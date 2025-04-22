@@ -21,6 +21,6 @@ export class WelcomePage implements OnInit {
   }
 
   toNavigate() {
-    // this.navService.navigate('/login', 'slide');
+    this.navService.push('/login', 'fade');
   }
 }

@@ -23,14 +23,6 @@ export class RegisterPage implements OnInit {
     }
 
     goToNavigation() {
-      // this.navController.navigateForward('/forgot-password')
-      // this.navService.navigate('/forgot-password', 'slide');
-
-      // this.navController.navigateForward('/forgot-password', {
-      //   animationDirection: 'forward',
-      //   state: { fromHome: true }
-      // });
-
       this.navService.push('/forgot-password', 'fade');
     }
 

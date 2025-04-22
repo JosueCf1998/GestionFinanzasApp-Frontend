@@ -33,8 +33,7 @@ export class LoginPage implements OnInit {
     console.log('Email:', this.email);
     console.log('Password:', this.password);
 
-
-    // this.navService.navigate('/welcome', 'slide');
+    this.navService.push('/welcome', 'fade');
   }
 
   forgotPassword() {
