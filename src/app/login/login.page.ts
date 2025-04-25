@@ -13,8 +13,8 @@ import { NavigationService } from '../navigation.service';
 })
 export class LoginPage implements OnInit {
 
-  email: string = '';
-  password: string = '';
+  email: string = 'AA';
+  password: string = 'AAA';
   showPassword: boolean = false;
 
   constructor(
@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
     console.log('Email:', this.email);
     console.log('Password:', this.password);
 
-    this.navService.push('/welcome', 'fade');
+    this.navService.push('/welcome-step-one', 'fade');
   }
 
   forgotPassword() {

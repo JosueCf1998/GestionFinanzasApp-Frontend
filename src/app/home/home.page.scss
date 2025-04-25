@@ -1,0 +1,59 @@
+:host {
+    --ion-background-color: #f8f9fa;
+  }
+  
+  .user-item {
+    --background: transparent;
+    --padding-start: 0;
+    margin-bottom: 24px;
+  
+    ion-avatar {
+      width: 60px;
+      height: 60px;
+    }
+  
+    h2 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+  
+    p {
+      color: var(--ion-color-medium);
+      font-size: 14px;
+    }
+  }
+  
+  .chart-container {
+    position: relative;
+    height: 280px;
+    width: 280px;
+    margin: 0 auto 32px;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+  
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  
+      h3 {
+        margin: 0 0 4px;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+      }
+  
+      p {
+        margin: 0;
+        color: var(--ion-color-medium);
+        font-size: 14px;
+      }
+    }
+  }

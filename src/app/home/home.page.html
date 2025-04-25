@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mi Progreso</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  
+  <!-- Sección de Usuario -->
+  <ion-item lines="none" class="user-item">
+    <ion-avatar slot="start">
+      <img [src]="user.avatar" alt="Avatar">
+    </ion-avatar>
+    <ion-label>
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.email }}</p>
+    </ion-label>
+  </ion-item>
+
+  <!-- Diagrama Circular -->
+  <div class="chart-container">
+    <canvas #doughnutCanvas></canvas>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>35%</h3>
+      <p>Proyectos</p>
+    </div>
+    <div class="stat-card">
+      <h3>25%</h3>
+      <p>Tareas</p>
+    </div>
+    <div class="stat-card">
+      <h3>20%</h3>
+      <p>Completado</p>
+    </div>
+    <div class="stat-card">
+      <h3>20%</h3>
+      <p>Pendiente</p>
+    </div>
+  </div>
+
+
+  
+</ion-content>
