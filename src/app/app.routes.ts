@@ -27,7 +27,23 @@ export const routes: Routes = [
     loadComponent: () => import('./welcome/welcomeStepTwo/welcome-step-two.page').then( m => m.WelcomeStepTwoPage)
   },
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+    path: 'folder',
+    loadComponent: () =>
+      import('./folder/folder.page').then((m) => m.FolderPage),
+    children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
+        path: 'home',
+        loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+      },
+      {
+        path: 'graphics',
+        loadComponent: () => import('./graphics/graphics.page').then( m => m.GraphicsPage)
+      },
+    ],
   },
 ];

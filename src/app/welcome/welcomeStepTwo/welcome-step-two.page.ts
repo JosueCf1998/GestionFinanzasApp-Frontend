@@ -23,6 +23,6 @@ export class WelcomeStepTwoPage implements OnInit {
   }
 
   toNavigate() {
-    this.navService.push('/home', 'fade');
+    this.navService.push('/folder', 'fade');
   }
 }

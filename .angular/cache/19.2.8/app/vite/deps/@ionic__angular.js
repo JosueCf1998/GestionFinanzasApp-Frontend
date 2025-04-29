@@ -120,11 +120,11 @@ import {
   openURL
 } from "./chunk-WX5ANBK4.js";
 import {
-  iosTransitionAnimation
-} from "./chunk-HV7BMKCE.js";
-import {
   mdTransitionAnimation
 } from "./chunk-RHG7RFIU.js";
+import {
+  iosTransitionAnimation
+} from "./chunk-HV7BMKCE.js";
 import {
   createAnimation,
   getIonPageElement
