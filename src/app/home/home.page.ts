@@ -15,41 +15,25 @@ import { IonicModule } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  currentUser = {
-    name: 'Ana López',
-    email: 'ana.lopez@empresa.com',
-    avatar: 'https://i.pravatar.cc/150?img=5'
+
+  @ViewChild('doughnutCanvas') doughnutCanvas: any;
+
+  user = {
+    name: 'Ana Martínez',
+    email: 'ana.martinez@ejemplo.com',
+    avatar: 'https://i.pravatar.cc/150?img=12'
   };
 
-  constructor() {}
+
+
+  constructor() { }
 
   ngOnInit() {
   }
 
-
-  onMenuItemSelected(path: string) {
-    console.log('Navegando a:', path);
-    // Lógica para navegar a la ruta seleccionada
+  ngAfterViewInit() {
+    // this.createDoughnutChart();
   }
-
-  // @ViewChild('doughnutCanvas') doughnutCanvas: any;
-
-  // user = {
-  //   name: 'Ana Martínez',
-  //   email: 'ana.martinez@ejemplo.com',
-  //   avatar: 'https://i.pravatar.cc/150?img=12'
-  // };
-
-
-
-  // constructor() { }
-
-  // ngOnInit() {
-  // }
-
-  // ngAfterViewInit() {
-  //   this.createDoughnutChart();
-  // }
 
   // createDoughnutChart() {
   //   Chart.register(DoughnutController, ArcElement, Tooltip, Legend);

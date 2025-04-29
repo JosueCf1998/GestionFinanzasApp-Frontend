@@ -7,61 +7,61 @@
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "87bbb023",
+      "fileHash": "afc12773",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "7db6e425",
+      "fileHash": "3a2a1875",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "daf7c7f6",
+      "fileHash": "20e63e51",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "da0ac315",
+      "fileHash": "86e50901",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "16c96416",
+      "fileHash": "84e91112",
       "needsInterop": false
     },
     "@ionic//angular": {
       "src": "../../../../../../node_modules/@ionic/angular/fesm2022/ionic-angular.mjs",
       "file": "@ionic__angular.js",
-      "fileHash": "c5d7714f",
+      "fileHash": "611d69ce",
       "needsInterop": false
     },
     "@ionic/angular": {
       "src": "../../../../../../node_modules/@ionic/angular/fesm2022/ionic-angular.mjs",
       "file": "@ionic_angular.js",
-      "fileHash": "31c59806",
+      "fileHash": "2e4db95a",
       "needsInterop": false
     },
     "@ionic/angular/standalone": {
       "src": "../../../../../../node_modules/@ionic/angular/fesm2022/ionic-angular-standalone.mjs",
       "file": "@ionic_angular_standalone.js",
-      "fileHash": "14db3f06",
+      "fileHash": "011f8dfc",
       "needsInterop": false
     },
     "ionicons": {
       "src": "../../../../../../node_modules/ionicons/dist/index.js",
       "file": "ionicons.js",
-      "fileHash": "ecfe732f",
+      "fileHash": "d6e2fd54",
       "needsInterop": false
     },
     "ionicons/icons": {
       "src": "../../../../../../node_modules/ionicons/icons/index.mjs",
       "file": "ionicons_icons.js",
-      "fileHash": "47e5249a",
+      "fileHash": "6b702374",
       "needsInterop": false
     }
   },
@@ -171,11 +171,11 @@
     "chunk-DU4K65ET": {
       "file": "chunk-DU4K65ET.js"
     },
-    "chunk-FDSV5UGB": {
-      "file": "chunk-FDSV5UGB.js"
-    },
     "chunk-XTRO27O7": {
       "file": "chunk-XTRO27O7.js"
+    },
+    "chunk-FDSV5UGB": {
+      "file": "chunk-FDSV5UGB.js"
     },
     "chunk-UOZ75P3U": {
       "file": "chunk-UOZ75P3U.js"

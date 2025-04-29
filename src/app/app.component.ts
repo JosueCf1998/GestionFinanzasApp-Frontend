@@ -14,8 +14,7 @@ import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutlin
 export class AppComponent {
   public appPages = [
     { title: 'Inicio', url: '/folder/home', icon: 'mail' },
-    { title: 'Gráficos', url: '/folder/graphics', icon: 'paper-plane' },
-    { title: 'Cerrar Sesión', url: '/login', icon: 'mail' }
+    { title: 'Gráficos', url: '/folder/graphics', icon: 'paper-plane' }
   ];
   constructor() {
     addIcons({ mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });

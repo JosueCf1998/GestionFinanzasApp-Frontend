@@ -1,9 +1,17 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+          expand="block"
+          shape="round"
+          class="login-btn"
+          (click)="logOut()">
+          Cerrar Sesion
+        </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
