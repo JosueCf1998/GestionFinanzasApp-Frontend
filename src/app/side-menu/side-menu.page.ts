@@ -1,16 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonContent, IonButton } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { NavigationService } from '../navigation.service';
 
 @Component({
-  selector: 'app-folder',
-  templateUrl: './folder.page.html',
-  styleUrls: ['./folder.page.scss'],
-  imports: [IonButton, RouterModule, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent],
+  selector: 'app-side-menu',
+  templateUrl: './side-menu.page.html',
+  styleUrls: ['./side-menu.page.scss'],
+  imports: [IonButton, RouterModule, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonContent],
 })
-export class FolderPage implements OnInit {
+export class SideMenuPage implements OnInit {
   public folder!: string;
   private activatedRoute = inject(ActivatedRoute);
   

@@ -27,9 +27,9 @@ export const routes: Routes = [
     loadComponent: () => import('./welcome/welcomeStepTwo/welcome-step-two.page').then( m => m.WelcomeStepTwoPage)
   },
   {
-    path: 'folder',
+    path: 'main',
     loadComponent: () =>
-      import('./folder/folder.page').then((m) => m.FolderPage),
+      import('./side-menu/side-menu.page').then((m) => m.SideMenuPage),
     children: [
       {
         path: '',
@@ -38,11 +38,11 @@ export const routes: Routes = [
       },
       {
         path: 'home',
-        loadComponent: () => import('./home/home.page').then( m => m.HomePage)
+        loadComponent: () => import('./side-menu/home/home.page').then( m => m.HomePage)
       },
       {
         path: 'graphics',
-        loadComponent: () => import('./graphics/graphics.page').then( m => m.GraphicsPage)
+        loadComponent: () => import('./side-menu/graphics/graphics.page').then( m => m.GraphicsPage)
       },
     ],
   },

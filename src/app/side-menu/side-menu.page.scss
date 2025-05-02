@@ -1,5 +1,5 @@
 ion-menu-button {
-  color: var(--ion-color-primary);
+  color: var(--ion-color-side-menu);
 }
 
 #container {
@@ -25,4 +25,12 @@ ion-menu-button {
 
 #container a {
   text-decoration: none;
+}
+
+.side-menu {
+  display: flex;
+  height: 4em;
+  background: var(--ion-color-side-menu);
+  color: var(--ion-color-custom-gradient-contrast);
+  clip-path: ellipse(100% 60% at 50% 40%);
 }

@@ -1,0 +1,21 @@
+<ion-header >
+  <ion-toolbar class="side-menu" color="side-menu" >
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        color="light"
+        expand="block"
+        shape="round"
+        class="login-btn"
+        (click)="logOut()">
+        Cerrar Sesion
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <router-outlet></router-outlet>
+</ion-content>
