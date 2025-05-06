@@ -44,6 +44,10 @@ export const routes: Routes = [
         path: 'graphics',
         loadComponent: () => import('./side-menu/graphics/graphics.page').then( m => m.GraphicsPage)
       },
+      {
+        path: 'categories',
+        loadComponent: () => import('./side-menu/categories/categories.page').then( m => m.CategoriesPage)
+      },
     ],
   },
 ];
