@@ -11,70 +11,33 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, FormsModule],
 })
 export class HomePage implements OnInit {
 
-
-  @ViewChild('doughnutCanvas') doughnutCanvas: any;
-
-  user = {
-    name: 'Ana Martínez',
-    email: 'ana.martinez@ejemplo.com',
-    avatar: 'https://i.pravatar.cc/150?img=12'
-  };
-
-
+  isModalOpen = false; // Controla si el modal está abierto
+  amount = 200; // Monto actual
+  newAmount: number = this.amount; // Monto temporal para el modal
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    // this.createDoughnutChart();
+
+  openModal() {
+    this.isModalOpen = true;
   }
 
-  // createDoughnutChart() {
-  //   Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
-    
-  //   new Chart(this.doughnutCanvas.nativeElement, {
-  //     type: 'doughnut',
-  //     data: {
-  //       labels: ['Proyectos', 'Tareas', 'Completado', 'Pendiente'],
-  //       datasets: [{
-  //         data: [35, 25, 20, 20],
-  //         backgroundColor: [
-  //           '#3880ff',
-  //           '#3dc2ff',
-  //           '#2dd36f',
-  //           '#ffc409'
-  //         ],
-  //         hoverBackgroundColor: [
-  //           '#4d90ff',
-  //           '#52d2ff',
-  //           '#42e37f',
-  //           '#ffd449'
-  //         ],
-  //         borderWidth: 0
-  //       }]
-  //     },
-  //     options: {
-  //       cutout: '70%',
-  //       plugins: {
-  //         legend: {
-  //           position: 'bottom',
-  //           labels: {
-  //             boxWidth: 12,
-  //             padding: 20,
-  //             font: {
-  //               family: "'Roboto', sans-serif"
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  updateAmount() {
+    if (this.newAmount) {
+      this.amount = this.newAmount; // Actualiza el monto
+    }
+    this.closeModal(); // Cierra el modal
+  }
 
 }
