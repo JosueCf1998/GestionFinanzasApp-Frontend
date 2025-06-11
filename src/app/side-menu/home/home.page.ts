@@ -5,13 +5,17 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonAvatar, IonLab
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
 
 import { IonicModule } from '@ionic/angular';
+import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
+import { ApiService } from '../../../services/api.service'; // Importa el servicio
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  providers: [ApiService], 
 })
 export class HomePage implements OnInit {
 
@@ -19,9 +23,10 @@ export class HomePage implements OnInit {
   amount = 200; // Monto actual
   newAmount: number = this.amount; // Monto temporal para el modal
 
-  constructor() { }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
+    this.loadPosts(); 
   }
 
 
@@ -38,6 +43,17 @@ export class HomePage implements OnInit {
       this.amount = this.newAmount; // Actualiza el monto
     }
     this.closeModal(); // Cierra el modal
+  }
+
+  loadPosts() {
+    this.apiService.getPosts().subscribe(
+      (data) => {
+        console.log('Datos cargados:', data);
+      },
+      (error) => {
+        console.error('Error al cargar datos:', error);
+      }
+    );
   }
 
 }
