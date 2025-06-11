@@ -18,4 +18,7 @@ export class GetHomeUseCase implements UseCase<void, Observable<Result<Post[]>>>
   execute(): Observable<Result<Post[]>> {
     return this.apiService.getPosts();
   }
+
+
+
 }

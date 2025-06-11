@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { GetHomeUseCase } from '../../../core/use-cases/get-home.usecase';
 import { Post } from '../../../core/models/post.model';
 import { Result } from '../../../core/models/result.model';
+import { body } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -43,14 +44,14 @@ export class HomePage implements OnInit {
   }
 
   loadPosts() {
-    this.getHomeUseCase.execute().subscribe((result: Result<Post[]>) => {
+    this.getHomeUseCase.execute().subscribe((result) => {
       if (result.success) {
-        this.posts = result.data!;
-        console.log('Datos cargados:', this.posts);
+        console.log('Datos obtenidos:', result.data);
       } else {
-        this.errorMessage = result.message;
-        console.error('Error al cargar datos:', this.errorMessage);
+        console.error('Error:', result);
       }
     });
   }
+
+  
 }

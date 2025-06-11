@@ -9,7 +9,8 @@ import { Result } from '../models/result.model';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+  private apiUrl = 'http://localhost/GestionFinanzasApp-Backend/listado-categoria';
+  //private apiUrl = 'https://jsonplaceholder.typicode.com/users';
 
   constructor(private http: HttpClient) {}
 
@@ -40,4 +41,6 @@ export class ApiService {
       })
     );
   }
+
+
 }
