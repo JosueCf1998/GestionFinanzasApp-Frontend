@@ -6,7 +6,8 @@ import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js
 
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
-import { ApiService } from '../../../services/api.service'; // Importa el servicio
+import { ApiService } from '../../../core/services/api.service'; // Importa el servicio
+import { NavigationService } from '../../../core/services/navigation.service';
 
 
 @Component({

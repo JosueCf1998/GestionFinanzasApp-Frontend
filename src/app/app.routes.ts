@@ -8,28 +8,28 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./features/auth/login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'register',
-    loadComponent: () => import('./register/register.page').then( m => m.RegisterPage)
+    loadComponent: () => import('./features/auth/register/register.page').then( m => m.RegisterPage)
   },
   {
     path: 'forgot-password',
-    loadComponent: () => import('./forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
+    loadComponent: () => import('./features/auth/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
   },
   {
     path: 'welcome-step-one',
-    loadComponent: () => import('./welcome/welcomeStepOne/welcome-step-one.page').then( m => m.WelcomeStepOnePage)
+    loadComponent: () => import('./features/welcome/welcomeStepOne/welcome-step-one.page').then( m => m.WelcomeStepOnePage)
   },
   {
     path: 'welcome-step-two',
-    loadComponent: () => import('./welcome/welcomeStepTwo/welcome-step-two.page').then( m => m.WelcomeStepTwoPage)
+    loadComponent: () => import('./features/welcome/welcomeStepTwo/welcome-step-two.page').then( m => m.WelcomeStepTwoPage)
   },
   {
     path: 'main',
     loadComponent: () =>
-      import('./side-menu/side-menu.page').then((m) => m.SideMenuPage),
+      import('./features/side-menu/side-menu.page').then((m) => m.SideMenuPage),
     children: [
       {
         path: '',
@@ -38,15 +38,15 @@ export const routes: Routes = [
       },
       {
         path: 'home',
-        loadComponent: () => import('./side-menu/home/home.page').then( m => m.HomePage)
+        loadComponent: () => import('./features/side-menu/home/home.page').then( m => m.HomePage)
       },
       {
         path: 'graphics',
-        loadComponent: () => import('./side-menu/graphics/graphics.page').then( m => m.GraphicsPage)
+        loadComponent: () => import('./features/side-menu/graphics/graphics.page').then( m => m.GraphicsPage)
       },
       {
         path: 'categories',
-        loadComponent: () => import('./side-menu/categories/categories.page').then( m => m.CategoriesPage)
+        loadComponent: () => import('./features/side-menu/categories/categories.page').then( m => m.CategoriesPage)
       },
     ],
   },

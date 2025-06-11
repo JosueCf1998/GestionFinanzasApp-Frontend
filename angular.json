@@ -35,7 +35,7 @@
                 "output": "assets"
               }
             ],
-            "styles": ["node_modules/@fortawesome/fontawesome-free/css/all.min.css", "src/global.scss", "src/theme/variables.scss"],
+            "styles": ["node_modules/@fortawesome/fontawesome-free/css/all.min.css", "src/theme/global.scss", "src/theme/variables.scss"],
             "scripts": [],
             "browser": "src/main.ts"
           },
@@ -109,7 +109,7 @@
                 "output": "assets"
               }
             ],
-            "styles": ["node_modules/@fortawesome/fontawesome-free/css/all.min.css", "src/global.scss", "src/theme/variables.scss"],
+            "styles": ["node_modules/@fortawesome/fontawesome-free/css/all.min.css", "src/theme/global.scss", "src/theme/variables.scss"],
             "scripts": []
           },
           "configurations": {

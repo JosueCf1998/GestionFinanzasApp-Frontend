@@ -2,7 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonContent, IonButton } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
-import { NavigationService } from '../navigation.service';
+import { NavigationService } from '../../core/services/navigation.service';
+
 
 @Component({
   selector: 'app-side-menu',
