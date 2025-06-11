@@ -1,14 +1,11 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonAvatar, IonLabel, IonIcon, IonMenuButton, IonMenuToggle, IonMenu, IonButtons, IonButton, IonList, IonApp } from '@ionic/angular/standalone';
-import { Chart, DoughnutController, ArcElement, Tooltip, Legend } from 'chart.js';
-
 import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
-import { ApiService } from '../../../core/services/api.service'; // Importa el servicio
-import { NavigationService } from '../../../core/services/navigation.service';
-
+import { HttpClientModule } from '@angular/common/http';
+import { GetHomeUseCase } from '../../../core/use-cases/get-home.usecase';
+import { Post } from '../../../core/models/post.model';
+import { Result } from '../../../core/models/result.model';
 
 @Component({
   selector: 'app-home',
@@ -16,20 +13,19 @@ import { NavigationService } from '../../../core/services/navigation.service';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
-  providers: [ApiService], 
 })
 export class HomePage implements OnInit {
+  isModalOpen = false;
+  amount = 200;
+  newAmount: number = this.amount;
+  posts: Post[] = [];
+  errorMessage: string | null = null;
 
-  isModalOpen = false; // Controla si el modal está abierto
-  amount = 200; // Monto actual
-  newAmount: number = this.amount; // Monto temporal para el modal
-
-  constructor(private apiService: ApiService) {}
+  constructor(private getHomeUseCase: GetHomeUseCase) {}
 
   ngOnInit() {
-    this.loadPosts(); 
+    this.loadPosts();
   }
-
 
   openModal() {
     this.isModalOpen = true;
@@ -41,20 +37,20 @@ export class HomePage implements OnInit {
 
   updateAmount() {
     if (this.newAmount) {
-      this.amount = this.newAmount; // Actualiza el monto
+      this.amount = this.newAmount;
     }
-    this.closeModal(); // Cierra el modal
+    this.closeModal();
   }
 
   loadPosts() {
-    this.apiService.getPosts().subscribe(
-      (data) => {
-        console.log('Datos cargados:', data);
-      },
-      (error) => {
-        console.error('Error al cargar datos:', error);
+    this.getHomeUseCase.execute().subscribe((result: Result<Post[]>) => {
+      if (result.success) {
+        this.posts = result.data!;
+        console.log('Datos cargados:', this.posts);
+      } else {
+        this.errorMessage = result.message;
+        console.error('Error al cargar datos:', this.errorMessage);
       }
-    );
+    });
   }
-
 }
