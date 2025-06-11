@@ -9,5 +9,6 @@ export interface UseCase<Input = void, Output = void> {
      * @param input Datos de entrada para el caso de uso.
      * @returns Resultado del caso de uso.
      */
-    execute(input: Input): Output;
+    executeGet(input: Input): Output;
+    executePost(input: Input): Output;
 }

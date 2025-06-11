@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { GetHomeUseCase } from '../../../core/use-cases/get-home.usecase';
+import { TestServiceUseCase } from '../../../core/use-cases/testService.usecase';
 import { Post } from '../../../core/models/post.model';
 import { Result } from '../../../core/models/result.model';
 import { body } from 'ionicons/icons';
@@ -22,10 +22,10 @@ export class HomePage implements OnInit {
   posts: Post[] = [];
   errorMessage: string | null = null;
 
-  constructor(private getHomeUseCase: GetHomeUseCase) {}
+  constructor(private testServiceUseCase: TestServiceUseCase) {}
 
   ngOnInit() {
-    this.loadPosts();
+    this.loadGet();
   }
 
   openModal() {
@@ -43,12 +43,24 @@ export class HomePage implements OnInit {
     this.closeModal();
   }
 
-  loadPosts() {
-    this.getHomeUseCase.execute().subscribe((result) => {
+  loadGet() {
+    this.testServiceUseCase.executeGet().subscribe((result: Result<Post[]>) => {
       if (result.success) {
-        console.log('Datos obtenidos:', result.data);
+        this.posts = result.data!;
+        console.log('Datos obtenidos:', this.posts);
       } else {
-        console.error('Error:', result);
+        this.errorMessage = result.message;
+        console.error('Error al cargar datos:', this.errorMessage);
+      }
+    });
+  }
+
+  loadPost() {
+    this.testServiceUseCase.executePost().subscribe((result: Result<Post[]>) => {
+      if (result.success) {
+        console.log('Solicitud enviada sin datos:', result.data);
+      } else {
+        console.error('Error al enviar solicitud:', result.message);
       }
     });
   }
