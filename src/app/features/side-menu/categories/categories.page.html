@@ -1,8 +1,43 @@
+<ion-content [fullscreen]="true" scroll-y="false">
+  <div class="content">
+    <!-- Tabs de Gastos e Ingresos -->
+    <div class="tabs-container">
+      <ion-segment [value]="segment" (ionChange)="onSegmentChanged($event)">
+        <ion-segment-button value="gastos">
+          <ion-label>Gastos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="ingresos">
+          <ion-label>Ingresos</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <!-- Cuadrícula de categorías dinámica -->
+    <div class="categories-grid">
+      <ng-container *ngIf="categoriasActuales.length > 0; else soloAgregar">
+        <ng-container *ngFor="let cat of categoriasActuales">
+          <div class="category-btn">
+            <div class="category-icon-circle" [ngStyle]="{'background': cat.color}">
+              <ion-icon src="assets/icon/{{cat.icono}}.svg"></ion-icon>
+            </div>
+            <span class="category-label">{{cat.nombre}}</span>
+          </div>
+        </ng-container>
+        <div class="category-btn agregar-btn" (click)="onAgregarCategoria(segment)">
+          <div class="category-icon-add">
+            <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
+          </div>
+          <span class="category-label agregar-label">Agregar</span>
+        </div>
+      </ng-container>
+      <ng-template #soloAgregar>
+        <div class="category-btn agregar-btn" (click)="onAgregarCategoria(segment)">
+          <div class="category-icon-add">
+            <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
+          </div>
+          <span class="category-label agregar-label">Agregar</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ion-content>
 
-
-
-
-<!-- <ion-split-pane contentId="main-content">
-  <ion-content id="main-content">
-  </ion-content>
-</ion-split-pane> -->

@@ -1,0 +1,105 @@
+.content {
+  display: flex;
+  flex-direction: column; /* Asegúrate de que los elementos estén en columna */
+  padding: 16px;
+  gap: 16px;
+  background: #fcfdf8;
+  min-height: 100vh;
+  padding-top: 0;
+}
+
+.tabs-container {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px 8px;
+  justify-items: center;
+  padding: 0 12px;
+}
+
+.category-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  font-size: 14px;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+  position: relative;
+  background: transparent;
+}
+
+.category-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  background: inherit; /* El color de fondo se hereda del ngStyle */
+}
+
+.category-icon-circle ion-icon,
+.category-icon-circle img {
+  color: #fff !important;
+  filter: brightness(0) invert(1);
+}
+
+.category-btn ion-icon {
+  font-size: 40px;
+  color: inherit;
+}
+
+.category-label {
+  color: #333;
+  font-size: 15px;
+  margin-top: 2px;
+  text-align: center;
+}
+
+.agregar-btn .category-label,
+.agregar-btn .category-label.agregar-label {
+  color: #333;
+}
+
+.agregar-btn .category-icon-circle.agregar-circle {
+  width: 48px;
+  height: 38px;
+  background: #ffd600 !important;
+}
+
+.agregar-btn .category-icon-circle {
+  background: none !important;
+  width: auto;
+  height: auto;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.agregar-btn ion-icon {
+  font-size: 48px;
+  color: #333 !important;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+}
+
+.agregar-btn span {
+  color: #333 !important;
+  font-size: 15px;
+}
