@@ -34,3 +34,27 @@ ion-menu-button {
   color: var(--ion-color-custom-gradient-contrast);
   // clip-path: ellipse(100% 60% at 50% 40%);
 }
+
+ion-content, .menu-content, .main-content, .content {
+  overflow: hidden !important;
+  --overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  scrollbar-width: none !important;
+}
+
+ion-content *::-webkit-scrollbar,
+ion-content::-webkit-scrollbar,
+.menu-content::-webkit-scrollbar,
+.main-content::-webkit-scrollbar,
+.content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+html, body {
+  overflow: hidden !important;
+  height: 100%;
+}

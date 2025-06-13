@@ -1,7 +1,81 @@
+<ion-header>
+  <ion-toolbar class="side-menu" color="side-menu">
+    <ion-buttons slot="start">
+      <div class="atras-btn" (click)="backToCategories()">
+        <ion-icon src="assets/icon/left.svg"></ion-icon>
+      </div>
+    </ion-buttons>
+    <ion-title class="header-title">Crear categoría</ion-title>
+    <ion-buttons slot="end">
+      <!-- Puedes agregar acciones aquí si lo necesitas -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true" scroll-y="false">
-  <div class="content">
-    <!-- Tabs de Gastos e Ingresos -->
-    
+  <div class="edit-category-content">
+    <form>
+      <div class="input-row">
+        <ion-icon src="assets/icon/list.svg" class="input-icon"></ion-icon>
+        <ion-input
+          type="text"
+          placeholder="Nombre de la categoría"
+          [(ngModel)]="nombreCategoria"
+          name="nombreCategoria"
+          required
+        ></ion-input>
+      </div>
+      <div class="input-error" *ngIf="showError">
+        Introduzca un nombre para la categoría
+      </div>
+
+      <div class="tipo-row">
+        <ion-label>Gastos</ion-label>
+        <ion-radio-group [(ngModel)]="tipoCategoria" name="tipoCategoria">
+          <ion-radio value="gastos" checked></ion-radio>
+          <ion-label>Gastos</ion-label>
+          <ion-radio value="ingresos"></ion-radio>
+          <ion-label>Ingresos</ion-label>
+        </ion-radio-group>
+      </div>
+
+      <div class="programado-row">
+        <ion-label class="label-programado">Gasto programado</ion-label>
+        <div class="programado-info">
+          <span class="no-seleccionado">No se ha seleccionado</span>
+          <span class="moneda">PEN por mes</span>
+        </div>
+      </div>
+
+      <div class="simbolos-row">
+        <ion-label class="label-simbolos">Símbolos</ion-label>
+        <div class="simbolos-grid">
+          <!-- Reemplaza por *ngFor para tus iconos -->
+          <div class="simbolo-btn" *ngFor="let icon of iconos" [class.selected]="icon === iconoSeleccionado" (click)="seleccionarIcono(icon)">
+            <ion-icon [src]="'assets/icon/' + icon + '.svg'"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-row">
+        <ion-label class="label-color">Color</ion-label>
+        <div class="color-grid">
+          <div
+            class="color-btn"
+            *ngFor="let color of colores"
+            [ngStyle]="{'background': color}"
+            [class.selected]="color === colorSeleccionado"
+            (click)="seleccionarColor(color)"
+          ></div>
+          <div class="color-btn add-color-btn">
+            <ion-icon name="add"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <ion-button expand="block" class="btn-anadir" [disabled]="!nombreCategoria" (click)="anadirCategoria()">
+        Añadir
+      </ion-button>
+    </form>
   </div>
 </ion-content>
-

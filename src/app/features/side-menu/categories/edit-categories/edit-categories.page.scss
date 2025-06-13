@@ -1,0 +1,267 @@
+ion-menu-button {
+  color: var(--ion-color-side-menu);
+}
+
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+  color: #8c8c8c;
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.side-menu {
+  display: flex;
+  height: 3.2em;
+  background: var(--ion-color-side-menu);
+  color: var(--ion-color-custom-gradient-contrast);
+  // clip-path: ellipse(100% 60% at 50% 40%);
+}
+
+.atras-btn {
+  font-size: 25px;
+  padding-left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--ion-color-custom-gradient-contrast);
+}
+
+.atras-btn ion-icon {
+  color: #fff !important;
+  filter: brightness(0) invert(1);
+}
+
+ion-header {
+  ion-toolbar.side-menu {
+    background: var(--ion-color-side-menu);
+    color: var(--ion-color-custom-gradient-contrast);
+    min-height: 56px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    border-radius: 0 0 16px 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ion-color-custom-gradient-contrast, #333);
+}
+
+.atras-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.atras-btn ion-icon {
+  font-size: 28px;
+  color: var(--ion-color-custom-gradient-contrast, #333);
+}
+
+.edit-category-content {
+  padding: 24px 16px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  background: #f4f4f4;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 4px;
+}
+
+.input-icon {
+  font-size: 22px;
+  margin-right: 10px;
+  color: #888;
+}
+
+ion-input {
+  flex: 1;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.input-error {
+  color: #e53935;
+  font-size: 13px;
+  margin-bottom: 8px;
+  margin-left: 4px;
+}
+
+.tipo-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.tipo-row ion-label {
+  font-size: 15px;
+  color: #333;
+  margin-right: 8px;
+}
+
+.programado-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4f4f4;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+
+.label-programado {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+}
+
+.programado-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.no-seleccionado {
+  color: #888;
+  font-size: 13px;
+}
+
+.moneda {
+  color: #1976d2;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.simbolos-row {
+  margin-bottom: 8px;
+}
+
+.label-simbolos {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.simbolos-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.simbolo-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.2s;
+}
+
+.simbolo-btn.selected {
+  border: 2px solid #1976d2;
+  background: #e3f2fd;
+}
+
+.simbolo-btn ion-icon {
+  font-size: 24px;
+  color: #1976d2;
+}
+
+.color-row {
+  margin-bottom: 8px;
+}
+
+.label-color {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.color-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.color-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+.color-btn.selected {
+  border: 2px solid #1976d2;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+}
+
+.add-color-btn {
+  background: #f4f4f4 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-color-btn ion-icon {
+  font-size: 20px;
+  color: #888;
+}
+
+.btn-anadir {
+  margin-top: 18px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 12px;
+}

@@ -57,7 +57,7 @@ export class CategoriesPage {
 
   onAgregarCategoria(tipo: "gastos" | "ingresos") {
     console.log(`Agregar categoría de tipo: ${tipo}`);
-    this.navService.push('/main/categories/edit', 'fade');
+    this.navService.push('/categories/edit', 'slide-left');
   }
 
   get categoriasActuales() {

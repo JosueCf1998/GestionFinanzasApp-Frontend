@@ -1,10 +1,42 @@
+ion-content {
+  --overflow: hidden;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+  --padding-bottom: 0;
+  --padding-top: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --margin-bottom: 0;
+  --margin-top: 0;
+  scrollbar-width: none !important; /* Firefox */
+}
+
+ion-content *::-webkit-scrollbar,
+ion-content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+html, body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
 .content {
   display: flex;
   flex-direction: column; /* Asegúrate de que los elementos estén en columna */
   padding: 16px;
   gap: 16px;
   background: #fcfdf8;
-  min-height: 100vh;
+  overflow: hidden !important;
+  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  box-sizing: border-box;
   padding-top: 0;
 }
 

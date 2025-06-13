@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'categories',
     pathMatch: 'full',
   },
   {
@@ -47,13 +47,12 @@ export const routes: Routes = [
       {
         path: 'categories',
         loadComponent: () => import('./features/side-menu/categories/categories.page').then(m => m.CategoriesPage)
-      },
-      {
-        path: 'categories/edit',
-        loadComponent: () => import('./features/side-menu/categories/edit-categories/edit-categories.page').then(m => m.EditCategoriesPage)
-      },
-      // ...aquí puedes agregar más rutas hijas si es necesario...
+      }
     ],
+  },
+  {
+    path: 'categories/edit',
+    loadComponent: () => import('./features/side-menu/categories/edit-categories/edit-categories.page').then(m => m.EditCategoriesPage)
   },
   // Wildcard para rutas no encontradas (opcional, recomendado en producción)
   {

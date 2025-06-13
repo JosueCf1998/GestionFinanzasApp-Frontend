@@ -1,9 +1,9 @@
 // src/app/core/services/navigation.service.ts
 import { Injectable } from '@angular/core';
-import { NavController, AnimationBuilder, createAnimation } from '@ionic/angular';
+import { NavController, AnimationBuilder, createAnimation, AnimationController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
-type NavigationAnimation = 'slide' | 'fade' | 'flip' | 'zoom' | 'none';
+type NavigationAnimation = 'slide' | 'fade' | 'flip' | 'zoom' | 'none' | 'back' | 'slide-right' | 'slide-left';
 
 interface CustomNavigationOptions {
   animated?: boolean;
@@ -17,7 +17,8 @@ interface CustomNavigationOptions {
 export class NavigationService {
   constructor(
     private navCtrl: NavController,
-    private router: Router
+    private router: Router,
+    private animationCtrl: AnimationController
   ) {}
 
   private getAnimationConfig(
@@ -94,7 +95,7 @@ export class NavigationService {
   /**
    * Navegación hacia atrás
    */
-  async pop(animation: NavigationAnimation = 'slide'): Promise<void> {
+  async pop(animation: NavigationAnimation = 'back'): Promise<void> {
     const options = this.getAnimationConfig(animation, 'back');
 
     try {
@@ -112,5 +113,27 @@ export class NavigationService {
   pushWithQuery(basePath: string, params: Record<string, any>, animation: NavigationAnimation = 'slide'): Promise<boolean> {
     const queryParams = new URLSearchParams(params).toString();
     return this.push(`${basePath}?${queryParams}`, animation);
+  }
+
+  /**
+   * Navegación hacia adelante con animación personalizada
+   */
+  forward(url: string, animation: 'slide-right' | 'slide-left' | 'slide' = 'slide-right') {
+    // slide-left = avance (de izquierda a derecha), slide-right = retroceso (de derecha a izquierda)
+    this.navCtrl.navigateForward(url, {
+      animated: true,
+      animationDirection: animation === 'slide-left' ? 'forward' : 'back'
+    });
+  }
+
+  /**
+   * Navegación hacia atrás con animación personalizada
+   */
+  back(url?: string, animation: 'back' | 'slide-left' | 'slide-right' = 'slide-left') {
+    if (url) {
+      this.router.navigateByUrl(url, { state: { animationDirection: animation === 'slide-right' ? 'back' : 'forward' } });
+    } else {
+      this.navCtrl.back({ animated: true, animationDirection: animation === 'slide-right' ? 'back' : 'forward' });
+    }
   }
 }
