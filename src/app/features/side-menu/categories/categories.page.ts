@@ -55,8 +55,11 @@ export class CategoriesPage {
     this.segment = ev.detail.value;
   }
 
-  onAgregarCategoria(tipo: "gastos" | "ingresos") {
-    console.log(`Agregar categoría de tipo: ${tipo}`);
+  goToCreateCategories(tipo: "gastos" | "ingresos") {
+    this.navService.push('/categories/create', 'slide-left');
+  }
+
+  goToEditCategories(tipo: "gastos" | "ingresos") {
     this.navService.push('/categories/edit', 'slide-left');
   }
 

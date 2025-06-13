@@ -54,6 +54,10 @@ export const routes: Routes = [
     path: 'categories/edit',
     loadComponent: () => import('./features/side-menu/categories/edit-categories/edit-categories.page').then(m => m.EditCategoriesPage)
   },
+  {
+    path: 'categories/create',
+    loadComponent: () => import('./features/side-menu/categories/create-categories/create-categories.page').then(m => m.CreateCategoriesPage)
+  },
   // Wildcard para rutas no encontradas (opcional, recomendado en producción)
   {
     path: '**',
