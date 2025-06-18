@@ -297,3 +297,21 @@ input-edit {
 .clear-btn:hover ion-icon {
   color: #e53935;
 }
+
+.label-tipo {
+  font-size: 15px;
+  font-weight: 500;
+  color: #888;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.tipo-descripcion {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ion-color-side-menu, #1976d2);
+  background: #f4f4f4;
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: inline-block;
+}
