@@ -1,81 +1,96 @@
 <ion-header>
   <ion-toolbar class="side-menu" color="side-menu">
     <ion-buttons slot="start">
-      <div class="atras-btn" (click)="backToCategories()">
+      <button class="atras-btn" type="button" (click)="backToCategories()">
         <ion-icon src="assets/icon/left.svg"></ion-icon>
-      </div>
+      </button>
     </ion-buttons>
     <ion-title class="header-title">Editar Categoría</ion-title>
     <ion-buttons slot="end">
-      <!-- Puedes agregar acciones aquí si lo necesitas -->
+      <!-- Acciones adicionales -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" scroll-y="false">
-  <div class="edit-category-content">
-    <form>
-      <div class="input-row">
-        <ion-icon src="assets/icon/list.svg" class="input-icon"></ion-icon>
-        <ion-input
-          type="text"
-          placeholder="Nombre de la categoría"
-          [(ngModel)]="nombreCategoria"
-          name="nombreCategoria"
-          required
-        ></ion-input>
+  <form class="edit-category-content" (ngSubmit)="anadirCategoria()">
+    <!-- Nombre de la categoría -->
+    <div class="input-row">
+      <div class="category-icon-circle icon-edit" [ngStyle]="{'background': colorCategoria}">
+        <ion-icon *ngIf="category" [src]="'assets/icon/' + iconoCategoria + '.svg'" class="input-icon"></ion-icon>
       </div>
-      <div class="input-error" *ngIf="showError">
-        Introduzca un nombre para la categoría
-      </div>
+      <ion-input
+        type="text"
+        placeholder="Nombre de la categoría"
+        [(ngModel)]="nombreCategoria"
+        name="nombreCategoria"
+        required
+        autocomplete="off"
+        maxlength="30"
+        class="input-edit"
+        (ionInput)="onInputNombreCategoria($event)"
+      ></ion-input>
+      <button type="button" class="clear-btn" *ngIf="nombreCategoria" (click)="clearNombreCategoria()">
+        <!-- <ion-icon name="close-circle"></ion-icon> -->
+      </button>
+    </div>
 
-      <div class="tipo-row">
-        <ion-label>Gastos</ion-label>
-        <ion-radio-group [(ngModel)]="tipoCategoria" name="tipoCategoria">
-          <ion-radio value="gastos" checked></ion-radio>
-          <ion-label>Gastos</ion-label>
-          <ion-radio value="ingresos"></ion-radio>
-          <ion-label>Ingresos</ion-label>
-        </ion-radio-group>
+    <!-- Selección de símbolo -->
+    <div class="simbolos-row">
+      <label class="label-simbolos">Símbolo</label>
+      <div class="simbolos-grid">
+        <button
+          type="button"
+          class="simbolo-btn"
+          *ngFor="let icon of iconos"
+          [class.selected]="icon.archivo === iconoSeleccionado"
+          (click)="seleccionarIcono(icon)"
+          [attr.aria-label]="icon.nombre"
+        >
+          <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
+        </button>
       </div>
+    </div>
 
-      <div class="programado-row">
-        <ion-label class="label-programado">Gasto programado</ion-label>
-        <div class="programado-info">
-          <span class="no-seleccionado">No se ha seleccionado</span>
-          <span class="moneda">PEN por mes</span>
-        </div>
+    <!-- Selección de color -->
+    <div class="color-row">
+      <label class="label-color">Color</label>
+      <div class="color-grid">
+        <button
+          type="button"
+          class="color-btn"
+          *ngFor="let color of colores"
+          [ngStyle]="{'background': color.valor}"
+          [class.selected]="color.valor === colorSeleccionado"
+          (click)="seleccionarColor(color)"
+          [attr.aria-label]="color.nombre"
+        >
+          <ion-icon
+            *ngIf="color.valor === colorSeleccionado"
+            src="assets/icon/check.svg"
+            class="color-check"
+          ></ion-icon>
+        </button>
       </div>
+    </div>
 
-      <div class="simbolos-row">
-        <ion-label class="label-simbolos">Símbolos</ion-label>
-        <div class="simbolos-grid">
-          <!-- Reemplaza por *ngFor para tus iconos -->
-          <div class="simbolo-btn" *ngFor="let icon of iconos" [class.selected]="icon === iconoSeleccionado" (click)="seleccionarIcono(icon)">
-            <ion-icon [src]="'assets/icon/' + icon + '.svg'"></ion-icon>
-          </div>
-        </div>
-      </div>
+    <!-- Botón de acción -->
+    <ion-button expand="block" class="btn-anadir" [disabled]="!nombreCategoria" type="submit">
+      Guardar
+    </ion-button>
+  </form>
 
-      <div class="color-row">
-        <ion-label class="label-color">Color</ion-label>
-        <div class="color-grid">
-          <div
-            class="color-btn"
-            *ngFor="let color of colores"
-            [ngStyle]="{'background': color}"
-            [class.selected]="color === colorSeleccionado"
-            (click)="seleccionarColor(color)"
-          ></div>
-          <div class="color-btn add-color-btn">
-            <ion-icon name="add"></ion-icon>
-          </div>
-        </div>
-      </div>
 
-      <ion-button expand="block" class="btn-anadir" [disabled]="!nombreCategoria" (click)="anadirCategoria()">
-        Añadir
-      </ion-button>
-    </form>
-  </div>
+
+  <app-custom-alert
+    *ngIf="showCustomAlert"
+    header="Cambios sin guardar"
+    message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
+    cancelText="No"
+    confirmText="Sí"
+    (onCancel)="showCustomAlert = false"
+    (onConfirm)="salirSinGuardar()"
+  ></app-custom-alert>
+
+  
 </ion-content>

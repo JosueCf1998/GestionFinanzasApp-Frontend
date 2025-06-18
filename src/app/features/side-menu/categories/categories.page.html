@@ -15,7 +15,7 @@
     <div class="categories-grid">
       <ng-container *ngIf="categoriasActuales.length > 0; else soloAgregar">
         <ng-container *ngFor="let cat of categoriasActuales">
-          <div class="category-btn" (click)="goToEditCategories(segment)">
+          <div class="category-btn" (click)="goToEditCategories(segment, cat)">
             <div class="category-icon-circle" [ngStyle]="{'background': cat.color}">
               <ion-icon src="assets/icon/{{cat.icono}}.svg"></ion-icon>
             </div>
@@ -39,5 +39,7 @@
       </ng-template>
     </div>
   </div>
+
+
 </ion-content>
 

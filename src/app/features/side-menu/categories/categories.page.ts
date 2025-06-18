@@ -10,7 +10,7 @@ const ALLOWED_CATEGORY_COLORS = [
   "blue", "yellow", "green", "red", "black", "pink", "orange", "purple", "teal", "brown", "gray", "cyan", "lime", "indigo", "gold"
 ];
 
-interface Categoria {
+export interface Categoria {
   nombre: string;
   icono: string;
   color: string; // nombre del color permitido
@@ -59,8 +59,8 @@ export class CategoriesPage {
     this.navService.push('/categories/create', 'slide-left');
   }
 
-  goToEditCategories(tipo: "gastos" | "ingresos") {
-    this.navService.push('/categories/edit', 'slide-left');
+  goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {
+    this.navService.push('/categories/edit', 'slide-left', { type, category});
   }
 
   get categoriasActuales() {

@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
   constructor(private testServiceUseCase: TestServiceUseCase) {}
 
   ngOnInit() {
-    this.loadGet();
+    //this.loadGet();
   }
 
   openModal() {
