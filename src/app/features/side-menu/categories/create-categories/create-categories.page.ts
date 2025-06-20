@@ -3,52 +3,104 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { CATEGORY_COLORS } from 'src/app/shared/constants/category-colors';
+import { ICONOS_CATEGORIA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
 import { NavigationService } from "src/app/core/services/navigation.service";
+import { Router } from '@angular/router';
+import { Categoria } from '../categories.page';
+import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 
 @Component({
   selector: "app-create-categories",
   templateUrl: "./create-categories.page.html",
   styleUrls: ["./create-categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
 })
 export class CreateCategoriesPage {
+  tipoCategoria: string;
+  category: Categoria = {
+    nombre: "",
+    icono: "",
+    color: ""
+  };
+  
+  iconos = ICONOS_CATEGORIA;
+  colores = COLORES_CATEGORIA;
+
   nombreCategoria: string = '';
-  tipoCategoria: string = 'gastos';
-  iconos: string[] = ['heart', 'study', 'wallet', 'gift', 'bus', 'restaurant', 'question', 'salary', 'bank'];
-  colores: string[] = Object.values(CATEGORY_COLORS);
-  iconoSeleccionado: string = this.iconos[0];
-  colorSeleccionado: string = this.colores[0];
+  colorCategoria: string = "";
+  iconoCategoria: string = "";
+
+  iconoSeleccionado: string = "";
+  colorSeleccionado: string = "";
+
   showError: boolean = false;
+  showCustomAlert = false;
+  private cambiosPendientes = false;
+  private isFirstInput = true;
 
   constructor(
-    private navService: NavigationService
-  ) { }
-
-  ngOnInit() {
+    private navService: NavigationService,
+    private router: Router
+  ) {
+    const state = window.history.state;
+    if (!state || !state.type) {
+      this.navService.forward('/main/categories', 'slide-right');
+      throw new Error('No se recibió la información necesaria para editar la categoría.');
+    }
+    this.tipoCategoria = state.type;
+    this.colorCategoria = "#d3d3d3";
   }
 
-  backToCategories() {
-    this.navService.forward('/main/categories', 'slide-right');
+  seleccionarIcono(icon: any) {
+    this.iconoSeleccionado = icon.archivo;
+    this.iconoCategoria = icon.archivo;
+    this.cambiosPendientes = this.iconoCategoria !== this.category.icono;
   }
 
-  seleccionarIcono(icon: string) {
-    this.iconoSeleccionado = icon;
-  }
-
-  seleccionarColor(color: string) {
-    this.colorSeleccionado = color;
+  seleccionarColor(color: any) {
+    this.colorSeleccionado = color.valor;
+    this.colorCategoria = color.valor;
+    this.cambiosPendientes = this.colorCategoria !== this.category.color;
   }
 
   anadirCategoria() {
-    if (!this.nombreCategoria) {
+    const nombreFinal = this.nombreCategoria.trim() === '' ? this.category.nombre : this.nombreCategoria.trim();
+    if (!nombreFinal) {
       this.showError = true;
       return;
     }
     this.showError = false;
-    // Aquí puedes manejar el guardado de la categoría
-    // ...
-    this.backToCategories();
+    const newCategory: Categoria = {
+      nombre: nombreFinal,
+      icono: this.iconoSeleccionado,
+      color: this.colorSeleccionado
+    };
+    this.salirSinGuardar()
+  }
+
+  onInputNombreCategoria(event: any) {
+    const value = event?.detail?.value ?? event?.target?.value ?? '';
+    this.cambiosPendientes = value.trim() !== this.category.nombre;
+  }
+
+  clearNombreCategoria() {
+    this.nombreCategoria = '';
+    this.isFirstInput = true;
+  }
+
+  async backToCategories() {
+    if (this.cambiosPendientes) {
+      this.showCustomAlert = true;
+    } else {
+      (document.activeElement as HTMLElement)?.blur();
+      this.navService.forward('/main/categories', 'slide-right');
+    }
+  }
+
+  salirSinGuardar() {
+    this.showCustomAlert = false;
+    (document.activeElement as HTMLElement)?.blur();
+    this.navService.forward('/main/categories', 'slide-right');
   }
 }

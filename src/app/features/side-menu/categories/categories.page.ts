@@ -55,8 +55,8 @@ export class CategoriesPage {
     this.segment = ev.detail.value;
   }
 
-  goToCreateCategories(tipo: "gastos" | "ingresos") {
-    this.navService.push('/categories/create', 'slide-left');
+  goToCreateCategories(type: "gastos" | "ingresos") {
+    this.navService.push('/categories/create', 'slide-left', { type });
   }
 
   goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {

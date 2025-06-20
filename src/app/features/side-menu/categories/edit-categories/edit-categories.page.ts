@@ -17,7 +17,7 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
 })
 export class EditCategoriesPage {
-  type: string;
+  tipoCategoria: string;
   category: Categoria;
 
   iconos = ICONOS_CATEGORIA;
@@ -44,7 +44,7 @@ export class EditCategoriesPage {
       this.navService.forward('/main/categories', 'slide-right');
       throw new Error('No se recibió la información necesaria para editar la categoría.');
     }
-    this.type = state.type;
+    this.tipoCategoria = state.type;
     this.category = state.category;
     this.nombreCategoria = this.category.nombre;
     this.iconoCategoria = this.category.icono;
