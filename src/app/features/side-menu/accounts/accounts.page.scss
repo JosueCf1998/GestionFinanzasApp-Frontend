@@ -53,7 +53,10 @@ html, body {
       margin-bottom: 4px;
       ion-icon { font-size: 28px; }
     }
-    span { font-size: 15px; }
+    span {     
+      text-align: center;
+      font-size: 15px; 
+    }
   }
 }
 .accounts-list {

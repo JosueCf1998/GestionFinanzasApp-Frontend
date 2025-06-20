@@ -42,15 +42,18 @@ export class AccountsPage {
   }
 
   goToCreateAccount() {
-
+    let type: "gastos" | "ingresos" = "gastos";
+    this.navService.push('/accounts/create-account', 'slide-left', { type });
   }
 
   goToHistoryTransfer() {
-    // Navega al historial de transferencias
+    let type: "gastos" | "ingresos" = "gastos";
+    this.navService.push('/accounts/history-transfer', 'slide-left', { type });
   }
 
   goToNewTransfer() {
-    // Navega a la pantalla de nueva transferencia
+    let type: "gastos" | "ingresos" = "gastos";
+    this.navService.push('/accounts/new-transfer', 'slide-left', { type });
   }
   
 }

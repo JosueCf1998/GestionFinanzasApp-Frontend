@@ -54,6 +54,7 @@ export const routes: Routes = [
       }
     ],
   },
+  // CATEGORIES ROUTES
   {
     path: 'categories/edit',
     loadComponent: () => import('./features/side-menu/categories/edit-categories/edit-categories.page').then(m => m.EditCategoriesPage)
@@ -61,6 +62,19 @@ export const routes: Routes = [
   {
     path: 'categories/create',
     loadComponent: () => import('./features/side-menu/categories/create-categories/create-categories.page').then(m => m.CreateCategoriesPage)
+  },
+  // ACCOUNTS ROUTES
+  {
+    path: 'accounts/create-account',
+    loadComponent: () => import('./features/side-menu/accounts/create-account/create-account.page').then(m => m.CreateAccountPage)
+  },
+  {
+    path: 'accounts/history-transfer',
+    loadComponent: () => import('./features/side-menu/accounts/history-transfer/history-transfer.page').then(m => m.HistoryTransferPage)
+  },
+  {
+    path: 'accounts/new-transfer',
+    loadComponent: () => import('./features/side-menu/accounts/new-transfer/new-transfer.page').then(m => m.NewTransferPage)
   },
   // Wildcard para rutas no encontradas (opcional, recomendado en producción)
   {
