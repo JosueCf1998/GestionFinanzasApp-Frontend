@@ -83,108 +83,95 @@ ion-menu-button {
 }
 
 // ====================
-// Input de nombre de categoría
+// Monto inicial y moneda
+// ====================
+.amount-section {
+  background: #f6faf7;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #b7d1c222;
+  padding: 20px 0 14px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .amount-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .amount-wrapper {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    background: transparent;
+    min-width: 180px;
+    max-width: 95vw;
+    padding: 0 26px;
+    overflow-x: auto;
+    border-radius: 12px;
+    /* Opcional: para que no se vea feo el scroll horizontal */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+  }
+
+  .amount-input {
+    font-size: 32px;
+    font-weight: 700;
+    color: #222;
+    text-align: right;
+    border: none;
+    background: transparent;
+    min-width: 60px;
+    width: auto;
+    max-width: none;
+    flex: 0 1 auto;
+    overflow: visible;
+    text-overflow: initial;
+    white-space: nowrap;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin-right: 8px;
+  }
+  .currency-label {
+    font-size: 1.5rem;
+    color: #2e7d5b;
+    font-weight: 600;
+    letter-spacing: 1px;
+    min-width: 38px;
+    text-align: left;
+    flex-shrink: 0;
+  }
+  .amount-divider {
+    border-bottom: 2px solid #cfd8dc;
+    width: 85%;
+    margin: 10px auto 0 auto;
+  }
+}
+
+// ====================
+// Input de nombre de cuenta
 // ====================
 .input-row {
-  display: flex;
-  align-items: center;
-  background: #f4f4f4;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 4px;
-  gap: 16px;
-}
-
-.category-icon-circle.icon-edit {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #1976d2;
-  margin: 0;
-  ion-icon, img {
-    font-size: 28px;
-    color: #fff !important;
-    filter: brightness(0) invert(1);
-  }
-}
-
-.input-edit {
-  flex: 1;
-  font-size: 16px;
-  background: transparent;
-  border: none;
-  outline: none;
-  --padding-start: 0;
-  --padding-end: 0;
-  margin-left: 0;
-}
-
-.clear-btn {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin-left: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  ion-icon {
-    font-size: 22px;
+  .input-label {
+    display: block;
     color: #888;
-    transition: color 0.2s;
+    font-size: 15px;
+    font-weight: 500;
   }
-  &:hover ion-icon {
-    color: #e53935;
+  .input-edit {
+    font-size: 16px;
+    color: #222;
+    border: none;
+    background: transparent;
+    width: 100%;
+    --padding-start: 0;
+    --padding-end: 0;
+    border-bottom: 2px solid #cfd8dc;
+    margin-bottom: 2px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
   }
-}
-
-.input-error {
-  color: #e53935;
-  font-size: 13px;
-  margin-bottom: 8px;
-  margin-left: 4px;
-  font-weight: 500;
-}
-
-// ====================
-// Tipo de categoría (informativo)
-// ====================
-.label-tipo {
-  font-size: 15px;
-  font-weight: 500;
-  color: #888;
-  margin-bottom: 2px;
-  display: block;
-}
-
-.tipo-selectores {
-  display: flex;
-  gap: 12px;
-  margin-top: 4px;
-}
-
-.tipo-btn {
-  padding: 6px 18px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  background: #f4f4f4;
-
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border 0.2s, color 0.2s;
-}
-
-.tipo-btn.selected {
-  background: var(--ion-color-side-menu, #1976d2);
-  color: #fff;
-  border: 2px solid var(--ion-color-side-menu, #1976d2);
 }
 
 // ====================

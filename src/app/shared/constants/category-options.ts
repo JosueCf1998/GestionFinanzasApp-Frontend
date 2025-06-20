@@ -27,3 +27,16 @@ export const COLORES_CATEGORIA = [
   { nombre: 'Índigo', valor: '#283593' },    // indigo
   { nombre: 'Oro', valor: '#bfa100' }        // gold
 ];
+
+export const ICONOS_CUENTA = [
+  { nombre: 'Billetes', archivo: 'bills' },
+  { nombre: 'Banco', archivo: 'bank' },
+  { nombre: 'Dolares', archivo: 'dolar' },
+  { nombre: 'MoneyBag', archivo: 'money-bag' },
+  { nombre: 'Estudio', archivo: 'study' },
+  { nombre: 'Cartera', archivo: 'wallet' },
+  { nombre: 'Bus', archivo: 'bus' },
+  { nombre: 'Pregunta', archivo: 'question' },
+  { nombre: 'Salario', archivo: 'salary' },
+  { nombre: 'Pregunta', archivo: 'question' }
+];

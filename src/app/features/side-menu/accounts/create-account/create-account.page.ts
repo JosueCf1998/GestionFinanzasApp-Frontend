@@ -3,10 +3,9 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { ICONOS_CATEGORIA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
+import { ICONOS_CUENTA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
-import { Categoria } from '../accounts.page';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 
 @Component({
@@ -17,27 +16,19 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
 })
 export class CreateAccountPage {
-  tipoCategoria: string;
-  category: Categoria = {
-    nombre: "",
-    icono: "",
-    color: ""
-  };
-  
-  iconos = ICONOS_CATEGORIA;
+  title: string = "";
+  iconos = ICONOS_CUENTA;
   colores = COLORES_CATEGORIA;
-
-  nombreCategoria: string = '';
-  colorCategoria: string = "";
-  iconoCategoria: string = "";
 
   iconoSeleccionado: string = "";
   colorSeleccionado: string = "";
 
   showError: boolean = false;
   showCustomAlert = false;
-  private cambiosPendientes = false;
-  private isFirstInput = true;
+  cambiosPendientes = false;
+
+  montoInicial: string = '';
+  nombreCuenta: string = '';
 
   constructor(
     private navService: NavigationService,
@@ -45,51 +36,63 @@ export class CreateAccountPage {
   ) {
     const state = window.history.state;
     if (!state || !state.type) {
-      this.navService.forward('/main/categories', 'slide-right');
-      throw new Error('No se recibió la información necesaria para editar la categoría.');
+      this.navService.forward('/main/accounts', 'slide-right');
+      throw new Error('No se recibió la información necesaria para crear o editar la cuenta.');
     }
-    this.tipoCategoria = state.type;
-    this.colorCategoria = "#d3d3d3";
+    this.title = state.type === 'crear' ? 'Crear Cuenta' : 'Editar Cuenta';
+    if (state.cuenta) {
+      this.nombreCuenta = state.cuenta.nombre;
+      this.montoInicial = state.cuenta.saldo?.toString() ?? '';
+      this.iconoSeleccionado = state.cuenta.icono ?? '';
+      this.colorSeleccionado = state.cuenta.color ?? '';
+    }
   }
 
   seleccionarIcono(icon: any) {
     this.iconoSeleccionado = icon.archivo;
-    this.iconoCategoria = icon.archivo;
-    this.cambiosPendientes = this.iconoCategoria !== this.category.icono;
+    this.cambiosPendientes = true;
   }
 
   seleccionarColor(color: any) {
     this.colorSeleccionado = color.valor;
-    this.colorCategoria = color.valor;
-    this.cambiosPendientes = this.colorCategoria !== this.category.color;
+    this.cambiosPendientes = true;
+  }
+  
+  isValidateForm(): boolean {
+    return (
+      !this.nombreCuenta ||
+      this.montoInicial === null ||
+      this.montoInicial === '' ||
+      !this.colorSeleccionado ||
+      !this.iconoSeleccionado
+    );
   }
 
-  anadirCategoria() {
-    const nombreFinal = this.nombreCategoria.trim() === '' ? this.category.nombre : this.nombreCategoria.trim();
-    if (!nombreFinal) {
+  isNumberInvalid(value: any): boolean {
+    return isNaN(Number(value));
+  }
+
+  guardarCuenta() {
+    if (!this.montoInicial || !this.nombreCuenta || !this.iconoSeleccionado || !this.colorSeleccionado) {
       this.showError = true;
       return;
     }
     this.showError = false;
-    const newCategory: Categoria = {
-      nombre: nombreFinal,
+
+    // Aquí deberías guardar la cuenta (llamada a servicio o almacenamiento)
+    const nuevaCuenta = {
+      nombre: this.nombreCuenta,
+      saldo: parseFloat(this.montoInicial) || 0,
       icono: this.iconoSeleccionado,
       color: this.colorSeleccionado
     };
-    this.salirSinGuardar()
+
+    // Simulación de guardado y navegación
+    this.cambiosPendientes = false;
+    this.navService.forward('/main/accounts', 'slide-right');
   }
 
-  onInputNombreCategoria(event: any) {
-    const value = event?.detail?.value ?? event?.target?.value ?? '';
-    this.cambiosPendientes = value.trim() !== this.category.nombre;
-  }
-
-  clearNombreCategoria() {
-    this.nombreCategoria = '';
-    this.isFirstInput = true;
-  }
-
-  async backToCategories() {
+  async backToAccounts() {
     if (this.cambiosPendientes) {
       this.showCustomAlert = true;
     } else {

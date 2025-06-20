@@ -10,7 +10,7 @@
     <div class="accounts-actions">
       <div class="action-btn" (click)="goToCreateAccount()">
         <div class="action-icon">
-          <ion-icon src="assets/icon/account.svg"></ion-icon>
+          <ion-icon src="assets/icon/add.svg"></ion-icon>
         </div>
         <span>Crear Cuenta</span>
       </div>
@@ -30,15 +30,17 @@
 
     <!-- Lista de cuentas -->
     <div class="accounts-list">
-      <div class="account-item" *ngFor="let cuenta of cuentas">
-        <div class="account-icon" [ngStyle]="{'background': cuenta.color}">
-          <ion-icon src="assets/icon/{{cuenta.icono}}.svg"></ion-icon>
-        </div>
-        <div class="account-info">
-          <span class="account-name">{{ cuenta.nombre }}</span>
-        </div>
-        <div class="account-balance">
-          S/. {{ cuenta.saldo | number:'1.2-2' }} 
+      <div *ngFor="let cuenta of cuentas">
+        <div class="account-item" (click)="goToEditAccount(cuenta)">
+          <div class="account-icon" [ngStyle]="{'background': cuenta.color}">
+            <ion-icon src="assets/icon/{{cuenta.icono}}.svg"></ion-icon>
+          </div>
+          <div class="account-info">
+            <span class="account-name">{{ cuenta.nombre }}</span>
+          </div>
+          <div class="account-balance">
+            S/. {{ cuenta.saldo | number:'1.2-2' }} 
+          </div>
         </div>
       </div>
     </div>

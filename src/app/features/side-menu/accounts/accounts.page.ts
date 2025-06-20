@@ -6,10 +6,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { CATEGORY_COLORS } from 'src/app/shared/constants/category-colors';
 import { NavigationService } from "src/app/core/services/navigation.service";
 
-const ALLOWED_CATEGORY_COLORS = [
-  "blue", "yellow", "green", "red", "black", "pink", "orange", "purple", "teal", "brown", "gray", "cyan", "lime", "indigo", "gold"
-];
-
 export interface Categoria {
   nombre: string;
   icono: string;
@@ -26,8 +22,8 @@ export interface Categoria {
 export class AccountsPage {
   
   cuentas = [
-    { nombre: 'Principal', saldo: 155, icono: 'bills', color: '#BFD8CC' },
-    { nombre: 'Ahorro', saldo: 0, icono: 'money-bag', color: '#F45B69' }
+    { nombre: 'Principal', saldo: 155, icono: 'bills', color: '#afb42b' },
+    { nombre: 'Ahorro', saldo: 0, icono: 'money-bag', color: '#ad1457' }
   ];
 
   constructor(
@@ -42,8 +38,13 @@ export class AccountsPage {
   }
 
   goToCreateAccount() {
-    let type: "gastos" | "ingresos" = "gastos";
+    let type: "crear" | "editar" = "crear";
     this.navService.push('/accounts/create-account', 'slide-left', { type });
+  }
+
+  goToEditAccount(cuenta: any) {
+    let type: "crear" | "editar" = "editar";
+    this.navService.push('/accounts/create-account', 'slide-left', { type, cuenta });
   }
 
   goToHistoryTransfer() {
