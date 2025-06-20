@@ -26,8 +26,8 @@ export interface Categoria {
 export class AccountsPage {
   
   cuentas = [
-    { nombre: 'Principal', saldo: 155, icono: 'dinero', color: '#BFD8CC' },
-    { nombre: 'Ahorro', saldo: 0, icono: 'ahorro', color: '#F45B69' }
+    { nombre: 'Principal', saldo: 155, icono: 'bills', color: '#BFD8CC' },
+    { nombre: 'Ahorro', saldo: 0, icono: 'money-bag', color: '#F45B69' }
   ];
 
   constructor(

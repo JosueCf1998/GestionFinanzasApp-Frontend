@@ -3,20 +3,20 @@
     <!-- Total -->
     <div class="accounts-total-card">
       <span class="total-label">Total</span>
-      <span class="total-value">{{ totalCuentas | number:'1.0-0' }} <span class="currency">S/.</span></span>
+      <span class="total-value"> <span class="currency">S/.</span>{{ totalCuentas | number:'1.2-2' }}</span>
     </div>
 
     <!-- Acciones -->
     <div class="accounts-actions">
       <div class="action-btn" (click)="goToCreateAccount()">
         <div class="action-icon">
-          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+          <ion-icon src="assets/icon/account.svg"></ion-icon>
         </div>
         <span>Crear Cuenta</span>
       </div>
       <div class="action-btn" (click)="goToHistoryTransfer()">
         <div class="action-icon">
-          <ion-icon src="assets/icon/historial.svg"></ion-icon>
+          <ion-icon src="assets/icon/history.svg"></ion-icon>
         </div>
         <span>Historial de transferencias</span>
       </div>
@@ -38,7 +38,7 @@
           <span class="account-name">{{ cuenta.nombre }}</span>
         </div>
         <div class="account-balance">
-          {{ cuenta.saldo | number:'1.0-0' }} S/.
+          S/. {{ cuenta.saldo | number:'1.2-2' }} 
         </div>
       </div>
     </div>
