@@ -1,0 +1,48 @@
+<ion-content [fullscreen]="true">
+  <div class="accounts-content">
+    <!-- Total -->
+    <div class="accounts-total-card">
+      <span class="total-label">Total</span>
+      <span class="total-value">{{ totalCuentas | number:'1.0-0' }} <span class="currency">S/.</span></span>
+    </div>
+
+    <!-- Acciones -->
+    <div class="accounts-actions">
+      <div class="action-btn" (click)="goToCreateAccount()">
+        <div class="action-icon">
+          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+        </div>
+        <span>Crear Cuenta</span>
+      </div>
+      <div class="action-btn" (click)="goToHistoryTransfer()">
+        <div class="action-icon">
+          <ion-icon src="assets/icon/historial.svg"></ion-icon>
+        </div>
+        <span>Historial de transferencias</span>
+      </div>
+      <div class="action-btn" (click)="goToNewTransfer()">
+        <div class="action-icon">
+          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+        </div>
+        <span>Nueva transferencia</span>
+      </div>
+    </div>
+
+    <!-- Lista de cuentas -->
+    <div class="accounts-list">
+      <div class="account-item" *ngFor="let cuenta of cuentas">
+        <div class="account-icon" [ngStyle]="{'background': cuenta.color}">
+          <ion-icon src="assets/icon/{{cuenta.icono}}.svg"></ion-icon>
+        </div>
+        <div class="account-info">
+          <span class="account-name">{{ cuenta.nombre }}</span>
+        </div>
+        <div class="account-balance">
+          {{ cuenta.saldo | number:'1.0-0' }} S/.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+

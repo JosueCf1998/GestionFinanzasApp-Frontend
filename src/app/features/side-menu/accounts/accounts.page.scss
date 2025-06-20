@@ -1,0 +1,108 @@
+ion-content {
+  --overflow: hidden;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+  --padding-bottom: 0;
+  --padding-top: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --margin-bottom: 0;
+  --margin-top: 0;
+  scrollbar-width: none !important; /* Firefox */
+}
+
+ion-content *::-webkit-scrollbar,
+ion-content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+html, body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+.accounts-content {
+  padding: 24px 0 0 0;
+  background: #fdfdf7;
+  min-height: 100vh;
+}
+.accounts-total {
+  text-align: center;
+  margin-bottom: 24px;
+  .total-label { font-size: 18px; color: #888; }
+  .total-value { display: block; font-size: 32px; font-weight: bold; color: #222; }
+}
+.accounts-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 24px;
+  .action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #6b8f7e;
+    .action-icon {
+      background: #b7d1c2;
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 4px;
+      ion-icon { font-size: 28px; }
+    }
+    span { font-size: 15px; }
+  }
+}
+.accounts-list {
+  .account-item {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    margin: 8px 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px #0001;
+    .account-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 12px;
+      ion-icon { font-size: 22px; color: #fff; }
+    }
+    .account-info { flex: 1; }
+    .account-name { font-size: 18px; }
+    .account-balance { font-size: 17px; font-weight: 500; color: #444; }
+  }
+}
+
+.accounts-total-card {
+  background: #6b8f7e;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px #6b8f7e22;
+  padding: 24px 0 18px 0;
+  margin: 0 24px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .total-label {
+    font-size: 18px;
+    opacity: 0.85;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .total-value {
+    font-size: 38px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    .currency {
+      font-size: 22px;
+      font-weight: 400;
+      margin-left: 2px;
+      opacity: 0.9;
+    }
+  }
+}

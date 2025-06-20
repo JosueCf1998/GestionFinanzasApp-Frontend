@@ -47,6 +47,10 @@ export const routes: Routes = [
       {
         path: 'categories',
         loadComponent: () => import('./features/side-menu/categories/categories.page').then(m => m.CategoriesPage)
+      },
+      {
+        path: 'accounts',
+        loadComponent: () => import('./features/side-menu/accounts/accounts.page').then(m => m.AccountsPage)
       }
     ],
   },
