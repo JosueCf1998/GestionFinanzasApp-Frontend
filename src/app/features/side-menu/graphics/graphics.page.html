@@ -1,8 +1,53 @@
+<ion-content [fullscreen]="true" class="graphics-content">
+  <div class="chart-card">
 
+    <ion-segment [(ngModel)]="selectedTab" class="main-tabs" (ionChange)="updateChart()">
+      <ion-segment-button value="general">
+        <ion-label>GENERAL</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="gastos">
+        <ion-label>GASTOS</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="ingresos">
+        <ion-label>INGRESOS</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    
+    <ion-segment [(ngModel)]="selectedPeriod" class="period-tabs" (ionChange)="updateChart()">
+      <ion-segment-button value="anio">
+        <ion-label>Por año</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="mes">
+        <ion-label>Por mes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="semana">
+        <ion-label>Por semana</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="dia">
+        <ion-label>Por día</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
+    <div *ngIf="selectedPeriod === 'semana' && selectedMonthForWeek && selectedYearForWeek" class="year-label">
+      <ion-text color="medium">
+        <small>
+          Fecha: {{ selectedMonthForWeek | number:'2.0' }}/{{ selectedYearForWeek }}
+        </small>
+      </ion-text>
+    </div>
 
-
-<!-- <ion-split-pane contentId="main-content">
-  <ion-content id="main-content">
-  </ion-content>
-</ion-split-pane> -->
+    <div *ngIf="chartData && chartData.length > 0; else noData" class="apex-wrapper">
+      <app-custom-chart
+        [series]="chartOptions.series"
+        [categories]="chartOptions.xaxis.categories"
+        [chartType]="'bar'"
+        [colors]="['#5e9c87', '#f7c948', '#6cb2eb', '#f86c6b']">
+      </app-custom-chart>
+    </div>
+    <ng-template #noData>
+      <ion-text color="medium" class="no-data-text">
+        <p>No hay datos para mostrar.</p>
+      </ion-text>
+    </ng-template>
+  </div>
+</ion-content>
