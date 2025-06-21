@@ -1,119 +1,110 @@
-ion-menu ion-content {
-    --background: var(--ion-item-background, var(--ion-background-color, #fff));
+/* src/app/app.component.scss */
+
+// Estilos para el encabezado del menú
+.menu-header {
+  display: flex;
+  align-items: center;
+  padding: 10px; // Aumentamos un poco el padding vertical
+  background: var(--ion-color-side-menu);
+  color: var(--ion-color-primary-contrast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // Sombra sutil para darle un poco de elevación
+  margin-bottom: 10px; // Espacio debajo del encabezado
+}
+
+.user-avatar {
+  width: 50px; // Ligeramente más grande
+  height: 50px; // Ligeramente más grande
+  border-radius: 50%;
+  margin-right: 16px; // Ajuste de margen
+  border: 3px solid var(--ion-color-primary-contrast); // Borde un poco más grueso
+  object-fit: cover;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2); // Un "halo" sutil alrededor del avatar
+  transition: transform 0.3s ease-in-out; // Transición para efectos de hover/active si se añaden
+}
+
+.user-info {
+  display: flex;
+  flex-flow: column;
+  .user-name {
+    font-size: 18px; // Un poco más grande para el nombre
+    font-weight: 600; // Un poco más de peso
+    color: var(--ion-color-primary-contrast);
+    padding: 0px !important;
   }
-  
-  ion-menu.md ion-content {
-    --padding-start: 8px;
-    --padding-end: 8px;
-    --padding-top: 20px;
-    --padding-bottom: 20px;
+
+  .user-email {
+    color: rgba(255, 255, 255, 0.85); // Color con mejor contraste
+    font-size: 14px; // Ligeramente más grande
+    opacity: 0.9; // Sutil opacidad
   }
-  
-  ion-menu.md ion-list {
-    padding: 20px 0;
+}
+
+// Estilos para los elementos de la lista del menú
+ion-list {
+  padding: 0;
+  background: var(--ion-background-color); // Asegura que el fondo de la lista sea el del tema
+}
+
+ion-item {
+  --padding-start: 20px;
+  --inner-padding-end: 20px;
+  --background-hover: var(--ion-color-light-shade); // Un hover más sutil y oscuro
+  --color-hover: var(--ion-color-primary);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; // Transiciones suaves
+  border-radius: 8px; // Bordes ligeramente redondeados para los ítems
+  margin: 4px 10px; // Margen entre ítems y de los bordes del menú
+}
+
+ion-item.selected {
+  --background: var(--ion-color-side-menu);
+  color: var(--ion-color-primary-contrast); // Texto contrastante
+  box-shadow: 0 2px 5px rgba(var(--ion-color-primary-rgb), 0.3); // Sombra para el ítem seleccionado
+  border-radius: 8px;
+  margin: 4px 10px;
+
+  ion-icon {
+    color: var(--ion-color-primary-contrast); // Icono blanco para el seleccionado
   }
-  
-  ion-menu.md ion-note {
-    margin-bottom: 30px;
+}
+
+ion-icon {
+  color: var(--ion-color-medium); // Color por defecto para iconos
+  font-size: 1.3em; // Ligeramente más grandes
+  transition: color 0.2s ease-in-out; // Transición para el color del icono
+}
+
+ion-label {
+  font-weight: 500;
+  font-size: 1.05em; // Ligeramente más grande
+  color: var(--ion-color-dark); // Color de texto más oscuro para mejor legibilidad
+}
+
+// Ajustes para el modo oscuro (opcional, si tu app soporta temas)
+@media (prefers-color-scheme: dark) {
+  .menu-header {
+    background: linear-gradient(to right, var(--ion-color-dark), var(--ion-color-dark-shade));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
-  
-  ion-menu.md ion-list-header,
-  ion-menu.md ion-note {
-    padding-left: 10px;
+
+  ion-item {
+    --background-hover: var(--ion-color-medium-tint);
   }
-  
-  ion-menu.md ion-list#inbox-list {
-    border-bottom: 1px solid var(--ion-background-color-step-150, #d7d8da);
-  }
-  
-  ion-menu.md ion-list#inbox-list ion-list-header {
-    font-size: 22px;
-    font-weight: 600;
-  
-    min-height: 20px;
-  }
-  
-  ion-menu.md ion-list#labels-list ion-list-header {
-    font-size: 16px;
-  
-    margin-bottom: 18px;
-  
-    color: #757575;
-  
-    min-height: 26px;
-  }
-  
-  ion-menu.md ion-item {
-    --padding-start: 10px;
-    --padding-end: 10px;
-    border-radius: 4px;
-  }
-  
-  ion-menu.md ion-item.selected {
-    --background: rgba(var(--ion-color-primary-rgb), 0.14);
-  }
-  
-  ion-menu.md ion-item.selected ion-icon {
-    color: var(--ion-color-primary);
-  }
-  
-  ion-menu.md ion-item ion-icon {
-    color: #616e7e;
-  }
-  
-  ion-menu.md ion-item ion-label {
-    font-weight: 500;
-  }
-  
-  ion-menu.ios ion-content {
-    --padding-bottom: 20px;
-  }
-  
-  ion-menu.ios ion-list {
-    padding: 20px 0 0 0;
-  }
-  
-  ion-menu.ios ion-note {
-    line-height: 24px;
-    margin-bottom: 20px;
-  }
-  
-  ion-menu.ios ion-item {
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --min-height: 50px;
-  }
-  
-  ion-menu.ios ion-item.selected ion-icon {
-    color: var(--ion-color-primary);
-  }
-  
-  ion-menu.ios ion-item ion-icon {
-    font-size: 24px;
-    color: #73849a;
-  }
-  
-  ion-menu.ios ion-list#labels-list ion-list-header {
-    margin-bottom: 8px;
-  }
-  
-  ion-menu.ios ion-list-header,
-  ion-menu.ios ion-note {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  
-  ion-menu.ios ion-note {
-    margin-bottom: 8px;
-  }
-  
-  ion-note {
-    display: inline-block;
-    font-size: 16px;
-  
-    color: var(--ion-color-medium-shade);
-  }
-  
+
   ion-item.selected {
-    --color: var(--ion-color-primary);
+    --background: var(--ion-color-tertiary); // Un color diferente para el seleccionado en modo oscuro
+    color: var(--ion-color-tertiary-contrast);
+    box-shadow: 0 2px 5px rgba(var(--ion-color-tertiary-rgb), 0.3);
+
+    ion-icon {
+      color: var(--ion-color-tertiary-contrast);
+    }
   }
+
+  ion-icon {
+    color: var(--ion-color-light);
+  }
+
+  ion-label {
+    color: var(--ion-color-light);
+  }
+}
