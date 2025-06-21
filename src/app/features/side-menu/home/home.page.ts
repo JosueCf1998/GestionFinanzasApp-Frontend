@@ -7,13 +7,13 @@ import { TestServiceUseCase } from '../../../core/use-cases/testService.usecase'
 import { Post } from '../../../core/models/post.model';
 import { Result } from '../../../core/models/result.model';
 import { body } from 'ionicons/icons';
-
+import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent],
 })
 export class HomePage implements OnInit {
   isModalOpen = false;
@@ -21,6 +21,12 @@ export class HomePage implements OnInit {
   newAmount: number = this.amount;
   posts: Post[] = [];
   errorMessage: string | null = null;
+  segment: 'gastos' | 'ingresos' = 'gastos';
+
+    dataTabs = [
+    { value: 'gastos', label: 'Gasto' },
+    { value: 'ingresos', label: 'Ingreso' }
+  ];
 
   constructor(private testServiceUseCase: TestServiceUseCase) {}
 
@@ -41,6 +47,10 @@ export class HomePage implements OnInit {
       this.amount = this.newAmount;
     }
     this.closeModal();
+  }
+
+  onSegmentChanged(ev: any) {
+    this.segment = ev.detail.value;
   }
 
   loadGet() {

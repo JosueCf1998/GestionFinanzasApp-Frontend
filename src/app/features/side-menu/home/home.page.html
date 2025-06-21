@@ -7,19 +7,22 @@
     </div>
   
     <!-- Tabs de Gastos e Ingresos -->
-    <div class="tabs-container">
-      <ion-segment value="gastos">
-        <ion-segment-button value="gastos">
-          <ion-label>Gastos</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="ingresos">
-          <ion-label>Ingresos</ion-label>
-        </ion-segment-button>
-      </ion-segment>
+    <div class="">
+      <app-custom-segment
+        [options]="dataTabs"
+        [(model)]="segment"
+        segmentClass="main-tabs"
+        (modelChange)="onSegmentChanged($event)">
+      </app-custom-segment>
     </div>
   
     <!-- Lista de categorías -->
     <ion-list class="categories-list">
+      <ion-item>
+        <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
+        <ion-label>Salud</ion-label>
+        <ion-note slot="end">S/. 45.00</ion-note>
+      </ion-item>
       <ion-item>
         <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
         <ion-label>Salud</ion-label>

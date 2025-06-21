@@ -1,3 +1,59 @@
+// ====================
+// Estructura Base
+// ====================
+
+html, body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
+ion-content {
+  --overflow: hidden;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+  --padding-bottom: 0;
+  --padding-top: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --margin-bottom: 0;
+  --margin-top: 0;
+  scrollbar-width: none !important; /* Firefox */
+}
+
+ion-content *::-webkit-scrollbar,
+ion-content::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+// ====================
+// Estructura Vista
+// ====================
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fcfdf8;
+  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  box-sizing: border-box;
+  margin-top: 16px;
+  padding: 0 16px 16px 16px;
+  overflow: hidden !important;
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .chart-container {
   background: #fff;
   border-radius: 20px;
@@ -13,13 +69,16 @@
 .chart-card {
   background: #fff;
   border-radius: 22px;
-  margin: 32px 12px 0 12px;
-  padding: 18px 10px 10px 10px;
+  padding: 4px;
   box-shadow: 0 4px 16px #0001;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
+
+// ====================
+// Tabs
+// ====================
 
 .main-tabs {
   margin-bottom: 10px;
@@ -33,53 +92,65 @@
   --indicator-color: #5e9c87;
 }
 
+// ====================
+// Gráficos y Leyendas
+// ====================
+
 .apex-wrapper {
-  padding: 0 8px 8px 8px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.legend,
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
 }
 
 .legend {
-  display: flex;
-  align-items: center;
   justify-content: flex-start;
   margin-top: 12px;
-  font-size: 14px;
-  gap: 16px;
 }
-
-.legend-item {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 4px;
-}
-.legend-item.ingresos { background: #5e9c87; }
-.legend-item.gastos { background: #f7c948; }
-.legend-item.beneficio { background: #6cb2eb; }
-.legend-item.perdida { background: #f86c6b; }
 
 .legend-row {
-  display: flex;
-  gap: 18px;
-  align-items: center;
   justify-content: center;
   margin-top: 10px;
+  gap: 18px;
   font-size: 15px;
   color: #7a7a7a;
 }
 
+.legend-item,
 .legend-dot {
   display: inline-block;
-  width: 13px;
-  height: 13px;
   border-radius: 50%;
-  margin-right: 5px;
   vertical-align: middle;
 }
+
+.legend-item {
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+}
+
+.legend-dot {
+  width: 13px;
+  height: 13px;
+  margin-right: 5px;
+}
+
 .legend-dot.ingresos { background: #5e9c87; }
-.legend-dot.gastos { background: #f7c948; }
+.legend-dot.gastos   { background: #f7c948; }
 .legend-dot.beneficio { background: #6cb2eb; }
-.legend-dot.perdida { background: #f86c6b; }
+.legend-dot.perdida   { background: #f86c6b; }
+
+// ====================
+// Otros
+// ====================
 
 .no-data-text {
   text-align: center;

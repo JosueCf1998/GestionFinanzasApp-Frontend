@@ -1,6 +1,17 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexYAxis, ApexDataLabels, ApexTitleSubtitle, ApexLegend, ApexStroke, ApexPlotOptions, ApexTooltip } from "ng-apexcharts";
 import { NgApexchartsModule } from 'ng-apexcharts';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexYAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexLegend,
+  ApexStroke,
+  ApexPlotOptions,
+  ApexTooltip
+} from "ng-apexcharts";
 
 export type CustomChartOptions = {
   series: ApexAxisChartSeries;
@@ -30,9 +41,9 @@ export class CustomChartComponent implements OnChanges {
   @Input() title: string = '';
   @Input() colors: string[] = ['#5e9c87', '#f7c948', '#6cb2eb', '#f86c6b'];
 
-  public chartOptions!: CustomChartOptions;
+  chartOptions!: CustomChartOptions;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_: SimpleChanges): void {
     this.chartOptions = {
       series: this.series,
       chart: {
@@ -60,7 +71,7 @@ export class CustomChartComponent implements OnChanges {
         categories: this.categories,
         labels: {
           style: {
-            fontSize: "13px",
+            fontSize: "12px",
             colors: "#666"
           }
         },
@@ -70,7 +81,7 @@ export class CustomChartComponent implements OnChanges {
       yaxis: {
         labels: {
           style: {
-            fontSize: "13px",
+            fontSize: "12px",
             colors: "#666"
           }
         }
@@ -110,4 +121,5 @@ export class CustomChartComponent implements OnChanges {
       }
     };
   }
+
 }

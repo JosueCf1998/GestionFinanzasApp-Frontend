@@ -1,0 +1,14 @@
+<div class="custom-segment" [ngClass]="segmentClass" role="tablist">
+  <button
+    *ngFor="let opt of options"
+    type="button"
+    class="custom-segment-btn"
+    [class.active]="model === opt.value"
+    [attr.aria-selected]="model === opt.value"
+    (click)="onChange(opt.value)"
+    role="tab"
+  >
+    {{ opt.label }}
+    <span class="custom-segment-indicator" *ngIf="model === opt.value"></span>
+  </button>
+</div>

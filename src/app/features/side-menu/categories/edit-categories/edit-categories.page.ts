@@ -6,7 +6,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { ICONOS_CATEGORIA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
-import { Categoria } from '../categories.page';
+import { Categoria } from 'src/app/shared/models/categoria.model';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 
 @Component({

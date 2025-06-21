@@ -288,7 +288,7 @@ ion-menu-button {
   font-size: 16px;
   border-radius: 12px;
   letter-spacing: 0.5px;
-  --background: #1976d2;
+  --background:  var(--ion-color-side-menu);
   --color: #fff;
   --box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
   --border-radius: 12px;

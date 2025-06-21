@@ -1,16 +1,20 @@
+// ====================
+// Estructura Base
+// ====================
+
+html, body {
+  overflow: hidden !important;
+  height: 100%;
+}
+
 ion-content {
   --overflow: hidden;
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   overscroll-behavior: none;
   touch-action: none;
-  --padding-bottom: 0;
-  --padding-top: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  --margin-bottom: 0;
-  --margin-top: 0;
-  scrollbar-width: none !important; /* Firefox */
+  --padding: 0;
+  --margin: 0;
+  scrollbar-width: none !important;
 }
 
 ion-content *::-webkit-scrollbar,
@@ -21,30 +25,29 @@ ion-content::-webkit-scrollbar {
   background: transparent !important;
 }
 
-html, body {
-  overflow: hidden !important;
-  height: 100%;
-}
+// ====================
+// Contenido principal
+// ====================
 
 .content {
   display: flex;
-  flex-direction: column; /* Asegúrate de que los elementos estén en columna */
-  padding: 16px;
+  flex-direction: column;
   gap: 16px;
   background: #fcfdf8;
-  overflow: hidden !important;
   min-height: 100dvh;
-  height: 100dvh;
-  max-height: 100dvh;
   box-sizing: border-box;
-  padding-top: 0;
+  padding: 16px 16px 16px 16px;
+  overflow: hidden !important;
 }
 
-.tabs-container {
-  margin-top: 16px;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: center;
+// ====================
+// Tabs y categorías
+// ====================
+
+.main-tabs {
+  margin-bottom: 18px;
+  --background: #f8faf9;
+  --indicator-color: #5e9c87;
 }
 
 .categories-grid {
@@ -52,7 +55,6 @@ html, body {
   grid-template-columns: repeat(4, 1fr);
   gap: 24px 8px;
   justify-items: center;
-  padding: 0 12px;
 }
 
 .category-btn {

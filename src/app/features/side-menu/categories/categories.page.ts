@@ -5,25 +5,27 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { CATEGORY_COLORS } from 'src/app/shared/constants/category-colors';
 import { NavigationService } from "src/app/core/services/navigation.service";
+import { Categoria } from 'src/app/shared/models/categoria.model';
+import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
 
 const ALLOWED_CATEGORY_COLORS = [
   "blue", "yellow", "green", "red", "black", "pink", "orange", "purple", "teal", "brown", "gray", "cyan", "lime", "indigo", "gold"
 ];
-
-export interface Categoria {
-  nombre: string;
-  icono: string;
-  color: string; // nombre del color permitido
-}
 
 @Component({
   selector: "app-categories",
   templateUrl: "./categories.page.html",
   styleUrls: ["./categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent],
 })
 export class CategoriesPage {
+  dataTabs = [
+    { value: 'gastos', label: 'Gasto' },
+    { value: 'ingresos', label: 'Ingreso' }
+  ];
+
+
   categorias: { gastos: Categoria[]; ingresos: Categoria[] } = {
     gastos: [
       { nombre: "Salud", icono: "heart", color: "#c62828" },
