@@ -49,13 +49,17 @@ export class LoginPage implements OnInit {
     console.log('Password:', this.loginForm.value.password);
     const correo = this.loginForm.value.email;
     const contraseña = this.loginForm.value.password;
-    const datos = correo + ':' + contraseña;
-    const encryptedData = this.encryptionService.encrypt(datos);
-    console.log('Datos cifrados:', encryptedData);
-    const decryptedData = this.encryptionService.decrypt(encryptedData);
-    console.log("Datos descifrados:", decryptedData);
 
-    this.navService.push('/welcome-step-one', 'fade');
+    if (correo && contraseña) { // check if both are not null or undefined
+      const encryptedData = this.encryptionService.encrypt(correo);
+      console.log('correo cifrados:', encryptedData);
+      const decryptedData = this.encryptionService.encrypt(contraseña);
+      console.log('contraseña cifrados:', decryptedData);
+    } else {
+      console.error('Email and password are required');
+    }
+
+    // this.navService.push('/welcome-step-one', 'fade');
   }
 
   forgotPassword() {
