@@ -3,7 +3,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink, IonHeader, IonTitle, IonToolbar, IonAvatar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
-import { CommonModule } from '@angular/common'; // Importa el CommonModule
+import { CommonModule } from '@angular/common';
+import { CustomLoadingComponent } from "./shared/components/spinner/custom-loading.component";
 
 @Component({
   selector: "app-root",
@@ -29,8 +30,9 @@ import { CommonModule } from '@angular/common'; // Importa el CommonModule
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
-    CommonModule
-  ],
+    CommonModule,
+    CustomLoadingComponent
+],
 })
 export class AppComponent {
   public appPages = [

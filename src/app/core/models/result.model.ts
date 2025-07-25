@@ -18,7 +18,8 @@ export interface Result<T> {
  */
 export interface ErrorDetail {
   code: string;             // Código del error (ej. "NETWORK_ERROR")
-  description: string;      // Descripción del error
+  message: string;          // Mensaje del error
+  description?: string;     // Descripción detallada (opcional)
   details?: any;            // Información adicional sobre el error (opcional)
 }
 
