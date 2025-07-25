@@ -4,7 +4,8 @@ import { IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonN
 import { addIcons } from 'ionicons';
 import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
 import { CommonModule } from '@angular/common';
-import { CustomLoadingComponent } from "./shared/components/spinner/custom-loading.component";
+import { CustomLoadingComponent } from "./shared/components/custom-loading/custom-loading.component";
+import { DynamicAlertComponent } from './shared/components/basic-alert/basic-alert.component';
 
 @Component({
   selector: "app-root",
@@ -31,7 +32,8 @@ import { CustomLoadingComponent } from "./shared/components/spinner/custom-loadi
     IonRouterLink,
     IonRouterOutlet,
     CommonModule,
-    CustomLoadingComponent
+    CustomLoadingComponent,
+    DynamicAlertComponent
 ],
 })
 export class AppComponent {

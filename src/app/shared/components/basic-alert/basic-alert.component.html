@@ -1,0 +1,26 @@
+<div class="dynamic-alert-backdrop" (click)="closeOnBackdrop && cancel()"></div>
+<div class="dynamic-alert" [ngClass]="alertSize">
+  <div class="dynamic-alert-content">
+    <ion-icon class="dynamic-alert-image" src="{{imageUrl}}"></ion-icon>
+    <div *ngIf="header" class="dynamic-alert-header">{{ header }}</div>
+    <div *ngIf="message" class="dynamic-alert-message">{{ message }}</div>
+  </div>
+  <div class="dynamic-alert-actions" [ngClass]="{ reverse: reverseButtons }">
+    <button
+      *ngIf="showCancel"
+      class="dynamic-btn cancel"
+      [ngClass]="cancelButtonClass"
+      (click)="cancel()"
+    >
+      {{ cancelText }}
+    </button>
+    <button
+      *ngIf="showConfirm"
+      class="dynamic-btn confirm"
+      [ngClass]="confirmButtonClass"
+      (click)="confirm()"
+    >
+      {{ confirmText }}
+    </button>
+  </div>
+</div>

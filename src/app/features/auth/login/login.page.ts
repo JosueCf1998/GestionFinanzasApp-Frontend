@@ -29,6 +29,8 @@ import {
   LoginRequest,
 } from "src/app/core/use-cases/loginService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
+import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 
 @Component({
   selector: "app-login",
@@ -50,15 +52,22 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
     IonToolbar,
     CommonModule,
     ReactiveFormsModule,
-  ],
+    CustomAlertComponent,
+    DynamicAlertComponent
+],
 })
 export class LoginPage implements OnInit {
+
   showPassword: boolean = false;
 
   loginForm = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
   });
+
+  showGenericAlert: boolean = false;
+  showUnauthorizedAlert: boolean = false
+  messageError: string = '';
 
   constructor(
     private navService: NavigationService,
@@ -75,10 +84,11 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-    // if (this.loginForm.invalid) {
-    //   console.error('Email and password are required');
-    //   return;
-    // }
+    if (this.loginForm.invalid) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = "Ingresa tus credenciales correctamente.";
+      return;
+    }
     const body: LoginRequest = {
       email: this.loginForm.value.email!,
       password: this.loginForm.value.password!,
@@ -102,33 +112,25 @@ export class LoginPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          // Éxito: navega y muestra mensaje si lo deseas
           this.navService.push("/welcome-step-one", "fade");
-          // Opcional: mostrar mensaje de bienvenida
-          // console.log(result.message);
         } else if (result.error) {
           // Error de negocio: credenciales incorrectas, usuario no encontrado, etc.
-          console.error("Error en login:", result.error.message);
+          console.error("Detalle:", result.error.description);
           if (result.error.description) {
-            console.error("Detalle:", result.error.description);
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+          this.showGenericAlert = true;
           }
-          // Aquí puedes mostrar un mensaje al usuario en la UI
         } else {
-          // Error genérico: sin estructura de error
-          console.error("Error en login:", result.message);
+          this.showGenericAlert = true;
         }
       },
       error: (err) => {
         this.loadingService.hide();
-        // Error inesperado: red, servidor caído, etc.
-        console.error("Error inesperado en la petición:", err);
-        // Aquí puedes mostrar un mensaje genérico al usuario
-      },
-      complete: () => {
-        this.loadingService.hide();
-        // Lógica al finalizar la petición (opcional)
-        // Por ejemplo, ocultar un spinner de carga
-      },
+        this.showGenericAlert = true;
+      }
     });
   }
+
 }
