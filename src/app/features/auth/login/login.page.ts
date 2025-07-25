@@ -95,11 +95,12 @@ export class LoginPage implements OnInit {
     };
 
     this.executeLogin(body);
-    // this.navService.push('/welcome-step-one', 'fade');
   }
 
   forgotPassword() {
+    // this.navService.push('/forgot-password', 'fade');
     // this.navService.navigate('/welcome', 'flip', 'forward');
+    this.navService.push('/forgot-password', 'slide-left');
   }
 
   goToRegister() {
