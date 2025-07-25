@@ -2,13 +2,15 @@
  * Modelo genérico para encapsular el resultado de una operación.
  * @template T Tipo de los datos en caso de éxito.
  */
+
 export interface Result<T> {
-  statusCode: number;       // Código de estado HTTP o interno
-  success: boolean;         // Indica si la operación fue exitosa
-  message: string;          // Mensaje descriptivo del resultado
-  data?: T;                 // Datos devueltos en caso de éxito
-  error?: ErrorDetail;      // Detalles del error en caso de fallo
-  meta?: MetaData;          // Metadatos adicionales (opcional)
+  success: boolean;           // Indica si la operación fue exitosa
+  message: string;            // Mensaje descriptivo del resultado
+  data: T | null;             // Datos principales devueltos en caso de éxito o null en caso de error
+  timestamp?: string;         // Marca de tiempo de la operación (opcional)
+  statusCode?: number;        // Código de estado HTTP o interno (opcional)
+  error?: ErrorDetail;        // Detalles del error en caso de fallo (opcional)
+  meta?: MetaData;            // Metadatos adicionales (opcional)
 }
 
 /**
