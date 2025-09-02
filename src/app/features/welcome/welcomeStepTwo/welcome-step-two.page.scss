@@ -27,7 +27,10 @@
 
 
       .content-area {
-        padding-bottom: 24px;
+        padding-bottom: 12px;
+        gap: 16px;
+        display: flex;
+        flex-direction: column;
 
         .logo {
           width: 150px;
@@ -58,7 +61,6 @@
           // box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
         }
         ion-input {
-          color: white;
           font-size: 16px;
         }
       }
@@ -79,6 +81,61 @@
         }
       }
 
+    }
+  }
+
+  .input-item {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(67, 97, 238, 0.10);
+    margin-bottom: 22px;
+    padding: 0 12px;
+    border: 2px solid #4361ee;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-item:focus-within {
+    border-color: #3a0ca3;
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.18);
+  }
+
+  .custom-input {
+    font-size: 1.18rem;
+    color: #222;
+    font-weight: 500;
+    padding-left: 4px;
+    background: transparent;
+  }
+
+  ion-label {
+    color: #4361ee;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+  }
+
+  ion-input::placeholder {
+    color: #888;
+    opacity: 1;
+    font-size: 1rem;
+  }
+
+  ion-text[color="danger"] small {
+    margin-left: 4px;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 500px) {
+    .main-content {
+      max-width: 95vw;
+      padding: 16px 4px;
+    }
+    .input-item {
+      min-height: 48px;
+      padding: 0 6px;
     }
   }
 }

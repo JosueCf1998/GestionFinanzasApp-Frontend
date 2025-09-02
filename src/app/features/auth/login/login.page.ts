@@ -31,6 +31,7 @@ import {
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
+import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 
 @Component({
   selector: "app-login",
@@ -74,10 +75,13 @@ export class LoginPage implements OnInit {
     private encryptionService: EncryptionService,
     private fb: FormBuilder,
     private loginServiceUseCase: LoginServiceUseCase,
-    private loadingService: SpinnerService
+    private loadingService: SpinnerService,
+    private localManagementService: LocalManagementService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.localManagementService.clear();
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;

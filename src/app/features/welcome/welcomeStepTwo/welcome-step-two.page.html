@@ -1,46 +1,35 @@
 <ion-content [fullscreen]="true" class="auth-content">
-
-    <!-- Background View -->
   <div class="background-container"></div>
-
-    <!-- Container View -->
   <div class="container">
-    <!-- Logo/Header -->
-    <div class="header">
-    </div>
-
-    <!-- Content -->
+    <div class="header"></div>
     <div class="main-content">
-      <!-- Section Content-->
       <section class="content-area">
         <h1>Introduzca el saldo de su cuenta principal</h1>
         <p>Mas adelante tendrá la opción de poder ingresar mas cuentas.</p>
-        <form class="content-form">
-          <ion-input
-            type="depositedAmount"
-            placeholder="Ingresa tu Saldo Base"
-            [(ngModel)]="depositedAmount"
-            name="depositedAmount"
-            required>
-          </ion-input>
+        <form class="content-form" [formGroup]="dataForm">
+          <ion-item class="input-item">
+            <ion-input
+              type="number"
+              formControlName="amount"
+              placeholder="Ingresa tu Saldo Base"
+              required
+              inputmode="decimal"
+              class="custom-input">
+            </ion-input>
+          </ion-item>
         </form>
       </section>
-
-      <!-- Section Buttons -->
       <div class="section-buttons">
         <ion-button
           expand="block"
           shape="round"
           class="custom-btn"
-          (click)="toNavigate()">
+          (click)="handleContinueButton()"
+          [disabled]="dataForm.invalid">
           Siguiente
         </ion-button>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-    </footer>
-
+    <footer class="footer"></footer>
   </div>
 </ion-content>
