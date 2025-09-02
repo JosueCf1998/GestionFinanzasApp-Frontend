@@ -5,26 +5,15 @@ import * as CryptoJS from "crypto-js";
   providedIn: "root",
 })
 export class EncryptionService {
-  /*
-  private secretKey: string = '$#Gre1410';
-  private clave = CryptoJS.enc.Utf8.parse("ClaveSecreta32Bytes_123456789012"); // 32 bytes
-  private iv = CryptoJS.enc.Utf8.parse("VectorInicial16B"); // 16 bytes
+
+  private readonly secretKey = "TuClaveSuperSecreta@2024";
 
   encrypt(data: string): string {
-    const encryptedData = CryptoJS.AES.encrypt(data, this.clave,
-    { iv: this.iv }).toString();
-    return encryptedData;
+    return AesEncryptor.encrypt(data, this.secretKey);
   }
 
   decrypt(encryptedData: string): string {
-    const decryptedData = CryptoJS.AES.decrypt(encryptedData, this.secretKey).toString(CryptoJS.enc.Utf8);
-    return decryptedData;
-  }
-
-  */
-  encrypt(data: string): string {
-    const encryptedData = AesEncryptor.encrypt("Datos confidenciales", "TuClaveSuperSecreta@2024");
-    return encryptedData;
+    return AesEncryptor.decrypt(encryptedData, this.secretKey);
   }
 }
 
@@ -34,34 +23,58 @@ class AesEncryptor {
   private static readonly SALT_SIZE = 128 / 8;
   private static readonly IV_SIZE = 128 / 8;
 
-  private static getKeyAndIV(password: string, salt: CryptoJS.lib.WordArray) {
+  private static getKeyAndIV(password: string, salt: CryptoJS.lib.WordArray, iv?: CryptoJS.lib.WordArray) {
     const key = CryptoJS.PBKDF2(password, salt, {
       keySize: this.KEY_SIZE / 32,
       iterations: this.ITERATIONS,
       hasher: CryptoJS.algo.SHA256
     });
-    const iv = CryptoJS.lib.WordArray.random(this.IV_SIZE);
     return { key, iv };
   }
 
   public static encrypt(data: string, password: string): string {
     try {
       const salt = CryptoJS.lib.WordArray.random(this.SALT_SIZE);
-      const { key, iv } = this.getKeyAndIV(password, salt);
-      
-      const encrypted = CryptoJS.AES.encrypt(data, key, { 
+      const iv = CryptoJS.lib.WordArray.random(this.IV_SIZE);
+      const { key } = this.getKeyAndIV(password, salt, iv);
+
+      const encrypted = CryptoJS.AES.encrypt(data, key, {
         iv: iv,
         padding: CryptoJS.pad.Pkcs7,
         mode: CryptoJS.mode.CBC
       });
 
       // Formato: salt (Base64) + iv (Base64) + ciphertext (Base64)
-      return salt.toString(CryptoJS.enc.Base64) + 
-             iv.toString(CryptoJS.enc.Base64) + 
+      return salt.toString(CryptoJS.enc.Base64) +
+             iv.toString(CryptoJS.enc.Base64) +
              encrypted.toString();
     } catch (error) {
       console.error('Encryption error:', error);
       throw new Error('Failed to encrypt data');
+    }
+  }
+
+  public static decrypt(encryptedData: string, password: string): string {
+    try {
+      // Extraer salt, iv y ciphertext del string
+      const saltB64 = encryptedData.substr(0, 24);
+      const ivB64 = encryptedData.substr(24, 24);
+      const ciphertext = encryptedData.substr(48);
+
+      const salt = CryptoJS.enc.Base64.parse(saltB64);
+      const iv = CryptoJS.enc.Base64.parse(ivB64);
+      const { key } = this.getKeyAndIV(password, salt, iv);
+
+      const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+        iv: iv,
+        padding: CryptoJS.pad.Pkcs7,
+        mode: CryptoJS.mode.CBC
+      });
+
+      return decrypted.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+      console.error('Decryption error:', error);
+      throw new Error('Failed to decrypt data');
     }
   }
 }

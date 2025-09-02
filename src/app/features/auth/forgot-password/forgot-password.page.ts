@@ -25,10 +25,9 @@ import {
 import { NavigationService } from "../../../core/services/navigation.service";
 import { EncryptionService } from "../../../core/services/encryption.service";
 import {
-  LoginServiceUseCase,
-  LoginResponse,
-  LoginRequest,
-} from "src/app/core/use-cases/loginService.usecase";
+  ForgotPasswordServiceUseCase,
+  ForgotPasswordRequest
+} from "src/app/core/use-cases/forgotPasswordService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
@@ -77,7 +76,7 @@ export class ForgotPasswordPage implements OnInit {
     private navService: NavigationService,
     private encryptionService: EncryptionService,
     private fb: FormBuilder,
-    private loginServiceUseCase: LoginServiceUseCase,
+    private forgotPasswordServiceUseCase: ForgotPasswordServiceUseCase,
     private loadingService: SpinnerService
   ) {}
 
@@ -101,24 +100,21 @@ export class ForgotPasswordPage implements OnInit {
       this.messageError = "Ingresa tus credenciales correctamente.";
       return;
     }
-    const body: LoginRequest = {
+    const body: ForgotPasswordRequest = {
       email: this.loginForm.value.email!,
       password: this.loginForm.value.password!,
     };
-
     this.executeForgotPassword(body);
   }
 
-  private executeForgotPassword(body: LoginRequest) {
+  private executeForgotPassword(body: ForgotPasswordRequest) {
     this.loadingService.show();
-    this.loginServiceUseCase.login(body).subscribe({
+    this.forgotPasswordServiceUseCase.forgotPassword(body).subscribe({
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.navService.push("/welcome-step-one", "fade");
+          this.navService.forward('/login', 'slide-right');
         } else if (result.error) {
-          // Error de negocio: credenciales incorrectas, usuario no encontrado, etc.
-          console.error("Detalle:", result.error.description);
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
             this.messageError = result.error.description;

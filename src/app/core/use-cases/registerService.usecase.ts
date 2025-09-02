@@ -7,12 +7,14 @@ import { tap } from 'rxjs/operators';
 import { LocalManagementService } from '../services/localManagementService.service';
 import { KEY_MANAGEMENT } from '../constants/key-management.constants';
 
-export interface LoginRequest {
+export interface RegisterRequest {
+  name: string,
+  lastName: string,
   email: string;
   password: string;
 }
 
-export interface LoginResponse {
+export interface RegisterResponse {
   token: string;
   id: number;
   name: string;
@@ -22,7 +24,7 @@ export interface LoginResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class LoginServiceUseCase {
+export class RegisterServiceUseCase {
 
   constructor(
     private apiService: ApiService,
@@ -30,13 +32,15 @@ export class LoginServiceUseCase {
     private localManagementService: LocalManagementService
   ) {}
 
-  login(body: LoginRequest): Observable<Result<LoginResponse>> {
-    const endpoint = 'login-usuario';
-    const encryptedBody: LoginRequest = {
+  register(body: RegisterRequest): Observable<Result<RegisterResponse>> {
+    const endpoint = 'register-user';
+    const encryptedBody: RegisterRequest = {
+      name: body.name,
+      lastName: body.lastName,
       email: this.encryptionService.encrypt(body.email),
       password: this.encryptionService.encrypt(body.password),
     };
-    return this.apiService.post<LoginResponse>(endpoint, encryptedBody).pipe(
+    return this.apiService.post<RegisterResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
           this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, result.data.token);

@@ -93,18 +93,15 @@ export class LoginPage implements OnInit {
       email: this.loginForm.value.email!,
       password: this.loginForm.value.password!,
     };
-
     this.executeLogin(body);
   }
 
   forgotPassword() {
-    // this.navService.push('/forgot-password', 'fade');
-    // this.navService.navigate('/welcome', 'flip', 'forward');
     this.navService.push('/forgot-password', 'slide-left');
   }
 
   goToRegister() {
-    // this.navService.navigate('/welcome', 'curl', 'back');
+    this.navService.push('/register', 'slide-left');
   }
 
   private executeLogin(body: LoginRequest) {
@@ -115,8 +112,6 @@ export class LoginPage implements OnInit {
         if (result.success && result.data) {
           this.navService.push("/welcome-step-one", "fade");
         } else if (result.error) {
-          // Error de negocio: credenciales incorrectas, usuario no encontrado, etc.
-          console.error("Detalle:", result.error.description);
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
             this.messageError = result.error.description;
