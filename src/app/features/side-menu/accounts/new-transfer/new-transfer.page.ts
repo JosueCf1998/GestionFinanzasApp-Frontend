@@ -17,77 +17,101 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
 })
 export class NewTransferPage {
-  tipoCategoria: string;
+
+
+  cuentas: { nombre: string, id: string }[] = [
+  { nombre: 'Principal', id: '1' },
+  { nombre: 'Ahorros', id: '2' },
+  { nombre: 'Ahorros', id: '3' },
+  { nombre: 'Tarjeta', id: '4' }
+  // Puedes cargar dinámicamente desde tu servicio
+];
+cuentaSeleccionada: { nombre: string, id: string } | null = null;
+isModalOpen: boolean = false;
+
+
+  cambiosPendientes = false;
+
   category: Categoria = {
     nombre: "",
     icono: "",
     color: ""
   };
   
-  iconos = ICONOS_CATEGORIA;
-  colores = COLORES_CATEGORIA;
-
-  nombreCategoria: string = '';
-  colorCategoria: string = "";
-  iconoCategoria: string = "";
-
-  iconoSeleccionado: string = "";
-  colorSeleccionado: string = "";
-
-  showError: boolean = false;
-  showCustomAlert = false;
-  private cambiosPendientes = false;
-  private isFirstInput = true;
+  cuentaOrigen: string = 'Principal';
+  cuentaDestino: string = '';
+  monto: number | null = null;
+  fecha: Date = new Date();
+  comentario: string = '';
+  showCustomAlert: boolean = false;
 
   constructor(
     private navService: NavigationService,
     private router: Router
   ) {
-    const state = window.history.state;
-    if (!state || !state.type) {
-      this.navService.forward('/main/categories', 'slide-right');
-      throw new Error('No se recibió la información necesaria para editar la categoría.');
-    }
-    this.tipoCategoria = state.type;
-    this.colorCategoria = "#d3d3d3";
   }
 
-  seleccionarIcono(icon: any) {
-    this.iconoSeleccionado = icon.archivo;
-    this.iconoCategoria = icon.archivo;
-    this.cambiosPendientes = this.iconoCategoria !== this.category.icono;
+  seleccionarCuentaOrigen() {
+    // Lógica para abrir selector de cuenta origen
+    this.isModalOpen = true;
   }
 
-  seleccionarColor(color: any) {
-    this.colorSeleccionado = color.valor;
-    this.colorCategoria = color.valor;
-    this.cambiosPendientes = this.colorCategoria !== this.category.color;
+  seleccionarCuentaDestino() {
+    // Lógica para abrir selector de cuenta destino
   }
 
-  anadirCategoria() {
-    const nombreFinal = this.nombreCategoria.trim() === '' ? this.category.nombre : this.nombreCategoria.trim();
-    if (!nombreFinal) {
-      this.showError = true;
-      return;
-    }
-    this.showError = false;
-    const newCategory: Categoria = {
-      nombre: nombreFinal,
-      icono: this.iconoSeleccionado,
-      color: this.colorSeleccionado
-    };
-    this.salirSinGuardar()
+  abrirCalculadora() {
+    // Lógica para abrir modal/calculadora
   }
 
-  onInputNombreCategoria(event: any) {
-    const value = event?.detail?.value ?? event?.target?.value ?? '';
-    this.cambiosPendientes = value.trim() !== this.category.nombre;
+  abrirSelectorFecha() {
+    // Lógica para abrir selector de fecha
   }
 
-  clearNombreCategoria() {
-    this.nombreCategoria = '';
-    this.isFirstInput = true;
+  crearTransferencia() {
+    // Lógica para guardar la transferencia
+    // Validar campos y enviar al backend
   }
+
+
+
+
+
+
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
+  updateAmount() {
+    
+  }
+
+
+  abrirModalCuentas() {
+    this.isModalOpen = true;
+    this.cuentaSeleccionada = null;
+  }
+  
+  // Selecciona una cuenta en el modal
+  seleccionarCuentaModal(cuenta: { nombre: string, id: string }) {
+    this.cuentaSeleccionada = cuenta;
+  }
+  
+  // Confirma la selección y asigna la cuenta
+  confirmarCuenta() {
+    this.cuentaOrigen = this.cuentaSeleccionada?.nombre || '';
+    this.closeModal();
+  }
+
+
+
+
+
 
   async backToCategories() {
     if (this.cambiosPendientes) {
@@ -103,4 +127,5 @@ export class NewTransferPage {
     (document.activeElement as HTMLElement)?.blur();
     this.navService.forward('/main/accounts', 'slide-right');
   }
+
 }
