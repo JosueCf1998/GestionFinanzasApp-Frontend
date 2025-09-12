@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
@@ -14,20 +14,32 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Realiza una solicitud GET a la API.
+   * Realiza una solicitud GET a la API con headers opcionales.
    */
-  get<T>(endpoint: string): Observable<Result<T>> {
-    return this.http.get<Result<T>>(`${this.baseUrl}/${endpoint}`).pipe(
+  get<T>(endpoint: string, options?: { headers?: { [header: string]: string } }): Observable<Result<T>> {
+    let httpOptions = {};
+    if (options?.headers) {
+      httpOptions = {
+        headers: new HttpHeaders(options.headers)
+      };
+    }
+    return this.http.get<Result<T>>(`${this.baseUrl}/${endpoint}`, httpOptions).pipe(
       map((response) => response),
       catchError((error) => this.handleError(error))
     );
   }
 
   /**
-   * Realiza una solicitud POST a la API.
+   * Realiza una solicitud POST a la API con headers opcionales.
    */
-  post<T>(endpoint: string, body: any): Observable<Result<T>> {
-    return this.http.post<Result<T>>(`${this.baseUrl}/${endpoint}`, body).pipe(
+  post<T>(endpoint: string, body: any, options?: { headers?: { [header: string]: string } }): Observable<Result<T>> {
+    let httpOptions = {};
+    if (options?.headers) {
+      httpOptions = {
+        headers: new HttpHeaders(options.headers)
+      };
+    }
+    return this.http.post<Result<T>>(`${this.baseUrl}/${endpoint}`, body, httpOptions).pipe(
       map((response) => response),
       catchError((error) => this.handleError(error))
     );

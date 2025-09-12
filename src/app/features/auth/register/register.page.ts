@@ -103,8 +103,8 @@ export class RegisterPage implements OnInit {
       return;
     }
     const body: RegisterRequest = {
-      name: this.loginForm.value.name!,
-      lastName: this.loginForm.value.lastName!,
+      nombre: this.loginForm.value.name!,
+      apellidos: this.loginForm.value.lastName!,
       email: this.loginForm.value.email!,
       password: this.loginForm.value.password!,
     };

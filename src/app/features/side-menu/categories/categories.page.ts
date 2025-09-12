@@ -7,6 +7,9 @@ import { CATEGORY_COLORS } from 'src/app/shared/constants/category-colors';
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Categoria } from 'src/app/shared/models/categoria.model';
 import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
+import { RegisterServiceUseCase } from "src/app/core/use-cases/registerService.usecase";
+import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { ListCategoriesServiceUseCase } from "src/app/core/use-cases/listCategoriesService.usecase";
 
 const ALLOWED_CATEGORY_COLORS = [
   "blue", "yellow", "green", "red", "black", "pink", "orange", "purple", "teal", "brown", "gray", "cyan", "lime", "indigo", "gold"
@@ -20,53 +23,65 @@ const ALLOWED_CATEGORY_COLORS = [
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent],
 })
 export class CategoriesPage {
+
+  showGenericAlert: boolean = false;
   dataTabs = [
     { value: 'gastos', label: 'Gasto' },
     { value: 'ingresos', label: 'Ingreso' }
   ];
 
-
-  categorias: { gastos: Categoria[]; ingresos: Categoria[] } = {
-    gastos: [
-      { nombre: "Salud", icono: "heart", color: "#c62828" },
-      { nombre: "Educación", icono: "study", color: "#388e3c" },
-      { nombre: "Alquiler", icono: "wallet", color: "#222" },
-      { nombre: "Regalo", icono: "gift", color: "#1976d2" },
-      { nombre: "Transporte", icono: "bus", color: "#fbc02d" },
-      { nombre: "Comida", icono: "restaurant", color: "#ad1457" },
-      { nombre: "Otros", icono: "question", color: "#616161" },
-    ],
-    ingresos: [
-      { nombre: "Salario", icono: "salary", color: "#1976d2" },
-      { nombre: "Regalo", icono: "gift", color: "#ad1457" },
-      { nombre: "Interés", icono: "bank", color: "#388e3c" },
-      { nombre: "Otros", icono: "question", color: "#616161" },
-    ],
-  };
-
+  gastos: Categoria[] = [];
+  ingresos: Categoria[] = [];
   segment: "gastos" | "ingresos" = "gastos";
 
   constructor(
-    private navService: NavigationService
+    private navService: NavigationService,
+    private listCategoriesServiceUseCase: ListCategoriesServiceUseCase,
+    private loadingService: SpinnerService
   ) { }
 
   ngOnInit() {
+    this.listCategories();
   }
 
-  onSegmentChanged(ev: any) {
-    this.segment = ev.detail.value;
-  }
+  onSegmentChanged(value: string) {
+    if (value === "gastos" || value === "ingresos") {
+      this.segment = value as "gastos" | "ingresos";
+    }
+}
 
   goToCreateCategories(type: "gastos" | "ingresos") {
     this.navService.push('/categories/create', 'slide-left', { type });
   }
 
   goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {
-    this.navService.push('/categories/edit', 'slide-left', { type, category});
+    this.navService.push('/categories/edit', 'slide-left', { type, category });
   }
 
-  get categoriasActuales() {
-    return this.categorias[this.segment];
+  listCategories() {
+    this.executeListCategories();
+  }
+  
+  get categoriasActuales(): Categoria[] {
+    return this.segment === 'gastos' ? this.gastos : this.ingresos;
   }
 
+  private executeListCategories() {
+    this.loadingService.show();
+    this.listCategoriesServiceUseCase.listCategories().subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success && result.data) {
+          this.ingresos = result.data.items.filter(cat => cat.tipo === "ingreso");
+          this.gastos = result.data.items.filter(cat => cat.tipo === "gasto");
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: () => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
 }

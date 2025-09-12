@@ -39,7 +39,7 @@ export class ForgotPasswordServiceUseCase {
     return this.apiService.post<ForgotPasswordResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
-          this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, result.data.token);
+          this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${result.data.token}`);
           this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, result.data.name);
           this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, result.data.email);
         }
