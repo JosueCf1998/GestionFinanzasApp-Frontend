@@ -15,6 +15,39 @@ export class EncryptionService {
   decrypt(encryptedData: string): string {
     return AesEncryptor.decrypt(encryptedData, this.secretKey);
   }
+
+  /**
+   * Desencripta y parsea un objeto JSON encriptado
+   * @param encryptedData - String encriptado que contiene un JSON
+   * @returns El objeto parseado del tipo especificado
+   */
+  decryptObject<T>(encryptedData: string): T {
+    try {
+      const decryptedString = this.decrypt(encryptedData);
+      return JSON.parse(decryptedString) as T;
+    } catch (error) {
+      console.error('Error al desencriptar objeto:', error);
+      throw new Error('Error al procesar datos encriptados');
+    }
+  }
+
+  /**
+   * Extrae y desencripta datos de una respuesta que viene con formato { data: "encrypted..." }
+   * @param response - Objeto con propiedad 'data' que contiene el string encriptado
+   * @returns El objeto desencriptado y parseado del tipo especificado
+   */
+  decryptResponse<T>(response: any): T {
+    try {
+      const encryptedString = response.data;
+      if (!encryptedString || typeof encryptedString !== 'string') {
+        throw new Error('Formato de respuesta inválido');
+      }
+      return this.decryptObject<T>(encryptedString);
+    } catch (error) {
+      console.error('Error al desencriptar respuesta:', error);
+      throw error;
+    }
+  }
 }
 
 class AesEncryptor {

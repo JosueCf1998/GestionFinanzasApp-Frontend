@@ -127,6 +127,18 @@
 
   <!-- Modals -->
   <app-basic-alert
+    *ngIf="showSuccessAlert"
+    [message]="'Usuario registrado con éxito.'"
+    [imageUrl]="'assets/icon/check.svg'"
+    [confirmText]="'Regresar'"
+    [alertSize]="'medium'"
+    [reverseButtons]="true"
+    [showCancel]="false"
+    (onConfirm)="navigateToLogin()"
+  >
+  </app-basic-alert>
+
+  <app-basic-alert
     *ngIf="showGenericAlert"
     [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
     [imageUrl]="'assets/icon/alert-triangle.svg'"

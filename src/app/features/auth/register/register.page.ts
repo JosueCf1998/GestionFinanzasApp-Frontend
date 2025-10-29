@@ -70,6 +70,7 @@ export class RegisterPage implements OnInit {
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
 
+  showSuccessAlert: boolean = false;
   showGenericAlert: boolean = false;
   showUnauthorizedAlert: boolean = false
   messageError: string = '';
@@ -117,7 +118,7 @@ export class RegisterPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.navService.forward('/login', 'slide-right');
+          this.showSuccessAlert = true;
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;

@@ -9,14 +9,10 @@ import { KEY_MANAGEMENT } from '../constants/key-management.constants';
 
 export interface ForgotPasswordRequest {
   email: string;
-  password: string;
+  new_password: string;
 }
 
 export interface ForgotPasswordResponse {
-  token: string;
-  id: number;
-  name: string;
-  email: string;
 }
 
 @Injectable({
@@ -31,17 +27,15 @@ export class ForgotPasswordServiceUseCase {
   ) {}
 
   forgotPassword(body: ForgotPasswordRequest): Observable<Result<ForgotPasswordResponse>> {
-    const endpoint = 'register-user';
+    const endpoint = 'forgot-password';
     const encryptedBody: ForgotPasswordRequest = {
       email: this.encryptionService.encrypt(body.email),
-      password: this.encryptionService.encrypt(body.password),
+      new_password: this.encryptionService.encrypt(body.new_password),
     };
     return this.apiService.post<ForgotPasswordResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
-          this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${result.data.token}`);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, result.data.name);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, result.data.email);
+          // TODO: NO SE USARA
         }
       })
     );

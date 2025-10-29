@@ -32,6 +32,7 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
+import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 
 @Component({
   selector: "app-login",
@@ -80,7 +81,7 @@ export class LoginPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.localManagementService.clear();
+    // this.localManagementService.clear();
   }
 
   togglePassword() {
@@ -108,13 +109,22 @@ export class LoginPage implements OnInit {
     this.navService.push('/register', 'slide-left');
   }
 
+  private isFirstLogin(): boolean {
+    const firstLoginFlag = this.localManagementService.getVariable(KEY_MANAGEMENT.FIRST_LOGIN);
+    return firstLoginFlag === null || firstLoginFlag === 'false';
+  }
+
   private executeLogin(body: LoginRequest) {
     this.loadingService.show();
     this.loginServiceUseCase.login(body).subscribe({
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.navService.push("/welcome-step-one", "fade");
+          if (this.isFirstLogin()) {
+            this.navService.push("/welcome-step-one", "fade");
+          } else {
+            this.navService.push('/main', 'fade');
+          }
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;

@@ -6,6 +6,7 @@ import { EncryptionService } from '../services/encryption.service';
 import { tap } from 'rxjs/operators';
 import { LocalManagementService } from '../services/localManagementService.service';
 import { KEY_MANAGEMENT } from '../constants/key-management.constants';
+import { decryptData, encryptFields } from '../utils/encryption.util';
 
 export interface LoginRequest {
   email: string;
@@ -31,20 +32,22 @@ export class LoginServiceUseCase {
   ) {}
 
   login(body: LoginRequest): Observable<Result<LoginResponse>> {
-    const endpoint = 'login-usuario';
-    const encryptedBody: LoginRequest = {
-      email: this.encryptionService.encrypt(body.email),
-      password: this.encryptionService.encrypt(body.password),
-    };
+    const endpoint = 'login-user';
+    const encryptedBody = encryptFields(body, this.encryptionService);
     return this.apiService.post<LoginResponse>(endpoint, encryptedBody).pipe(
+      decryptData<LoginResponse>(this.encryptionService),
       tap(result => {
         if (result.success && result.data) {
-          this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${result.data.token}`);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, result.data.name);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, result.data.email);
+          this.saveUserData(result.data);
         }
       })
     );
+  }
+
+  private saveUserData(userData: LoginResponse): void {
+    this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.name);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, userData.email);
   }
 
 }

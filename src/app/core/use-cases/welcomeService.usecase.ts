@@ -8,8 +8,10 @@ import { LocalManagementService } from '../services/localManagementService.servi
 import { KEY_MANAGEMENT } from '../constants/key-management.constants';
 
 export interface WelcomeRequest {
-  name: string,
-  amount: string,
+  nombre: string;
+  saldo: number;
+  icon: string;
+  color: string;
 }
 
 export interface WelcomeResponse {
@@ -32,11 +34,20 @@ export class WelcomeServiceUseCase {
 
   createAccount(body:WelcomeRequest): Observable<Result<WelcomeResponse>> {
     const endpoint = 'create-account';
-    const encryptedBody: WelcomeRequest = {
-      name: body.name,
-      amount: body.amount
+    const request: WelcomeRequest = {
+      nombre: body.nombre,
+      saldo:  body.saldo,
+      icon: body.icon,
+      color:  body.color
     };
-    return this.apiService.post<WelcomeResponse>(endpoint, encryptedBody).pipe(
+  
+    const token = this.localManagementService.getVariable(KEY_MANAGEMENT.TOKEN);
+    const options = {
+      headers: {
+        Authorization: token || ''
+      }
+    };
+    return this.apiService.post<WelcomeResponse>(endpoint, request, options).pipe(
       tap(result => {
         if (result.success && result.data) {
         }

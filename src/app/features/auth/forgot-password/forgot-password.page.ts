@@ -102,7 +102,7 @@ export class ForgotPasswordPage implements OnInit {
     }
     const body: ForgotPasswordRequest = {
       email: this.loginForm.value.email!,
-      password: this.loginForm.value.password!,
+      new_password: this.loginForm.value.password!,
     };
     this.executeForgotPassword(body);
   }

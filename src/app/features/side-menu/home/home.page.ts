@@ -57,10 +57,8 @@ export class HomePage implements OnInit {
     this.testServiceUseCase.executeGet().subscribe((result: Result<Post[]>) => {
       if (result.success) {
         this.posts = result.data!;
-        console.log('Datos obtenidos:', this.posts);
       } else {
         this.errorMessage = result.message;
-        console.error('Error al cargar datos:', this.errorMessage);
       }
     });
   }

@@ -33,7 +33,7 @@ export class RegisterServiceUseCase {
   ) {}
 
   register(body: RegisterRequest): Observable<Result<RegisterResponse>> {
-    const endpoint = 'crear-usuario';
+    const endpoint = 'create-user';
     const encryptedBody: RegisterRequest = {
       nombre: body.nombre,
       apellidos: body.apellidos,
@@ -43,9 +43,7 @@ export class RegisterServiceUseCase {
     return this.apiService.post<RegisterResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
-          this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${result.data.token}`);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, result.data.name);
-          this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, result.data.email);
+          // TODO: NO SE USARA
         }
       })
     );

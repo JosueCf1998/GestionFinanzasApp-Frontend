@@ -3,4 +3,5 @@ export const KEY_MANAGEMENT = {
   NAME: 'user_name',
   EMAIL: 'user_email',
   ID: 'user_id',
+  FIRST_LOGIN: 'first_login',
 };

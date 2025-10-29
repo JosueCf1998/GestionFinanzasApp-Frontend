@@ -1,9 +1,22 @@
-<div class="dynamic-alert-backdrop" (click)="closeOnBackdrop && cancel()"></div>
-<div class="dynamic-alert" [ngClass]="alertSize">
+<div class="dynamic-alert-backdrop" (click)="closeOnBackdrop && cancel()" role="presentation"></div>
+<div 
+  class="dynamic-alert" 
+  [ngClass]="alertSize"
+  role="alertdialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="ariaLabelledBy"
+  [attr.aria-describedby]="ariaDescribedBy"
+>
   <div class="dynamic-alert-content">
-    <ion-icon class="dynamic-alert-image" src="{{imageUrl}}"></ion-icon>
-    <div *ngIf="header" class="dynamic-alert-header">{{ header }}</div>
-    <div *ngIf="message" class="dynamic-alert-message">{{ message }}</div>
+    <ion-icon 
+      class="dynamic-alert-image" 
+      [src]="imageUrl"
+      [attr.aria-label]="imageAlt"
+      [attr.title]="imageAlt"
+      role="img"
+    ></ion-icon>
+    <div *ngIf="header" id="alert-header" class="dynamic-alert-header">{{ header }}</div>
+    <div *ngIf="message" id="alert-message" class="dynamic-alert-message">{{ message }}</div>
   </div>
   <div class="dynamic-alert-actions" [ngClass]="{ reverse: reverseButtons }">
     <button
@@ -11,6 +24,8 @@
       class="dynamic-btn cancel"
       [ngClass]="cancelButtonClass"
       (click)="cancel()"
+      type="button"
+      [attr.aria-label]="cancelAriaLabel"
     >
       {{ cancelText }}
     </button>
@@ -19,6 +34,8 @@
       class="dynamic-btn confirm"
       [ngClass]="confirmButtonClass"
       (click)="confirm()"
+      type="button"
+      [attr.aria-label]="confirmAriaLabel"
     >
       {{ confirmText }}
     </button>

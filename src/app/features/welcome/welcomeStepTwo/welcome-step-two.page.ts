@@ -5,6 +5,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonImg, IonIcon, 
 import { NavigationService } from '../../../core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { WelcomeServiceUseCase, WelcomeRequest } from 'src/app/core/use-cases/welcomeService.usecase';
+import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
+import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 
 @Component({
   selector: 'app-welcome-step-two',
@@ -24,7 +26,8 @@ export class WelcomeStepTwoPage implements OnInit {
   constructor(
       private navService: NavigationService,
       private loadingService: SpinnerService,
-      private welcomeServiceUseCase: WelcomeServiceUseCase
+      private welcomeServiceUseCase: WelcomeServiceUseCase,
+      private localManagementService: LocalManagementService
   ) { }
 
   ngOnInit() {
@@ -32,11 +35,16 @@ export class WelcomeStepTwoPage implements OnInit {
 
   handleContinueButton() {
     const body: WelcomeRequest = {
-      name: "Principal",
-      amount: this.dataForm.value.amount!,
+      nombre: "Principal",
+      saldo: Number(this.dataForm.value.amount!),
+      icon: "bills",
+      color: "#afb42b",
     }
-    console.log(body)
     this.executeCreateAccount(body);
+  }
+  
+  private markAsLoggedIn(): void {
+    this.localManagementService.setVariable(KEY_MANAGEMENT.FIRST_LOGIN, true);
   }
 
   private executeCreateAccount(body: WelcomeRequest) {
@@ -45,6 +53,7 @@ export class WelcomeStepTwoPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
+          this.markAsLoggedIn();
           this.navService.push('/main', 'fade');
         } else if (result.error) {
           if (result.error.description) {
