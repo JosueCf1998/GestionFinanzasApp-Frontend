@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="success">
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="/prueba/screen-one"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pantalla 2 - Verde</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="screen-two">
+  <div class="content-center">
+    <h1>Pantalla 2</h1>
+    <p>Esta es la segunda pantalla (Verde)</p>
+    
+    <div class="button-group">
+      <ion-button 
+        expand="block" 
+        (click)="goBack()"
+        fill="outline"
+        class="nav-button"
+      >
+        ← Volver a Pantalla 1
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        (click)="goToScreenThree()"
+        class="nav-button"
+      >
+        Ir a Pantalla 3 →
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

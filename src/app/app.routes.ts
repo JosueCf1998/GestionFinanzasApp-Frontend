@@ -76,6 +76,19 @@ export const routes: Routes = [
     path: 'accounts/new-transfer',
     loadComponent: () => import('./features/side-menu/accounts/new-transfer/new-transfer.page').then(m => m.NewTransferPage)
   },
+  // PRUEBA ROUTES - Testing navigation
+  {
+    path: 'prueba/screen-one',
+    loadComponent: () => import('./features/prueba/screen-one/screen-one.page').then(m => m.ScreenOnePage)
+  },
+  {
+    path: 'prueba/screen-two',
+    loadComponent: () => import('./features/prueba/screen-two/screen-two.page').then(m => m.ScreenTwoPage)
+  },
+  {
+    path: 'prueba/screen-three',
+    loadComponent: () => import('./features/prueba/screen-three/screen-three.page').then(m => m.ScreenThreePage)
+  },
   // Wildcard para rutas no encontradas (opcional, recomendado en producción)
   {
     path: '**',

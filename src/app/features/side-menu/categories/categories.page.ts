@@ -51,11 +51,11 @@ export class CategoriesPage {
 }
 
   goToCreateCategories(type: "gastos" | "ingresos") {
-    this.navService.push('/categories/create', 'slide-left', { type });
+    //this.navService.push('/categories/create', 'slide-left', { type });
   }
 
   goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {
-    this.navService.push('/categories/edit', 'slide-left', { type, category });
+    //this.navService.push('/categories/edit', 'slide-left', { type, category });
   }
 
   listCategories() {

@@ -23,18 +23,18 @@ export class AccountsPage {
   }
 
   goToCreateAccount() {
-    this.navService.push('/accounts/create-account', 'slide-left', { type: "crear" });
+    //this.navService.push('/accounts/create-account', 'slide-left', { type: "crear" });
   }
 
   goToEditAccount(cuenta: any) {
-    this.navService.push('/accounts/create-account', 'slide-left', { type: "editar", cuenta });
+    //this.navService.push('/accounts/create-account', 'slide-left', { type: "editar", cuenta });
   }
 
   goToHistoryTransfer() {
-    this.navService.push('/accounts/history-transfer', 'slide-left', { type: "gastos" });
+    //this.navService.push('/accounts/history-transfer', 'slide-left', { type: "gastos" });
   }
 
   goToNewTransfer() {
-    this.navService.push('/accounts/new-transfer', 'slide-left', { type: "gastos" });
+    //this.navService.push('/accounts/new-transfer', 'slide-left', { type: "gastos" });
   }
 }
