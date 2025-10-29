@@ -1,88 +1,57 @@
-<ion-content [fullscreen]="true" class="auth-content" scroll-y="false">
+<ion-content class="auth-content" scroll-y="false">
   <div class="background-curve"></div>
 
-  <div class="login-container">
-    <!-- Logo/Header -->
-    <div class="header">
-      <div class="back-icon" (click)="navigateToLogin()">
-        <ion-icon
-        class="icon"
-          slot="start"
-          src="assets/icon/left.svg"
-        ></ion-icon>
+  <div class="register-container">
+    <div class="header-section">
+      <div class="back-icon" (click)="goBack()">
+        <ion-icon class="icon" src="assets/icon/left.svg"></ion-icon>
       </div>
-      <div class="account-icon">
-        <ion-icon
-        class="icon"
-          slot="start"
-          src="assets/icon/user-plus.svg"
-        ></ion-icon>
+      <div class="icon-wrapper">
+        <ion-icon src="assets/icon/user-plus.svg" class="main-icon"></ion-icon>
       </div>
-      <h1>Crea tu Cuenta</h1>
-      <p>Ingresa los siguientes datos: </p>
+      <h1>Bienvenido</h1>
+      <p>Crea tu cuenta para comenzar</p>
     </div>
 
-    <!-- Formulario -->
-    <form class="login-form" [formGroup]="loginForm">
-      
+    <form class="register-form" [formGroup]="registerForm">
       <ion-item lines="none" class="form-item">
-        <ion-icon
-          slot="start"
-          src="assets/icon/user.svg"
-          color="medium"
-        ></ion-icon>
+        <ion-icon slot="start" src="assets/icon/user.svg"></ion-icon>
         <ion-input
-          type="name"
+          type="text"
           placeholder="Nombres"
           formControlName="name"
           required
-        >
-        </ion-input>
+        ></ion-input>
       </ion-item>
 
       <ion-item lines="none" class="form-item">
-        <ion-icon
-          slot="start"
-          src="assets/icon/user.svg"
-          color="medium"
-        ></ion-icon>
+        <ion-icon slot="start" src="assets/icon/user.svg"></ion-icon>
         <ion-input
-          type="lastName"
+          type="text"
           placeholder="Apellidos"
           formControlName="lastName"
           required
-        >
-        </ion-input>
+        ></ion-input>
       </ion-item>
 
       <ion-item lines="none" class="form-item">
-        <ion-icon
-          slot="start"
-          src="assets/icon/mail.svg"
-          color="medium"
-        ></ion-icon>
+        <ion-icon slot="start" src="assets/icon/mail.svg"></ion-icon>
         <ion-input
           type="email"
           placeholder="Correo electrónico"
           formControlName="email"
           required
-        >
-        </ion-input>
+        ></ion-input>
       </ion-item>
 
       <ion-item lines="none" class="form-item">
-        <ion-icon
-          slot="start"
-          src="assets/icon/password.svg"
-          color="medium"
-        ></ion-icon>
+        <ion-icon slot="start" src="assets/icon/password.svg"></ion-icon>
         <ion-input
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           placeholder="Contraseña"
           formControlName="password"
           required
-        >
-        </ion-input>
+        ></ion-input>
         <ion-button fill="clear" slot="end" (click)="togglePassword()">
           <ion-icon
             [src]="showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'"
@@ -91,18 +60,13 @@
       </ion-item>
 
       <ion-item lines="none" class="form-item">
-        <ion-icon
-          slot="start"
-          src="assets/icon/password.svg"
-          color="medium"
-        ></ion-icon>
+        <ion-icon slot="start" src="assets/icon/password.svg"></ion-icon>
         <ion-input
-          type="password"
+          [type]="showRepeatPassword ? 'text' : 'password'"
           placeholder="Repite la Contraseña"
           formControlName="repeatPassword"
           required
-        >
-        </ion-input>
+        ></ion-input>
         <ion-button fill="clear" slot="end" (click)="toggleRepeatPassword()">
           <ion-icon
             [src]="showRepeatPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'"
@@ -111,30 +75,26 @@
       </ion-item>
     </form>
 
-    <!-- Section Buttons -->
-    <div class="section">
-        <ion-button
-          expand="block"
-          shape="round"
-          class="login-btn"
-          (click)="handleRegister()"
-        >
-          Crear Cuenta
-        </ion-button>
-      </div>
+      <ion-button
+        expand="block"
+        shape="round"
+        class="register-btn"
+        (click)="handleRegister()"
+      >
+        Crear Cuenta
+      </ion-button>
   </div>
 
-
-  <!-- Modals -->
+  <!-- Alerts -->
   <app-basic-alert
     *ngIf="showSuccessAlert"
     [message]="'Usuario registrado con éxito.'"
     [imageUrl]="'assets/icon/check.svg'"
-    [confirmText]="'Regresar'"
+    [confirmText]="'Ir a Login'"
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="navigateToLogin()"
+    (onConfirm)="handleSuccessConfirm()"
   >
   </app-basic-alert>
 
@@ -146,7 +106,7 @@
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showGenericAlert = false"
+    (onConfirm)="closeAlerts()"
   >
   </app-basic-alert>
 
@@ -158,8 +118,7 @@
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showUnauthorizedAlert = false"
+    (onConfirm)="closeAlerts()"
   >
   </app-basic-alert>
-  
 </ion-content>

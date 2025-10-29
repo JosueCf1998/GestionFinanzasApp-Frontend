@@ -1,37 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
-  FormsModule,
   Validators,
 } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonImg,
   IonIcon,
   IonButton,
-  IonLabel,
   IonItem,
-  IonList,
-  IonText,
   IonInput,
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
-import { EncryptionService } from "../../../core/services/encryption.service";
 import {
   ForgotPasswordServiceUseCase,
   ForgotPasswordRequest
 } from "src/app/core/use-cases/forgotPasswordService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
-
 
 @Component({
   selector: 'app-forgot-password',
@@ -39,27 +27,19 @@ import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/bas
   styleUrls: ['./forgot-password.page.scss'],
   standalone: true,
   imports: [
-    IonInput,
-    IonText,
-    IonList,
-    IonItem,
-    IonLabel,
-    IonButton,
-    IonIcon,
-    IonImg,
-    IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     ReactiveFormsModule,
-    CustomAlertComponent,
+    IonContent,
+    IonIcon,
+    IonButton,
+    IonItem,
+    IonInput,
     DynamicAlertComponent
-],
+  ],
 })
-export class ForgotPasswordPage implements OnInit {
+export class ForgotPasswordPage {
 
-  loginForm = new FormGroup({
+  forgotForm = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
     repeatPassword: new FormControl("", [Validators.required]),
@@ -69,18 +49,14 @@ export class ForgotPasswordPage implements OnInit {
   showRepeatPassword: boolean = false;
 
   showGenericAlert: boolean = false;
-  showUnauthorizedAlert: boolean = false
+  showUnauthorizedAlert: boolean = false;
   messageError: string = '';
 
   constructor(
     private navService: NavigationService,
-    private encryptionService: EncryptionService,
-    private fb: FormBuilder,
     private forgotPasswordServiceUseCase: ForgotPasswordServiceUseCase,
     private loadingService: SpinnerService
   ) {}
-
-  ngOnInit() {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -90,19 +66,20 @@ export class ForgotPasswordPage implements OnInit {
     this.showRepeatPassword = !this.showRepeatPassword;
   }
 
-  navigateToLogin() {
-    this.navService.forward('/login', 'slide-right');
+  goBack() {
+    this.navService.back();
   }
 
   handleForgotPassword() {
-    if (this.loginForm.invalid) {
+    if (this.forgotForm.invalid) {
       this.showUnauthorizedAlert = true;
       this.messageError = "Ingresa tus credenciales correctamente.";
       return;
     }
+    
     const body: ForgotPasswordRequest = {
-      email: this.loginForm.value.email!,
-      new_password: this.loginForm.value.password!,
+      email: this.forgotForm.value.email!,
+      new_password: this.forgotForm.value.password!,
     };
     this.executeForgotPassword(body);
   }
@@ -110,16 +87,16 @@ export class ForgotPasswordPage implements OnInit {
   private executeForgotPassword(body: ForgotPasswordRequest) {
     this.loadingService.show();
     this.forgotPasswordServiceUseCase.forgotPassword(body).subscribe({
-      next: (result) => {
+      next: async (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.navService.forward('/login', 'slide-right');
+          await this.navService.replace('/login');
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
             this.messageError = result.error.description;
           } else {
-          this.showGenericAlert = true;
+            this.showGenericAlert = true;
           }
         } else {
           this.showGenericAlert = true;
@@ -132,4 +109,8 @@ export class ForgotPasswordPage implements OnInit {
     });
   }
 
+  closeAlerts() {
+    this.showGenericAlert = false;
+    this.showUnauthorizedAlert = false;
+  }
 }
