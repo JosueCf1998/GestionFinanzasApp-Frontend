@@ -53,6 +53,7 @@
           name="monto"
           class="amount-input"
           placeholder="0"
+          (ionChange)="onInputChange()"
           required
         >
         </ion-input>
@@ -62,9 +63,20 @@
 
     <div class="transfer-section">
       <label class="transfer-label">Fecha</label>
-      <button type="button" class="date-btn" (click)="abrirSelectorFecha()">
-        {{ fecha | date:'fullDate' }}
-      </button>
+      <ion-datetime-button datetime="fecha-transferencia"></ion-datetime-button>
+      
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime 
+            id="fecha-transferencia"
+            presentation="date"
+            [(ngModel)]="fecha"
+            name="fecha"
+            [max]="maxDate"
+            (ionChange)="onInputChange()"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
     </div>
 
     <div class="transfer-section">
@@ -75,9 +87,10 @@
         maxlength="4096"
         placeholder="Comentario"
         class="comment-input"
+        (ionChange)="onInputChange()"
       >
       </ion-textarea>
-      <div class="comment-count">{{ comentario?.length || 0 }}/4096</div>
+      <div class="comment-count">{{ comentario.length || 0 }}/4096</div>
     </div>
 
     <ion-button
@@ -103,11 +116,17 @@
     (onConfirm)="salirSinGuardar()"
   ></app-custom-alert>
 
-  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()" cssClass="custom-modal">
+  <ion-modal 
+    [isOpen]="isModalOpen" 
+    (didDismiss)="closeModal()" 
+    [cssClass]="getModalClass()"
+  >
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Modificar Monto</ion-title>
+          <ion-title>
+            {{ tipoSeleccion === 'origen' ? 'Seleccionar Cuenta Origen' : 'Seleccionar Cuenta Destino' }}
+          </ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" (click)="closeModal()">
               <ion-icon name="close-outline"></ion-icon>
@@ -117,18 +136,27 @@
       </ion-header>
       <ion-content scroll-y="false">
         <div class="modal-content">
-          <div class="cuentas-list" [class.scrollable]="cuentas.length > 3">
-            <ng-container *ngFor="let cuenta of cuentas">
-              <button
-                type="button"
-                class="cuenta-item"
-                [class.selected]="cuentaSeleccionada === cuenta"
-                (click)="seleccionarCuentaModal(cuenta)">
-                {{ cuenta.nombre }}
-              </button>
-            </ng-container>
+          <div class="cuentas-list" [class.scrollable]="cuentasDisponibles.length > 3">
+            <button
+              *ngFor="let cuenta of cuentasDisponibles"
+              type="button"
+              class="cuenta-item"
+              [class.selected]="cuentaSeleccionada?.id === cuenta.id"
+              (click)="seleccionarCuentaModal(cuenta)">
+              {{ cuenta.nombre }}
+              <span *ngIf="cuenta.saldo !== undefined" class="saldo-info">
+                (S/ {{ cuenta.saldo }})
+              </span>
+            </button>
           </div>
-          <ion-button expand="block" shape="round" color="primary" (click)="updateAmount()">Guardar</ion-button>
+          <ion-button 
+            expand="block" 
+            shape="round" 
+            color="primary" 
+            [disabled]="!cuentaSeleccionada"
+            (click)="confirmarCuenta()">
+            Confirmar
+          </ion-button>
         </div>
       </ion-content>
     </ng-template>

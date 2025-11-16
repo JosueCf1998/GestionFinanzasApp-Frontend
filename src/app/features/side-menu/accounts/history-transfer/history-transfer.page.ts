@@ -44,10 +44,10 @@ export class HistoryTransferPage {
     private router: Router
   ) {
     const state = window.history.state;
-    if (!state || !state.type) {
-      this.navService.forward('/main/categories', 'slide-right');
-      throw new Error('No se recibió la información necesaria para editar la categoría.');
-    }
+    // if (!state || !state.type) {
+    //   this.navService.forward('/main/categories', 'slide-right');
+    //   throw new Error('No se recibió la información necesaria para editar la categoría.');
+    // }
     this.tipoCategoria = state.type;
     this.colorCategoria = "#d3d3d3";
   }
@@ -94,13 +94,13 @@ export class HistoryTransferPage {
       this.showCustomAlert = true;
     } else {
       (document.activeElement as HTMLElement)?.blur();
-      this.navService.forward('/main/accounts', 'slide-right');
+      this.navService.back()
     }
   }
 
   salirSinGuardar() {
     this.showCustomAlert = false;
     (document.activeElement as HTMLElement)?.blur();
-    this.navService.forward('/main/accounts', 'slide-right');
+    this.navService.back()
   }
 }

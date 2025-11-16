@@ -1,107 +1,109 @@
-<ion-header>
-  <ion-toolbar class="side-menu" color="side-menu">
-    <ion-buttons slot="start">
-      <button class="atras-btn" type="button" (click)="backToAccounts()">
-        <ion-icon src="assets/icon/left.svg"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title class="header-title">{{ title }}</ion-title>
-    <ion-buttons slot="end"></ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<!-- Content General -->
+<ion-content [fullscreen]="true" scroll-y="false">
+  <ion-header>
+    <ion-toolbar class="side-menu" color="side-menu">
+      <ion-buttons slot="start">
+        <button class="atras-btn" type="button" (click)="backToAccounts()">
+          <ion-icon src="assets/icon/left.svg"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title class="header-title">{{ title }}</ion-title>
+      <ion-buttons slot="end"></ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-content [fullscreen]="false" scroll-y="false">
   <div class="content">
-    <form class="edit-category-content" (ngSubmit)="guardarCuenta()">
-      <!-- Monto inicial y moneda -->
-      <div class="amount-section">
-        <div class="amount-row">
-          <div class="amount-wrapper">
-            <ion-input
-              type="number"
-              placeholder="0.00"
-              [(ngModel)]="montoInicial"
-              name="montoInicial"
-              inputmode="decimal"
-              min="0"
-              step="0.01"
-              maxlength="10"
-              class="amount-input"
-              required
-            ></ion-input>
-            <span class="currency-label">PEN</span>
+      <form class="edit-category-content" (ngSubmit)="guardarCuenta()">
+        <!-- Monto inicial y moneda -->
+        <div class="amount-section">
+          <div class="amount-row">
+            <div class="amount-wrapper">
+              <ion-input
+                type="number"
+                placeholder="0.00"
+                [(ngModel)]="montoInicial"
+                name="montoInicial"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                maxlength="10"
+                class="amount-input"
+                required
+              ></ion-input>
+              <span class="currency-label">PEN</span>
+            </div>
+          </div>
+          <div class="amount-divider"></div>
+        </div>
+
+        <!-- Nombre de la cuenta -->
+        <div class="input-row">
+          <label class="input-label">Nombre de la cuenta</label>
+          <ion-input
+            type="text"
+            placeholder="Nombre de la cuenta"
+            [(ngModel)]="nombreCuenta"
+            name="nombreCuenta"
+            required
+            maxlength="30"
+            class="input-edit"
+          ></ion-input>
+        </div>
+
+        <!-- Selección de símbolo -->
+        <div class="simbolos-row">
+          <label class="label-simbolos">Símbolo</label>
+          <div class="simbolos-grid">
+            <button
+              type="button"
+              class="simbolo-btn"
+              *ngFor="let icon of iconos"
+              [class.selected]="icon.archivo === iconoSeleccionado"
+              (click)="seleccionarIcono(icon)"
+              [attr.aria-label]="icon.nombre"
+            >
+              <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
+            </button>
           </div>
         </div>
-        <div class="amount-divider"></div>
-      </div>
 
-      <!-- Nombre de la cuenta -->
-      <div class="input-row">
-        <label class="input-label">Nombre de la cuenta</label>
-        <ion-input
-          type="text"
-          placeholder="Nombre de la cuenta"
-          [(ngModel)]="nombreCuenta"
-          name="nombreCuenta"
-          required
-          maxlength="30"
-          class="input-edit"
-        ></ion-input>
-      </div>
-
-      <!-- Selección de símbolo -->
-      <div class="simbolos-row">
-        <label class="label-simbolos">Símbolo</label>
-        <div class="simbolos-grid">
-          <button
-            type="button"
-            class="simbolo-btn"
-            *ngFor="let icon of iconos"
-            [class.selected]="icon.archivo === iconoSeleccionado"
-            (click)="seleccionarIcono(icon)"
-            [attr.aria-label]="icon.nombre"
-          >
-            <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
-          </button>
+        <!-- Selección de color -->
+        <div class="color-row">
+          <label class="label-color">Color</label>
+          <div class="color-grid">
+            <button
+              type="button"
+              class="color-btn"
+              *ngFor="let color of colores"
+              [ngStyle]="{'background': color.valor}"
+              [class.selected]="color.valor === colorSeleccionado"
+              (click)="seleccionarColor(color)"
+              [attr.aria-label]="color.nombre"
+            >
+              <ion-icon
+                *ngIf="color.valor === colorSeleccionado"
+                src="assets/icon/check.svg"
+                class="color-check"
+              ></ion-icon>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Selección de color -->
-      <div class="color-row">
-        <label class="label-color">Color</label>
-        <div class="color-grid">
-          <button
-            type="button"
-            class="color-btn"
-            *ngFor="let color of colores"
-            [ngStyle]="{'background': color.valor}"
-            [class.selected]="color.valor === colorSeleccionado"
-            (click)="seleccionarColor(color)"
-            [attr.aria-label]="color.nombre"
-          >
-            <ion-icon
-              *ngIf="color.valor === colorSeleccionado"
-              src="assets/icon/check.svg"
-              class="color-check"
-            ></ion-icon>
-          </button>
-        </div>
-      </div>
+        <!-- Botón de acción -->
+        <ion-button expand="block" class="btn-anadir" [disabled]="isValidateForm()" type="submit">
+          Guardar
+        </ion-button>
+      </form>
+    </div>
 
-      <!-- Botón de acción -->
-      <ion-button expand="block" class="btn-anadir" [disabled]="isValidateForm()" type="submit">
-        Guardar
-      </ion-button>
-    </form>
-  </div>
-
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
+    <app-custom-alert
+      *ngIf="showCustomAlert"
+      header="Cambios sin guardar"
+      message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
+      cancelText="No"
+      confirmText="Sí"
+      (onCancel)="showCustomAlert = false"
+      (onConfirm)="salirSinGuardar()"
+    ></app-custom-alert>
+    
 </ion-content>

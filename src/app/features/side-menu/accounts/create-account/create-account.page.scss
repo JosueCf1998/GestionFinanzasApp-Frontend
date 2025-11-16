@@ -1,37 +1,4 @@
-// ====================
-// Estructura Base
-// ====================
-html, body {
-  overflow: hidden !important;
-  height: 100%;
-}
 
-ion-content {
-  --overflow: hidden;
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
-  overscroll-behavior: none;
-  touch-action: none;
-  --padding-bottom: 0;
-  --padding-top: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  --margin-bottom: 0;
-  --margin-top: 0;
-  scrollbar-width: none !important;
-}
-
-ion-content *::-webkit-scrollbar,
-ion-content::-webkit-scrollbar {
-  width: 0 !important;
-  height: 0 !important;
-  display: none !important;
-  background: transparent !important;
-}
-
-// ====================
-// Barra superior y header
-// ====================
 ion-menu-button {
   color: var(--ion-color-side-menu);
 }
