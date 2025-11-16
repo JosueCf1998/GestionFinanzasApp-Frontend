@@ -23,18 +23,20 @@ export class AccountsPage {
   }
 
   goToCreateAccount() {
-    //this.navService.push('/accounts/create-account', 'slide-left', { type: "crear" });
+    // Navegar a la ruta anidada bajo /main y pasar el tipo en el estado
+    this.navService.push('/accounts/create-account', { type: 'crear' });
   }
 
   goToEditAccount(cuenta: any) {
-    //this.navService.push('/accounts/create-account', 'slide-left', { type: "editar", cuenta });
+    // Reutilizamos la pantalla de creación para edición pasando el estado
+    this.navService.push('/accounts/create-account', { type: 'editar', cuenta });
   }
 
   goToHistoryTransfer() {
-    //this.navService.push('/accounts/history-transfer', 'slide-left', { type: "gastos" });
+    this.navService.push('/accounts/history-transfer', { });
   }
 
   goToNewTransfer() {
-    //this.navService.push('/accounts/new-transfer', 'slide-left', { type: "gastos" });
+    this.navService.push('/accounts/new-transfer', { });
   }
 }

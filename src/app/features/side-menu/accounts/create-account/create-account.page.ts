@@ -97,13 +97,13 @@ export class CreateAccountPage {
       this.showCustomAlert = true;
     } else {
       (document.activeElement as HTMLElement)?.blur();
-      this.navService.forward('/main/accounts', 'slide-right');
+      this.navService.back();
     }
   }
 
   salirSinGuardar() {
     this.showCustomAlert = false;
     (document.activeElement as HTMLElement)?.blur();
-    this.navService.forward('/main/accounts', 'slide-right');
+    this.navService.back();
   }
 }

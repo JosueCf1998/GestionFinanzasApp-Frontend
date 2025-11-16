@@ -73,12 +73,6 @@ isModalOpen: boolean = false;
     // Validar campos y enviar al backend
   }
 
-
-
-
-
-
-
   openModal() {
     this.isModalOpen = true;
   }
@@ -108,24 +102,19 @@ isModalOpen: boolean = false;
     this.closeModal();
   }
 
-
-
-
-
-
   async backToCategories() {
     if (this.cambiosPendientes) {
       this.showCustomAlert = true;
     } else {
       (document.activeElement as HTMLElement)?.blur();
-      this.navService.forward('/main/accounts', 'slide-right');
+      this.navService.back();
     }
   }
 
   salirSinGuardar() {
     this.showCustomAlert = false;
     (document.activeElement as HTMLElement)?.blur();
-    this.navService.forward('/main/accounts', 'slide-right');
+    this.navService.back();
   }
 
 }
