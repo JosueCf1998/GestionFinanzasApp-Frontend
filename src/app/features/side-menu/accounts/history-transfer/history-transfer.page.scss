@@ -2,31 +2,6 @@ ion-menu-button {
   color: var(--ion-color-side-menu);
 }
 
-#container {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  color: #8c8c8c;
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-
 // ====================
 // Barra superior y header
 // ====================
@@ -45,7 +20,8 @@ ion-menu-button {
   letter-spacing: 0.5px;
 }
 
-.atras-btn {
+.atras-btn,
+.add-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,9 +36,11 @@ ion-menu-button {
   width: 40px;
   height: 40px;
   font-size: 25px;
+  
   &:hover {
-    background: #ececec;
+    background: rgba(255, 255, 255, 0.1);
   }
+  
   ion-icon {
     font-size: 28px;
     color: #fff !important;
@@ -73,237 +51,214 @@ ion-menu-button {
 // ====================
 // Contenido principal
 // ====================
-.edit-category-content {
-  padding: 28px 16px 0 16px;
+.content-wrapper {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  max-width: 420px;
-  margin: 0 auto;
+  background: #f5f5f5;
 }
 
 // ====================
-// Input de nombre de categoría
+// Sección de filtros
 // ====================
-.input-row {
+.filter-section {
+  background: #fff;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.period-navigation {
   display: flex;
   align-items: center;
-  background: #f4f4f4;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 12px 8px;
+  background: #f8fafc;
   border-radius: 12px;
-  padding: 12px 16px;
-  margin-bottom: 4px;
-  gap: 16px;
-}
 
-.category-icon-circle.icon-edit {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #1976d2;
-  margin: 0;
-  ion-icon, img {
-    font-size: 28px;
-    color: #fff !important;
-    filter: brightness(0) invert(1);
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(56, 128, 255, 0.1);
+    }
+
+    ion-icon {
+      font-size: 24px;
+      color: var(--ion-color-side-menu);
+    }
+  }
+
+  .period-label {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2a2a2a;
+    letter-spacing: 0.3px;
   }
 }
 
-.input-edit {
+// ====================
+// Lista de transferencias
+// ====================
+.transfers-list {
   flex: 1;
-  font-size: 16px;
-  background: transparent;
-  border: none;
-  outline: none;
-  --padding-start: 0;
-  --padding-end: 0;
-  margin-left: 0;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f5f5f5;
 }
 
-.clear-btn {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin-left: 6px;
+.no-data {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 60px 20px;
+  color: #999;
+  text-align: center;
+
   ion-icon {
-    font-size: 22px;
-    color: #888;
-    transition: color 0.2s;
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
   }
-  &:hover ion-icon {
-    color: #e53935;
+
+  p {
+    font-size: 16px;
+    margin: 0;
   }
 }
 
-.input-error {
-  color: #e53935;
-  font-size: 13px;
-  margin-bottom: 8px;
-  margin-left: 4px;
-  font-weight: 500;
+.transfer-group {
+  margin-bottom: 24px;
 }
 
-// ====================
-// Tipo de categoría (informativo)
-// ====================
-.label-tipo {
-  font-size: 15px;
-  font-weight: 500;
-  color: #888;
-  margin-bottom: 2px;
-  display: block;
+.date-header {
+  margin-bottom: 12px;
+  padding: 0 4px;
+
+  .date-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: 0.3px;
+  }
 }
 
-.tipo-selectores {
+.transfer-item {
   display: flex;
-  gap: 12px;
-  margin-top: 4px;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
-.tipo-btn {
-  padding: 6px 18px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  background: #f4f4f4;
-
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border 0.2s, color 0.2s;
-}
-
-.tipo-btn.selected {
-  background: var(--ion-color-side-menu, #1976d2);
-  color: #fff;
-  border: 2px solid var(--ion-color-side-menu, #1976d2);
-}
-
-// ====================
-// Selección de símbolo
-// ====================
-.simbolos-row {
-  margin-bottom: 8px;
-}
-
-.label-simbolos {
-  font-size: 15px;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.simbolos-grid {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-
-.simbolo-btn {
+.transfer-icon {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #f4f4f4;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.2s, background 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-  &:hover {
-    background: #e3f2fd;
-  }
-  &.selected {
-    border: 2px solid #1976d2;
-    background: #e3f2fd;
-  }
+  margin-right: 14px;
+  flex-shrink: 0;
+
   ion-icon {
-    font-size: 24px;
-    color: #0000;
+    font-size: 22px;
+    color: #fff;
   }
 }
 
-// ====================
-// Selección de color
-// ====================
-.color-row {
-  margin-bottom: 8px;
+.transfer-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.label-color {
+.transfer-category {
   font-size: 15px;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 8px;
-  display: block;
+  font-weight: 600;
+  color: #2a2a2a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.color-grid {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 6px;
+.transfer-subcategory {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.color-btn {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.transfer-description {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.color-check {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 28px;
-  color: #fff !important;
-  pointer-events: none;
-  z-index: 2;
-}
+.transfer-amount {
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 12px;
+  flex-shrink: 0;
+  white-space: nowrap;
 
-.add-color-btn {
-  background: #f4f4f4 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed #bbb;
-  ion-icon {
-    font-size: 20px;
-    color: #888;
+  &.positive {
+    color: #5e9c87;
+  }
+
+  &.negative {
+    color: #f86c6b;
   }
 }
 
 // ====================
-// Botón añadir
+// Responsive
 // ====================
-.btn-anadir {
-  margin-top: 22px;
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 12px;
-  letter-spacing: 0.5px;
-  --background: #1976d2;
-  --color: #fff;
-  --box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
-  --border-radius: 12px;
+@media (max-width: 768px) {
+  .filter-section {
+    padding: 12px;
+  }
+
+  .transfers-list {
+    padding: 12px;
+  }
+
+  .period-navigation {
+    padding: 8px 4px;
+  }
+
+  .transfer-item {
+    padding: 12px;
+  }
+
 }

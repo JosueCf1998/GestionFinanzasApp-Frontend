@@ -1,115 +1,87 @@
-<ion-header>
-  <ion-toolbar class="side-menu" color="side-menu">
-    <ion-buttons slot="start">
-      <button class="atras-btn" type="button" (click)="backToCategories()">
-        <ion-icon src="assets/icon/left.svg"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title class="header-title">Historial de Transferencias</ion-title>
-    <ion-buttons slot="end">
-      <!-- Acciones adicionales -->
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+<!-- Content General -->
 <ion-content [fullscreen]="true" scroll-y="false">
-  <form class="edit-category-content" (ngSubmit)="anadirCategoria()">
-    <!-- Nombre de la categoría -->
-    <div class="input-row">
-      <div class="category-icon-circle icon-edit" [ngStyle]="{'background': colorCategoria}">
-        <ion-icon *ngIf="category" [src]="'assets/icon/' + iconoCategoria + '.svg'" class="input-icon"></ion-icon>
-      </div>
-      <ion-input
-        type="text"
-        placeholder="Nombre de la categoría"
-        [(ngModel)]="nombreCategoria"
-        name="nombreCategoria"
-        required
-        autocomplete="off"
-        maxlength="30"
-        class="input-edit"
-        (ionInput)="onInputNombreCategoria($event)"
-      ></ion-input>
-      <button type="button" class="clear-btn" *ngIf="nombreCategoria" (click)="clearNombreCategoria()">
-        <!-- <ion-icon name="close-circle"></ion-icon> -->
-      </button>
-    </div>
-
-    <!-- Tipo de Categoría (seleccionable, con diseño informativo) -->
-    <div class="tipo-row">
-      <label class="label-tipo">Tipo</label>
-      <div class="tipo-selectores">
-        <button
-          type="button"
-          class="tipo-btn"
-          [class.selected]="tipoCategoria === 'gastos'"
-          (click)="tipoCategoria = 'gastos'"
-        >
-          Gasto
+  <ion-header>
+    <ion-toolbar class="side-menu" color="side-menu">
+      <ion-buttons slot="start">
+        <button class="atras-btn" type="button" (click)="backToAccounts()">
+          <ion-icon src="assets/icon/left.svg"></ion-icon>
         </button>
-        <button
-          type="button"
-          class="tipo-btn"
-          [class.selected]="tipoCategoria === 'ingresos'"
-          (click)="tipoCategoria = 'ingresos'"
-        >
-          Ingreso
+      </ion-buttons>
+      <ion-title class="header-title">{{ title }}</ion-title>
+      <ion-buttons slot="end">
+        <button class="add-btn" type="button">
+          <ion-icon name="add-circle-outline"></ion-icon>
         </button>
-      </div>
-    </div>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
 
-    <!-- Selección de símbolo -->
-    <div class="simbolos-row">
-      <label class="label-simbolos">Símbolo</label>
-      <div class="simbolos-grid">
-        <button
-          type="button"
-          class="simbolo-btn"
-          *ngFor="let icon of iconos"
-          [class.selected]="icon.archivo === iconoSeleccionado"
-          (click)="seleccionarIcono(icon)"
-          [attr.aria-label]="icon.nombre"
-        >
-          <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
+  <div class="content-wrapper">
+    <!-- Filtros de período -->
+    <div class="filter-section">
+      <app-custom-segment
+        [options]="periodTabs"
+        [(model)]="selectedPeriod"
+        segmentClass="period-tabs"
+        (modelChange)="onPeriodChange()">
+      </app-custom-segment>
+
+      <!-- Navegación según el período seleccionado -->
+      <div class="period-navigation" *ngIf="selectedPeriod !== 'periodo'">
+        <button class="nav-btn" (click)="selectedPeriod === 'dia' ? changeDay(-1) : selectedPeriod === 'semana' ? changeWeek(-1) : selectedPeriod === 'mes' ? changeMonth(-1) : changeYear(-1)">
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+
+        <div class="period-label">
+          <span *ngIf="selectedPeriod === 'dia'">
+            {{ selectedDay | date: 'd \'de\' MMMM \'de\' yyyy' : '' : 'es' }}
+          </span>
+          <span *ngIf="selectedPeriod === 'semana'">
+            Semana {{ selectedWeek }}, {{ selectedYear }}
+          </span>
+          <span *ngIf="selectedPeriod === 'mes'">
+            {{ getMonthName(selectedMonth) }} {{ selectedYear }}
+          </span>
+          <span *ngIf="selectedPeriod === 'anio'">
+            {{ selectedYear }}
+          </span>
+        </div>
+
+        <button class="nav-btn" (click)="selectedPeriod === 'dia' ? changeDay(1) : selectedPeriod === 'semana' ? changeWeek(1) : selectedPeriod === 'mes' ? changeMonth(1) : changeYear(1)">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
         </button>
       </div>
     </div>
 
-    <!-- Selección de color -->
-    <div class="color-row">
-      <label class="label-color">Color</label>
-      <div class="color-grid">
-        <button
-          type="button"
-          class="color-btn"
-          *ngFor="let color of colores"
-          [ngStyle]="{'background': color.valor}"
-          [class.selected]="color.valor === colorSeleccionado"
-          (click)="seleccionarColor(color)"
-          [attr.aria-label]="color.nombre"
-        >
-          <ion-icon
-            *ngIf="color.valor === colorSeleccionado"
-            src="assets/icon/check.svg"
-            class="color-check"
-          ></ion-icon>
-        </button>
+    <!-- Lista de transferencias -->
+    <div class="transfers-list" [class.with-navigation]="selectedPeriod !== 'periodo'">
+      <div *ngIf="groupedTransfers.length === 0" class="no-data">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <p>No hay transferencias para este período</p>
+      </div>
+
+      <div *ngFor="let group of groupedTransfers" class="transfer-group">
+        <div class="date-header">
+          <span class="date-text">{{ group.fecha }}</span>
+        </div>
+
+        <div class="transfer-item" *ngFor="let transfer of group.items">
+          <div class="transfer-info">
+            <div class="transfer-category">{{ transfer.categoria }}</div>
+            <div class="transfer-subcategory" *ngIf="transfer.subcategoria">
+              {{ transfer.subcategoria }}
+            </div>
+            <div class="transfer-description" *ngIf="transfer.descripcion">
+              {{ transfer.descripcion }}
+            </div>
+          </div>
+
+          <div class="transfer-amount" [class.positive]="transfer.monto > 0" [class.negative]="transfer.monto < 0">
+            {{ formatCurrency(transfer.monto) }}
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Botón de acción -->
-    <ion-button expand="block" class="btn-anadir" [disabled]="!nombreCategoria" type="submit">
-      Guardar
-    </ion-button>
-  </form>
-
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
+  </div>
+    
 </ion-content>
