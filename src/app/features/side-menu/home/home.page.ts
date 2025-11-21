@@ -8,6 +8,8 @@ import { Post } from '../../../core/models/post.model';
 import { Result } from '../../../core/models/result.model';
 import { body } from 'ionicons/icons';
 import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
+import { NavigationService } from "src/app/core/services/navigation.service";
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -23,12 +25,15 @@ export class HomePage implements OnInit {
   errorMessage: string | null = null;
   segment: 'gastos' | 'ingresos' = 'gastos';
 
-    dataTabs = [
+  dataTabs = [
     { value: 'gastos', label: 'Gasto' },
     { value: 'ingresos', label: 'Ingreso' }
   ];
 
-  constructor(private testServiceUseCase: TestServiceUseCase) {}
+  constructor(
+    private testServiceUseCase: TestServiceUseCase,
+    private navService: NavigationService
+  ) {}
 
   ngOnInit() {
     //this.loadGet();
@@ -49,8 +54,13 @@ export class HomePage implements OnInit {
     this.closeModal();
   }
 
-  onSegmentChanged(ev: any) {
-    this.segment = ev.detail.value;
+  onSegmentChanged(event: string | number) {
+    this.segment = event as 'gastos' | 'ingresos';
+    console.log('Segment changed to:', this.segment);
+  }
+
+  navigateToCreateTransac() {
+    this.navService.push('/home/create');
   }
 
   loadGet() {
@@ -72,6 +82,4 @@ export class HomePage implements OnInit {
       }
     });
   }
-
-  
 }

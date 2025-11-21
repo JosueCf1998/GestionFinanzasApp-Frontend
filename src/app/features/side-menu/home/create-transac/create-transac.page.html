@@ -1,0 +1,155 @@
+<ion-header>
+  <ion-toolbar class="side-menu" color="side-menu">
+    <ion-buttons slot="start">
+      <button class="atras-btn" type="button" (click)="backToCategories()">
+        <ion-icon src="assets/icon/left.svg"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title class="header-title">Añadir transacciones</ion-title>
+    <ion-buttons slot="end">
+      <!-- Acciones adicionales -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scroll-y="false">
+  <div class="transaction-container">
+    <!-- Formulario -->
+    <form class="transaction-form">
+      <!-- Cuenta -->
+      <div class="transfer-section">
+        <label class="transfer-label">Cuenta</label>
+        <button type="button" class="account-btn" (click)="seleccionarCuenta()">
+          <span [class.placeholder]="!cuentaSeleccionada">{{ cuentaSeleccionada || 'No se ha seleccionado' }}</span>
+        </button>
+      </div>
+
+      <!-- Tipo (Gastos/Ingresos) -->
+      <div class="transfer-section">
+        <label class="transfer-label">Tipo</label>
+        <div class="tipo-selectores">
+          <button
+            type="button"
+            class="tipo-btn"
+            [class.selected]="segmentoSeleccionado === 'gastos'"
+            (click)="cambiarTipo('gastos')"
+          >
+            Gasto
+          </button>
+          <button
+            type="button"
+            class="tipo-btn"
+            [class.selected]="segmentoSeleccionado === 'ingresos'"
+            (click)="cambiarTipo('ingresos')"
+          >
+            Ingreso
+          </button>
+        </div>
+      </div>
+
+      <!-- Monto -->
+      <div class="transfer-section">
+        <label class="transfer-label">Monto</label>
+        <div class="amount-row">
+          <ion-input
+            type="number"
+            min="0"
+            [(ngModel)]="monto"
+            name="monto"
+            class="amount-input"
+            placeholder="0"
+            required
+          >
+          </ion-input>
+          <span class="currency-label">{{ moneda }}</span>
+        </div>
+      </div>
+
+      <!-- Categorías -->
+      <div class="transfer-section">
+        <label class="transfer-label">Categorías</label>
+        <div class="categories-grid">
+          <div 
+            *ngFor="let categoria of obtenerCategorias()" 
+            class="category-item"
+            [class.selected]="categoriaSeleccionada?.id === categoria.id"
+            (click)="seleccionarCategoria(categoria)"
+          >
+            <div class="category-icon" [style.background-color]="categoria.color">
+              <ion-icon [src]="'assets/icon/' + categoria.icono + '.svg'"></ion-icon>
+            </div>
+            <span class="category-name">{{ categoria.nombre }}</span>
+          </div>
+          
+          <div class="category-item">
+            <div class="category-icon more-icon">
+              <ion-icon name="add-outline"></ion-icon>
+            </div>
+            <span class="category-name">Más</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fecha -->
+      <div class="transfer-section">
+        <label class="transfer-label">Fecha</label>
+        <div class="date-options">
+          <button 
+            type="button"
+            class="date-btn" 
+            [class.active]="fechaSeleccionada === 'hoy'"
+            (click)="setFechaHoy()"
+          >
+            20/11<br>hoy
+          </button>
+          <button 
+            type="button"
+            class="date-btn"
+            [class.active]="fechaSeleccionada === 'ayer'"
+            (click)="setFechaAyer()"
+          >
+            19/11<br>ayer
+          </button>
+          <button 
+            type="button"
+            class="date-btn"
+            [class.active]="fechaSeleccionada === 'ultimo'"
+            (click)="setFechaUltimo()"
+          >
+            23/6<br>último
+          </button>
+          <button 
+            type="button"
+            class="calendar-btn" 
+            (click)="abrirCalendario()"
+          >
+            <ion-icon name="calendar-outline"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Comentario -->
+      <div class="transfer-section">
+        <label class="transfer-label">Comentario</label>
+        <ion-textarea 
+          [(ngModel)]="comentario"
+          [ngModelOptions]="{standalone: true}"
+          placeholder="Ingrese un comentario (opcional)"
+          class="comment-input"
+          rows="3"
+        ></ion-textarea>
+        <div class="comment-count">{{ comentario.length }}/200</div>
+      </div>
+
+      <!-- Botón -->
+      <ion-button
+        expand="block"
+        class="btn-transferir"
+        (click)="crearTransaccion()"
+      >
+        Añadir
+      </ion-button>
+    </form>
+  </div>
+
+</ion-content>
