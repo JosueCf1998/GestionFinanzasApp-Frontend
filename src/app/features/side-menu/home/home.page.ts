@@ -1,4 +1,4 @@
-import { ListAccountsUseCase } from './../../../core/use-cases/Accounts/list-accounts.usecase';
+import { ListAccountsUseCase } from '../../../core/use-cases/accounts/list-accounts.usecase';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

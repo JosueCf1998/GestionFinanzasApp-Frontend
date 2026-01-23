@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { NavigationService } from "src/app/core/services/navigation.service";
-import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/Accounts/list-accounts.usecase";
+import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 
 @Component({

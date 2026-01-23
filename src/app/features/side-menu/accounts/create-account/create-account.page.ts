@@ -1,4 +1,4 @@
-import { UpdateAccountRequest, UpdateAccountUseCase } from './../../../../core/use-cases/Accounts/update-account.usecase';
+import { UpdateAccountRequest, UpdateAccountUseCase } from '../../../../core/use-cases/accounts/update-account.usecase';
 import { Component } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
@@ -9,8 +9,8 @@ import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/Accounts/create-account.usecase";
-import { Accounts } from "src/app/core/use-cases/Accounts/list-accounts.usecase";
+import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/accounts/create-account.usecase";
+import { Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 
 @Component({
   selector: "app-create-account",

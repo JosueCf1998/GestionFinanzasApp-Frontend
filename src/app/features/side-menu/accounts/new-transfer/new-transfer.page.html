@@ -38,7 +38,7 @@
         (click)="seleccionarCuentaDestino()"
       >
         <span [class.selected]="cuentaDestino"
-          >{{ cuentaDestino || 'No se ha seleccionado' }}</span
+          >{{ cuentaDestino || 'Selecciona una cuenta' }}</span
         >
       </button>
     </div>
@@ -122,20 +122,12 @@
     [cssClass]="getModalClass()"
   >
     <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>
-            {{ tipoSeleccion === 'origen' ? 'Seleccionar Cuenta Origen' : 'Seleccionar Cuenta Destino' }}
-          </ion-title>
-          <ion-buttons slot="end">
-            <ion-button fill="clear" (click)="closeModal()">
-              <ion-icon name="close-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content scroll-y="false">
-        <div class="modal-content">
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h2 class="modal-title">Seleccione una cuenta</h2>
+        </div>
+        
+        <div class="modal-body">
           <div class="cuentas-list" [class.scrollable]="cuentasDisponibles.length > 3">
             <button
               *ngFor="let cuenta of cuentasDisponibles"
@@ -143,22 +135,28 @@
               class="cuenta-item"
               [class.selected]="cuentaSeleccionada?.id === cuenta.id"
               (click)="seleccionarCuentaModal(cuenta)">
-              {{ cuenta.nombre }}
-              <span *ngIf="cuenta.saldo !== undefined" class="saldo-info">
-                (S/ {{ cuenta.saldo }})
-              </span>
+              <div class="cuenta-icon" [style.background]="cuenta.color">
+                <ion-icon [src]="'assets/icon/' + cuenta.icon + '.svg'"></ion-icon>
+              </div>
+              <div class="cuenta-info">
+                <span class="cuenta-nombre">{{ cuenta.nombre }}</span>
+                <span class="cuenta-saldo">S/. {{ +cuenta.saldo | number:'1.2-2' }}</span>
+              </div>
+              <div class="cuenta-radio">
+                <div class="radio-outer" [class.checked]="cuentaSeleccionada?.id === cuenta.id">
+                  <div class="radio-inner"></div>
+                </div>
+              </div>
             </button>
           </div>
-          <ion-button 
-            expand="block" 
-            shape="round" 
-            color="primary" 
-            [disabled]="!cuentaSeleccionada"
-            (click)="confirmarCuenta()">
-            Confirmar
-          </ion-button>
         </div>
-      </ion-content>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn-cancelar" (click)="closeModal()">
+            CANCELAR
+          </button>
+        </div>
+      </div>
     </ng-template>
   </ion-modal>
 
