@@ -7,16 +7,7 @@ import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
-import { from } from "rxjs";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-
-interface CuentaTransferencia {
-  nombre: string;
-  id: string;
-  saldo: number;
-  icon: string;
-  color: string;
-}
 
 @Component({
   selector: "app-new-transfer",
@@ -27,8 +18,8 @@ interface CuentaTransferencia {
 })
 export class NewTransferPage implements OnInit {
 
-  cuentas: CuentaTransferencia[] = [];
-  cuentaSeleccionada: CuentaTransferencia | null = null;
+  accounts: Accounts[] = [];
+  selectedAccount: Accounts | null = null;
   isModalOpen: boolean = false;
   tipoSeleccion: 'origen' | 'destino' = 'origen';
   cambiosPendientes = false;
@@ -63,13 +54,7 @@ export class NewTransferPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data?.items) {
-          this.cuentas = result.data.items.map(account => ({
-            nombre: account.name,
-            id: account.id.toString(),
-            saldo: account.amount,
-            icon: account.icon,
-            color: account.color
-          }));
+          this.accounts = result.data.items
         }
       },
       error: () => {
@@ -82,20 +67,20 @@ export class NewTransferPage implements OnInit {
 
   seleccionarCuentaOrigen() {
     this.tipoSeleccion = 'origen';
-    this.cuentaSeleccionada = null;
+    this.selectedAccount = null;
     this.isModalOpen = true;
   }
 
   seleccionarCuentaDestino() {
     this.tipoSeleccion = 'destino';
-    this.cuentaSeleccionada = null;
+    this.selectedAccount = null;
     this.isModalOpen = true;
   }
 
   get cuentasDisponibles() {
     return this.tipoSeleccion === 'destino' 
-      ? this.cuentas.filter(c => c.id !== this.cuentaOrigenId)
-      : this.cuentas;
+      ? this.accounts.filter(c => c.id.toString() !== this.cuentaOrigenId)
+      : this.accounts;
   }
 
   getModalClass(): string {
@@ -139,8 +124,8 @@ export class NewTransferPage implements OnInit {
       return false;
     }
 
-    const cuentaOrig = this.cuentas.find(c => c.id === this.cuentaOrigenId);
-    if (cuentaOrig && cuentaOrig.saldo < this.monto) {
+    const cuentaOrig = this.accounts.find(c => c.id.toString() === this.cuentaOrigenId);
+    if (cuentaOrig && cuentaOrig.amount < this.monto) {
       console.error('Saldo insuficiente en la cuenta de origen');
       return false;
     }
@@ -150,35 +135,31 @@ export class NewTransferPage implements OnInit {
 
   closeModal() {
     this.isModalOpen = false;
-    this.cuentaSeleccionada = null;
+    this.selectedAccount = null;
   }
 
   updateAmount() {
-    if (this.cuentaSeleccionada) {
-      this.confirmarCuenta();
+    if (this.selectedAccount) {
+      // this.confirmarCuenta();
     }
     this.closeModal();
   }
   
-  seleccionarCuentaModal(cuenta: CuentaTransferencia) {
-    this.cuentaSeleccionada = cuenta;
+  seleccionarYConfirmar(account: Accounts) {
+    this.selectedAccount = account;
     this.marcarCambiosPendientes();
-  }
-  
-  confirmarCuenta() {
-    if (!this.cuentaSeleccionada) return;
-
+    
     if (this.tipoSeleccion === 'origen') {
-      this.cuentaOrigenId = this.cuentaSeleccionada.id;
-      this.cuentaOrigen = this.cuentaSeleccionada.nombre;
+      this.cuentaOrigenId = account.id.toString();
+      this.cuentaOrigen = account.name;
       
       if (this.cuentaDestinoId === this.cuentaOrigenId) {
         this.cuentaDestinoId = '';
         this.cuentaDestino = '';
       }
     } else {
-      this.cuentaDestinoId = this.cuentaSeleccionada.id;
-      this.cuentaDestino = this.cuentaSeleccionada.nombre;
+      this.cuentaDestinoId = account.id.toString();
+      this.cuentaDestino = account.name;
     }
 
     this.closeModal();

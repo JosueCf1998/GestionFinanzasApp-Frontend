@@ -125,36 +125,33 @@
       <div class="modal-wrapper">
         <div class="modal-header">
           <h2 class="modal-title">Seleccione una cuenta</h2>
+          <button class="btn-close" (click)="closeModal()">
+              <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
+          </button>
         </div>
         
         <div class="modal-body">
           <div class="cuentas-list" [class.scrollable]="cuentasDisponibles.length > 3">
-            <button
-              *ngFor="let cuenta of cuentasDisponibles"
-              type="button"
-              class="cuenta-item"
-              [class.selected]="cuentaSeleccionada?.id === cuenta.id"
-              (click)="seleccionarCuentaModal(cuenta)">
-              <div class="cuenta-icon" [style.background]="cuenta.color">
-                <ion-icon [src]="'assets/icon/' + cuenta.icon + '.svg'"></ion-icon>
-              </div>
-              <div class="cuenta-info">
-                <span class="cuenta-nombre">{{ cuenta.nombre }}</span>
-                <span class="cuenta-saldo">S/. {{ +cuenta.saldo | number:'1.2-2' }}</span>
-              </div>
-              <div class="cuenta-radio">
-                <div class="radio-outer" [class.checked]="cuentaSeleccionada?.id === cuenta.id">
-                  <div class="radio-inner"></div>
+            <div
+              *ngFor="let account of cuentasDisponibles"
+              class="cuenta-card"
+              [class.selected]="selectedAccount?.id === account.id"
+              (click)="seleccionarYConfirmar(account)">
+              <div class="cuenta-left">
+                <div class="cuenta-icon" [style.background]="account.color">
+                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
+                </div>
+                <div class="cuenta-details">
+                  <span class="cuenta-nombre">{{ account.name }}</span>
+                  <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
                 </div>
               </div>
-            </button>
+              <div class="cuenta-check">
+                <ion-icon name="checkmark-circle" *ngIf="selectedAccount?.id === account.id"></ion-icon>
+                <div class="check-placeholder" *ngIf="selectedAccount?.id !== account.id"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn-cancelar" (click)="closeModal()">
-            CANCELAR
-          </button>
         </div>
       </div>
     </ng-template>
