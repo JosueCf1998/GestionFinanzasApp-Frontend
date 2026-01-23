@@ -7,6 +7,7 @@ export const routes: Routes = [
     redirectTo: 'main',
     pathMatch: 'full',
   },
+  // PRE-LOGIN ROUTES
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.page').then(m => m.LoginPage)
@@ -19,6 +20,7 @@ export const routes: Routes = [
     path: 'forgot-password',
     loadComponent: () => import('./features/auth/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
   },
+  // POST-LOGIN ROUTES
   {
     path: 'welcome-step-one',
     loadComponent: () => import('./features/welcome/welcomeStepOne/welcome-step-one.page').then(m => m.WelcomeStepOnePage)
@@ -55,7 +57,7 @@ export const routes: Routes = [
       }
     ],
   },
-  // CATEGORIES ROUTES
+  // TRANSACTION ROUTES
   {
     path: 'home/create',
     loadComponent: () => import('./features/side-menu/home/create-transac/create-transac.page').then(m => m.CreateTransacPage)
@@ -78,6 +80,7 @@ export const routes: Routes = [
     path: 'accounts/create-account',
     loadComponent: () => import('./features/side-menu/accounts/create-account/create-account.page').then(m => m.CreateAccountPage)
   },
+  // TRANSFER ROUTES
   {
     path: 'accounts/history-transfer',
     loadComponent: () => import('./features/side-menu/accounts/history-transfer/history-transfer.page').then(m => m.HistoryTransferPage)

@@ -15,9 +15,6 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  id: number;
-  name: string;
-  email: string;
 }
 
 @Injectable({
@@ -35,7 +32,8 @@ export class LoginServiceUseCase {
     const endpoint = 'login-user';
     const encryptedBody = encryptFields(body, this.encryptionService);
     return this.apiService.post<LoginResponse>(endpoint, encryptedBody).pipe(
-      decryptData<LoginResponse>(this.encryptionService),
+      // TODO: MEJORA PLANTEADA
+      // decryptData<LoginResponse>(this.encryptionService),
       tap(result => {
         if (result.success && result.data) {
           this.saveUserData(result.data);
@@ -45,9 +43,8 @@ export class LoginServiceUseCase {
   }
 
   private saveUserData(userData: LoginResponse): void {
+    console.log(`Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
-    this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.name);
-    this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, userData.email);
   }
 
 }
