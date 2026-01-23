@@ -2,8 +2,8 @@
   <div class="home-content">
     <!-- Saldo principal -->
     <div class="balance-container">
-      <h1 (click)="openModal()">S/. 200.00</h1>
-      <p>Cuenta: Principal</p>
+      <h1 class="text-display-large" (click)="openModal()">S/. 200.00</h1>
+      <p class="text-body text-secondary">Cuenta: Principal</p>
     </div>
   
     <!-- Tabs de Gastos e Ingresos -->
@@ -20,13 +20,13 @@
     <ion-list class="categories-list">
       <ion-item>
         <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
-        <ion-label>Salud</ion-label>
-        <ion-note slot="end">S/. 45.00</ion-note>
+        <ion-label class="text-body">Salud</ion-label>
+        <ion-note slot="end" class="text-body-bold">S/. 45.00</ion-note>
       </ion-item>
       <ion-item>
         <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
-        <ion-label>Estudios</ion-label>
-        <ion-note slot="end">S/. 245.00</ion-note>
+        <ion-label class="text-body">Estudios</ion-label>
+        <ion-note slot="end" class="text-body-bold">S/. 245.00</ion-note>
       </ion-item>
     </ion-list>
   </div>
@@ -36,7 +36,7 @@
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Modificar Monto</ion-title>
+          <ion-title class="text-subtitle">Modificar Monto</ion-title>
           <ion-buttons slot="end">
             <ion-button fill="clear" (click)="closeModal()">
               <ion-icon name="close-outline"></ion-icon>
@@ -47,10 +47,10 @@
       <ion-content>
         <div class="modal-content">
           <ion-item>
-            <ion-label position="floating">Nuevo Monto</ion-label>
+            <ion-label position="floating" class="text-body">Nuevo Monto</ion-label>
             <ion-input type="number" [(ngModel)]="newAmount"></ion-input>
           </ion-item>
-          <ion-button expand="block" shape="round" color="primary" (click)="updateAmount()">Guardar</ion-button>
+          <ion-button expand="block" shape="round" color="primary" class="text-button" (click)="updateAmount()">Guardar</ion-button>
         </div>
       </ion-content>
     </ng-template>

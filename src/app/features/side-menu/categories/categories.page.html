@@ -17,14 +17,14 @@
             <div class="category-icon-circle" [ngStyle]="{'background': cat.color}">
               <ion-icon src="assets/icon/{{cat.icono}}.svg"></ion-icon>
             </div>
-            <span class="category-label">{{cat.nombre}}</span>
+            <span class="category-label text-small">{{cat.nombre}}</span>
           </div>
         </ng-container>
         <div class="category-btn agregar-btn" (click)="goToCreateCategories(segment)">
           <div class="category-icon-add">
             <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
           </div>
-          <span class="category-label agregar-label">Agregar</span>
+          <span class="category-label agregar-label text-small">Agregar</span>
         </div>
       </ng-container>
       <ng-template #soloAgregar>
@@ -32,7 +32,7 @@
           <div class="category-icon-add">
             <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
           </div>
-          <span class="category-label agregar-label">Agregar</span>
+          <span class="category-label agregar-label text-small">Agregar</span>
         </div>
       </ng-template>
     </div>

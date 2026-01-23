@@ -5,7 +5,7 @@
         <ion-icon src="assets/icon/left.svg"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title class="header-title">Editar Categoría</ion-title>
+    <ion-title class="header-title text-subtitle">Editar Categoría</ion-title>
     <ion-buttons slot="end">
       <!-- Acciones adicionales -->
     </ion-buttons>
@@ -36,15 +36,15 @@
     </div>
     <!-- Nombre de Tipo de Categoria -->
     <div class="tipo-row">
-      <label class="label-tipo">Tipo</label>
-      <div class="tipo-descripcion">
+      <label class="label-tipo text-body">Tipo</label>
+      <div class="tipo-descripcion text-body">
         {{ tipoCategoria   === 'gastos' ? 'Gasto' : 'Ingreso' }}
       </div>
     </div>
 
     <!-- Selección de símbolo -->
     <div class="simbolos-row">
-      <label class="label-simbolos">Símbolo</label>
+      <label class="label-simbolos text-body">Símbolo</label>
       <div class="simbolos-grid">
         <button
           type="button"
@@ -61,7 +61,7 @@
 
     <!-- Selección de color -->
     <div class="color-row">
-      <label class="label-color">Color</label>
+      <label class="label-color text-body">Color</label>
       <div class="color-grid">
         <button
           type="button"
@@ -82,7 +82,7 @@
     </div>
 
     <!-- Botón de acción -->
-    <ion-button expand="block" class="btn-anadir" [disabled]="!nombreCategoria" type="submit">
+    <ion-button expand="block" class="btn-anadir text-button" [disabled]="!nombreCategoria" type="submit">
       Guardar
     </ion-button>
   </form>

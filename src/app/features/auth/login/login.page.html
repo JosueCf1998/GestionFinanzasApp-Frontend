@@ -5,8 +5,8 @@
     <!-- Logo/Header -->
     <div class="header">
       <ion-img src="assets/image/logo.png" class="logo"></ion-img>
-      <h1>Bienvenido</h1>
-      <p>Inicia sesión para continuar</p>
+      <h1 class="text-title">Bienvenido</h1>
+      <p class="text-body text-secondary">Inicia sesión para continuar</p>
     </div>
 
     <!-- Formulario -->
@@ -52,7 +52,7 @@
             expand="block"
             fill="clear"
             size="small"
-            class="ion-text-center label-links"
+            class="ion-text-center label-links text-link"
             (click)="forgotPassword()"
           >
             ¿Olvidaste tu contraseña?
@@ -62,20 +62,20 @@
         <ion-button
           expand="block"
           shape="round"
-          class="login-btn"
+          class="login-btn text-button"
           (click)="login()"
         >
           Iniciar sesión
         </ion-button>
 
         <ion-text class="ion-text-center label-links">
-          <p>ó</p>
+          <p class="text-caption text-secondary">ó</p>
         </ion-text>
 
         <ion-button
           expand="block"
           shape="round"
-          class="login-btn"
+          class="login-btn text-button"
           (click)="goToRegister()"
         >
           Crear una cuenta

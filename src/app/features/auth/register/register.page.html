@@ -9,8 +9,8 @@
       <div class="icon-wrapper">
         <ion-icon src="assets/icon/user-plus.svg" class="main-icon"></ion-icon>
       </div>
-      <h1>Bienvenido</h1>
-      <p>Crea tu cuenta para comenzar</p>
+      <h1 class="text-title">Bienvenido</h1>
+      <p class="text-body text-secondary">Crea tu cuenta para comenzar</p>
     </div>
 
     <form class="register-form" [formGroup]="registerForm">
@@ -78,7 +78,7 @@
     <ion-button
       expand="block"
       shape="round"
-      class="register-btn"
+      class="register-btn text-button"
       (click)="handleRegister()"
     >
       Crear Cuenta

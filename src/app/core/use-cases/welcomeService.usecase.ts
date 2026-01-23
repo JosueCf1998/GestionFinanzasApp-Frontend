@@ -40,14 +40,7 @@ export class WelcomeServiceUseCase {
       icon: body.icon,
       color:  body.color
     };
-  
-    const token = this.localManagementService.getVariable(KEY_MANAGEMENT.TOKEN);
-    const options = {
-      headers: {
-        Authorization: token || ''
-      }
-    };
-    return this.apiService.post<WelcomeResponse>(endpoint, request, options).pipe(
+    return this.apiService.post<WelcomeResponse>(endpoint, request).pipe(
       tap(result => {
         if (result.success && result.data) {
         }

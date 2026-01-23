@@ -36,14 +36,7 @@ export class ListCategoriesServiceUseCase {
 
   listCategories(): Observable<Result<ListCategoriesResponse>> {
     const endpoint = 'listado-categoria';
-    // const token = this.localManagementService.getVariable(KEY_MANAGEMENT.TOKEN);
-    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJfaWQiOjQ1LCJlbWFpbCI6Impvc3VlMTIzQGdtYWlsLmNvbSJ9LCJpYXQiOjE3NTY4MDA0MjcsImV4cCI6MTg1NjgwMDQyN30.FlUmrkjARJeZ25JJsQtesBwX32QWyt1cds_tIg4By_8"
-    const options = {
-      headers: {
-        Authorization: token
-      }
-    };
-    return this.apiService.get<ListCategoriesResponse>(endpoint, options).pipe(
+    return this.apiService.get<ListCategoriesResponse>(endpoint).pipe(
       tap(result => {
         if (result.success && result.data?.items) {
         }
