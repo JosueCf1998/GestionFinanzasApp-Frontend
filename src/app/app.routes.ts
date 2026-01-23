@@ -31,8 +31,7 @@ export const routes: Routes = [
   },
   {
     path: 'main',
-    loadComponent: () =>
-      import('./features/side-menu/side-menu.page').then(m => m.SideMenuPage),
+    loadComponent: () => import('./features/side-menu/side-menu.page').then(m => m.SideMenuPage),
     children: [
       {
         path: '',

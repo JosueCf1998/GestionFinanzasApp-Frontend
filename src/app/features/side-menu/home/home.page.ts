@@ -1,3 +1,4 @@
+import { ListAccountsUseCase } from './../../../core/use-cases/Accounts/list-accounts.usecase';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +10,7 @@ import { Result } from '../../../core/models/result.model';
 import { body } from 'ionicons/icons';
 import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
 import { NavigationService } from "src/app/core/services/navigation.service";
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 
 @Component({
   selector: 'app-home',
@@ -18,10 +20,15 @@ import { NavigationService } from "src/app/core/services/navigation.service";
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent],
 })
 export class HomePage implements OnInit {
+
+  showGenericAlert = false;
+  showUnauthorizedAlert: boolean = false
+  messageError: string = '';
+
+
   isModalOpen = false;
   amount = 200;
   newAmount: number = this.amount;
-  posts: Post[] = [];
   errorMessage: string | null = null;
   segment: 'gastos' | 'ingresos' = 'gastos';
 
@@ -31,12 +38,13 @@ export class HomePage implements OnInit {
   ];
 
   constructor(
-    private testServiceUseCase: TestServiceUseCase,
-    private navService: NavigationService
+    private listAccountsUseCase: ListAccountsUseCase,
+    private navService: NavigationService,
+    private loadingService: SpinnerService,
   ) {}
 
   ngOnInit() {
-    //this.loadGet();
+    this.loadData();
   }
 
   openModal() {
@@ -63,6 +71,39 @@ export class HomePage implements OnInit {
     this.navService.push('/home/create');
   }
 
+  loadData() {
+    this.executeAccountList();
+  }
+
+  private executeAccountList() {
+    this.loadingService.show();
+    this.listAccountsUseCase.listAccounts().subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success && result.data) {
+          // guardar los datos y mostrarlos en la pantalla
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
+  
+}
+
+/*
+
   loadGet() {
     this.testServiceUseCase.executeGet().subscribe((result: Result<Post[]>) => {
       if (result.success) {
@@ -82,4 +123,5 @@ export class HomePage implements OnInit {
       }
     });
   }
-}
+
+*/

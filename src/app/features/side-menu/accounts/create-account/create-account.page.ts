@@ -7,6 +7,8 @@ import { ICONOS_CUENTA, COLORES_CATEGORIA } from 'src/app/shared/constants/categ
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
+import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/Accounts/create-account.usecase";
 
 @Component({
   selector: "app-create-account",
@@ -16,6 +18,12 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
   imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
 })
 export class CreateAccountPage {
+
+  showGenericAlert = false;
+  showUnauthorizedAlert: boolean = false
+  messageError: string = '';
+
+
   title: string = "";
   iconos = ICONOS_CUENTA;
   colores = COLORES_CATEGORIA;
@@ -31,8 +39,9 @@ export class CreateAccountPage {
   nombreCuenta: string = '';
 
   constructor(
+    private createAccountUseCase: CreateAccountUseCase,
     private navService: NavigationService,
-    private router: Router
+    private loadingService: SpinnerService,
   ) {
     const state = window.history.state;
     if (!state || !state.type) {
@@ -48,6 +57,34 @@ export class CreateAccountPage {
     }
   }
 
+  // MARK: - SERVICIOS 
+  private executeAccountList(body: CreateAccountRequest) {
+    this.loadingService.show();
+    this.createAccountUseCase.createAccount(body).subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success && result.data) {
+          this.cambiosPendientes = false;
+          this.navService.forward('/main/accounts', 'slide-right');
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
+
+  // MARK: - FUNCIONALDIDADES 
   seleccionarIcono(icon: any) {
     this.iconoSeleccionado = icon.archivo;
     this.cambiosPendientes = true;
@@ -78,18 +115,14 @@ export class CreateAccountPage {
       return;
     }
     this.showError = false;
-
-    // Aquí deberías guardar la cuenta (llamada a servicio o almacenamiento)
-    const nuevaCuenta = {
-      nombre: this.nombreCuenta,
-      saldo: parseFloat(this.montoInicial) || 0,
-      icono: this.iconoSeleccionado,
+    const body: CreateAccountRequest = {
+      name: this.nombreCuenta,
+      amount: parseFloat(this.montoInicial) || 0,
+      icon: this.iconoSeleccionado,
       color: this.colorSeleccionado
-    };
-
-    // Simulación de guardado y navegación
-    this.cambiosPendientes = false;
-    this.navService.forward('/main/accounts', 'slide-right');
+    }
+    console.log(body);
+    this.executeAccountList(body)
   }
 
   async backToAccounts() {
