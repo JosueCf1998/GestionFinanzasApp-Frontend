@@ -2,10 +2,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { Result } from '../../models/result.model';
-import { tap } from 'rxjs/operators';
+export interface Accounts {
+  id: number;
+  name: string;
+  amount: number;
+  icon: string;
+  color: string;
+}
 
 export interface ListAccountsResponse {
-  items: string;
+  items: Accounts[];
 }
 
 @Injectable({
@@ -19,13 +25,7 @@ export class ListAccountsUseCase {
 
   listAccounts(): Observable<Result<ListAccountsResponse>> {
     const endpoint = 'list-account';
-    return this.apiService.get<ListAccountsResponse>(endpoint, {}).pipe(
-      tap(result => {
-        if (result.success && result.data) {
-          // No es necesario guardar nada
-        }
-      })
-    );
+    return this.apiService.get<ListAccountsResponse>(endpoint);
   }
 
 }

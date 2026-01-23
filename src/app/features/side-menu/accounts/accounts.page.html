@@ -30,16 +30,16 @@
 
     <!-- Lista de cuentas -->
     <div class="accounts-list">
-      <div *ngFor="let cuenta of cuentas">
-        <div class="account-item" (click)="goToEditAccount(cuenta)">
-          <div class="account-icon" [ngStyle]="{'background': cuenta.color}">
-            <ion-icon src="assets/icon/{{cuenta.icono}}.svg"></ion-icon>
+      <div *ngFor="let account of accountList">
+        <div class="account-item" (click)="goToEditAccount(account)">
+          <div class="account-icon" [ngStyle]="{'background': account.color}">
+            <ion-icon src="assets/icon/{{account.icon}}.svg"></ion-icon>
           </div>
           <div class="account-info">
-            <span class="account-name">{{ cuenta.nombre }}</span>
+            <span class="account-name">{{ account.name }}</span>
           </div>
           <div class="account-balance">
-            S/. {{ cuenta.saldo | number:'1.2-2' }} 
+            S/. {{ account.amount | number:'1.2-2' }} 
           </div>
         </div>
       </div>

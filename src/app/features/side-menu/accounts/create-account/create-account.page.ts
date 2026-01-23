@@ -64,8 +64,8 @@ export class CreateAccountPage {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.cambiosPendientes = false;
-          this.navService.forward('/main/accounts', 'slide-right');
+          //this.cambiosPendientes = false;
+          //this.navService.forward('/main/accounts', 'slide-right');
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
