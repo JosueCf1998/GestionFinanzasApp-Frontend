@@ -37,8 +37,6 @@ export class AccountsPage {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.accountList = result.data.items;
-          // Mapear las cuentas del backend al formato de la UI
-          // this.cuentas = result.data.cuentas.map(cuenta => this.listAccountsUseCase.mapToUI(cuenta));
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
@@ -59,18 +57,19 @@ export class AccountsPage {
 
   // MARK: - FUNCIONES
 
-  get totalCuentas() {
-    return this.accountList.reduce((acc, c) => acc + c.amount, 0);
+  get totalCuentas(): number {
+    return this.accountList.reduce((acc, c) => acc + Number(c.amount || 0), 0);
   }
 
   goToCreateAccount() {
-    // Navegar a la ruta anidada bajo /main y pasar el tipo en el estado
     this.navService.push('/accounts/create-account', { type: 'crear' });
   }
 
   goToEditAccount(account: Accounts) {
-    // Reutilizamos la pantalla de creación para edición pasando el estado
-    this.navService.push('/accounts/create-account', { type: 'editar', account });
+    this.navService.push('/accounts/create-account', { 
+      type: 'editar', 
+      account: account
+    });
   }
 
   goToHistoryTransfer() {

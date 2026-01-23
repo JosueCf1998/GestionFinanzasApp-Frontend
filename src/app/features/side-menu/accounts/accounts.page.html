@@ -1,45 +1,47 @@
 <ion-content [fullscreen]="true">
   <div class="content">
-    <!-- Total -->
-    <div class="accounts-total-card">
-      <span class="total-label">Total cuentas</span>
-      <span class="total-value"> <span class="currency">S/.</span>{{ totalCuentas | number:'1.2-2' }}</span>
-    </div>
+    <div class="scrollable-content">
+      <!-- Total -->
+      <div class="accounts-total-card">
+        <span class="total-label">Total cuentas</span>
+        <span class="total-value"> <span class="currency">S/.</span>{{ totalCuentas | number:'1.2-2' }}</span>
+      </div>
 
-    <!-- Acciones -->
-    <div class="accounts-actions">
-      <div class="action-btn" (click)="goToCreateAccount()">
-        <div class="action-icon">
-          <ion-icon src="assets/icon/add.svg"></ion-icon>
+      <!-- Acciones -->
+      <div class="accounts-actions">
+        <div class="action-btn" (click)="goToCreateAccount()">
+          <div class="action-icon">
+            <ion-icon src="assets/icon/add.svg"></ion-icon>
+          </div>
+          <span>Crear Cuenta</span>
         </div>
-        <span>Crear Cuenta</span>
-      </div>
-      <div class="action-btn" (click)="goToHistoryTransfer()">
-        <div class="action-icon">
-          <ion-icon src="assets/icon/history.svg"></ion-icon>
+        <div class="action-btn" (click)="goToHistoryTransfer()">
+          <div class="action-icon">
+            <ion-icon src="assets/icon/history.svg"></ion-icon>
+          </div>
+          <span>Historial de transferencias</span>
         </div>
-        <span>Historial de transferencias</span>
-      </div>
-      <div class="action-btn" (click)="goToNewTransfer()">
-        <div class="action-icon">
-          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+        <div class="action-btn" (click)="goToNewTransfer()">
+          <div class="action-icon">
+            <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+          </div>
+          <span>Nueva transferencia</span>
         </div>
-        <span>Nueva transferencia</span>
       </div>
-    </div>
 
-    <!-- Lista de cuentas -->
-    <div class="accounts-list">
-      <div *ngFor="let account of accountList">
-        <div class="account-item" (click)="goToEditAccount(account)">
-          <div class="account-icon" [ngStyle]="{'background': account.color}">
-            <ion-icon src="assets/icon/{{account.icon}}.svg"></ion-icon>
-          </div>
-          <div class="account-info">
-            <span class="account-name">{{ account.name }}</span>
-          </div>
-          <div class="account-balance">
-            S/. {{ account.amount | number:'1.2-2' }} 
+      <!-- Lista de cuentas -->
+      <div class="accounts-list">
+        <div *ngFor="let account of accountList">
+          <div class="account-item" (click)="goToEditAccount(account)">
+            <div class="account-icon" [ngStyle]="{'background': account.color}">
+              <ion-icon src="assets/icon/{{account.icon}}.svg"></ion-icon>
+            </div>
+            <div class="account-info">
+              <span class="account-name">{{ account.name }}</span>
+            </div>
+            <div class="account-balance">
+              S/. {{ +account.amount | number:'1.2-2' }} 
+            </div>
           </div>
         </div>
       </div>

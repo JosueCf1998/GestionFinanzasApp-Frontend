@@ -1,3 +1,4 @@
+import { UpdateAccountRequest, UpdateAccountUseCase } from './../../../../core/use-cases/Accounts/update-account.usecase';
 import { Component } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/Accounts/create-account.usecase";
+import { Accounts } from "src/app/core/use-cases/Accounts/list-accounts.usecase";
 
 @Component({
   selector: "app-create-account",
@@ -23,6 +25,7 @@ export class CreateAccountPage {
   showUnauthorizedAlert: boolean = false
   messageError: string = '';
 
+  isCreateAccountActive = false
 
   title: string = "";
   iconos = ICONOS_CUENTA;
@@ -37,9 +40,11 @@ export class CreateAccountPage {
 
   montoInicial: string = '';
   nombreCuenta: string = '';
+  accountData: Accounts = {} as Accounts;
 
   constructor(
     private createAccountUseCase: CreateAccountUseCase,
+    private updateAccountUseCase: UpdateAccountUseCase,
     private navService: NavigationService,
     private loadingService: SpinnerService,
   ) {
@@ -48,24 +53,57 @@ export class CreateAccountPage {
       this.navService.forward('/main/accounts', 'slide-right');
       throw new Error('No se recibió la información necesaria para crear o editar la cuenta.');
     }
-    this.title = state.type === 'crear' ? 'Crear Cuenta' : 'Editar Cuenta';
-    if (state.cuenta) {
-      this.nombreCuenta = state.cuenta.nombre;
-      this.montoInicial = state.cuenta.saldo?.toString() ?? '';
-      this.iconoSeleccionado = state.cuenta.icono ?? '';
-      this.colorSeleccionado = state.cuenta.color ?? '';
+    this.isCreateAccountActive = state.type === 'crear';
+    this.updateView(this.isCreateAccountActive, state);
+  }
+
+  updateView(value: Boolean, state: any) {
+    this.title = value ? 'Crear Cuenta' : 'Editar Cuenta';
+    if (state.account) {
+      this.accountData = state.account;
+      this.nombreCuenta = state.account.name;
+      this.montoInicial = state.account.amount?.toString() ?? '';
+      this.iconoSeleccionado = state.account.icon ?? '';
+      this.colorSeleccionado = state.account.color ?? '';
     }
   }
 
   // MARK: - SERVICIOS 
-  private executeAccountList(body: CreateAccountRequest) {
+
+  private executeCreateAccount(body: CreateAccountRequest) {
     this.loadingService.show();
     this.createAccountUseCase.createAccount(body).subscribe({
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          //this.cambiosPendientes = false;
-          //this.navService.forward('/main/accounts', 'slide-right');
+          this.cambiosPendientes = false;
+          this.navService.forward('/main/accounts', 'slide-right');
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
+
+  private executeUpdateAccount(body: UpdateAccountRequest) {
+    this.loadingService.show();
+    this.updateAccountUseCase.updateAccount(body).subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success && result.data) {
+          this.cambiosPendientes = false;
+          this.navService.forward('/main/accounts', 'slide-right');
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
@@ -85,6 +123,7 @@ export class CreateAccountPage {
   }
 
   // MARK: - FUNCIONALDIDADES 
+
   seleccionarIcono(icon: any) {
     this.iconoSeleccionado = icon.archivo;
     this.cambiosPendientes = true;
@@ -115,14 +154,24 @@ export class CreateAccountPage {
       return;
     }
     this.showError = false;
-    const body: CreateAccountRequest = {
-      name: this.nombreCuenta,
-      amount: parseFloat(this.montoInicial) || 0,
-      icon: this.iconoSeleccionado,
-      color: this.colorSeleccionado
+    if (this.isCreateAccountActive) {
+      const body: CreateAccountRequest = {
+        name: this.nombreCuenta,
+        amount: parseFloat(this.montoInicial) || 0,
+        icon: this.iconoSeleccionado,
+        color: this.colorSeleccionado
+      }
+      this.executeCreateAccount(body)
+    } else {
+      const body: UpdateAccountRequest = {
+        id: this.accountData.id,
+        name: this.nombreCuenta,
+        amount: parseFloat(this.montoInicial) || 0,
+        icon: this.iconoSeleccionado,
+        color: this.colorSeleccionado
+      }
+      this.executeUpdateAccount(body)
     }
-    console.log(body);
-    this.executeAccountList(body)
   }
 
   async backToAccounts() {
