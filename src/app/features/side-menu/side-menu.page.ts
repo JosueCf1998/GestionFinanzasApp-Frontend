@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonHeader, IonToolbar, IonButtons, IonMenuButton, IonContent, IonButton } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
+import { LogoutServiceUseCase } from '../../core/use-cases/logoutService.usecase';
 import { NavigationService } from '../../core/services/navigation.service';
 
 
@@ -16,7 +17,8 @@ export class SideMenuPage implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   
   constructor(
-    private navService: NavigationService
+    private logoutService: LogoutServiceUseCase,
+    private navigationService: NavigationService
   ) { }
 
   ngOnInit() {
@@ -24,7 +26,8 @@ export class SideMenuPage implements OnInit {
   }
 
   logOut() {
-    this.navService.push('/login', 'fade');
+    this.logoutService.logout();
+    this.navigationService.back();
   }
   
 }

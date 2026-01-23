@@ -43,7 +43,7 @@ export class LoginServiceUseCase {
   }
 
   private saveUserData(userData: LoginResponse): void {
-    this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, userData.token);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
   }
 
 }
