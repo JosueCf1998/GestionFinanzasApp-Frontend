@@ -3,8 +3,8 @@
     <div class="scrollable-content">
       <!-- Total -->
       <div class="accounts-total-card">
-        <span class="total-label">Total cuentas</span>
-        <span class="total-value"> <span class="currency">S/.</span>{{ totalCuentas | number:'1.2-2' }}</span>
+        <span class="text-body text-white total-label">Total cuentas</span>
+        <span class="text-display-large text-white"> <span class="currency">S/.</span>{{ totalCuentas | number:'1.2-2' }}</span>
       </div>
 
       <!-- Acciones -->
@@ -13,37 +13,48 @@
           <div class="action-icon">
             <ion-icon src="assets/icon/add.svg"></ion-icon>
           </div>
-          <span>Crear Cuenta</span>
+          <span class="text-small">Crear Cuenta</span>
         </div>
         <div class="action-btn" (click)="goToHistoryTransfer()">
           <div class="action-icon">
             <ion-icon src="assets/icon/history.svg"></ion-icon>
           </div>
-          <span>Historial de transferencias</span>
+          <span class="text-small">Historial de transferencias</span>
         </div>
         <div class="action-btn" (click)="goToNewTransfer()">
           <div class="action-icon">
             <ion-icon src="assets/icon/transfer.svg"></ion-icon>
           </div>
-          <span>Nueva transferencia</span>
+          <span class="text-small">Nueva transferencia</span>
         </div>
       </div>
 
       <!-- Lista de cuentas -->
-      <div class="accounts-list">
+      <div class="accounts-list" *ngIf="accountList.length > 0">
         <div *ngFor="let account of accountList">
           <div class="account-item" (click)="goToEditAccount(account)">
             <div class="account-icon" [ngStyle]="{'background': account.color}">
               <ion-icon src="assets/icon/{{account.icon}}.svg"></ion-icon>
             </div>
             <div class="account-info">
-              <span class="account-name">{{ account.name }}</span>
+              <span class="text-body text-primary">{{ account.name }}</span>
             </div>
-            <div class="account-balance">
+            <div class="account-balance text-body-bold text-primary">
               S/. {{ +account.amount | number:'1.2-2' }} 
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Mensaje cuando no hay cuentas -->
+      <div class="empty-state" *ngIf="accountList.length === 0">
+        <ion-icon src="assets/icon/wallet.svg" class="empty-icon"></ion-icon>
+        <h3 class="text-subtitle text-primary">No tienes cuentas registradas</h3>
+        <p class="text-caption text-secondary">Crea tu primera cuenta para comenzar a gestionar tus finanzas</p>
+        <button class="create-account-btn text-button text-white" (click)="goToCreateAccount()">
+          <ion-icon src="assets/icon/add.svg"></ion-icon>
+          Crear cuenta
+        </button>
       </div>
     </div>
   </div>

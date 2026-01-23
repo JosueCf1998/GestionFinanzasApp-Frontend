@@ -36,6 +36,102 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
+// ====================
+// Sistema de Tipografía Optimizado
+// ====================
+
+// Escala reducida y enfocada para apps móviles
+// Basado en principios de Material Design y iOS HIG
+
+// Títulos de página/sección
+.text-title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #2c3e50;
+}
+
+.text-subtitle {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #2c3e50;
+}
+
+// Textos estándar (más usado)
+.text-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #2c3e50;
+}
+
+.text-body-bold {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #2c3e50;
+}
+
+// Textos secundarios/auxiliares
+.text-caption {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.text-small {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: #9ca3af;
+}
+
+// Números grandes (totales, montos importantes)
+.text-display-large {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.text-display {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+// Botones
+.text-button {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.text-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4361ee;
+  text-decoration: none;
+}
+
+// Variantes de peso (solo las necesarias)
+.text-medium { font-weight: 500; }
+.text-semibold { font-weight: 600; }
+.text-bold { font-weight: 700; }
+
+// Colores semánticos
+.text-primary { color: #2c3e50; }
+.text-secondary { color: #6b7280; }
+.text-muted { color: #9ca3af; }
+.text-white { color: #ffffff; }
+.text-success { color: #10b981; }
+.text-danger { color: #ef4444; }
+.text-warning { color: #f59e0b; }
+.text-brand { color: #4361ee; }
+
 ion-menu {
     width: 250px;
     max-width: 80%;

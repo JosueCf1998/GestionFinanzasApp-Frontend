@@ -77,7 +77,7 @@ export class CreateAccountPage {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
-          this.navService.forward('/main/accounts', 'slide-right');
+          this.navService.back();
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
@@ -103,7 +103,7 @@ export class CreateAccountPage {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
-          this.navService.forward('/main/accounts', 'slide-right');
+          this.navService.back();
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;

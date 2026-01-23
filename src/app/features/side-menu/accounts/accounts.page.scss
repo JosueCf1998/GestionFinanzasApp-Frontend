@@ -86,7 +86,6 @@ ion-content::-webkit-scrollbar {
 
 .accounts-total-card {
   background: #4361ee;
-  color: #fff;
   border-radius: 18px;
   box-shadow: 0 4px 18px #4f8cff22;
   padding: 24px 0 18px 0;
@@ -96,23 +95,15 @@ ion-content::-webkit-scrollbar {
   align-items: center;
   
   .total-label {
-    font-size: 18px;
-    opacity: 0.85;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    display: block;
   }
   
-  .total-value {
-    font-size: 38px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    
-    .currency {
-      font-size: 22px;
-      font-weight: 400;
-      margin-left: 2px;
-      opacity: 0.9;
-    }
+  .currency {
+    font-size: 26px;
+    font-weight: 600;
+    opacity: 0.95;
   }
 }
 
@@ -129,18 +120,23 @@ ion-content::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #fff;
+    max-width: 90px;
+    
     .action-icon {
       background: var(--ion-color-side-menu);
       border-radius: 16px;
       padding: 12px;
-      margin-bottom: 4px;
-      ion-icon { font-size: 28px; }
+      margin-bottom: 6px;
+      
+      ion-icon { 
+        font-size: 26px;
+        color: #fff;
+      }
     }
-    span {     
+    
+    span {
       text-align: center;
-      font-size: 15px; 
-      color: #444;
+      line-height: 1.2;
     }
   }
 }
@@ -183,7 +179,8 @@ ion-content::-webkit-scrollbar {
       
       ion-icon { 
         font-size: 24px; 
-        color: #fff; 
+        color: #fff;
+        filter: brightness(0) invert(1);
       }
     }
     
@@ -191,10 +188,7 @@ ion-content::-webkit-scrollbar {
       flex: 1; 
       min-width: 0;
       
-      .account-name { 
-        font-size: 16px;
-        font-weight: 500;
-        color: #2c3e50;
+      span {
         display: block;
         white-space: nowrap;
         overflow: hidden;
@@ -202,12 +196,58 @@ ion-content::-webkit-scrollbar {
       }
     }
     
-    .account-balance { 
-      font-size: 16px; 
-      font-weight: 600; 
-      color: #2c3e50;
+    .account-balance {
       flex-shrink: 0;
       margin-left: 8px;
+    }
+  }
+}
+
+// ====================
+// Estado vacío
+// ====================
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 80px;
+    color: #d1d5db;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    margin: 0 0 8px 0;
+  }
+  
+  p {
+    margin: 0 0 24px 0;
+  }
+  
+  .create-account-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ion-color-side-menu);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    ion-icon {
+      font-size: 20px;
+    }
+    
+    &:active {
+      transform: scale(0.98);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
     }
   }
 }
