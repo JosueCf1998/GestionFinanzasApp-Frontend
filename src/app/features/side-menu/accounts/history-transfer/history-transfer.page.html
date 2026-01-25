@@ -66,18 +66,23 @@
         </div>
 
         <div class="transfer-item" *ngFor="let transfer of group.items">
+          <div class="transfer-icon">
+            <ion-icon name="swap-horizontal-outline"></ion-icon>
+          </div>
+          
           <div class="transfer-info">
-            <div class="transfer-category">{{ transfer.categoria }}</div>
-            <div class="transfer-subcategory" *ngIf="transfer.subcategoria">
-              {{ transfer.subcategoria }}
+            <div class="transfer-accounts">
+              <span class="origin">{{ transfer.originAccountName }}</span>
+              <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+              <span class="destination">{{ transfer.destinationAccountName }}</span>
             </div>
-            <div class="transfer-description" *ngIf="transfer.descripcion">
-              {{ transfer.descripcion }}
+            <div class="transfer-comment" *ngIf="transfer.comment">
+              {{ transfer.comment }}
             </div>
           </div>
 
-          <div class="transfer-amount" [class.positive]="transfer.monto > 0" [class.negative]="transfer.monto < 0">
-            {{ formatCurrency(transfer.monto) }}
+          <div class="transfer-amount">
+            {{ transfer.amount }} S/.
           </div>
         </div>
       </div>
