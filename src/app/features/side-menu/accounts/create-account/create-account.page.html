@@ -62,7 +62,7 @@
               (click)="seleccionarIcono(icon)"
               [attr.aria-label]="icon.nombre"
             >
-              <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
+              <ion-icon src="assets/icon/{{icon.archivo}}.svg"></ion-icon>
             </button>
           </div>
         </div>

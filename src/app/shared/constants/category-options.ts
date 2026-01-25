@@ -36,7 +36,7 @@ export const ICONOS_CUENTA = [
   { nombre: 'Estudio', archivo: 'study' },
   { nombre: 'Cartera', archivo: 'wallet' },
   { nombre: 'Bus', archivo: 'bus' },
-  { nombre: 'Pregunta', archivo: 'question' },
+  { nombre: 'PiggyBank', archivo: 'pig-piggy-bank' },
   { nombre: 'Salario', archivo: 'salary' },
   { nombre: 'Pregunta', archivo: 'question' }
 ];

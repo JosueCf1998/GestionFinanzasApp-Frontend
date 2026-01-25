@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { CreateTransferRequest, CreateTransferUseCase } from "src/app/core/use-cases/transfer/create-transfer.usecase";
+import { convertISODateToSQL } from "src/app/core/utils/date.util";
 
 @Component({
   selector: "app-new-transfer",
@@ -33,6 +35,9 @@ export class NewTransferPage implements OnInit {
   comentario: string = '';
   
   showCustomAlert: boolean = false;
+  showGenericAlert: boolean = false;
+  showUnauthorizedAlert: boolean = false;
+  messageError: string = '';
   maxDate: string = new Date().toISOString();
 
   constructor(
@@ -40,15 +45,16 @@ export class NewTransferPage implements OnInit {
     private router: Router,
     private listAccountsUseCase: ListAccountsUseCase,
     private loadingService: SpinnerService,
+    private createTransferUseCase: CreateTransferUseCase,
   ) {}
 
   ngOnInit() {
-    this.cargarCuentas();
+    this.executeAccountList();
   }
 
   // MARK: - SERVICIOS
 
-  private cargarCuentas() {
+  private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().subscribe({
       next: (result) => {
@@ -59,6 +65,32 @@ export class NewTransferPage implements OnInit {
       },
       error: () => {
         this.loadingService.hide();
+      }
+    });
+  }
+
+  private executeCreateTransfer(body: CreateTransferRequest) {
+    this.loadingService.show();
+    this.createTransferUseCase.createTransfer(body).subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success && result.data) {
+          this.cambiosPendientes = false;
+          this.navService.back();
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
       }
     });
   }
@@ -93,19 +125,14 @@ export class NewTransferPage implements OnInit {
 
   async crearTransferencia() {
     if (!this.validarTransferencia()) return;
-
-    const transferencia = {
-      cuentaOrigenId: this.cuentaOrigenId,
-      cuentaDestinoId: this.cuentaDestinoId,
-      monto: this.monto,
-      fecha: this.fecha,
-      comentario: this.comentario.trim()
+    const transferencia: CreateTransferRequest = {
+      originAccountId: this.cuentaOrigenId,
+      destinationAccountId: this.cuentaDestinoId,
+      amount: this.monto!,
+      date: convertISODateToSQL(this.fecha),
+      comment: this.comentario.trim()
     };
-
-    console.log('Transferencia a guardar:', transferencia);
-
-    this.cambiosPendientes = false;
-    this.navService.back();
+    this.executeCreateTransfer(transferencia);
   }
 
   private validarTransferencia(): boolean {
