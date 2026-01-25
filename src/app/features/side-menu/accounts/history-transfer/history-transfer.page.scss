@@ -593,3 +593,18 @@ ion-menu-button {
   }
 
 }
+
+// ====================
+// Botón flotante
+// ====================
+.fab-custom {
+  margin-bottom: 30px;
+  margin-right: 8px;
+  
+  ion-fab-button {
+    --background: var(--ion-color-side-menu);
+    --background-activated: var(--ion-color-side-menu-shade);
+    --background-hover: var(--ion-color-side-menu-tint);
+    --color: white;
+  }
+}

@@ -122,6 +122,17 @@ export class HistoryTransferPage implements OnInit {
     this.navService.back();
   }
 
+  navigateToAddTransfer() {
+    this.navService.push('/accounts/new-transfer', { });
+  }
+
+  editTransfer(transfer: Transfer) {
+    this.navService.push('/accounts/new-transfer', {
+      transferData: transfer,
+      isEdit: true
+    });
+  }
+
   onPeriodChange() {
     this.filterTransfers();
   }

@@ -20,6 +20,25 @@ import { convertISODateToSQL } from "src/app/core/utils/date.util";
 })
 export class NewTransferPage implements OnInit {
 
+  title: string = 'Crear Transferencia';
+  isEditMode: boolean = false;
+  transferId: number | null = null;
+  
+  // Valores originales para detectar cambios en modo edición
+  private originalData: {
+    cuentaOrigenId: string;
+    cuentaDestinoId: string;
+    monto: number | null;
+    fecha: string;
+    comentario: string;
+  } = {
+    cuentaOrigenId: '',
+    cuentaDestinoId: '',
+    monto: null,
+    fecha: new Date().toISOString(),
+    comentario: ''
+  };
+  
   accounts: Accounts[] = [];
   selectedAccount: Accounts | null = null;
   isModalOpen: boolean = false;
@@ -49,6 +68,16 @@ export class NewTransferPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    const state = window.history.state;
+    if (state?.isEdit && state?.transferData) {
+      this.isEditMode = true;
+      this.title = 'Editar Transferencia';
+      this.loadTransferData(state.transferData);
+      this.executeAccountList();
+      return;
+    }
+    this.isEditMode = false;
+    this.title = 'Crear Transferencia';
     this.executeAccountList();
   }
 
@@ -96,6 +125,26 @@ export class NewTransferPage implements OnInit {
   }
 
   // MARK: - FUNCIONALIDADES
+
+  private loadTransferData(transfer: any) {
+    this.transferId = transfer.id;
+    this.cuentaOrigenId = transfer.originAccountId?.toString() || '';
+    this.cuentaOrigen = transfer.originAccountName || '';
+    this.cuentaDestinoId = transfer.destinationAccountId?.toString() || '';
+    this.cuentaDestino = transfer.destinationAccountName || '';
+    this.monto = transfer.amount;
+    this.fecha = transfer.date ? new Date(transfer.date).toISOString() : new Date().toISOString();
+    this.comentario = transfer.comment || '';
+    
+    // Guardar valores originales para comparar cambios
+    this.originalData = {
+      cuentaOrigenId: this.cuentaOrigenId,
+      cuentaDestinoId: this.cuentaDestinoId,
+      monto: this.monto,
+      fecha: this.fecha,
+      comentario: this.comentario
+    };
+  }
 
   seleccionarCuentaOrigen() {
     this.tipoSeleccion = 'origen';
@@ -201,11 +250,21 @@ export class NewTransferPage implements OnInit {
   }
 
   async backToCategories() {
-    const hayCambios = 
-      this.cuentaDestinoId !== '' ||
-      (this.monto !== null && this.monto > 0) ||
-      this.comentario.trim() !== '';
-
+    let hayCambios = false;
+    if (this.isEditMode) {
+      hayCambios = 
+        this.cuentaOrigenId !== this.originalData.cuentaOrigenId ||
+        this.cuentaDestinoId !== this.originalData.cuentaDestinoId ||
+        this.monto !== this.originalData.monto ||
+        this.fecha !== this.originalData.fecha ||
+        this.comentario.trim() !== this.originalData.comentario.trim();
+    } else {
+      // En modo creación, verificar si hay datos ingresados
+      hayCambios = 
+        this.cuentaDestinoId !== '' ||
+        (this.monto !== null && this.monto > 0) ||
+        this.comentario.trim() !== '';
+    }
     if (hayCambios) {
       this.showCustomAlert = true;
     } else {

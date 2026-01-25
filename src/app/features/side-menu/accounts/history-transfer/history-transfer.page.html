@@ -8,6 +8,7 @@
         </button>
       </ion-buttons>
       <ion-title class="header-title">{{ title }}</ion-title>
+
     </ion-toolbar>
   </ion-header>
 
@@ -20,7 +21,6 @@
           <ion-icon src="assets/icon/wallet.svg"></ion-icon>
           <span>{{ accountFilterLabel }}</span>
         </div>
-        <ion-icon name="chevron-forward-outline" class="dropdown-icon"></ion-icon>
       </div>
 
       <!-- Tabs de período -->
@@ -67,7 +67,7 @@
           <span class="date-text">{{ group.fecha }}</span>
         </div>
 
-        <div class="transfer-item" *ngFor="let transfer of group.items">
+        <div class="transfer-item" *ngFor="let transfer of group.items" (click)="editTransfer(transfer)">
           <div class="transfer-icon" 
                [class.icon-inicial]="transfer.type === 'Inicial'" 
                [class.icon-ajuste]="transfer.type === 'Ajuste'"
@@ -169,5 +169,12 @@
       </div>
     </ng-template>
   </ion-modal>
+
+  <!-- Botón flotante para agregar transferencia -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-custom">
+    <ion-fab-button (click)="navigateToAddTransfer()">
+      <ion-icon src="assets/icon/add.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
     
 </ion-content>
