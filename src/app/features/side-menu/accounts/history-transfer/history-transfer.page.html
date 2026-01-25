@@ -8,17 +8,22 @@
         </button>
       </ion-buttons>
       <ion-title class="header-title">{{ title }}</ion-title>
-      <ion-buttons slot="end">
-        <button class="add-btn" type="button">
-          <ion-icon name="add-circle-outline"></ion-icon>
-        </button>
-      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
   <div class="content-wrapper">
-    <!-- Filtros de período -->
+    <!-- Sección de filtros -->
     <div class="filter-section">
+      <!-- Filtro de cuentas -->
+      <div class="account-filter-chip" (click)="openAccountModal()">
+        <div class="chip-content">
+          <ion-icon src="assets/icon/wallet.svg"></ion-icon>
+          <span>{{ accountFilterLabel }}</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="dropdown-icon"></ion-icon>
+      </div>
+
+      <!-- Tabs de período -->
       <app-custom-segment
         [options]="periodTabs"
         [(model)]="selectedPeriod"
@@ -27,17 +32,14 @@
       </app-custom-segment>
 
       <!-- Navegación según el período seleccionado -->
-      <div class="period-navigation" *ngIf="selectedPeriod !== 'periodo'">
-        <button class="nav-btn" (click)="selectedPeriod === 'dia' ? changeDay(-1) : selectedPeriod === 'semana' ? changeWeek(-1) : selectedPeriod === 'mes' ? changeMonth(-1) : changeYear(-1)">
-          <ion-icon name="chevron-back-outline"></ion-icon>
+      <div class="period-navigation">
+        <button class="nav-btn" (click)="selectedPeriod === 'semana' ? changeWeek(-1) : selectedPeriod === 'mes' ? changeMonth(-1) : changeYear(-1)">
+          <ion-icon [src]="'assets/icon/left-inline.svg'"></ion-icon>
         </button>
 
         <div class="period-label">
-          <span *ngIf="selectedPeriod === 'dia'">
-            {{ selectedDay | date: 'd \'de\' MMMM \'de\' yyyy' : '' : 'es' }}
-          </span>
           <span *ngIf="selectedPeriod === 'semana'">
-            Semana {{ selectedWeek }}, {{ selectedYear }}
+            Semana {{ selectedWeekOfMonth }} - {{ getMonthName(selectedMonth) }} {{ selectedYear }}
           </span>
           <span *ngIf="selectedPeriod === 'mes'">
             {{ getMonthName(selectedMonth) }} {{ selectedYear }}
@@ -47,17 +49,17 @@
           </span>
         </div>
 
-        <button class="nav-btn" (click)="selectedPeriod === 'dia' ? changeDay(1) : selectedPeriod === 'semana' ? changeWeek(1) : selectedPeriod === 'mes' ? changeMonth(1) : changeYear(1)">
-          <ion-icon name="chevron-forward-outline"></ion-icon>
+        <button class="nav-btn" (click)="selectedPeriod === 'semana' ? changeWeek(1) : selectedPeriod === 'mes' ? changeMonth(1) : changeYear(1)">
+          <ion-icon [src]="'assets/icon/right-inline.svg'"></ion-icon>
         </button>
       </div>
     </div>
 
     <!-- Lista de transferencias -->
-    <div class="transfers-list" [class.with-navigation]="selectedPeriod !== 'periodo'">
+    <div class="transfers-list">
       <div *ngIf="groupedTransfers.length === 0" class="no-data">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <p>No hay transferencias para este período</p>
+        <ion-icon src="assets/icon/transfer.svg" class="empty-icon"></ion-icon>
+        <p>No hay transferencias para mostrar</p>
       </div>
 
       <div *ngFor="let group of groupedTransfers" class="transfer-group">
@@ -66,27 +68,106 @@
         </div>
 
         <div class="transfer-item" *ngFor="let transfer of group.items">
-          <div class="transfer-icon">
-            <ion-icon name="swap-horizontal-outline"></ion-icon>
+          <div class="transfer-icon" 
+               [class.icon-inicial]="transfer.type === 'Inicial'" 
+               [class.icon-ajuste]="transfer.type === 'Ajuste'"
+               [class.icon-realizado]="transfer.type === 'Realizado'">
+            <ion-icon [src]="'assets/icon/' + getTransferIcon(transfer.type) + '.svg'"></ion-icon>
           </div>
           
           <div class="transfer-info">
-            <div class="transfer-accounts">
-              <span class="origin">{{ transfer.originAccountName }}</span>
-              <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
-              <span class="destination">{{ transfer.destinationAccountName }}</span>
-            </div>
-            <div class="transfer-comment" *ngIf="transfer.comment">
-              {{ transfer.comment }}
-            </div>
+            <!-- Tipo: Initial -->
+            <ng-container *ngIf="transfer.type === 'Inicial'">
+              <div class="transfer-title">{{ transfer.originAccountName }}</div>
+              <div class="transfer-comment">Monto Inicial</div>
+            </ng-container>
+
+            <!-- Tipo: Adjustment -->
+            <ng-container *ngIf="transfer.type === 'Ajuste'">
+              <div class="transfer-title">{{ transfer.originAccountName }}</div>
+              <div class="transfer-comment">Ajuste del Monto</div>
+            </ng-container>
+
+            <!-- Tipo: Completed -->
+            <ng-container *ngIf="transfer.type === 'Realizado'">
+              <div class="transfer-accounts">
+                <span class="origin">{{ transfer.originAccountName }}</span>
+                <ion-icon src="assets/icon/right-double.svg" class="empty-icon"></ion-icon>
+                <span class="destination">{{ transfer.destinationAccountName }}</span>
+              </div>
+              <div class="transfer-comment" *ngIf="transfer.comment">
+                {{ transfer.comment }}
+              </div>
+            </ng-container>
           </div>
 
           <div class="transfer-amount">
-            {{ transfer.amount }} S/.
+            S/. {{ transfer.amount }} 
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal de selección de cuentas -->
+  <ion-modal 
+    [isOpen]="isAccountModalOpen" 
+    (didDismiss)="closeAccountModal()" 
+    [cssClass]="getModalClass()"
+  >
+    <ng-template>
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h2 class="modal-title">Filtrar por Cuentas</h2>
+          <button class="btn-close" (click)="closeAccountModal()">
+              <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="cuentas-list" [class.scrollable]="accounts.length >= 4">
+            <!-- Opción de todas las cuentas -->
+            <div
+              class="cuenta-card"
+              [class.selected]="selectAllAccounts"
+              (click)="toggleSelectAll()">
+              <div class="cuenta-left">
+                <div class="cuenta-icon all-accounts">
+                  <ion-icon [src]="'assets/icon/bank.svg'"></ion-icon>
+                </div>
+                <div class="cuenta-details">
+                  <span class="cuenta-nombre">Todas las cuentas</span>
+                  <span class="cuenta-saldo">Mostrar todas</span>
+                </div>
+              </div>
+              <div class="cuenta-check">
+                <ion-icon name="checkmark-circle" *ngIf="selectAllAccounts"></ion-icon>
+              </div>
+            </div>
+
+            <!-- Lista de cuentas individuales -->
+            <div
+              *ngFor="let account of accounts"
+              class="cuenta-card"
+              [class.selected]="account.selected && !selectAllAccounts"
+              (click)="toggleAccountSelection(account)">
+              <div class="cuenta-left">
+                <div class="cuenta-icon" [style.background]="account.color">
+                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
+                </div>
+                <div class="cuenta-details">
+                  <span class="cuenta-nombre">{{ account.name }}</span>
+                  <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
+                </div>
+              </div>
+              <div class="cuenta-check">
+                <ion-icon name="checkmark-circle" *ngIf="account.selected && !selectAllAccounts"></ion-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
     
 </ion-content>
