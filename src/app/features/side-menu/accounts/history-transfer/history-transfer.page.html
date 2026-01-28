@@ -78,7 +78,7 @@
           <div class="transfer-info">
             <!-- Tipo: Initial -->
             <ng-container *ngIf="transfer.type === 'Inicial'">
-              <div class="transfer-title">{{ transfer.originAccountName }}</div>
+              <div class="transfer-title">{{ transfer.destinationAccountName }}</div>
               <div class="transfer-comment">Monto Inicial</div>
             </ng-container>
 
@@ -108,8 +108,25 @@
       </div>
     </div>
   </div>
+  
+  <!-- Botón flotante para agregar transferencia -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-custom">
+    <ion-fab-button (click)="navigateToAddTransfer()">
+      <ion-icon src="assets/icon/add.svg"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <!-- Modal de selección de cuentas -->
+  <app-custom-alert
+    *ngIf="showCustomAlert"
+    header="Cambios sin guardar"
+    message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
+    cancelText="No"
+    confirmText="Sí"
+    (onCancel)="showCustomAlert = false"
+    (onConfirm)="salirSinGuardar()"
+  ></app-custom-alert>
+
   <ion-modal 
     [isOpen]="isAccountModalOpen" 
     (didDismiss)="closeAccountModal()" 
@@ -169,12 +186,5 @@
       </div>
     </ng-template>
   </ion-modal>
-
-  <!-- Botón flotante para agregar transferencia -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-custom">
-    <ion-fab-button (click)="navigateToAddTransfer()">
-      <ion-icon src="assets/icon/add.svg"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
     
 </ion-content>

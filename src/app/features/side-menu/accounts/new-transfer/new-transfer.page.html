@@ -24,9 +24,10 @@
         class="account-btn"
         (click)="seleccionarCuentaOrigen()"
       >
-        <span [class.selected]="cuentaOrigen"
-          >{{ cuentaOrigen || 'Selecciona una cuenta' }}</span
-        >
+        <div class="account-btn-content" [class.selected]="cuentaOrigen">
+          <span class="account-name">{{ cuentaOrigen || 'Selecciona una cuenta' }}</span>
+          <span class="account-amount" *ngIf="cuentaOrigenAmount !== null">S/. {{ cuentaOrigenAmount | number:'1.2-2' }}</span>
+        </div>
       </button>
     </div>
 
@@ -37,9 +38,10 @@
         class="account-btn"
         (click)="seleccionarCuentaDestino()"
       >
-        <span [class.selected]="cuentaDestino"
-          >{{ cuentaDestino || 'Selecciona una cuenta' }}</span
-        >
+        <div class="account-btn-content" [class.selected]="cuentaDestino">
+          <span class="account-name">{{ cuentaDestino || 'Selecciona una cuenta' }}</span>
+          <span class="account-amount" *ngIf="cuentaDestinoAmount !== null">S/. {{ cuentaDestinoAmount | number:'1.2-2' }}</span>
+        </div>
       </button>
     </div>
 

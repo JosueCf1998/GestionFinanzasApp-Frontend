@@ -33,7 +33,7 @@ const TRANSFER_KEY_MAP = {
   amount: 'monto',
   date: 'fecha',
   comment: 'comentario',
-  type: 'tipo'
+  type: 'tipo_transferencia'
 } as const;
 
 @Injectable({
@@ -52,7 +52,7 @@ export class ListTransferUseCase {
           items: (result.data?.items || []).map((t: any) => ({
             ...mapObjectKeysReverse(t, TRANSFER_KEY_MAP),
             amount: parseFloat(t.monto || '0'),
-            type: Object.values(TransferType).includes(t.tipo) ? t.tipo : TransferType.completed
+            type: Object.values(TransferType).includes(t.tipo_transferencia) ? t.tipo_transferencia : TransferType.completed
           } as Transfer))
         }
       } as Result<ListTransferResponse>))

@@ -10,6 +10,7 @@ import { CustomSegmentComponent } from "../../../../shared/components/custom-seg
 import { ListTransferUseCase, Transfer } from "src/app/core/use-cases/transfer/list-transfer.usecase";
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 
 interface AccountFilter {
   id: number;
@@ -25,7 +26,7 @@ interface AccountFilter {
   templateUrl: "./history-transfer.page.html",
   styleUrls: ["./history-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent],
 })
 export class HistoryTransferPage implements OnInit {
   title: string = "Transferencias";
@@ -67,7 +68,9 @@ export class HistoryTransferPage implements OnInit {
     const currentDate = new Date();
     this.selectedMonth = currentDate.getMonth() + 1;
     this.selectedWeekOfMonth = this.getWeekOfMonth(currentDate);
-    
+  }
+
+  ionViewWillEnter() {
     this.loadData();
   }
 
@@ -97,6 +100,7 @@ export class HistoryTransferPage implements OnInit {
         
         // Procesar transferencias y enriquecer con nombres de cuentas
         if (results.transfers.success && results.transfers.data?.items) {
+          console.log('Transferencias cargadas:', results.transfers.data.items);
           this.allTransfers = this.enrichTransfersWithAccountNames(results.transfers.data.items);
           this.filterTransfers();
         }
@@ -107,6 +111,8 @@ export class HistoryTransferPage implements OnInit {
     });
   }
 
+  // MARK: - FUNCIONALIDADES
+
   private enrichTransfersWithAccountNames(transfers: Transfer[]): Transfer[] {
     return transfers.map(transfer => ({
       ...transfer,
@@ -114,8 +120,6 @@ export class HistoryTransferPage implements OnInit {
       destinationAccountName: this.accounts.find(acc => acc.id === transfer.destinationAccountId)?.name || 'Cuenta desconocida'
     }));
   }
-
-  // MARK: - FUNCIONALIDADES
 
   async backToAccounts() {
     (document.activeElement as HTMLElement)?.blur();
@@ -245,13 +249,17 @@ export class HistoryTransferPage implements OnInit {
       }
     });
 
-    // Convertir a array y ordenar por fecha descendente
+    // Convertir a array y ordenar por fecha descendente (más reciente primero)
     this.groupedTransfers = Array.from(groups.entries())
       .map(([fecha, items]) => ({ 
         fecha, 
         items: items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       }))
-      .sort((a, b) => new Date(b.items[0].date).getTime() - new Date(a.items[0].date).getTime());
+      .sort((a, b) => {
+        const dateA = new Date(a.items[0].date).getTime();
+        const dateB = new Date(b.items[0].date).getTime();
+        return dateB - dateA; // Descendente: más reciente primero
+      });
   }
 
   // MARK: - MODAL DE CUENTAS
@@ -347,6 +355,12 @@ export class HistoryTransferPage implements OnInit {
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     return months[month - 1];
+  }
+
+  salirSinGuardar() {
+    this.showCustomAlert = false;
+    (document.activeElement as HTMLElement)?.blur();
+    this.navService.back();
   }
 
   // Método auxiliar para comparar si dos fechas son el mismo día

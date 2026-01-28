@@ -38,7 +38,7 @@ ion-content::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: #fcfdf8;
+  background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100dvh;
   height: 100dvh;
   max-height: 100dvh;

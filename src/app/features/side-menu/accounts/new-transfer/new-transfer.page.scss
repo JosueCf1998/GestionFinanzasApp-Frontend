@@ -339,6 +339,37 @@ ion-menu-button {
   cursor: pointer;
 }
 
+.account-btn-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  
+  .account-name {
+    color: #1976d2;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  .account-amount {
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  
+  &.selected {
+    .account-name {
+      color: #1976d2;
+      font-weight: 500;
+    }
+    
+    .account-amount {
+      color: #6b7280;
+      font-weight: 400;
+      font-size: 13px;
+    }
+  }
+}
+
 .account-btn .selected, .date-btn {
   color: #1976d2;
   font-weight: 500;

@@ -7,18 +7,22 @@ import { encryptBody } from '../../utils/encryption.util';
 import { mapObjectKeys } from '../../utils/mapping.util';
 
 export interface UpdateTransferRequest {
-  name: string;
+  id: number;
+  originAccountId: string;
+  destinationAccountId: string;
   amount: number;
-  icon: string;
-  color: string;
+  date: string;
+  comment: string;
 }
 
 // Mapeo de propiedades
 const REQUEST_KEY_MAP = {
-  name: 'nombre',
-  amount: 'saldo',
-  icon: 'icon',
-  color: 'color'
+  id: 'transf_id',
+  originAccountId: 'cuenta_id_origen',
+  destinationAccountId: 'cuenta_id_destino',
+  amount: 'monto',
+  date: 'fecha',
+  comment: 'comentario'
 } as const;
 
 export interface UpdateTransferResponse {

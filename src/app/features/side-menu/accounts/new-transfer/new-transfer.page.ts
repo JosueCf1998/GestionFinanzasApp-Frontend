@@ -9,6 +9,7 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateTransferRequest, CreateTransferUseCase } from "src/app/core/use-cases/transfer/create-transfer.usecase";
+import { UpdateTransferRequest, UpdateTransferUseCase } from "src/app/core/use-cases/transfer/update-transfer.usecase";
 import { convertISODateToSQL } from "src/app/core/utils/date.util";
 
 @Component({
@@ -47,8 +48,10 @@ export class NewTransferPage implements OnInit {
   
   cuentaOrigenId: string = '';
   cuentaOrigen: string = '';
+  cuentaOrigenAmount: number | null = null;
   cuentaDestinoId: string = '';
   cuentaDestino: string = '';
+  cuentaDestinoAmount: number | null = null;
   monto: number | null = null;
   fecha: string = new Date().toISOString();
   comentario: string = '';
@@ -65,6 +68,7 @@ export class NewTransferPage implements OnInit {
     private listAccountsUseCase: ListAccountsUseCase,
     private loadingService: SpinnerService,
     private createTransferUseCase: CreateTransferUseCase,
+    private updateTransferUseCase: UpdateTransferUseCase,
   ) {}
 
   ngOnInit() {
@@ -124,6 +128,32 @@ export class NewTransferPage implements OnInit {
     });
   }
 
+  private executeUpdateTransfer(body: UpdateTransferRequest) {
+    this.loadingService.show();
+    this.updateTransferUseCase.updateTransfer(body).subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        if (result.success) {
+          this.cambiosPendientes = false;
+          this.navService.back();
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      error: (err) => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
+
   // MARK: - FUNCIONALIDADES
 
   private loadTransferData(transfer: any) {
@@ -135,6 +165,16 @@ export class NewTransferPage implements OnInit {
     this.monto = transfer.amount;
     this.fecha = transfer.date ? new Date(transfer.date).toISOString() : new Date().toISOString();
     this.comentario = transfer.comment || '';
+    
+    // Cargar los montos de las cuentas
+    if (this.cuentaOrigenId) {
+      const accountOrigen = this.accounts.find(a => a.id.toString() === this.cuentaOrigenId);
+      this.cuentaOrigenAmount = accountOrigen?.amount ?? null;
+    }
+    if (this.cuentaDestinoId) {
+      const accountDestino = this.accounts.find(a => a.id.toString() === this.cuentaDestinoId);
+      this.cuentaDestinoAmount = accountDestino?.amount ?? null;
+    }
     
     // Guardar valores originales para comparar cambios
     this.originalData = {
@@ -174,14 +214,29 @@ export class NewTransferPage implements OnInit {
 
   async crearTransferencia() {
     if (!this.validarTransferencia()) return;
-    const transferencia: CreateTransferRequest = {
-      originAccountId: this.cuentaOrigenId,
-      destinationAccountId: this.cuentaDestinoId,
-      amount: this.monto!,
-      date: convertISODateToSQL(this.fecha),
-      comment: this.comentario.trim()
-    };
-    this.executeCreateTransfer(transferencia);
+    
+    if (this.isEditMode && this.transferId) {
+      // Modo edición: usar updateTransfer
+      const transferencia: UpdateTransferRequest = {
+        id: this.transferId,
+        originAccountId: this.cuentaOrigenId,
+        destinationAccountId: this.cuentaDestinoId,
+        amount: this.monto!,
+        date: convertISODateToSQL(this.fecha),
+        comment: this.comentario.trim()
+      };
+      this.executeUpdateTransfer(transferencia);
+    } else {
+      // Modo creación: usar createTransfer
+      const transferencia: CreateTransferRequest = {
+        originAccountId: this.cuentaOrigenId,
+        destinationAccountId: this.cuentaDestinoId,
+        amount: this.monto!,
+        date: convertISODateToSQL(this.fecha),
+        comment: this.comentario.trim()
+      };
+      this.executeCreateTransfer(transferencia);
+    }
   }
 
   private validarTransferencia(): boolean {
@@ -228,14 +283,17 @@ export class NewTransferPage implements OnInit {
     if (this.tipoSeleccion === 'origen') {
       this.cuentaOrigenId = account.id.toString();
       this.cuentaOrigen = account.name;
+      this.cuentaOrigenAmount = account.amount;
       
       if (this.cuentaDestinoId === this.cuentaOrigenId) {
         this.cuentaDestinoId = '';
         this.cuentaDestino = '';
+        this.cuentaDestinoAmount = null;
       }
     } else {
       this.cuentaDestinoId = account.id.toString();
       this.cuentaDestino = account.name;
+      this.cuentaDestinoAmount = account.amount;
     }
 
     this.closeModal();
