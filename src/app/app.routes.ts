@@ -88,6 +88,10 @@ export const routes: Routes = [
     path: 'accounts/new-transfer',
     loadComponent: () => import('./features/side-menu/accounts/new-transfer/new-transfer.page').then(m => m.NewTransferPage)
   },
+  {
+    path: 'accounts/detail-transfer',
+    loadComponent: () => import('./features/side-menu/accounts/detail-transfer/detail-transfer.page').then(m => m.DetailTransferPage)
+  },
   // PRUEBA ROUTES - Testing navigation
   {
     path: 'prueba/screen-one',

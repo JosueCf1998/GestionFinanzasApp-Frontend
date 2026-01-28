@@ -114,11 +114,20 @@ export class HistoryTransferPage implements OnInit {
   // MARK: - FUNCIONALIDADES
 
   private enrichTransfersWithAccountNames(transfers: Transfer[]): Transfer[] {
-    return transfers.map(transfer => ({
-      ...transfer,
-      originAccountName: this.accounts.find(acc => acc.id === transfer.originAccountId)?.name || 'Cuenta desconocida',
-      destinationAccountName: this.accounts.find(acc => acc.id === transfer.destinationAccountId)?.name || 'Cuenta desconocida'
-    }));
+    return transfers.map(transfer => {
+      const originAccount = this.accounts.find(acc => acc.id === transfer.originAccountId);
+      const destinationAccount = this.accounts.find(acc => acc.id === transfer.destinationAccountId);
+      
+      return {
+        ...transfer,
+        originAccountName: originAccount?.name || 'Cuenta desconocida',
+        destinationAccountName: destinationAccount?.name || 'Cuenta desconocida',
+        originAccountIcon: originAccount?.icon || '',
+        originAccountColor: originAccount?.color || '',
+        destinationAccountIcon: destinationAccount?.icon || '',
+        destinationAccountColor: destinationAccount?.color || ''
+      };
+    });
   }
 
   async backToAccounts() {
@@ -131,9 +140,14 @@ export class HistoryTransferPage implements OnInit {
   }
 
   editTransfer(transfer: Transfer) {
-    this.navService.push('/accounts/new-transfer', {
-      transferData: transfer,
-      isEdit: true
+    console.log('=== NAVEGANDO A DETALLE ===');
+    console.log('Transfer seleccionado:', transfer);
+    
+    // Guardar en localStorage como respaldo
+    localStorage.setItem('transferDetail', JSON.stringify(transfer));
+    
+    this.navService.push('/accounts/detail-transfer', {
+      transferData: transfer
     });
   }
 

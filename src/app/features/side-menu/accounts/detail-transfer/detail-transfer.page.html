@@ -1,0 +1,82 @@
+<!-- Content General -->
+<ion-content [fullscreen]="true" scroll-y="false">
+  <!-- Content Header -->
+  <ion-header>
+    <ion-toolbar class="side-menu" color="side-menu">
+      <ion-buttons slot="start">
+        <button class="atras-btn" type="button" (click)="backToCategories()">
+          <ion-icon src="assets/icon/left.svg"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title class="header-title">{{ title }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Content Body -->
+  <div class="transfer-form">
+    
+    <!-- Card de información -->
+    <div class="detail-card">
+      <!-- Sección de Cuentas -->
+      <div class="accounts-section">
+        <!-- Cuenta de Origen -->
+        <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Ajuste'">
+          <div class="transfer-label">{{ type === 'Realizado' ? 'Transfiere de una Cuenta' : 'Ajuste de la Cuenta' }}</div>
+          <div class="account-display">
+            <div class="account-icon" [style.background-color]="cuentaOrigenColor">
+              <ion-icon [src]="'assets/icon/' + cuentaOrigenIcon + '.svg'"></ion-icon>
+            </div>
+            <div class="account-info">{{ cuentaOrigen }}</div>
+          </div>
+        </div>
+
+        <!-- Cuenta de Destino -->
+        <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Inicial'">
+          <div class="transfer-label">{{ type === 'Realizado' ? 'Transfiere a una Cuenta' : 'Cuenta Inicial' }}</div>
+          <div class="account-display">
+            <div class="account-icon" [style.background-color]="cuentaDestinoColor">
+              <ion-icon [src]="'assets/icon/' + cuentaDestinoIcon + '.svg'"></ion-icon>
+            </div>
+            <div class="account-info">{{ cuentaDestino }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Sección de Detalles -->
+      <div class="details-section">
+        <!-- Monto -->
+        <div class="transfer-section">
+          <div class="transfer-label">Monto</div>
+          <div class="amount-display">S/. {{ monto | number:'1.2-2' }}</div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="transfer-section">
+          <div class="transfer-label">Fecha de Transferencia</div>
+          <div class="date-display">{{ formatDate(fecha) }}</div>
+        </div>
+
+        <!-- Comentario -->
+        <div class="transfer-section" *ngIf="comentario">
+          <div class="transfer-label">Comentario</div>
+          <div class="comment-display">{{ comentario }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de acción (solo para transferencias realizadas) -->
+    <div class="action-buttons" *ngIf="type === 'Realizado'">
+      <ion-button expand="block" class="btn-editar" (click)="editarTransferencia()">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Editar
+      </ion-button>
+      <ion-button expand="block" class="btn-eliminar" (click)="eliminarTransferencia()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>
