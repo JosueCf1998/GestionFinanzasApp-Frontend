@@ -140,12 +140,7 @@ export class HistoryTransferPage implements OnInit {
   }
 
   editTransfer(transfer: Transfer) {
-    console.log('=== NAVEGANDO A DETALLE ===');
-    console.log('Transfer seleccionado:', transfer);
-    
-    // Guardar en localStorage como respaldo
     localStorage.setItem('transferDetail', JSON.stringify(transfer));
-    
     this.navService.push('/accounts/detail-transfer', {
       transferData: transfer
     });
@@ -254,7 +249,7 @@ export class HistoryTransferPage implements OnInit {
     
     // Agrupar transferencias por fecha
     this.filteredTransfers.forEach(transfer => {
-      const dateKey = this.formatDateKey(new Date(transfer.date));
+      const dateKey = this.formatDateKey(transfer.date);
       const group = groups.get(dateKey);
       if (group) {
         group.push(transfer);
@@ -346,10 +341,17 @@ export class HistoryTransferPage implements OnInit {
     return `${count} cuentas`;
   }
 
-  formatDateKey(date: Date): string {
+  formatDateKey(dateString: string): string {
+    // Extraer directamente del string para evitar problemas de zona horaria
+    const parts = dateString.split('T')[0].split('-');
+    const year = parts[0];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    
     const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
                     'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    return `${date.getDate()} de ${months[date.getMonth()]} de ${date.getFullYear()}`;
+    
+    return `${day} de ${months[monthIndex]} de ${year}`;
   }
 
   getWeekNumber(date: Date): number {

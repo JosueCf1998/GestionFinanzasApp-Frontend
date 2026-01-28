@@ -135,7 +135,7 @@ export class NewTransferPage implements OnInit {
         this.loadingService.hide();
         if (result.success) {
           this.cambiosPendientes = false;
-          this.navService.back();
+          this.navService.backMultiple(2)
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;

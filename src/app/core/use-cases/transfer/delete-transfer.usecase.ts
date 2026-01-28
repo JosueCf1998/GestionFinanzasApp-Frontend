@@ -7,18 +7,12 @@ import { encryptBody } from '../../utils/encryption.util';
 import { mapObjectKeys } from '../../utils/mapping.util';
 
 export interface DeleteTransferRequest {
-  name: string;
-  amount: number;
-  icon: string;
-  color: string;
+  id: number;
 }
 
 // Mapeo de propiedades
 const REQUEST_KEY_MAP = {
-  name: 'nombre',
-  amount: 'saldo',
-  icon: 'icon',
-  color: 'color'
+  id: 'transf_id'
 } as const;
 
 export interface DeleteTransferResponse {

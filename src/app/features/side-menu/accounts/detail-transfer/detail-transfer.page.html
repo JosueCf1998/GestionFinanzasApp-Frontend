@@ -69,7 +69,7 @@
     <!-- Botones de acción (solo para transferencias realizadas) -->
     <div class="action-buttons" *ngIf="type === 'Realizado'">
       <ion-button expand="block" class="btn-editar" (click)="editarTransferencia()">
-        <ion-icon slot="start" name="create-outline"></ion-icon>
+        <ion-icon [src]="'assets/icon/edit.svg'"></ion-icon>
         Editar
       </ion-button>
       <ion-button expand="block" class="btn-eliminar" (click)="eliminarTransferencia()">
@@ -79,4 +79,25 @@
     </div>
 
   </div>
+
+  <!-- Alert de confirmación de eliminación -->
+  <app-custom-alert
+    *ngIf="showCustomAlert"
+    header="Eliminar transferencia"
+    message="¿Estás seguro de que deseas eliminar esta transferencia?"
+    cancelText="No"
+    confirmText="Sí"
+    (onCancel)="cerrarAlert()"
+    (onConfirm)="confirmarEliminacion()"
+  ></app-custom-alert>
+
+  <!-- Alert de error -->
+  <app-custom-alert
+    *ngIf="showErrorAlert"
+    header="Error"
+    [message]="messageError"
+    confirmText="OK"
+    (onConfirm)="cerrarAlert()"
+  ></app-custom-alert>
+
 </ion-content>

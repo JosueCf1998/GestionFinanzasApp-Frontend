@@ -59,6 +59,32 @@ export class NavigationService {
   }
 
   /**
+   * Retroceder múltiples pantallas
+   */
+  async backMultiple(steps: number): Promise<void> {
+    if (this.isNavigating) return;
+    
+    this.isNavigating = true;
+    
+    try {
+      for (let i = 0; i < steps; i++) {
+        await this.navCtrl.back({
+          animated: i === steps - 1, // Solo animar la última navegación
+          animationDirection: 'back'
+        });
+        // Pequeño delay entre navegaciones para asegurar que se procesen
+        if (i < steps - 1) {
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+      }
+    } finally {
+      setTimeout(() => {
+        this.isNavigating = false;
+      }, 300);
+    }
+  }
+
+  /**
    * Reemplazar (sin historial) - para login
    */
   async replace(path: string, state?: any): Promise<void> {

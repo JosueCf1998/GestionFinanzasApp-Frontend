@@ -3,19 +3,24 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from "@angular/router";
+import { DeleteTransferUseCase } from "src/app/core/use-cases/transfer/delete-transfer.usecase";
+import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 
 @Component({
   selector: "app-detail-transfer",
   templateUrl: "./detail-transfer.page.html",
   styleUrls: ["./detail-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, CustomAlertComponent],
 })
 export class DetailTransferPage implements OnInit {
 
   title: string = 'Detalle Transferencia';
   
   transferId: number | null = null;
+  cuentaOrigenId: number | null = null;
+  cuentaDestinoId: number | null = null;
   cuentaOrigen: string = '';
   cuentaDestino: string = '';
   monto: number | null = null;
@@ -28,10 +33,16 @@ export class DetailTransferPage implements OnInit {
   cuentaOrigenColor: string = '';
   cuentaDestinoIcon: string = '';
   cuentaDestinoColor: string = '';
+  
+  showCustomAlert: boolean = false;
+  showErrorAlert: boolean = false;
+  messageError: string = '';
 
   constructor(
     private navService: NavigationService,
-    private router: Router
+    private router: Router,
+    private deleteTransferUseCase: DeleteTransferUseCase,
+    private loadingService: SpinnerService
   ) {}
 
   ngOnInit() {
@@ -69,6 +80,8 @@ export class DetailTransferPage implements OnInit {
     console.log('Transfer recibido:', transfer);
     
     this.transferId = transfer.id;
+    this.cuentaOrigenId = transfer.originAccountId || null;
+    this.cuentaDestinoId = transfer.destinationAccountId || null;
     this.cuentaOrigen = transfer.originAccountName || '';
     this.cuentaDestino = transfer.destinationAccountName || '';
     this.monto = transfer.amount;
@@ -84,6 +97,8 @@ export class DetailTransferPage implements OnInit {
     
     console.log('Datos cargados:', {
       transferId: this.transferId,
+      cuentaOrigenId: this.cuentaOrigenId,
+      cuentaDestinoId: this.cuentaDestinoId,
       cuentaOrigen: this.cuentaOrigen,
       cuentaDestino: this.cuentaDestino,
       monto: this.monto,
@@ -104,11 +119,18 @@ export class DetailTransferPage implements OnInit {
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    
+    // Extraer directamente del string para evitar problemas de zona horaria
+    const parts = dateString.split('T')[0].split('-');
+    const year = parts[0];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const month = months[monthIndex];
+    
+    return `${day} de ${month} del ${year}`;
   }
 
   getTransferTypeLabel(): string {
@@ -125,11 +147,14 @@ export class DetailTransferPage implements OnInit {
   }
 
   editarTransferencia() {
+    // Desenfocar el elemento activo antes de navegar
+    (document.activeElement as HTMLElement)?.blur();
+    
     // Navegar a la página de edición con los datos de la transferencia
     const transferData = {
       id: this.transferId,
-      originAccountId: null, // Estos IDs deberían venir del backend
-      destinationAccountId: null,
+      originAccountId: this.cuentaOrigenId,
+      destinationAccountId: this.cuentaDestinoId,
       amount: this.monto,
       date: this.fecha,
       comment: this.comentario,
@@ -147,14 +172,46 @@ export class DetailTransferPage implements OnInit {
   }
 
   async eliminarTransferencia() {
-    // Aquí deberías agregar un diálogo de confirmación
-    const confirmDelete = confirm('¿Estás seguro de que deseas eliminar esta transferencia?');
-    if (confirmDelete) {
-      // TODO: Implementar la lógica de eliminación con el servicio correspondiente
-      console.log('Eliminando transferencia con ID:', this.transferId);
-      // Después de eliminar, volver atrás
-      this.navService.back();
+    if (!this.transferId) {
+      console.error('No hay ID de transferencia para eliminar');
+      return;
     }
+
+    this.showCustomAlert = true;
+  }
+
+  confirmarEliminacion() {
+    this.showCustomAlert = false;
+    
+    if (!this.transferId) return;
+    
+    this.loadingService.show();
+    
+    this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).subscribe({
+      next: (result) => {
+        this.loadingService.hide();
+        
+        if (result.success) {
+          console.log('✅ Transferencia eliminada exitosamente');
+          this.navService.back();
+        } else {
+          console.error('❌ Error al eliminar transferencia:', result.message);
+          this.messageError = result.message || 'Error al eliminar la transferencia';
+          this.showErrorAlert = true;
+        }
+      },
+      error: (error) => {
+        this.loadingService.hide();
+        console.error('❌ Error en la petición:', error);
+        this.messageError = 'Ocurrió un error al eliminar la transferencia';
+        this.showErrorAlert = true;
+      }
+    });
+  }
+
+  cerrarAlert() {
+    this.showCustomAlert = false;
+    this.showErrorAlert = false;
   }
 
 }

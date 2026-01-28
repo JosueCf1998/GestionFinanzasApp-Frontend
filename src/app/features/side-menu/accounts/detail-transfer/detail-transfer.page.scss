@@ -614,6 +614,8 @@ ion-menu-button {
   ion-icon {
     font-size: 20px;
     margin-right: 4px;
+    color: #fff !important;
+    filter: brightness(0) invert(1);
   }
 }
 
