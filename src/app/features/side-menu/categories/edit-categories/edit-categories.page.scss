@@ -318,14 +318,22 @@ ion-menu-button {
 
 .btn-eliminar {
   --background: transparent;
+  --background-activated: #dc2626;
+  --background-hover: rgba(220, 38, 38, 0.05);
   --color: #dc2626;
+  --color-activated: #ffffff;
   --box-shadow: none;
   --border-radius: 12px;
   border: 2px solid #dc2626;
   border-radius: 12px;
+  transition: all 0.2s ease;
   
   &:hover {
     --background: rgba(220, 38, 38, 0.05);
+  }
+  
+  &:active {
+    transform: scale(0.98);
   }
   
   ion-icon {

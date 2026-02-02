@@ -9,6 +9,7 @@ import { CustomSegmentComponent } from "src/app/shared/components/custom-segment
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
+import { AlertService } from "src/app/core/services/alert.service";
 
 @Component({
   selector: "app-categories",
@@ -24,7 +25,6 @@ export class CategoriesPage {
     { value: 'gastos', label: 'Gasto' },
     { value: 'ingresos', label: 'Ingreso' }
   ];
-  showSystemCategoryAlert = false;
 
   gastos: Categoria[] = [];
   ingresos: Categoria[] = [];
@@ -33,7 +33,8 @@ export class CategoriesPage {
   constructor(
     private navService: NavigationService,
     private listCategoriesUseCase: ListCategoriesUseCase,
-    private loadingService: SpinnerService
+    private loadingService: SpinnerService,
+    private alertService: AlertService
   ) { 
     this.executeListCategories();
   }
@@ -75,14 +76,17 @@ export class CategoriesPage {
 
   goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {
     if (category.usuario_id == null) {
-      this.showSystemCategoryAlert = true;
+      this.alertService.showAlert(
+        'Categoría del Sistema',
+        'Esta es una categoría predeterminada del sistema y no puede ser modificada.',
+        'Entendido'
+      );
       return;
     }
     this.navService.push('/categories/edit', { type, category });
   }
   
   cerrarAlert() {
-    this.showSystemCategoryAlert = false;
     this.showGenericAlert = false;
   }
   

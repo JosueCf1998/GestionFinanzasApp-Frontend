@@ -1,4 +1,12 @@
 <ion-content [fullscreen]="true" scroll-y="false">
+  <app-custom-alert
+    *ngIf="showGenericAlert"
+    [header]="'Error'"
+    [message]="'No se pudieron cargar las categorías. Por favor, intenta nuevamente.'"
+    [confirmText]="'Aceptar'"
+    (onConfirm)="cerrarAlert()"
+  ></app-custom-alert>
+
   <div class="content">
     <!-- Tabs de Gastos e Ingresos -->
     <div class="">
@@ -37,14 +45,4 @@
       </ng-template>
     </div>
   </div>
-
-  <app-custom-alert
-    *ngIf="showSystemCategoryAlert"
-    header="Categoría predeterminada"
-    message="Esta categoría es predeterminada del sistema y no puede ser modificada ni eliminada."
-    confirmText="Entendido"
-    (onConfirm)="cerrarAlert()"
-  ></app-custom-alert>
-
 </ion-content>
-
