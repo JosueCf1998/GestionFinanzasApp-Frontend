@@ -280,8 +280,60 @@ ion-menu-button {
 }
 
 // ====================
-// Botón añadir
+// Botones de acción
 // ====================
+.action-buttons {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+}
+
+.btn-editar,
+.btn-eliminar {
+  flex: 1;
+  --border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  height: 52px;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+.btn-editar {
+  --background: var(--ion-color-side-menu);
+  --background-hover: var(--ion-color-side-menu-shade);
+  --background-activated: var(--ion-color-side-menu-shade);
+  --color: #fff;
+  --box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+  
+  ion-icon {
+    font-size: 20px;
+    margin-right: 4px;
+    color: #fff !important;
+    filter: brightness(0) invert(1);
+  }
+}
+
+.btn-eliminar {
+  --background: transparent;
+  --color: #dc2626;
+  --box-shadow: none;
+  --border-radius: 12px;
+  border: 2px solid #dc2626;
+  border-radius: 12px;
+  
+  &:hover {
+    --background: rgba(220, 38, 38, 0.05);
+  }
+  
+  ion-icon {
+    font-size: 20px;
+    margin-right: 4px;
+  }
+}
+
 .btn-anadir {
   margin-top: 22px;
   font-weight: 600;

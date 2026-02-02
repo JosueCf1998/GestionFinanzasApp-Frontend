@@ -188,4 +188,5 @@ export class CreateAccountPage {
     (document.activeElement as HTMLElement)?.blur();
     this.navService.back();
   }
+  
 }

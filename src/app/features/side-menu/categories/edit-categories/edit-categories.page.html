@@ -81,22 +81,57 @@
       </div>
     </div>
 
-    <!-- Botón de acción -->
-    <ion-button expand="block" class="btn-anadir text-button" [disabled]="!nombreCategoria" type="submit">
-      Guardar
-    </ion-button>
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <ion-button expand="block" class="btn-editar text-button" [disabled]="!puedeGuardar" type="submit">
+        <ion-icon [src]="'assets/icon/edit.svg'"></ion-icon>
+        Guardar
+      </ion-button>
+      <ion-button expand="block" class="btn-eliminar text-button" type="button" (click)="eliminarCategoria()">
+        <ion-icon slot="start" name="trash-outline"></ion-icon>
+        Eliminar
+      </ion-button>
+    </div>
   </form>
 
-
-
+  <!-- Alert de confirmación de salida sin guardar -->
   <app-custom-alert
-    *ngIf="showCustomAlert"
+    *ngIf="showExitAlert"
     header="Cambios sin guardar"
     message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
     cancelText="No"
     confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
+    (onCancel)="cerrarAlert()"
     (onConfirm)="salirSinGuardar()"
+  ></app-custom-alert>
+
+  <!-- Alert de confirmación de eliminación -->
+  <app-custom-alert
+    *ngIf="showDeleteAlert"
+    header="Eliminar categoría"
+    message="¿Estás seguro de que deseas eliminar esta categoría?"
+    cancelText="No"
+    confirmText="Sí"
+    (onCancel)="cerrarAlert()"
+    (onConfirm)="confirmarEliminacion()"
+  ></app-custom-alert>
+
+  <!-- Alert de error genérico -->
+  <app-custom-alert
+    *ngIf="showGenericAlert"
+    header="Error"
+    message="Ocurrió un error al procesar la solicitud. Por favor, intenta nuevamente."
+    confirmText="OK"
+    (onConfirm)="cerrarAlert()"
+  ></app-custom-alert>
+
+  <!-- Alert de error con mensaje -->
+  <app-custom-alert
+    *ngIf="showUnauthorizedAlert"
+    header="Error"
+    [message]="messageError"
+    confirmText="OK"
+    (onConfirm)="cerrarAlert()"
   ></app-custom-alert>
 
   

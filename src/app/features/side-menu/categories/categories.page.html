@@ -38,6 +38,13 @@
     </div>
   </div>
 
+  <app-custom-alert
+    *ngIf="showSystemCategoryAlert"
+    header="Categoría predeterminada"
+    message="Esta categoría es predeterminada del sistema y no puede ser modificada ni eliminada."
+    confirmText="Entendido"
+    (onConfirm)="cerrarAlert()"
+  ></app-custom-alert>
 
 </ion-content>
 
