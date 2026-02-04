@@ -18,16 +18,20 @@
   
     <!-- Lista de categorías -->
     <ion-list class="categories-list">
-      <ion-item>
-        <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
-        <ion-label class="text-body">Salud</ion-label>
-        <ion-note slot="end" class="text-body-bold">S/. 45.00</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="heart-outline" slot="start" color="danger"></ion-icon>
-        <ion-label class="text-body">Estudios</ion-label>
-        <ion-note slot="end" class="text-body-bold">S/. 245.00</ion-note>
-      </ion-item>
+      <ng-container *ngIf="categoriesWithAmounts.length > 0; else noCategories">
+        <ion-item *ngFor="let category of categoriesWithAmounts">
+          <div slot="start" class="category-icon" [style.background]="category.color">
+            <ion-icon [src]="'assets/icon/' + category.icono + '.svg'"></ion-icon>
+          </div>
+          <ion-label class="text-body">{{ category.nombre }}</ion-label>
+          <ion-note slot="end" class="text-body-bold">S/. {{ category.totalAmount | number:'1.2-2' }}</ion-note>
+        </ion-item>
+      </ng-container>
+      <ng-template #noCategories>
+        <ion-item>
+          <ion-label class="text-body" color="medium">No hay transacciones en esta categoría</ion-label>
+        </ion-item>
+      </ng-template>
     </ion-list>
   </div>
 

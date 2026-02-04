@@ -1,0 +1,49 @@
+<ion-modal 
+  [isOpen]="isOpen" 
+  (didDismiss)="closeModal()" 
+  [cssClass]="getModalClass()"
+  [backdropDismiss]="false"
+>
+  <ng-template>
+    <div class="modal-wrapper">
+      <!-- Header con gradiente sutil -->
+      <div class="modal-header">
+        <h2 class="modal-title">Seleccione una cuenta</h2>
+        <button class="btn-close" (click)="closeModal()" aria-label="Cerrar">
+          <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
+        </button>
+      </div>
+      
+      <!-- Body con las cuentas -->
+      <div class="modal-body">
+        <div class="cuentas-list">
+          <div
+            *ngFor="let account of accounts; let i = index"
+            class="cuenta-card"
+            [class.selected]="selectedAccount?.id === account.id"
+            [style.animation-delay]="i * 0.05 + 's'"
+            (click)="selectAccount(account)">
+            <div class="cuenta-content">
+              <div class="account-icon-wrapper">
+                <div class="account-icon-circle" [ngStyle]="{'background': account.color}">
+                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
+                </div>
+              </div>
+              <div class="cuenta-info">
+                <span class="cuenta-nombre">{{ account.name }}</span>
+                <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
+              </div>
+            </div>
+            <div class="cuenta-check">
+              <ion-icon 
+                name="checkmark-circle" 
+                class="check-icon"
+                *ngIf="selectedAccount?.id === account.id">
+              </ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

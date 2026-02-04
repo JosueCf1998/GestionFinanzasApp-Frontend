@@ -118,45 +118,12 @@
     (onConfirm)="salirSinGuardar()"
   ></app-custom-alert>
 
-  <ion-modal 
-    [isOpen]="isModalOpen" 
-    (didDismiss)="closeModal()" 
-    [cssClass]="getModalClass()"
-  >
-    <ng-template>
-      <div class="modal-wrapper">
-        <div class="modal-header">
-          <h2 class="modal-title">Seleccione una cuenta</h2>
-          <button class="btn-close" (click)="closeModal()">
-              <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
-          </button>
-        </div>
-        
-        <div class="modal-body">
-          <div class="cuentas-list" [class.scrollable]="cuentasDisponibles.length > 3">
-            <div
-              *ngFor="let account of cuentasDisponibles"
-              class="cuenta-card"
-              [class.selected]="selectedAccount?.id === account.id"
-              (click)="seleccionarYConfirmar(account)">
-              <div class="cuenta-left">
-                <div class="cuenta-icon" [style.background]="account.color">
-                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
-                </div>
-                <div class="cuenta-details">
-                  <span class="cuenta-nombre">{{ account.name }}</span>
-                  <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
-                </div>
-              </div>
-              <div class="cuenta-check">
-                <ion-icon name="checkmark-circle" *ngIf="selectedAccount?.id === account.id"></ion-icon>
-                <div class="check-placeholder" *ngIf="selectedAccount?.id !== account.id"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-  </ion-modal>
+  <app-account-selector-modal
+    [isOpen]="isModalOpen"
+    [accounts]="cuentasDisponibles"
+    [selectedAccountId]="selectedAccount?.id?.toString() || null"
+    (accountSelected)="seleccionarYConfirmar($event)"
+    (modalClosed)="closeModal()"
+  ></app-account-selector-modal>
 
 </ion-content>

@@ -6,6 +6,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
+import { AccountSelectorModalComponent } from "src/app/shared/components/account-selector-modal/account-selector-modal.component";
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateTransferRequest, CreateTransferUseCase } from "src/app/core/use-cases/transfer/create-transfer.usecase";
@@ -17,7 +18,7 @@ import { convertISODateToSQL } from "src/app/core/utils/date.util";
   templateUrl: "./new-transfer.page.html",
   styleUrls: ["./new-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AccountSelectorModalComponent],
 })
 export class NewTransferPage implements OnInit {
 
@@ -187,12 +188,14 @@ export class NewTransferPage implements OnInit {
   }
 
   seleccionarCuentaOrigen() {
+    (document.activeElement as HTMLElement)?.blur();
     this.tipoSeleccion = 'origen';
     this.selectedAccount = null;
     this.isModalOpen = true;
   }
 
   seleccionarCuentaDestino() {
+    (document.activeElement as HTMLElement)?.blur();
     this.tipoSeleccion = 'destino';
     this.selectedAccount = null;
     this.isModalOpen = true;

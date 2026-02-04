@@ -5,7 +5,7 @@
         <ion-icon src="assets/icon/left.svg"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title class="header-title">Añadir transacciones</ion-title>
+    <ion-title class="header-title">Nueva Transacción</ion-title>
     <ion-buttons slot="end">
       <!-- Acciones adicionales -->
     </ion-buttons>
@@ -18,15 +18,52 @@
     <form class="transaction-form">
       <!-- Cuenta -->
       <div class="transfer-section">
-        <label class="transfer-label">Cuenta</label>
+        <label class="transfer-label">
+          <ion-icon src="assets/icon/wallet.svg" class="label-icon"></ion-icon>
+          Cuenta
+        </label>
         <button type="button" class="account-btn" (click)="seleccionarCuenta()">
-          <span [class.placeholder]="!cuentaSeleccionada">{{ cuentaSeleccionada || 'No se ha seleccionado' }}</span>
+          <div class="account-btn-content" [class.selected]="cuentaSeleccionada">
+            <div class="account-info">
+              <ion-icon src="assets/icon/card.svg" class="account-icon"></ion-icon>
+              <span class="account-name">{{ cuentaSeleccionada || 'Selecciona una cuenta' }}</span>
+            </div>
+            <div class="account-right">
+              <span class="account-amount" *ngIf="cuentaAmount !== null">S/. {{ cuentaAmount | number:'1.2-2' }}</span>
+              <ion-icon name="chevron-forward-outline" class="chevron-icon"></ion-icon>
+            </div>
+          </div>
         </button>
+      </div>
+
+      <!-- Monto -->
+      <div class="transfer-section">
+        <label class="transfer-label">
+          <ion-icon src="assets/icon/money.svg" class="label-icon"></ion-icon>
+          Monto
+        </label>
+        <div class="amount-row">
+          <ion-input
+            type="number"
+            min="0"
+            [(ngModel)]="monto"
+            name="monto"
+            class="amount-input"
+            placeholder="0"
+            (ionChange)="onMontoChange()"
+            required
+          >
+          </ion-input>
+          <span class="currency-label">PEN</span>
+        </div>
       </div>
 
       <!-- Tipo (Gastos/Ingresos) -->
       <div class="transfer-section">
-        <label class="transfer-label">Tipo</label>
+        <label class="transfer-label">
+          <ion-icon src="assets/icon/exchange.svg" class="label-icon"></ion-icon>
+          Tipo
+        </label>
         <div class="tipo-selectores">
           <button
             type="button"
@@ -47,27 +84,12 @@
         </div>
       </div>
 
-      <!-- Monto -->
-      <div class="transfer-section">
-        <label class="transfer-label">Monto</label>
-        <div class="amount-row">
-          <ion-input
-            type="number"
-            min="0"
-            [(ngModel)]="monto"
-            name="monto"
-            class="amount-input"
-            placeholder="0"
-            required
-          >
-          </ion-input>
-          <span class="currency-label">{{ moneda }}</span>
-        </div>
-      </div>
-
       <!-- Categorías -->
       <div class="transfer-section">
-        <label class="transfer-label">Categorías</label>
+        <label class="transfer-label">
+          <ion-icon src="assets/icon/grid.svg" class="label-icon"></ion-icon>
+          Categorías
+        </label>
         <div class="categories-grid">
           <div 
             *ngFor="let categoria of obtenerCategorias()" 
@@ -82,8 +104,8 @@
           </div>
           
           <div class="category-item">
-            <div class="category-icon more-icon">
-              <ion-icon name="add-outline"></ion-icon>
+            <div class="category-icon-add">
+              <ion-icon src="assets/icon/add.svg"></ion-icon>
             </div>
             <span class="category-name">Más</span>
           </div>
@@ -92,7 +114,10 @@
 
       <!-- Fecha -->
       <div class="transfer-section">
-        <label class="transfer-label">Fecha</label>
+        <label class="transfer-label">
+          <ion-icon name="calendar-outline" class="label-icon"></ion-icon>
+          Fecha
+        </label>
         <div class="date-options">
           <button 
             type="button"
@@ -123,20 +148,24 @@
             class="calendar-btn" 
             (click)="abrirCalendario()"
           >
-            <ion-icon name="calendar-outline"></ion-icon>
+              <ion-icon src="assets/icon/calendar.svg"></ion-icon>
           </button>
         </div>
       </div>
 
       <!-- Comentario -->
       <div class="transfer-section">
-        <label class="transfer-label">Comentario</label>
+        <label class="transfer-label">
+          <ion-icon name="create-outline" class="label-icon"></ion-icon>
+          Comentario
+        </label>
         <ion-textarea 
           [(ngModel)]="comentario"
           [ngModelOptions]="{standalone: true}"
           placeholder="Ingrese un comentario (opcional)"
           class="comment-input"
           rows="3"
+          (ionInput)="onComentarioChange()"
         ></ion-textarea>
         <div class="comment-count">{{ comentario.length }}/200</div>
       </div>
@@ -145,11 +174,32 @@
       <ion-button
         expand="block"
         class="btn-transferir"
+        [disabled]="!puedeGuardar"
+        type="button"
         (click)="crearTransaccion()"
       >
         Añadir
       </ion-button>
     </form>
   </div>
+
+  <app-custom-alert
+    *ngIf="showCustomAlert"
+    header="Cambios sin guardar"
+    message="Has realizado cambios en la transacción. ¿Deseas salir sin guardar?"
+    cancelText="No"
+    confirmText="Sí"
+    (onCancel)="showCustomAlert = false"
+    (onConfirm)="salirSinGuardar()"
+  ></app-custom-alert>
+
+  <!-- Modal de selección de cuentas -->
+  <app-account-selector-modal
+    [isOpen]="isModalOpen"
+    [accounts]="cuentas"
+    [selectedAccountId]="cuentaId"
+    (accountSelected)="onAccountSelected($event)"
+    (modalClosed)="closeModal()"
+  ></app-account-selector-modal>
 
 </ion-content>

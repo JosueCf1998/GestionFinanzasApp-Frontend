@@ -79,13 +79,46 @@ ion-content::-webkit-scrollbar {
   height: 60px;
   border-radius: 50%;
   margin-bottom: 8px;
-  background: inherit; /* El color de fondo se hereda del ngStyle */
+  background: inherit;
+  position: relative;
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.35) 0%, 
+      rgba(255,255,255,0) 60%
+    );
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 }
 
 .category-icon-circle ion-icon,
 .category-icon-circle img {
   color: #fff !important;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(1) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
+  position: relative;
+  z-index: 1;
 }
 
 .category-btn ion-icon {
