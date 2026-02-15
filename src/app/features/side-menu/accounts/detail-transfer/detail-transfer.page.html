@@ -100,4 +100,30 @@
     (onConfirm)="cerrarAlert()"
   ></app-custom-alert>
 
+  <!-- Alert de error genérico -->
+  <app-basic-alert
+    *ngIf="showGenericAlert"
+    [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
+    [imageUrl]="'assets/icon/alert-triangle.svg'"
+    [confirmText]="'Entendido'"
+    [alertSize]="'medium'"
+    [reverseButtons]="true"
+    [showCancel]="false"
+    (onConfirm)="showGenericAlert = false"
+  >
+  </app-basic-alert>
+
+  <!-- Alert de error no autorizado -->
+  <app-basic-alert
+    *ngIf="showUnauthorizedAlert"
+    [message]="messageError"
+    [imageUrl]="'assets/icon/alert-triangle.svg'"
+    [confirmText]="'Entendido'"
+    [alertSize]="'medium'"
+    [reverseButtons]="true"
+    [showCancel]="false"
+    (onConfirm)="showUnauthorizedAlert = false"
+  >
+  </app-basic-alert>
+
 </ion-content>

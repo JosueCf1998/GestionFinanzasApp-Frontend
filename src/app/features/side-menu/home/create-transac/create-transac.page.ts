@@ -138,20 +138,12 @@ export class CreateTransacPage implements OnInit {
             );
           }
         } else {
-          this.alertService.showAlert(
-            'Error',
-            'Ocurrió un error inesperado',
-            'Aceptar'
-          );
+          this.showGenericAlert = true;
         }
       },
       error: (err) => {
         this.loadingService.hide();
-        this.alertService.showAlert(
-          'Error',
-          'No se pudo crear la transacción. Por favor, intenta nuevamente.',
-          'Aceptar'
-        );
+        this.showGenericAlert = true;
       }
     });
   }

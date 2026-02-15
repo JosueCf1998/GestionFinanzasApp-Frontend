@@ -11,6 +11,7 @@ import { ListTransferUseCase, Transfer } from "src/app/core/use-cases/transfer/l
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
+import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 
 interface AccountFilter {
   id: number;
@@ -26,10 +27,12 @@ interface AccountFilter {
   templateUrl: "./history-transfer.page.html",
   styleUrls: ["./history-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent, DynamicAlertComponent],
 })
 export class HistoryTransferPage implements OnInit {
   title: string = "Transferencias";
+
+  showGenericAlert: boolean = false;
 
   // Filtros
   selectedPeriod: string = 'mes';
@@ -107,6 +110,7 @@ export class HistoryTransferPage implements OnInit {
       },
       error: () => {
         this.loadingService.hide();
+        this.showGenericAlert = true;
       }
     });
   }

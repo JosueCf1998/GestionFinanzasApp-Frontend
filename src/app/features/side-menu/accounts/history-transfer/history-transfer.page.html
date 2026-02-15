@@ -127,6 +127,19 @@
     (onConfirm)="salirSinGuardar()"
   ></app-custom-alert>
 
+  <!-- Alert de error genérico -->
+  <app-basic-alert
+    *ngIf="showGenericAlert"
+    [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
+    [imageUrl]="'assets/icon/alert-triangle.svg'"
+    [confirmText]="'Entendido'"
+    [alertSize]="'medium'"
+    [reverseButtons]="true"
+    [showCancel]="false"
+    (onConfirm)="showGenericAlert = false"
+  >
+  </app-basic-alert>
+
   <ion-modal 
     [isOpen]="isAccountModalOpen" 
     (didDismiss)="closeAccountModal()" 

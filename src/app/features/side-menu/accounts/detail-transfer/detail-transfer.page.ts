@@ -6,13 +6,14 @@ import { Router } from "@angular/router";
 import { DeleteTransferUseCase } from "src/app/core/use-cases/transfer/delete-transfer.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
+import { DynamicAlertComponent } from "../../../../shared/components/basic-alert/basic-alert.component";
 
 @Component({
   selector: "app-detail-transfer",
   templateUrl: "./detail-transfer.page.html",
   styleUrls: ["./detail-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, CustomAlertComponent, DynamicAlertComponent],
 })
 export class DetailTransferPage implements OnInit {
 
@@ -35,6 +36,8 @@ export class DetailTransferPage implements OnInit {
   cuentaDestinoColor: string = '';
   
   showCustomAlert: boolean = false;
+  showGenericAlert: boolean = false;
+  showUnauthorizedAlert: boolean = false;
   showErrorAlert: boolean = false;
   messageError: string = '';
 
@@ -194,17 +197,21 @@ export class DetailTransferPage implements OnInit {
         if (result.success) {
           console.log('✅ Transferencia eliminada exitosamente');
           this.navService.back();
+        } else if (result.error) {
+          if (result.error.description) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = result.error.description;
+          } else {
+            this.showGenericAlert = true;
+          }
         } else {
-          console.error('❌ Error al eliminar transferencia:', result.message);
-          this.messageError = result.message || 'Error al eliminar la transferencia';
-          this.showErrorAlert = true;
+          this.showGenericAlert = true;
         }
       },
       error: (error) => {
         this.loadingService.hide();
         console.error('❌ Error en la petición:', error);
-        this.messageError = 'Ocurrió un error al eliminar la transferencia';
-        this.showErrorAlert = true;
+        this.showGenericAlert = true;
       }
     });
   }
