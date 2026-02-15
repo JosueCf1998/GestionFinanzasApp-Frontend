@@ -16,14 +16,7 @@ export class LogoutServiceUseCase {
   }
 
   private clearAllData(): void {
-    this.localManagementService.removeVariable(KEY_MANAGEMENT.TOKEN);
-    this.localManagementService.removeVariable(KEY_MANAGEMENT.NAME);
-    this.localManagementService.removeVariable(KEY_MANAGEMENT.EMAIL);
-    this.localManagementService.removeVariable(KEY_MANAGEMENT.ID);
+    this.localManagementService.clear()
   }
 
-  hasActiveSession(): boolean {
-    const token = this.localManagementService.getVariable(KEY_MANAGEMENT.TOKEN);
-    return !!token;
-  }
 }
