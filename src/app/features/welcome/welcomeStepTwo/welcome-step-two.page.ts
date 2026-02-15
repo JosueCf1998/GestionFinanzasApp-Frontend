@@ -7,6 +7,7 @@ import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { WelcomeServiceUseCase, WelcomeRequest } from 'src/app/core/use-cases/welcomeService.usecase';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
+import { CreateAccountRequest, CreateAccountUseCase } from 'src/app/core/use-cases/accounts/create-account.usecase';
 
 @Component({
   selector: 'app-welcome-step-two',
@@ -26,7 +27,7 @@ export class WelcomeStepTwoPage implements OnInit {
   constructor(
       private navService: NavigationService,
       private loadingService: SpinnerService,
-      private welcomeServiceUseCase: WelcomeServiceUseCase,
+      private createAccountUseCase: CreateAccountUseCase,
       private localManagementService: LocalManagementService
   ) { }
 
@@ -34,11 +35,11 @@ export class WelcomeStepTwoPage implements OnInit {
   }
 
   handleContinueButton() {
-    const body: WelcomeRequest = {
-      nombre: "Principal",
-      saldo: Number(this.dataForm.value.amount!),
+    const body: CreateAccountRequest = {
+      name: "Principal",
+      amount: parseFloat(this.dataForm.value.amount!) || 0,
       icon: "bills",
-      color: "#afb42b",
+      color: "#afb42b"
     }
     this.executeCreateAccount(body);
   }
@@ -47,30 +48,30 @@ export class WelcomeStepTwoPage implements OnInit {
     this.localManagementService.setVariable(KEY_MANAGEMENT.FIRST_LOGIN, true);
   }
 
-  private executeCreateAccount(body: WelcomeRequest) {
-    this.loadingService.show();
-    this.welcomeServiceUseCase.createAccount(body).subscribe({
-      next: (result) => {
-        this.loadingService.hide();
-        if (result.success && result.data) {
-          this.markAsLoggedIn();
-          this.navService.push('/main', 'fade');
-        } else if (result.error) {
-          if (result.error.description) {
-            // this.showUnauthorizedAlert = true;
-            // this.messageError = result.error.description;
+  private executeCreateAccount(body: CreateAccountRequest) {
+      this.loadingService.show();
+      this.createAccountUseCase.createAccount(body).subscribe({
+        next: (result) => {
+          this.loadingService.hide();
+          if (result.success && result.data) {
+            this.markAsLoggedIn();
+            this.navService.push('/main', 'fade');
+          } else if (result.error) {
+            if (result.error.description) {
+              // this.showUnauthorizedAlert = true;
+              // this.messageError = result.error.description;
+            } else {
+              this.showGenericAlert = true;
+            }
           } else {
-          this.showGenericAlert = true;
+            this.showGenericAlert = true;
           }
-        } else {
+        },
+        error: (err) => {
+          this.loadingService.hide();
           this.showGenericAlert = true;
         }
-      },
-      error: (err) => {
-        this.loadingService.hide();
-        this.showGenericAlert = true;
-      }
-    });
-  }
+      });
+    }
 
 }

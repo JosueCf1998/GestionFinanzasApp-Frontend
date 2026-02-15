@@ -120,11 +120,14 @@ export class LoginPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
+          this.navService.push("/welcome-step-one", "fade");
+          /*
           if (this.isFirstLogin()) {
             this.navService.push("/welcome-step-one", "fade");
           } else {
             this.navService.push('/main', 'fade');
           }
+          */
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
