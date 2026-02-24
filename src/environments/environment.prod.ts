@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tuapp.com', // URL base para producción
+  apiUrl: 'https://api.gfinvia.com', // URL base para producción
 };
