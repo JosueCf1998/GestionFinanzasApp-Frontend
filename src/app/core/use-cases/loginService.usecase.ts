@@ -15,6 +15,12 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
+  user?: {
+    id?: string;
+    nombre: string;
+    correo: string;
+    imagen?: string;
+  };
 }
 
 @Injectable({
@@ -43,7 +49,19 @@ export class LoginServiceUseCase {
   }
 
   private saveUserData(userData: LoginResponse): void {
+    // Guardar el token
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
+    
+    // Guardar los datos del usuario si vienen en la respuesta
+    if (userData.user) {
+      const user = {
+        id: userData.user.id,
+        nombre: userData.user.nombre,
+        correo: userData.user.correo,
+        imagen: userData.user.imagen || 'https://gravatar.com/avatar/placeholder?s=200&d=mp'
+      };
+      this.localManagementService.setVariable('user', JSON.stringify(user));
+    }
   }
 
 }

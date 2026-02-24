@@ -1,21 +1,47 @@
-<ion-header >
-  <ion-toolbar class="side-menu" color="side-menu" >
-    <ion-buttons slot="start">
-      <ion-menu-button color="light"></ion-menu-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button
-        color="light"
-        expand="block"
-        shape="round"
-        class="login-btn text-button"
-        (click)="logOut()">
-        <ion-icon src="assets/icon/exit.svg" color="light" class="empty-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-split-pane contentId="main-content" when="md">
+  <ion-menu contentId="main-content" type="overlay" menuId="main-menu">
+    <ion-content>
+      <div class="menu-header">
+        <img [src]="usuario?.imagen || 'https://gravatar.com/avatar/placeholder?s=200&d=mp'" alt="User Avatar" class="user-avatar">
+        <div class="user-info">
+          <ion-label class="user-name">{{ usuario?.nombre || 'Usuario' }}</ion-label>
+          <ion-label class="user-email">{{ usuario?.correo || 'correo@ejemplo.com' }}</ion-label>
+        </div>
+      </div>
+      <ion-list id="inbox-list">
+        @for (p of appPages; track p) {
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+              <ion-icon aria-hidden="true" slot="start" [src]="'assets/icon/' + p.icon + '.svg'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        }
+      </ion-list>
+    </ion-content>
+  </ion-menu>
 
-<ion-content>
-  <router-outlet></router-outlet>
-</ion-content>
+  <div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar class="side-menu" color="side-menu">
+        <ion-buttons slot="start">
+          <ion-menu-button color="light" menuId="main-menu"></ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button
+            color="light"
+            expand="block"
+            shape="round"
+            class="login-btn text-button"
+            (click)="logOut()">
+            <ion-icon src="assets/icon/exit.svg" color="light" class="empty-icon"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <router-outlet></router-outlet>
+    </ion-content>
+  </div>
+</ion-split-pane>

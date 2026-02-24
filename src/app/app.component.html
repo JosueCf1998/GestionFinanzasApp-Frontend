@@ -1,29 +1,4 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <div *ngIf="usuarioLogueado">
-          <div class="menu-header">
-            <img [src]="usuario.imagen" alt="User Avatar" class="user-avatar">
-            <div class="user-info">
-              <ion-label class="user-name">{{ usuario.nombre }}</ion-label>
-              <ion-label class="user-email">{{ usuario.correo }}</ion-label>
-            </div>
-          </div>
-          <ion-list id="inbox-list">
-            @for (p of appPages; track p; let i = $index) {
-              <ion-menu-toggle auto-hide="false">
-                <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-                  <ion-icon aria-hidden="true" slot="start" src="assets/icon/{{p.icon}}.svg"></ion-icon>
-                  <ion-label>{{ p.title }}</ion-label>
-                </ion-item>
-              </ion-menu-toggle>
-            }
-          </ion-list>
-        </div>
-      </ion-content>
-    </ion-menu>
-    <app-spinner></app-spinner>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-  </ion-split-pane>
+  <app-spinner></app-spinner>
+  <ion-router-outlet></ion-router-outlet>
 </ion-app>
