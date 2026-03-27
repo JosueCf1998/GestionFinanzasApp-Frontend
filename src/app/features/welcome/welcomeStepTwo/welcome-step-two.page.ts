@@ -19,9 +19,10 @@ import { CreateAccountRequest, CreateAccountUseCase } from 'src/app/core/use-cas
 export class WelcomeStepTwoPage implements OnInit {
 
   showGenericAlert: boolean = false;
+  private numericValue: number = 0;
 
   dataForm = new FormGroup({
-    amount: new FormControl("", [Validators.required]),
+    amount: new FormControl("0.00", [Validators.required]),
   });
 
   constructor(
@@ -34,18 +35,54 @@ export class WelcomeStepTwoPage implements OnInit {
   ngOnInit() {
   }
 
+  onKeyDown(event: any) {
+    const key = event.key;
+    
+    // Permitir teclas de control
+    if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(key)) {
+      if (key === 'Backspace' || key === 'Delete') {
+        event.preventDefault();
+        this.removeLastDigit();
+      }
+      return;
+    }
+    
+    // Bloquear todo lo que no sea número
+    if (!/^[0-9]$/.test(key)) {
+      event.preventDefault();
+      return;
+    }
+  }
+
+  onAmountInput(event: any) {
+    const input = event.detail.value || '';
+    const numbers = input.replace(/[^0-9]/g, '');
+    
+    if (numbers.length > 0) {
+      // Convertir a número y dividir por 100 para mantener 2 decimales
+      this.numericValue = parseInt(numbers) || 0;
+      const formatted = (this.numericValue / 100).toFixed(2);
+      this.dataForm.get('amount')?.setValue(formatted, { emitEvent: false });
+    } else {
+      this.numericValue = 0;
+      this.dataForm.get('amount')?.setValue('0.00', { emitEvent: false });
+    }
+  }
+
+  removeLastDigit() {
+    this.numericValue = Math.floor(this.numericValue / 10);
+    const formatted = (this.numericValue / 100).toFixed(2);
+    this.dataForm.get('amount')?.setValue(formatted, { emitEvent: false });
+  }
+
   handleContinueButton() {
     const body: CreateAccountRequest = {
       name: "Principal",
-      amount: parseFloat(this.dataForm.value.amount!) || 0,
+      amount: this.numericValue / 100,
       icon: "bills",
       color: "#afb42b"
     }
     this.executeCreateAccount(body);
-  }
-  
-  private markAsLoggedIn(): void {
-    this.localManagementService.setVariable(KEY_MANAGEMENT.FIRST_LOGIN, true);
   }
 
   private executeCreateAccount(body: CreateAccountRequest) {
@@ -54,8 +91,7 @@ export class WelcomeStepTwoPage implements OnInit {
         next: (result) => {
           this.loadingService.hide();
           if (result.success && result.data) {
-            this.markAsLoggedIn();
-            this.navService.push('/main', 'fade');
+            this.navService.push('/main');
           } else if (result.error) {
             if (result.error.description) {
               // this.showUnauthorizedAlert = true;

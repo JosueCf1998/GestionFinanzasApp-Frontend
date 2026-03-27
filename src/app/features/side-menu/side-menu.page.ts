@@ -92,6 +92,6 @@ export class SideMenuPage implements OnInit {
 
   logOut() {
     this.logoutService.logout();
-    this.navigationService.back();
+    this.navigationService.replaceToLogin();
   }
 }

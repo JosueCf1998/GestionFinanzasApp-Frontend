@@ -4,7 +4,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'splash',
     pathMatch: 'full',
   },
   // PRE-LOGIN ROUTES
@@ -109,5 +109,9 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
+  },
+  {
+    path: 'splash',
+    loadComponent: () => import('./features/splash/splash.page').then( m => m.SplashPage)
   }
 ];

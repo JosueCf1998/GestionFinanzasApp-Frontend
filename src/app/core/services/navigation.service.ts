@@ -87,21 +87,28 @@ export class NavigationService {
   /**
    * Reemplazar (sin historial) - para login
    */
-  async replace(path: string, state?: any): Promise<void> {
+  async replace(path: string, state?: any, animated: boolean = true): Promise<void> {
     if (this.isNavigating) return;
     
     this.isNavigating = true;
     
     try {
       await this.navCtrl.navigateRoot(path, {
-        animated: true,
-        animationDirection: 'forward',
+        animated: animated,
+        animationDirection: animated ? 'back' : undefined,
         state
       });
     } finally {
       setTimeout(() => {
         this.isNavigating = false;
-      }, 300);
+      }, animated ? 300 : 100);
     }
+  }
+
+  /**
+   * Navegación específica para logout (sin animación para evitar glitches)
+   */
+  async replaceToLogin(): Promise<void> {
+    return this.replace('/login', undefined, false);
   }
 }

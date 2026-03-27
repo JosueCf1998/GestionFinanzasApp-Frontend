@@ -1,35 +1,48 @@
-<ion-content [fullscreen]="true" class="auth-content">
-  <div class="background-container"></div>
-  <div class="container">
-    <div class="header"></div>
-    <div class="main-content">
-      <section class="content-area">
-        <h1>Introduzca el saldo de su cuenta principal</h1>
-        <p>Mas adelante tendrá la opción de poder ingresar mas cuentas.</p>
-        <form class="content-form" [formGroup]="dataForm">
-          <ion-item class="input-item">
-            <ion-input
-              type="number"
-              formControlName="amount"
-              placeholder="Ingresa tu Saldo Base"
-              required
-              inputmode="decimal"
-              class="custom-input">
-            </ion-input>
-          </ion-item>
-        </form>
-      </section>
-      <div class="section-buttons">
+<ion-content [fullscreen]="true" scroll-y="false">
+  <div class="welcome-screen">
+    <!-- Animated Background -->
+    <div class="animated-background">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="content-wrapper">
+      <!-- Text Content -->
+      <div class="text-content">
+        <h1 class="welcome-title">Configura tu cuenta principal</h1>
+        <p class="welcome-description">
+          Ingresa el saldo inicial de tu cuenta. Podrás agregar más cuentas después.
+        </p>
+      </div>
+
+      <!-- Form Section -->
+      <form class="form-section" [formGroup]="dataForm">
+        <ion-item lines="none" class="input-item">
+          <ion-input
+            type="text"
+            formControlName="amount"
+            placeholder="0.00"
+            required
+            inputmode="numeric"
+            (ionInput)="onAmountInput($event)"
+            (keydown)="onKeyDown($event)">
+          </ion-input>
+        </ion-item>
+      </form>
+
+      <!-- CTA Button -->
+      <div class="action-section">
         <ion-button
           expand="block"
           shape="round"
-          class="custom-btn"
+          class="cta-button"
           (click)="handleContinueButton()"
           [disabled]="dataForm.invalid">
-          Siguiente
+          Continuar
+          <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
         </ion-button>
       </div>
     </div>
-    <footer class="footer"></footer>
   </div>
 </ion-content>

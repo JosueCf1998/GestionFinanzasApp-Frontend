@@ -22,6 +22,7 @@ export class WelcomeStepOnePage implements OnInit {
   }
 
   toNavigate() {
-    this.navService.push('/welcome-step-two', 'fade');
+    this.navService.push('/welcome-step-two');
   }
+  
 }

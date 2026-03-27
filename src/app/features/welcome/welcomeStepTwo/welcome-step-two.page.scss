@@ -1,141 +1,260 @@
-.auth-content {
-  --background: none;
-  position: relative;
+ion-content {
+  --background: transparent;
+}
 
-  .background-container {
+.welcome-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 50%, #4895ef 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Partículas de fondo animadas
+  &::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);
-    // clip-path: ellipse(100% 60% at 50% 40%);
-    z-index: -1;
+    background-image: 
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 33% 80%, white, transparent),
+      radial-gradient(1px 1px at 15% 90%, white, transparent);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    opacity: 0.5;
+    animation: stars 60s linear infinite;
+  }
+}
+
+// Orbes de fondo
+.animated-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: float 15s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.6) 0%, transparent 70%);
+  top: 10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
+  bottom: 15%;
+  right: -5%;
+  animation-delay: 5s;
+}
+
+// Contenedor principal
+.content-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+// Contenido de texto
+.text-content {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 20px 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.welcome-description {
+  font-size: 17px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.6;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+// Sección del formulario
+.form-section {
+  width: 100%;
+  margin-bottom: 30px;
+  animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+.input-item {
+  --background: rgba(255, 255, 255, 0.95);
+  --border-radius: 16px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --min-height: 60px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    --background: white;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
   }
 
-  .container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 450px;
-    margin: 0 auto;
-    padding: 20px;
+  ion-input {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1a1a1a;
+    --placeholder-color: #94a3b8;
+    --placeholder-opacity: 1;
+  }
+}
 
-    .main-content {
-      text-align: center;
+// Sección de acción
+.action-section {
+  width: 100%;
+  animation: fadeInUp 1s ease-out 0.7s both;
+}
 
+.cta-button {
+  --background: white;
+  --color: #4361ee;
+  --padding-top: 18px;
+  --padding-bottom: 18px;
+  --box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 
-      .content-area {
-        padding-bottom: 12px;
-        gap: 16px;
-        display: flex;
-        flex-direction: column;
-
-        .logo {
-          width: 150px;
-          height: 150px;
-          margin: 0 auto 20px;
-          filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
-        }
-  
-        h1 {
-          font-size: 24px;
-          font-weight: 700;
-          color: white;
-          margin-top: 36px;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-  
-        p {
-          font-size: 16px;
-          color: rgba(255, 255, 255, 0.8);
-          margin: 0;
-        }
-      }
-
-      .content-form {
-  
-        &:focus-within {
-          --background: #e9ecef;
-          // box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
-        }
-        ion-input {
-          font-size: 16px;
-        }
-      }
-
-      .section-buttons {
-        display: flex;
-        justify-content: center;
-
-        .custom-btn {
-          --background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-          --background-activated: #3a0ca3;
-          --box-shadow: 0 4px 16px rgba(67, 97, 238, 0.3);
-          font-weight: 600;
-          letter-spacing: 0.5px;
-          font-size: 16px;
-          width: 70%;
-
-        }
-      }
-
-    }
+  &:hover:not([disabled]) {
+    --box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
   }
 
-  .input-item {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(67, 97, 238, 0.10);
-    margin-bottom: 22px;
-    padding: 0 12px;
-    border: 2px solid #4361ee;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    min-height: 56px;
-    display: flex;
-    align-items: center;
+  &:active:not([disabled]) {
+    transform: translateY(0);
   }
 
-  .input-item:focus-within {
-    border-color: #3a0ca3;
-    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.18);
+  &[disabled] {
+    --background: rgba(255, 255, 255, 0.5);
+    --color: rgba(67, 97, 238, 0.5);
+    opacity: 0.6;
+  }
+
+  ion-icon {
+    margin-left: 8px;
+    font-size: 20px;
+  }
+}
+
+// Animaciones
+@keyframes stars {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(20px, -20px) scale(1.05);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.2;
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 500px) {
+  .content-wrapper {
+    padding: 30px 24px;
+  }
+
+  .icon-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .feature-icon {
+    font-size: 48px;
+  }
+
+  .welcome-title {
+    font-size: 28px;
   }
 
   .custom-input {
-    font-size: 1.18rem;
-    color: #222;
-    font-weight: 500;
-    padding-left: 4px;
-    background: transparent;
+    font-size: 28px;
   }
 
-  ion-label {
-    color: #4361ee;
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.5px;
-  }
-
-  ion-input::placeholder {
-    color: #888;
-    opacity: 1;
-    font-size: 1rem;
-  }
-
-  ion-text[color="danger"] small {
-    margin-left: 4px;
-    font-size: 0.95rem;
-  }
-
-  @media (max-width: 500px) {
-    .main-content {
-      max-width: 95vw;
-      padding: 16px 4px;
-    }
-    .input-item {
-      min-height: 48px;
-      padding: 0 6px;
-    }
+  .currency-symbol {
+    font-size: 24px;
   }
 }

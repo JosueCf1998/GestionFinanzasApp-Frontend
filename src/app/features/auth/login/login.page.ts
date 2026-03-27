@@ -118,12 +118,14 @@ export class LoginPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          console.log("Cuentas obtenidas:", result.data.items);
-          if (result.data.items.length < 2) {
-            this.navService.push("/welcome-step-one", "fade");
+          this.navService.push("/welcome-step-one");
+          /*
+          if (result.data.items.length == 0) {
+            this.navService.push("/welcome-step-one");
           } else {
-            this.navService.push('/main', 'fade')
+            this.navService.push('/main')
           }
+          */
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
@@ -221,16 +223,11 @@ export class LoginPage implements OnInit {
   }
 
   forgotPassword() {
-    this.navService.push('/forgot-password', 'slide-left');
+    this.navService.push('/forgot-password');
   }
 
   goToRegister() {
-    this.navService.push('/register', 'slide-left');
-  }
-
-  private isFirstLogin(): boolean {
-    const firstLoginFlag = this.localManagementService.getVariable(KEY_MANAGEMENT.FIRST_LOGIN);
-    return firstLoginFlag === null || firstLoginFlag === 'false';
+    this.navService.push('/register');
   }
 
 }
