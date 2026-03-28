@@ -12,10 +12,10 @@ ion-menu-button {
 
 .header-title {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   color: #fff;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .atras-btn {
@@ -134,9 +134,11 @@ ion-menu-button {
 .input-row {
   .input-label {
     display: block;
-    color: #888;
+    color: #333;
     font-size: 15px;
     font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 8px;
   }
   .input-edit {
     font-size: 16px;
@@ -147,7 +149,15 @@ ion-menu-button {
     border-bottom: 2px solid #cfd8dc;
     margin-bottom: 2px;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.2px;
+    line-height: 1.4;
+    transition: border-color 0.2s ease;
+    --placeholder-color: #8c8c8c;
+    --placeholder-opacity: 1;
+
+    &:focus-within {
+      border-bottom-color: #9aa9c0;
+    }
   }
 }
 
@@ -163,6 +173,7 @@ ion-menu-button {
   font-weight: 500;
   margin-bottom: 8px;
   display: block;
+  line-height: 1.4;
 }
 .simbolos-grid {
   display: flex;
@@ -207,6 +218,7 @@ ion-menu-button {
   font-weight: 500;
   margin-bottom: 8px;
   display: block;
+  line-height: 1.4;
 }
 .color-grid {
   display: flex;

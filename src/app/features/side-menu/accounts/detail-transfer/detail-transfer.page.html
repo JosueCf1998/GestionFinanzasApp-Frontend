@@ -8,7 +8,7 @@
           <ion-icon src="assets/icon/left.svg"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-title class="header-title">{{ title }}</ion-title>
+      <ion-title class="header-title text-subtitle">{{ title }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -21,7 +21,7 @@
       <div class="accounts-section">
         <!-- Cuenta de Origen -->
         <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Ajuste'">
-          <div class="transfer-label">{{ type === 'Realizado' ? 'Transfiere de una Cuenta' : 'Ajuste de la Cuenta' }}</div>
+          <div class="transfer-label text-body">{{ type === 'Realizado' ? 'Transfiere de una Cuenta' : 'Ajuste de la Cuenta' }}</div>
           <div class="account-display">
             <div class="account-icon" [style.background-color]="cuentaOrigenColor">
               <ion-icon [src]="'assets/icon/' + cuentaOrigenIcon + '.svg'"></ion-icon>
@@ -32,7 +32,7 @@
 
         <!-- Cuenta de Destino -->
         <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Inicial'">
-          <div class="transfer-label">{{ type === 'Realizado' ? 'Transfiere a una Cuenta' : 'Cuenta Inicial' }}</div>
+          <div class="transfer-label text-body">{{ type === 'Realizado' ? 'Transfiere a una Cuenta' : 'Cuenta Inicial' }}</div>
           <div class="account-display">
             <div class="account-icon" [style.background-color]="cuentaDestinoColor">
               <ion-icon [src]="'assets/icon/' + cuentaDestinoIcon + '.svg'"></ion-icon>
@@ -48,19 +48,19 @@
       <div class="details-section">
         <!-- Monto -->
         <div class="transfer-section">
-          <div class="transfer-label">Monto</div>
+          <div class="transfer-label text-body">Monto</div>
           <div class="amount-display">S/. {{ monto | number:'1.2-2' }}</div>
         </div>
 
         <!-- Fecha -->
         <div class="transfer-section">
-          <div class="transfer-label">Fecha de Transferencia</div>
+          <div class="transfer-label text-body">Fecha de Transferencia</div>
           <div class="date-display">{{ formatDate(fecha) }}</div>
         </div>
 
         <!-- Comentario -->
         <div class="transfer-section" *ngIf="comentario">
-          <div class="transfer-label">Comentario</div>
+          <div class="transfer-label text-body">Comentario</div>
           <div class="comment-display">{{ comentario }}</div>
         </div>
       </div>

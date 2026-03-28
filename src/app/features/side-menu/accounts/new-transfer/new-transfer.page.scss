@@ -358,8 +358,9 @@ ion-menu-button {
 
 .transfer-label {
   font-size: 15px;
-  color: #9b9b9b;
-  margin-bottom: 2px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8px;
   display: block;
 }
 
@@ -368,7 +369,7 @@ ion-menu-button {
   border: none;
   padding: 0;
   font-size: 16px;
-  color: #1976d2;
+  color: #222;
   text-align: left;
   cursor: pointer;
 }
@@ -379,9 +380,9 @@ ion-menu-button {
   gap: 4px;
   
   .account-name {
-    color: #1976d2;
+    color: #222;
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
   }
   
   .account-amount {
@@ -392,8 +393,8 @@ ion-menu-button {
   
   &.selected {
     .account-name {
-      color: #1976d2;
-      font-weight: 500;
+      color: #222;
+      font-weight: 600;
     }
     
     .account-amount {
@@ -405,7 +406,7 @@ ion-menu-button {
 }
 
 .account-btn .selected, .date-btn {
-  color: #1976d2;
+  color: #222;
   font-weight: 500;
 }
 
@@ -435,7 +436,7 @@ ion-menu-button {
 
 .comment-count {
   font-size: 12px;
-  color: #9b9b9b;
+  color: #6b7280;
   text-align: right;
 }
 

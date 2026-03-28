@@ -8,7 +8,7 @@
           <ion-icon src="assets/icon/left.svg"></ion-icon>
         </button>
       </ion-buttons>
-      <ion-title class="header-title">{{ title }}</ion-title>
+      <ion-title class="header-title text-subtitle">{{ title }}</ion-title>
       <ion-buttons slot="end">
         <!-- Acciones adicionales -->
       </ion-buttons>
@@ -18,7 +18,7 @@
   <!-- Content Body -->
   <form class="transfer-form" (ngSubmit)="crearTransferencia()">
     <div class="transfer-section">
-      <label class="transfer-label">Transfiere de una cuenta</label>
+      <label class="transfer-label text-body">Transfiere de una cuenta</label>
       <button
         type="button"
         class="account-btn"
@@ -32,7 +32,7 @@
     </div>
 
     <div class="transfer-section">
-      <label class="transfer-label">Transfiere a una cuenta</label>
+      <label class="transfer-label text-body">Transfiere a una cuenta</label>
       <button
         type="button"
         class="account-btn"
@@ -46,7 +46,7 @@
     </div>
 
     <div class="transfer-section">
-      <label class="transfer-label">Transfiere una cantidad</label>
+      <label class="transfer-label text-body">Transfiere una cantidad</label>
       <div class="amount-row">
         <app-amount-input
           class="amount-input-component"
@@ -64,7 +64,7 @@
     </div>
 
     <div class="transfer-section">
-      <label class="transfer-label">Fecha</label>
+      <label class="transfer-label text-body">Fecha</label>
       <ion-datetime-button datetime="fecha-transferencia"></ion-datetime-button>
       
       <ion-modal [keepContentsMounted]="true">
@@ -82,7 +82,7 @@
     </div>
 
     <div class="transfer-section">
-      <label class="transfer-label">Comentario</label>
+      <label class="transfer-label text-body">Comentario</label>
       <ion-textarea
         [(ngModel)]="comentario"
         name="comentario"
