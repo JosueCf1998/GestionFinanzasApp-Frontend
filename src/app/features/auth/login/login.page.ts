@@ -15,9 +15,7 @@ import {
   IonImg,
   IonIcon,
   IonButton,
-  IonLabel,
   IonItem,
-  IonList,
   IonText,
   IonInput,
 } from "@ionic/angular/standalone";
@@ -29,11 +27,11 @@ import {
   LoginRequest,
 } from "src/app/core/use-cases/loginService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
+import { LoginUserRequest, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 
 @Component({
   selector: "app-login",
@@ -43,25 +41,20 @@ import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accoun
   imports: [
     IonInput,
     IonText,
-    IonList,
     IonItem,
-    IonLabel,
     IonButton,
     IonIcon,
     IonImg,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     ReactiveFormsModule,
-    CustomAlertComponent,
     DynamicAlertComponent
 ],
 })
 export class LoginPage implements OnInit {
 
   showPassword: boolean = false;
+  private readonly minPasswordLength = 6;
 
   loginForm = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
@@ -74,22 +67,19 @@ export class LoginPage implements OnInit {
 
   constructor(
     private navService: NavigationService,
-    private loginServiceUseCase: LoginServiceUseCase,
+    private loginUserUseCase: LoginUserUseCase,
     private listAccountsUseCase: ListAccountsUseCase,
-    private loadingService: SpinnerService,
-    private localManagementService: LocalManagementService
+    private loadingService: SpinnerService
   ) {}
 
   ngOnInit() {
-    let token = this.localManagementService.getVariable(KEY_MANAGEMENT.TOKEN);
-    console.log(token == null ? "No hay token almacenado" : "Token encontrado en localStorage");
   }
 
   // MARK: - SERVICIOS
 
-  private executeLogin(body: LoginRequest) {
+  private executeLogin(body: LoginUserRequest) {
     this.loadingService.show();
-    this.loginServiceUseCase.login(body).subscribe({
+    this.loginUserUseCase.execute(body).subscribe({
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
@@ -99,7 +89,7 @@ export class LoginPage implements OnInit {
             this.showUnauthorizedAlert = true;
             this.messageError = result.error.description;
           } else {
-          this.showGenericAlert = true;
+            this.showGenericAlert = true;
           }
         } else {
           this.showGenericAlert = true;
@@ -165,9 +155,7 @@ export class LoginPage implements OnInit {
   validationLogin(): boolean {
     // Validar que el formulario tenga valores
     if (this.loginForm.invalid) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "Ingresa tus credenciales correctamente.";
-      return false;
+      return this.showValidationError("Ingresa tus credenciales correctamente.");
     }
 
     const email = this.loginForm.value.email?.trim() || '';
@@ -175,51 +163,61 @@ export class LoginPage implements OnInit {
 
     // Validar que los campos no estén vacíos después del trim
     if (!email || !password) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "Por favor completa todos los campos.";
-      return false;
+      return this.showValidationError("Por favor completa todos los campos.");
     }
 
     // Validar formato de email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "Por favor ingresa un correo electrónico válido.";
-      return false;
+      return this.showValidationError("Por favor ingresa un correo electrónico válido.");
     }
 
     // Validar que el email no contenga espacios
     if (email.includes(' ')) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "El correo electrónico no debe contener espacios.";
-      return false;
+      return this.showValidationError("El correo electrónico no debe contener espacios.");
     }
 
-    // Validar longitud mínima de contraseña
-    //TODO: Agregar al final
-    /*
-    if (password.length < 6) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "La contraseña debe tener al menos 6 caracteres.";
-      return false;
-    }
-    */
-
-    // Validar que la contraseña no contenga solo espacios
-    if (password.trim().length === 0) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "La contraseña no puede contener solo espacios.";
-      return false;
+    const passwordError = this.validatePassword(password);
+    if (passwordError) {
+      return this.showValidationError(passwordError);
     }
 
     // Validar longitud máxima razonable
-    if (email.length > 254 || password.length > 128) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = "Los datos ingresados exceden la longitud permitida.";
-      return false;
+    if (email.length > 254) {
+      return this.showValidationError("El correo electrónico excede la longitud permitida.");
     }
 
     return true;
+  }
+
+  private validatePassword(password: string): string | null {
+    const validations = [
+      {
+        isValid: password.trim().length > 0,
+        message: "La contraseña no puede contener solo espacios.",
+      },
+      {
+        isValid: password.length >= this.minPasswordLength,
+        message: `La contraseña debe tener al menos ${this.minPasswordLength} caracteres.`,
+      },
+      {
+        isValid: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+        message: "La contraseña debe incluir al menos un carácter especial.",
+      },
+      {
+        isValid: password.length <= 128,
+        message: "La contraseña excede la longitud permitida.",
+      },
+    ];
+
+    const failedValidation = validations.find((validation) => !validation.isValid);
+    return failedValidation ? failedValidation.message : null;
+  }
+
+  private showValidationError(message: string): false {
+    this.showUnauthorizedAlert = true;
+    this.messageError = message;
+    return false;
   }
 
   forgotPassword() {

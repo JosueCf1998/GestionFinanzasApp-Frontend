@@ -87,6 +87,13 @@
           font-size: 16px;
           font-weight: 400;
         }
+
+        .eye-toggle-btn {
+          --padding-start: 0;
+          --padding-end: 0;
+          margin-inline-start: 0;
+          margin-inline-end: 0;
+        }
       }
 
       .login-btn {

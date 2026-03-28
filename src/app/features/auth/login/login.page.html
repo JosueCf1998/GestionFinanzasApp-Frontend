@@ -33,13 +33,19 @@
           color="medium"
         ></ion-icon>
         <ion-input
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           placeholder="Contraseña"
           formControlName="password"
           required
         >
         </ion-input>
-        <ion-button fill="clear" slot="end" (click)="togglePassword()">
+        <ion-button
+          type="button"
+          fill="clear"
+          slot="end"
+          class="eye-toggle-btn"
+          (click)="togglePassword()"
+        >
           <ion-icon
             [src]="showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'"
           ></ion-icon>
