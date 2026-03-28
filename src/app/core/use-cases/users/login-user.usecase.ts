@@ -4,21 +4,14 @@ import { ApiService } from '../../services/api.service';
 import { Result } from '../../models/result.model';
 import { EncryptionService } from '../../services/encryption.service';
 import { encryptBody } from '../../utils/encryption.util';
-import { mapObjectKeys } from '../../utils/mapping.util';
 import { tap } from 'rxjs/operators';
 import { KEY_MANAGEMENT } from '../../constants/key-management.constants';
+import { LocalManagementService } from '../../services/localManagementService.service';
 
 export interface LoginUserRequest {
   email: string;
   password: string;
 }
-
-// Mapeo de propiedades
-const REQUEST_KEY_MAP = {
-  email: 'correo',
-  password: 'contrasena'
-} as const;
-
 export interface LoginUserResponse {
   token: string;
   user?: {
@@ -33,19 +26,15 @@ export interface LoginUserResponse {
   providedIn: 'root',
 })
 export class LoginUserUseCase {
-  localManagementService: any;
-
   constructor(
     private apiService: ApiService,
-    private encryptionService: EncryptionService
+    private encryptionService: EncryptionService,
+    private localManagementService: LocalManagementService
   ) {}
 
   execute(body: LoginUserRequest): Observable<Result<LoginUserResponse>> {
     const endpoint = 'login-user';
-    console.log('LoginUserUseCase - Request Body:', body);
-    // const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(body, this.encryptionService);
-
     return this.apiService.post<LoginUserResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
@@ -56,10 +45,7 @@ export class LoginUserUseCase {
   }
 
   private saveUserData(userData: LoginUserResponse): void {
-    // Guardar el token
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
-    
-    // Guardar los datos del usuario si vienen en la respuesta
     if (userData.user) {
       const user = {
         id: userData.user.id,

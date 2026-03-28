@@ -8,15 +8,10 @@ import {
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   IonContent,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonIcon,
   IonButton,
   IonItem,
   IonInput,
-  IonButtons,
-  IonBackButton,
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import {
@@ -25,6 +20,7 @@ import {
 } from "src/app/core/use-cases/registerService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
+import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
 
 @Component({
   selector: 'app-register',
@@ -35,15 +31,10 @@ import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/bas
     CommonModule,
     ReactiveFormsModule,
     IonContent,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonIcon,
     IonButton,
     IonItem,
     IonInput,
-    IonButtons,
-    IonBackButton,
     DynamicAlertComponent
   ],
 })
@@ -90,11 +81,28 @@ export class RegisterPage {
       return;
     }
     
+    const password = this.registerForm.value.password || "";
+    const repeatPassword = this.registerForm.value.repeatPassword || "";
+
+    const passwordError = validate(password);
+    if (passwordError) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = passwordError;
+      return;
+    }
+
+    const matchError = validateMatch(password, repeatPassword);
+    if (matchError) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = matchError;
+      return;
+    }
+
     const body: RegisterRequest = {
       nombre: this.registerForm.value.name!,
       apellidos: this.registerForm.value.lastName!,
       email: this.registerForm.value.email!,
-      password: this.registerForm.value.password!,
+      password: password,
     };
     this.executeRegister(body);
   }

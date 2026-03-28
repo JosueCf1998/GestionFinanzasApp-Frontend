@@ -20,6 +20,7 @@ import {
 } from "src/app/core/use-cases/forgotPasswordService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
+import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
 
 @Component({
   selector: 'app-forgot-password',
@@ -77,9 +78,26 @@ export class ForgotPasswordPage {
       return;
     }
     
+    const password = this.forgotForm.value.password || "";
+    const repeatPassword = this.forgotForm.value.repeatPassword || "";
+
+    const passwordError = validate(password);
+    if (passwordError) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = passwordError;
+      return;
+    }
+
+    const matchError = validateMatch(password, repeatPassword);
+    if (matchError) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = matchError;
+      return;
+    }
+
     const body: ForgotPasswordRequest = {
       email: this.forgotForm.value.email!,
-      new_password: this.forgotForm.value.password!,
+      new_password: password,
     };
     this.executeForgotPassword(body);
   }

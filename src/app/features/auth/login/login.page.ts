@@ -31,7 +31,8 @@ import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/bas
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
-import { LoginUserRequest, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
+import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
+import { validate } from "src/app/core/utils/password-validation.util";
 
 @Component({
   selector: "app-login",
@@ -54,7 +55,6 @@ import { LoginUserRequest, LoginUserUseCase } from "src/app/core/use-cases/users
 export class LoginPage implements OnInit {
 
   showPassword: boolean = false;
-  private readonly minPasswordLength = 6;
 
   loginForm = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
@@ -83,8 +83,15 @@ export class LoginPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-           this.executeAccountList();
+          const responseError = this.validateLoginResponse(result.data);
+          if (responseError) {
+            this.showUnauthorizedAlert = true;
+            this.messageError = responseError;
+            return;
+          }
+          this.executeAccountList();
         } else if (result.error) {
+          console.log(result.error);
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
             this.messageError = result.error.description;
@@ -92,6 +99,7 @@ export class LoginPage implements OnInit {
             this.showGenericAlert = true;
           }
         } else {
+          console.log("error desconocido");
           this.showGenericAlert = true;
         }
       },
@@ -108,14 +116,11 @@ export class LoginPage implements OnInit {
       next: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
-          this.navService.push("/welcome-step-one");
-          /*
           if (result.data.items.length == 0) {
             this.navService.push("/welcome-step-one");
           } else {
             this.navService.push('/main')
           }
-          */
         } else if (result.error) {
           if (result.error.description) {
             this.showUnauthorizedAlert = true;
@@ -141,25 +146,24 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-    if (!this.validationLogin()) {
+    const { email, password } = this.sanitizeCredentials();
+
+    if (!this.validationLogin(email, password)) {
       return;
     }
     
-    const body: LoginRequest = {
-      email: this.loginForm.value.email!.trim().toLowerCase(),
-      password: this.loginForm.value.password!,
+    const body: LoginUserRequest = {
+      email,
+      password,
     };
     this.executeLogin(body);
   }
 
-  validationLogin(): boolean {
+  validationLogin(email: string, password: string): boolean {
     // Validar que el formulario tenga valores
     if (this.loginForm.invalid) {
       return this.showValidationError("Ingresa tus credenciales correctamente.");
     }
-
-    const email = this.loginForm.value.email?.trim() || '';
-    const password = this.loginForm.value.password || '';
 
     // Validar que los campos no estén vacíos después del trim
     if (!email || !password) {
@@ -177,7 +181,7 @@ export class LoginPage implements OnInit {
       return this.showValidationError("El correo electrónico no debe contener espacios.");
     }
 
-    const passwordError = this.validatePassword(password);
+    const passwordError = validate(password);
     if (passwordError) {
       return this.showValidationError(passwordError);
     }
@@ -190,28 +194,28 @@ export class LoginPage implements OnInit {
     return true;
   }
 
-  private validatePassword(password: string): string | null {
-    const validations = [
-      {
-        isValid: password.trim().length > 0,
-        message: "La contraseña no puede contener solo espacios.",
-      },
-      {
-        isValid: password.length >= this.minPasswordLength,
-        message: `La contraseña debe tener al menos ${this.minPasswordLength} caracteres.`,
-      },
-      {
-        isValid: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
-        message: "La contraseña debe incluir al menos un carácter especial.",
-      },
-      {
-        isValid: password.length <= 128,
-        message: "La contraseña excede la longitud permitida.",
-      },
-    ];
+  private sanitizeCredentials(): { email: string; password: string } {
+    const rawEmail = this.loginForm.value.email || "";
+    const rawPassword = this.loginForm.value.password || "";
 
-    const failedValidation = validations.find((validation) => !validation.isValid);
-    return failedValidation ? failedValidation.message : null;
+    const email = rawEmail.trim().toLowerCase().replace(/\s+/g, "");
+    const password = rawPassword.trim();
+
+    this.loginForm.patchValue({ email, password }, { emitEvent: false });
+
+    return { email, password };
+  }
+
+  private validateLoginResponse(data: LoginUserResponse): string | null {
+    if (!data.token || data.token.trim().length === 0) {
+      return "No se recibió un token válido en el inicio de sesión.";
+    }
+
+    if (data.user?.correo && data.user.correo.includes(" ")) {
+      return "El correo del usuario recibido no es válido.";
+    }
+
+    return null;
   }
 
   private showValidationError(message: string): false {
