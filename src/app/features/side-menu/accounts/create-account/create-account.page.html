@@ -18,27 +18,22 @@
         <div class="amount-section">
           <div class="amount-row">
             <div class="amount-wrapper">
-              <ion-input
-                type="number"
-                placeholder="0.00"
-                [(ngModel)]="montoInicial"
-                name="montoInicial"
-                inputmode="decimal"
-                min="0"
-                step="0.01"
-                maxlength="10"
-                class="amount-input"
-                required
-              ></ion-input>
-              <span class="currency-label">PEN</span>
+                <app-amount-input
+                  class="amount-input"
+                  [(ngModel)]="montoInicial"
+                  name="montoInicial"
+                  placeholder="0.00"
+                  [required]="true"
+                  currencyCode="PEN"
+                  variant="enhanced"
+                ></app-amount-input>
             </div>
           </div>
-          <div class="amount-divider"></div>
         </div>
 
         <!-- Nombre de la cuenta -->
         <div class="input-row">
-          <label class="input-label text-body">Nombre de la cuenta</label>
+          <label class="label-simbolos text-body">Nombre de la cuenta</label>
           <ion-input
             type="text"
             placeholder="Nombre de la cuenta"

@@ -12,13 +12,14 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateTransferRequest, CreateTransferUseCase } from "src/app/core/use-cases/transfer/create-transfer.usecase";
 import { UpdateTransferRequest, UpdateTransferUseCase } from "src/app/core/use-cases/transfer/update-transfer.usecase";
 import { convertISODateToSQL } from "src/app/core/utils/date.util";
+import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 
 @Component({
   selector: "app-new-transfer",
   templateUrl: "./new-transfer.page.html",
   styleUrls: ["./new-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AccountSelectorModalComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AccountSelectorModalComponent, AmountInputComponent],
 })
 export class NewTransferPage implements OnInit {
 

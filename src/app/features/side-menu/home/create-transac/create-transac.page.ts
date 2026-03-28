@@ -11,13 +11,14 @@ import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-ca
 import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { Categoria } from "src/app/shared/models/categoria.model";
 import { AccountSelectorModalComponent } from "src/app/shared/components/account-selector-modal/account-selector-modal.component";
+import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 
 @Component({
   selector: "app-create-transac",
   templateUrl: "./create-transac.page.html",
   styleUrls: ["./create-transac.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AccountSelectorModalComponent],
+  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AccountSelectorModalComponent, AmountInputComponent],
 })
 export class CreateTransacPage implements OnInit {
   segmentoSeleccionado = 'ingresos';

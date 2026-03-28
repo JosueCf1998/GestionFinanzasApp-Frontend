@@ -18,17 +18,7 @@
 
       <!-- Form Section -->
       <form class="form-section" [formGroup]="dataForm">
-        <ion-item lines="none" class="input-item">
-          <ion-input
-            type="text"
-            formControlName="amount"
-            placeholder="0.00"
-            required
-            inputmode="numeric"
-            (ionInput)="onAmountInput($event)"
-            (keydown)="onKeyDown($event)">
-          </ion-input>
-        </ion-item>
+        <app-amount-input class="input-item" formControlName="amount" placeholder="0.00" [required]="true" currencyCode="PEN" variant="basic"></app-amount-input>
       </form>
 
       <!-- CTA Button -->

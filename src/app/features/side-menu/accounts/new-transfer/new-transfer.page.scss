@@ -410,25 +410,11 @@ ion-menu-button {
 }
 
 .amount-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  width: 100%;
 }
 
-.amount-input {
-  flex: 1;
-  font-size: 28px;
-  border: none;
-  border-bottom: 1px solid #c2cfcf;
-  color: #3d3d3d;
-  background: transparent;
-  padding: 4px 0;
-}
-
-.currency-label {
-  font-size: 20px;
-  color: #3d3d3d;
-  font-weight: 500;
+.amount-input-component {
+  width: 100%;
 }
 
 .calc-btn {

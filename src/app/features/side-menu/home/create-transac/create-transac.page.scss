@@ -114,29 +114,11 @@ ion-content {
 // Monto
 // ====================
 .amount-row {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
+  width: 100%;
 }
 
-.amount-input {
-  flex: 1;
-  font-size: 40px;
-  font-weight: 700;
-  border: none;
-  color: #1a1a2e;
-  background: transparent;
-  padding: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  letter-spacing: -1px;
-}
-
-.currency-label {
-  font-size: 20px;
-  color: #9ca3af;
-  font-weight: 600;
-  padding-bottom: 4px;
+.amount-input-component {
+  width: 100%;
 }
 
 // ====================

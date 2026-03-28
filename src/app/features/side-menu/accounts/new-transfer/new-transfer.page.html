@@ -48,18 +48,18 @@
     <div class="transfer-section">
       <label class="transfer-label">Transfiere una cantidad</label>
       <div class="amount-row">
-        <ion-input
-          type="number"
-          min="0"
+        <app-amount-input
+          class="amount-input-component"
           [(ngModel)]="monto"
           name="monto"
-          class="amount-input"
-          placeholder="0"
-          (ionChange)="onInputChange()"
-          required
-        >
-        </ion-input>
-        <span class="currency-label">PEN</span>
+          placeholder="0.00"
+          [required]="true"
+          currencyCode="PEN"
+          variant="enhanced"
+          locale="es-PE"
+          [maxDigits]="11"
+          (ngModelChange)="onInputChange()"
+        ></app-amount-input>
       </div>
     </div>
 

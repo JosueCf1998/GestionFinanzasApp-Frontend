@@ -11,13 +11,14 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/accounts/create-account.usecase";
 import { Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
+import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 
 @Component({
   selector: "app-create-account",
   templateUrl: "./create-account.page.html",
   styleUrls: ["./create-account.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AmountInputComponent],
 })
 export class CreateAccountPage {
 
@@ -38,7 +39,7 @@ export class CreateAccountPage {
   showCustomAlert = false;
   cambiosPendientes = false;
 
-  montoInicial: string = '';
+  montoInicial: number | null = null;
   nombreCuenta: string = '';
   accountData: Accounts = {} as Accounts;
 
@@ -62,7 +63,7 @@ export class CreateAccountPage {
     if (state.account) {
       this.accountData = state.account;
       this.nombreCuenta = state.account.name;
-      this.montoInicial = state.account.amount?.toString() ?? '';
+      this.montoInicial = state.account.amount ?? null;
       this.iconoSeleccionado = state.account.icon ?? '';
       this.colorSeleccionado = state.account.color ?? '';
     }
@@ -138,7 +139,6 @@ export class CreateAccountPage {
     return (
       !this.nombreCuenta ||
       this.montoInicial === null ||
-      this.montoInicial === '' ||
       !this.colorSeleccionado ||
       !this.iconoSeleccionado
     );
@@ -157,7 +157,7 @@ export class CreateAccountPage {
     if (this.isCreateAccountActive) {
       const body: CreateAccountRequest = {
         name: this.nombreCuenta,
-        amount: parseFloat(this.montoInicial) || 0,
+        amount: this.montoInicial || 0,
         icon: this.iconoSeleccionado,
         color: this.colorSeleccionado
       }
@@ -166,7 +166,7 @@ export class CreateAccountPage {
       const body: UpdateAccountRequest = {
         id: this.accountData.id,
         name: this.nombreCuenta,
-        amount: parseFloat(this.montoInicial) || 0,
+        amount: this.montoInicial || 0,
         icon: this.iconoSeleccionado,
         color: this.colorSeleccionado
       }

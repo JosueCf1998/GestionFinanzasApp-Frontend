@@ -43,18 +43,18 @@
           Monto
         </label>
         <div class="amount-row">
-          <ion-input
-            type="number"
-            min="0"
+          <app-amount-input
+            class="amount-input-component"
             [(ngModel)]="monto"
             name="monto"
-            class="amount-input"
-            placeholder="0"
-            (ionChange)="onMontoChange()"
-            required
-          >
-          </ion-input>
-          <span class="currency-label">PEN</span>
+            placeholder="0.00"
+            [required]="true"
+            currencyCode="PEN"
+            variant="enhanced"
+            locale="es-PE"
+            [maxDigits]="11"
+            (ngModelChange)="onMontoChange()"
+          ></app-amount-input>
         </div>
       </div>
 

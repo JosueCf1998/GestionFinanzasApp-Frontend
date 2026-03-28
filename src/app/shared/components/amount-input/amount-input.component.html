@@ -1,0 +1,14 @@
+<ion-item lines="none" class="amount-input-item" [class.enhanced]="isEnhanced" [class.is-disabled]="isDisabled">
+  <span class="currency-label">{{ currencyLabel }}</span>
+  <ion-input
+    type="text"
+    [value]="displayValue"
+    [placeholder]="placeholder"
+    [required]="required"
+    [disabled]="isDisabled"
+    (ionInput)="onAmountInput($event)"
+    (keydown)="onKeyDown($event)"
+    (paste)="onPaste($event)"
+    (ionBlur)="markAsTouched()">
+  </ion-input>
+</ion-item>

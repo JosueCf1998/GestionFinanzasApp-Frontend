@@ -118,27 +118,18 @@ ion-content {
 }
 
 .input-item {
-  --background: rgba(255, 255, 255, 0.95);
-  --border-radius: 16px;
-  --padding-start: 20px;
-  --padding-end: 20px;
-  --min-height: 60px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-
-  &:focus-within {
-    --background: white;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
-
-  ion-input {
-    font-size: 18px;
-    font-weight: 500;
-    color: #1a1a1a;
-    --placeholder-color: #94a3b8;
-    --placeholder-opacity: 1;
-  }
+  --amount-input-bg: rgba(255, 255, 255, 0.95);
+  --amount-input-bg-focus: white;
+  --amount-input-border-radius: 16px;
+  --amount-input-padding-start: 20px;
+  --amount-input-padding-end: 20px;
+  --amount-input-min-height: 60px;
+  --amount-input-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  --amount-input-shadow-focus: 0 15px 50px rgba(0, 0, 0, 0.3);
+  --amount-input-font-size: 18px;
+  --amount-input-font-weight: 500;
+  --amount-input-color: #1a1a1a;
+  --amount-input-placeholder-color: #94a3b8;
 }
 
 // Sección de acción
