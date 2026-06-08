@@ -45,13 +45,11 @@ export class CategoriesPage {
   private executeListCategories() {
     this.loadingService.show();
     this.listCategoriesUseCase.execute().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          this.ingresos = result.data.items.filter(cat => cat.tipo === "ingresos");
-          this.gastos = result.data.items.filter(cat => cat.tipo === "gastos");
-        } else if (result.error) {
-            this.showGenericAlert = true;
+        if (data) {
+          this.ingresos = data.items.filter(cat => cat.tipo === "ingresos");
+          this.gastos = data.items.filter(cat => cat.tipo === "gastos");
         } else {
           this.showGenericAlert = true;
         }

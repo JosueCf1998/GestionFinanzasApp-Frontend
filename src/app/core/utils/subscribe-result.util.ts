@@ -1,18 +1,18 @@
 import { Observable, Subscription } from 'rxjs';
-import { Result } from '../models/result.model';
+import { Result, ErrorDetail } from '../models/result.model';
 
 /**
  * Handlers para el flujo de `Result<T>`.
- * - `success` se ejecuta cuando `res.success === true`.
- * - `failure` se ejecuta cuando `res.success === false` o hay un error de transporte.
+ * - `success` recibe únicamente la `data` (T|null).
+ * - `failure` recibe el modelo `ErrorDetail` o `null` si no hay info.
  */
 export type ServiceHandlers<T> = {
-  success: (result: Result<T>) => void;
-  failure: (error: string | null, result?: Result<T>) => void;
+  success: (data: T | null) => void;
+  failure: (error: ErrorDetail | null) => void;
 };
 
 /**
- * service: helper profesional para suscribirse a `Observable<Result<T>>`.
+ * service: helper para suscribirse a `Observable<Result<T>>`.
  * Devuelve la `Subscription` para que el consumidor pueda cancelar si lo desea.
  *
  * Uso:
@@ -26,15 +26,24 @@ export function service<T>(
   return obs.subscribe({
     next: (res) => {
       if (res.success) {
-        handlers.success(res);
-      } else {
-        // prefer description if available
-        const errStr = (res as any).error?.description ?? res.message ?? null;
-        handlers.failure(errStr, res);
+        handlers.success(res.data);
+        return;
       }
+      // Construir ErrorDetail preferente a partir de `res.error`
+      let error: ErrorDetail = {
+        code: String(res.statusCode) ?? "500",
+        message: res.error?.description ?? "Error desconocido",
+        description: res.error?.message ?? "No se proporcionó información adicional",
+      };
+      handlers.failure(error);
     },
     error: (err) => {
-      handlers.failure(err?.message ?? String(err));
+      const errDetail: ErrorDetail = {
+        code: err.code ?? "500",
+        message: err?.message ?? String(err),
+        description: typeof err === 'string' ? err : (err?.stack ?? String(err)),
+      };
+      handlers.failure(errDetail);
     },
   });
 }

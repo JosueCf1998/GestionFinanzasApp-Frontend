@@ -62,6 +62,33 @@ export class RegisterPage {
     private registerUserUseCase: RegisterUserUseCase,
     private loadingService: SpinnerService
   ) {}
+  
+  // MARK: - SERVICES
+
+  private executeRegister(body: RegisterUserRequest) {
+    this.loadingService.show();
+    this.registerUserUseCase.createUser(body).service({
+      success: (data) => {
+        this.loadingService.hide();
+        if (data) {
+          this.showSuccessAlert = true;
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        if (error) {
+          this.showUnauthorizedAlert = true;
+          this.messageError = error.message;
+        } else {
+          this.showGenericAlert = true;
+        }
+      }
+    });
+  }
+
+  // MARK: - FUNCTIONS
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -106,25 +133,6 @@ export class RegisterPage {
       password: password,
     };
     this.executeRegister(body);
-  }
-
-  private executeRegister(body: RegisterUserRequest) {
-    this.loadingService.show();
-    this.registerUserUseCase.createUser(body).service({
-      success: (result) => {
-        this.loadingService.hide();
-        this.showSuccessAlert = true;
-      },
-      failure: (error) => {
-        this.loadingService.hide();
-        if (error) {
-          this.showUnauthorizedAlert = true;
-          this.messageError = error;
-        } else {
-          this.showGenericAlert = true;
-        }
-      }
-    });
   }
 
   async handleSuccessConfirm() {

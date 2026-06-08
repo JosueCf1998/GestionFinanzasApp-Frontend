@@ -45,20 +45,9 @@ export class WelcomeStepTwoPage implements OnInit {
   private executeCreateAccount(body: CreateAccountRequest) {
       this.loadingService.show();
       this.createAccountUseCase.createAccount(body).service({
-        success: (result) => {
+        success: (data) => {
           this.loadingService.hide();
-          if (result.success && result.data) {
-            this.navService.push('/main');
-          } else if (result.error) {
-            if ((result as any).error?.description) {
-              // this.showUnauthorizedAlert = true;
-              // this.messageError = result.error.description;
-            } else {
-              this.showGenericAlert = true;
-            }
-          } else {
-            this.showGenericAlert = true;
-          }
+          this.navService.push('/main');
         },
         failure: (error) => {
           this.loadingService.hide();

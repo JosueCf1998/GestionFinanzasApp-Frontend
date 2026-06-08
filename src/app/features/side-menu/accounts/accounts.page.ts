@@ -34,17 +34,10 @@ export class AccountsPage {
   private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          this.accountList = result.data.items;
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
+        if (data) {
+          this.accountList = data.items;
         } else {
           this.showGenericAlert = true;
         }

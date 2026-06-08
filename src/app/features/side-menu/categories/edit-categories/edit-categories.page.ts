@@ -69,18 +69,11 @@ export class EditCategoriesPage {
   private executeUpdateCategory(body: UpdateCategoryRequest) {
     this.loadingService.show();
     this.updateCategoryUseCase.updateCategory(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           this.cambiosPendientes = false;
           this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }
@@ -101,15 +94,10 @@ export class EditCategoriesPage {
 
     this.loadingService.show();
     this.deleteCategoryUseCase.deleteCategory({ id: this.category.id }).service({
-      success: (result) => {
+      success: () => {
         this.loadingService.hide();
-        if (result.success) {
-          this.cambiosPendientes = false;
-          this.navService.back();
-        } else {
-          this.messageError = result.message || 'Error al eliminar la categoría';
-          this.showUnauthorizedAlert = true;
-        }
+        this.cambiosPendientes = false;
+        this.navService.back();
       },
       failure: (error) => {
         this.loadingService.hide();

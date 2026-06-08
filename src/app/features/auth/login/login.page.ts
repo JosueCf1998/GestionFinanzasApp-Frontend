@@ -78,32 +78,28 @@ export class LoginPage implements OnInit {
   private executeLogin(body: LoginUserRequest) {
     this.loadingService.show();
     this.loginUserUseCase.execute(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          const responseError = this.validateLoginResponse(result.data);
+        if (data) {
+          const responseError = this.validateLoginResponse(data);
           if (responseError) {
             this.showUnauthorizedAlert = true;
             this.messageError = responseError;
             return;
           }
           this.executeAccountList();
-        } else if (result.error) {
-          console.log(result.error);
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
-          console.log("error desconocido");
           this.showGenericAlert = true;
         }
       },
       failure: (error) => {
         this.loadingService.hide();
-        this.showGenericAlert = true;
+        if (error) {
+          this.showUnauthorizedAlert = true;
+          this.messageError = error.message;
+        } else {
+          this.showGenericAlert = true;
+        }
       }
     });
   }
@@ -111,20 +107,13 @@ export class LoginPage implements OnInit {
   private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          if (result.data.items.length == 0) {
+        if (data) {
+          if (data.items.length == 0) {
             this.navService.push("/welcome-step-one");
           } else {
             this.navService.push('/main')
-          }
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
           }
         } else {
           this.showGenericAlert = true;
@@ -132,7 +121,14 @@ export class LoginPage implements OnInit {
       },
       failure: (error) => {
         this.loadingService.hide();
-        this.showGenericAlert = true;
+        if (error?.code == "404") {
+            this.navService.push("/welcome-step-one");
+        } else if (error) {
+          this.showUnauthorizedAlert = true;
+          this.messageError = error.message;
+        } else {
+          this.showGenericAlert = true;
+        }
       }
     });
   }

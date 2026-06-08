@@ -191,22 +191,10 @@ export class DetailTransferPage implements OnInit {
     this.loadingService.show();
     
     this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).service({
-      success: (result) => {
+      success: () => {
         this.loadingService.hide();
-        
-        if (result.success) {
-          console.log('✅ Transferencia eliminada exitosamente');
-          this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
+        console.log('✅ Transferencia eliminada exitosamente');
+        this.navService.back();
       },
       failure: (error) => {
         this.loadingService.hide();

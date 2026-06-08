@@ -57,17 +57,10 @@ export class HomePage {
   private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           // guardar los datos y mostrarlos en la pantalla
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }
@@ -82,12 +75,10 @@ export class HomePage {
   private executeTransferList() {
     this.loadingService.show();
     this.listTransferUseCase.listTransfer().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          console.log('Transfers List:', result.data.items);
-        } else if (result.error) {
-          console.error('Error loading transfers:', result.error);
+        if (data) {
+          console.log('Transfers List:', data.items);
         }
       },
       failure: (error) => {
@@ -100,13 +91,11 @@ export class HomePage {
   private executeTransactionsList() {
     this.loadingService.show();
     this.listTransactionsUseCase.execute().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          console.log('Transactions List:', result.data.items);
-          this.groupTransactionsByCategory(result.data.items);
-        } else if (result.error) {
-          console.error('Error loading transactions:', result.error);
+        if (data) {
+          console.log('Transactions List:', data.items);
+          this.groupTransactionsByCategory(data.items);
         }
       },
       failure: (error) => {

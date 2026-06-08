@@ -75,18 +75,11 @@ export class CreateAccountPage {
   private executeCreateAccount(body: CreateAccountRequest) {
     this.loadingService.show();
     this.createAccountUseCase.createAccount(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           this.cambiosPendientes = false;
           this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }
@@ -101,18 +94,11 @@ export class CreateAccountPage {
   private executeUpdateAccount(body: UpdateAccountRequest) {
     this.loadingService.show();
     this.updateAccountUseCase.updateAccount(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           this.cambiosPendientes = false;
           this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }

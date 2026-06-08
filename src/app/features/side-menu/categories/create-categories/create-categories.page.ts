@@ -65,18 +65,11 @@ export class CreateCategoriesPage {
   private executeCreateCategory(body: CreateCategoryRequest) {
     this.loadingService.show();
     this.createCategoryUseCase.createCategory(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           this.cambiosPendientes = false;
           this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }

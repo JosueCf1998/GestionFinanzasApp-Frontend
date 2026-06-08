@@ -60,6 +60,33 @@ export class ForgotPasswordPage {
     private loadingService: SpinnerService
   ) {}
 
+  // MARK: - SERVICIOS
+
+  private executeForgotPassword(body: ForgotPassworUserdRequest) {
+    this.loadingService.show();
+    this.forgotPasswordUseCase.forgotPassword(body).service({
+      success: async (data) => {
+        this.loadingService.hide();
+        if (data) {
+          await this.navService.replace('/login');
+        } else {
+          this.showGenericAlert = true;
+        }
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        if (error) {
+          this.showUnauthorizedAlert = true;
+          this.messageError = error.message;
+        } else {
+          this.showGenericAlert = true;
+        }
+      }
+    });
+  }
+
+  // MARK: - FUNCTIONS
+
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
@@ -101,31 +128,6 @@ export class ForgotPasswordPage {
       new_password: password,
     };
     this.executeForgotPassword(body);
-  }
-
-  private executeForgotPassword(body: ForgotPassworUserdRequest) {
-    this.loadingService.show();
-    this.forgotPasswordUseCase.forgotPassword(body).service({
-      success: async (result) => {
-        this.loadingService.hide();
-        if (result.success && result.data) {
-          await this.navService.replace('/login');
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
-      },
-      failure: (error) => {
-        this.loadingService.hide();
-        this.showGenericAlert = true;
-      }
-    });
   }
 
   closeAlerts() {

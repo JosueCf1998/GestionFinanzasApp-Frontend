@@ -93,10 +93,10 @@ export class NewTransferPage implements OnInit {
   private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data?.items) {
-          this.accounts = result.data.items
+        if (data?.items) {
+          this.accounts = data.items
         }
       },
       failure: () => {
@@ -108,18 +108,11 @@ export class NewTransferPage implements OnInit {
   private executeCreateTransfer(body: CreateTransferRequest) {
     this.loadingService.show();
     this.createTransferUseCase.createTransfer(body).service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
+        if (data) {
           this.cambiosPendientes = false;
           this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
         } else {
           this.showGenericAlert = true;
         }
@@ -134,21 +127,10 @@ export class NewTransferPage implements OnInit {
   private executeUpdateTransfer(body: UpdateTransferRequest) {
     this.loadingService.show();
     this.updateTransferUseCase.updateTransfer(body).service({
-      success: (result) => {
+      success: () => {
         this.loadingService.hide();
-        if (result.success) {
-          this.cambiosPendientes = false;
-          this.navService.backMultiple(2)
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
+        this.cambiosPendientes = false;
+        this.navService.backMultiple(2)
       },
       failure: (error) => {
         this.loadingService.hide();

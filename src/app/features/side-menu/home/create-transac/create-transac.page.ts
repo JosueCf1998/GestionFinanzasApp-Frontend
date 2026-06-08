@@ -63,18 +63,11 @@ export class CreateTransacPage implements OnInit {
   private executeListCategories() {
     this.loadingService.show();
     this.listCategoriesUseCase.execute().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          this.categoriasIngresos = result.data.items.filter(cat => cat.tipo === "ingresos");
-          this.categoriasGastos = result.data.items.filter(cat => cat.tipo === "gastos");
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
+        if (data) {
+          this.categoriasIngresos = data.items.filter(cat => cat.tipo === "ingresos");
+          this.categoriasGastos = data.items.filter(cat => cat.tipo === "gastos");
         } else {
           this.showGenericAlert = true;
         }
@@ -89,21 +82,14 @@ export class CreateTransacPage implements OnInit {
   private executeListAccounts() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
-      success: (result) => {
+      success: (data) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          this.cuentas = result.data.items;
+        if (data) {
+          this.cuentas = data.items;
           if (this.cuentas.length > 0) {
             this.cuentaId = this.cuentas[0].id.toString();
             this.cuentaSeleccionada = this.cuentas[0].name;
             this.cuentaAmount = this.cuentas[0].amount;
-          }
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = (result as any).error.description;
-          } else {
-            this.showGenericAlert = true;
           }
         } else {
           this.showGenericAlert = true;
@@ -119,29 +105,11 @@ export class CreateTransacPage implements OnInit {
   private executeCreateTransaction(body: any) {
     this.loadingService.show();
     this.createTransactionsUseCase.execute(body).service({
-      success: (result) => {
+      success: () => {
         this.loadingService.hide();
-        if (result.success) {
-          this.cambiosPendientes = false;
-          this.resetForm();
-          this.navService.back();
-        } else if (result.error) {
-          if ((result as any).error?.description) {
-            this.alertService.showAlert(
-              'Error',
-              (result as any).error.description,
-              'Aceptar'
-            );
-          } else {
-            this.alertService.showAlert(
-              'Error',
-              'No se pudo crear la transacción',
-              'Aceptar'
-            );
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
+        this.cambiosPendientes = false;
+        this.resetForm();
+        this.navService.back();
       },
       failure: (error) => {
         this.loadingService.hide();
