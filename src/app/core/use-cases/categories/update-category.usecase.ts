@@ -37,7 +37,7 @@ export class UpdateCategoryUseCase {
   ) {}
 
   updateCategory(body: UpdateCategoryRequest): Observable<Result<UpdateCategoryResponse>> {
-    const endpoint = 'update-category';
+    const endpoint = 'categories/update';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<UpdateCategoryResponse>(endpoint, encryptedBody);

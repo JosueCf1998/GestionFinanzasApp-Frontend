@@ -39,7 +39,7 @@ export class UpdateTransferUseCase {
   ) {}
 
   updateTransfer(body: UpdateTransferRequest): Observable<Result<UpdateTransferResponse>> {
-    const endpoint = 'update-transfers';
+    const endpoint = 'transfers/update';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<UpdateTransferResponse>(endpoint, encryptedBody);

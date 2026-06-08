@@ -25,7 +25,7 @@ export class DeleteAccountUseCase {
   ) {}
 
   deleteAccount(body: DeleteAccountRequest): Observable<Result<DeleteAccountResponse>> {
-    const endpoint = 'delete-account';
+    const endpoint = 'accounts/delete';
     const encryptedBody = encryptFields(body, this.encryptionService);
     return this.apiService.post<DeleteAccountResponse>(endpoint, encryptedBody).pipe(
       tap(result => {

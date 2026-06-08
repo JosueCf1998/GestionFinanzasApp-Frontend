@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-accounts",
@@ -32,15 +33,15 @@ export class AccountsPage {
 
   private executeAccountList() {
     this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().subscribe({
-      next: (result) => {
+    this.listAccountsUseCase.listAccounts().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.accountList = result.data.items;
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -48,7 +49,7 @@ export class AccountsPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

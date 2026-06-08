@@ -21,11 +21,6 @@ import {
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import { EncryptionService } from "../../../core/services/encryption.service";
-import {
-  LoginServiceUseCase,
-  LoginResponse,
-  LoginRequest,
-} from "src/app/core/use-cases/loginService.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
@@ -35,6 +30,7 @@ import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/c
 import { validate } from "src/app/core/utils/password-validation.util";
 import { DecryptionCryptoUseCase } from "src/app/core/use-cases/crypto/decryption.usecase";
 import { EncryptionCryptoUseCase } from "src/app/core/use-cases/crypto/encryption.usecase";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-login",
@@ -72,8 +68,6 @@ export class LoginPage implements OnInit {
     private loginUserUseCase: LoginUserUseCase,
     private listAccountsUseCase: ListAccountsUseCase,
     private loadingService: SpinnerService,
-    private encryptionService: EncryptionCryptoUseCase,
-    private decryptionService: DecryptionCryptoUseCase
   ) {}
 
   ngOnInit() {
@@ -83,8 +77,8 @@ export class LoginPage implements OnInit {
 
   private executeLogin(body: LoginUserRequest) {
     this.loadingService.show();
-    this.loginUserUseCase.execute(body).subscribe({
-      next: (result) => {
+    this.loginUserUseCase.execute(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           const responseError = this.validateLoginResponse(result.data);
@@ -96,9 +90,9 @@ export class LoginPage implements OnInit {
           this.executeAccountList();
         } else if (result.error) {
           console.log(result.error);
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -107,7 +101,7 @@ export class LoginPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -116,8 +110,8 @@ export class LoginPage implements OnInit {
 
   private executeAccountList() {
     this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().subscribe({
-      next: (result) => {
+    this.listAccountsUseCase.listAccounts().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           if (result.data.items.length == 0) {
@@ -126,9 +120,9 @@ export class LoginPage implements OnInit {
             this.navService.push('/main')
           }
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -136,7 +130,7 @@ export class LoginPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -235,9 +229,7 @@ export class LoginPage implements OnInit {
   }
 
   forgotPassword() {
-    // this.navService.push('/forgot-password');
-    this.encryptionService.execute().subscribe();
-    this.decryptionService.execute().subscribe();
+    this.navService.push('/forgot-password');
   }
 
   goToRegister() {

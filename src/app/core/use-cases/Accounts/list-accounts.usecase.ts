@@ -24,7 +24,7 @@ export class ListAccountsUseCase {
   ) {}
 
   listAccounts(): Observable<Result<ListAccountsResponse>> {
-    const endpoint = 'list-account';
+    const endpoint = 'accounts/list';
     return this.apiService.get<ListAccountsResponse>(endpoint);
   }
 

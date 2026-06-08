@@ -44,7 +44,7 @@ export class ListTransferUseCase {
   constructor(private apiService: ApiService) {}
 
   listTransfer(): Observable<Result<ListTransferResponse>> {
-    const endpoint = 'list-transfers';
+    const endpoint = 'transfers/list';
     return this.apiService.get<ListTransferResponse>(endpoint).pipe(
       map(result => ({
         ...result,

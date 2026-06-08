@@ -37,7 +37,7 @@ export class UpdateAccountUseCase {
   ) {}
 
   updateAccount(body: UpdateAccountRequest): Observable<Result<UpdateAccountRequest>> {
-    const endpoint = 'update-account';
+    const endpoint = 'accounts/update';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<UpdateAccountRequest>(endpoint, encryptedBody);

@@ -29,7 +29,7 @@ export class DeleteTransferUseCase {
   ) {}
 
   deleteTransfer(body: DeleteTransferRequest): Observable<Result<DeleteTransferResponse>> {
-    const endpoint = 'delete-transfers';
+    const endpoint = 'transfers/delete';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<DeleteTransferResponse>(endpoint, encryptedBody);

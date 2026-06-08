@@ -33,7 +33,7 @@ export class LoginUserUseCase {
   ) {}
 
   execute(body: LoginUserRequest): Observable<Result<LoginUserResponse>> {
-    const endpoint = 'login-user';
+    const endpoint = 'users/login';
     const encryptedBody = encryptBody(body, this.encryptionService);
     return this.apiService.post<LoginUserResponse>(endpoint, encryptedBody).pipe(
       tap(result => {

@@ -10,6 +10,7 @@ import { Categoria } from 'src/app/shared/models/categoria.model';
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateCategoryRequest, CreateCategoryUseCase } from "src/app/core/use-cases/categories/create-category.usecase";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-create-categories",
@@ -63,16 +64,16 @@ export class CreateCategoriesPage {
 
   private executeCreateCategory(body: CreateCategoryRequest) {
     this.loadingService.show();
-    this.createCategoryUseCase.createCategory(body).subscribe({
-      next: (result) => {
+    this.createCategoryUseCase.createCategory(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -80,7 +81,7 @@ export class CreateCategoriesPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

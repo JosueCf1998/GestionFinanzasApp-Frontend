@@ -10,6 +10,7 @@ import { CustomSegmentComponent } from "src/app/shared/components/custom-segment
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { Categoria } from 'src/app/shared/models/categoria.model';
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: 'app-home',
@@ -55,15 +56,15 @@ export class HomePage {
 
   private executeAccountList() {
     this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().subscribe({
-      next: (result) => {
+    this.listAccountsUseCase.listAccounts().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           // guardar los datos y mostrarlos en la pantalla
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -71,7 +72,7 @@ export class HomePage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -80,8 +81,8 @@ export class HomePage {
 
   private executeTransferList() {
     this.loadingService.show();
-    this.listTransferUseCase.listTransfer().subscribe({
-      next: (result) => {
+    this.listTransferUseCase.listTransfer().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           console.log('Transfers List:', result.data.items);
@@ -89,17 +90,17 @@ export class HomePage {
           console.error('Error loading transfers:', result.error);
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
-        console.error('Error executing transfer list:', err);
+        console.error('Error executing transfer list:', error);
       }
     });
   }
 
   private executeTransactionsList() {
     this.loadingService.show();
-    this.listTransactionsUseCase.execute().subscribe({
-      next: (result) => {
+    this.listTransactionsUseCase.execute().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           console.log('Transactions List:', result.data.items);
@@ -108,9 +109,9 @@ export class HomePage {
           console.error('Error loading transactions:', result.error);
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
-        console.error('Error executing transactions list:', err);
+        console.error('Error executing transactions list:', error);
       }
     });
   }

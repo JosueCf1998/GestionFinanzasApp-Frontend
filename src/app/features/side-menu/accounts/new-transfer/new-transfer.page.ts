@@ -13,6 +13,7 @@ import { CreateTransferRequest, CreateTransferUseCase } from "src/app/core/use-c
 import { UpdateTransferRequest, UpdateTransferUseCase } from "src/app/core/use-cases/transfer/update-transfer.usecase";
 import { convertISODateToSQL } from "src/app/core/utils/date.util";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-new-transfer",
@@ -91,14 +92,14 @@ export class NewTransferPage implements OnInit {
 
   private executeAccountList() {
     this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().subscribe({
-      next: (result) => {
+    this.listAccountsUseCase.listAccounts().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data?.items) {
           this.accounts = result.data.items
         }
       },
-      error: () => {
+      failure: () => {
         this.loadingService.hide();
       }
     });
@@ -106,16 +107,16 @@ export class NewTransferPage implements OnInit {
 
   private executeCreateTransfer(body: CreateTransferRequest) {
     this.loadingService.show();
-    this.createTransferUseCase.createTransfer(body).subscribe({
-      next: (result) => {
+    this.createTransferUseCase.createTransfer(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -123,7 +124,7 @@ export class NewTransferPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -132,16 +133,16 @@ export class NewTransferPage implements OnInit {
 
   private executeUpdateTransfer(body: UpdateTransferRequest) {
     this.loadingService.show();
-    this.updateTransferUseCase.updateTransfer(body).subscribe({
-      next: (result) => {
+    this.updateTransferUseCase.updateTransfer(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success) {
           this.cambiosPendientes = false;
           this.navService.backMultiple(2)
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -149,7 +150,7 @@ export class NewTransferPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

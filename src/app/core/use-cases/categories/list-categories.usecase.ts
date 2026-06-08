@@ -34,7 +34,7 @@ export class ListCategoriesUseCase {
   ) {}
 
   execute(): Observable<Result<ListCategoriesResponse>> {
-    const endpoint = 'list-category';
+    const endpoint = 'categories/list';
     return this.apiService.get<ListCategoriesResponse>(endpoint);
   }
 

@@ -10,6 +10,7 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { AlertService } from "src/app/core/services/alert.service";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-categories",
@@ -43,8 +44,8 @@ export class CategoriesPage {
 
   private executeListCategories() {
     this.loadingService.show();
-    this.listCategoriesUseCase.execute().subscribe({
-      next: (result) => {
+    this.listCategoriesUseCase.execute().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.ingresos = result.data.items.filter(cat => cat.tipo === "ingresos");
@@ -55,7 +56,7 @@ export class CategoriesPage {
           this.showGenericAlert = true;
         }
       },
-      error: () => {
+      failure: () => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

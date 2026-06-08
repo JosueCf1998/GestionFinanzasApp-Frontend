@@ -39,7 +39,7 @@ export class CreateTransactionsUseCase {
   ) {}
 
   execute(body: CreateTransactionsRequest): Observable<Result<CreateTransactionsResponse>> {
-    const endpoint = 'create-transactions';
+    const endpoint = 'transactions/create';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateTransactionsResponse>(endpoint, encryptedBody);

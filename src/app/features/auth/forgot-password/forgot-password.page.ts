@@ -15,12 +15,13 @@ import {
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import {
-  ForgotPasswordServiceUseCase,
-  ForgotPasswordRequest
-} from "src/app/core/use-cases/forgotPasswordService.usecase";
+  ForgotPasswordUserUseCase,
+  ForgotPassworUserdRequest
+} from "src/app/core/use-cases/users/forgot-password-user.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: 'app-forgot-password',
@@ -55,7 +56,7 @@ export class ForgotPasswordPage {
 
   constructor(
     private navService: NavigationService,
-    private forgotPasswordServiceUseCase: ForgotPasswordServiceUseCase,
+    private forgotPasswordUseCase: ForgotPasswordUserUseCase,
     private loadingService: SpinnerService
   ) {}
 
@@ -95,24 +96,24 @@ export class ForgotPasswordPage {
       return;
     }
 
-    const body: ForgotPasswordRequest = {
+    const body: ForgotPassworUserdRequest = {
       email: this.forgotForm.value.email!,
       new_password: password,
     };
     this.executeForgotPassword(body);
   }
 
-  private executeForgotPassword(body: ForgotPasswordRequest) {
+  private executeForgotPassword(body: ForgotPassworUserdRequest) {
     this.loadingService.show();
-    this.forgotPasswordServiceUseCase.forgotPassword(body).subscribe({
-      next: async (result) => {
+    this.forgotPasswordUseCase.forgotPassword(body).service({
+      success: async (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           await this.navService.replace('/login');
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -120,7 +121,7 @@ export class ForgotPasswordPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

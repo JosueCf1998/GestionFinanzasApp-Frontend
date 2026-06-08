@@ -29,7 +29,7 @@ export class DeleteCategoryUseCase {
   ) {}
 
   deleteCategory(body: DeleteCategoryRequest): Observable<Result<DeleteCategoryResponse>> {
-    const endpoint = 'delete-category';
+    const endpoint = 'categories/delete';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<DeleteCategoryResponse>(endpoint, encryptedBody);

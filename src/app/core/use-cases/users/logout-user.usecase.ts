@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { LocalManagementService } from '../services/localManagementService.service';
-import { KEY_MANAGEMENT } from '../constants/key-management.constants';
+import { LocalManagementService } from '../../services/localManagementService.service';
+import { KEY_MANAGEMENT } from '../../constants/key-management.constants';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LogoutServiceUseCase {
+export class LogoutUserUseCase {
 
   constructor(
     private localManagementService: LocalManagementService

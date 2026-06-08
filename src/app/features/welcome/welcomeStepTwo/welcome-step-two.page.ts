@@ -6,6 +6,7 @@ import { NavigationService } from '../../../core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { CreateAccountRequest, CreateAccountUseCase } from 'src/app/core/use-cases/accounts/create-account.usecase';
 import { AmountInputComponent } from 'src/app/shared/components/amount-input/amount-input.component';
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: 'app-welcome-step-two',
@@ -43,13 +44,13 @@ export class WelcomeStepTwoPage implements OnInit {
 
   private executeCreateAccount(body: CreateAccountRequest) {
       this.loadingService.show();
-      this.createAccountUseCase.createAccount(body).subscribe({
-        next: (result) => {
+      this.createAccountUseCase.createAccount(body).service({
+        success: (result) => {
           this.loadingService.hide();
           if (result.success && result.data) {
             this.navService.push('/main');
           } else if (result.error) {
-            if (result.error.description) {
+            if ((result as any).error?.description) {
               // this.showUnauthorizedAlert = true;
               // this.messageError = result.error.description;
             } else {
@@ -59,7 +60,7 @@ export class WelcomeStepTwoPage implements OnInit {
             this.showGenericAlert = true;
           }
         },
-        error: (err) => {
+        failure: (error) => {
           this.loadingService.hide();
           this.showGenericAlert = true;
         }

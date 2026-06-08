@@ -15,12 +15,13 @@ import {
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import {
-  RegisterServiceUseCase,
-  RegisterRequest
-} from "src/app/core/use-cases/registerService.usecase";
+  RegisterUserUseCase,
+  RegisterUserRequest
+} from "src/app/core/use-cases/users/register-user.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: 'app-register',
@@ -58,7 +59,7 @@ export class RegisterPage {
 
   constructor(
     private navService: NavigationService,
-    private registerServiceUseCase: RegisterServiceUseCase,
+    private registerUserUseCase: RegisterUserUseCase,
     private loadingService: SpinnerService
   ) {}
 
@@ -98,36 +99,30 @@ export class RegisterPage {
       return;
     }
 
-    const body: RegisterRequest = {
-      nombre: this.registerForm.value.name!,
-      apellidos: this.registerForm.value.lastName!,
+    const body: RegisterUserRequest = {
+      name: this.registerForm.value.name!,
+      lastName: this.registerForm.value.lastName!,
       email: this.registerForm.value.email!,
       password: password,
     };
     this.executeRegister(body);
   }
 
-  private executeRegister(body: RegisterRequest) {
+  private executeRegister(body: RegisterUserRequest) {
     this.loadingService.show();
-    this.registerServiceUseCase.register(body).subscribe({
-      next: async (result) => {
+    this.registerUserUseCase.createUser(body).service({
+      success: (result) => {
         this.loadingService.hide();
-        if (result.success && result.data) {
-          this.showSuccessAlert = true;
-        } else if (result.error) {
-          if (result.error.description) {
-            this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
-          } else {
-            this.showGenericAlert = true;
-          }
+        this.showSuccessAlert = true;
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        if (error) {
+          this.showUnauthorizedAlert = true;
+          this.messageError = error;
         } else {
           this.showGenericAlert = true;
         }
-      },
-      error: (err) => {
-        this.loadingService.hide();
-        this.showGenericAlert = true;
       }
     });
   }

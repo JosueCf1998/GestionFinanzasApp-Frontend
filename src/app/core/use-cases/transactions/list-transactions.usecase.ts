@@ -30,7 +30,7 @@ export class ListTransactionsUseCase {
   ) {}
 
   execute(): Observable<Result<ListTransactionsResponse>> {
-    const endpoint = 'list-transactions';
+    const endpoint = 'transactions/list';
     return this.apiService.get<ListTransactionsResponse>(endpoint);
   }
 

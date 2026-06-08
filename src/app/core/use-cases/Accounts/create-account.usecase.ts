@@ -35,7 +35,7 @@ export class CreateAccountUseCase {
   ) {}
 
   createAccount(body: CreateAccountRequest): Observable<Result<CreateAccountResponse>> {
-    const endpoint = 'create-account';
+    const endpoint = 'accounts/create';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateAccountResponse>(endpoint, encryptedBody);

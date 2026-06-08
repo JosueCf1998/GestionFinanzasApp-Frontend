@@ -11,6 +11,7 @@ import { CustomAlertComponent } from "../../../../shared/components/custom-alert
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { UpdateCategoryRequest, UpdateCategoryUseCase } from "src/app/core/use-cases/categories/update-category.usecase";
 import { DeleteCategoryUseCase } from "src/app/core/use-cases/categories/delete-category.usecase";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-edit-categories",
@@ -67,16 +68,16 @@ export class EditCategoriesPage {
 
   private executeUpdateCategory(body: UpdateCategoryRequest) {
     this.loadingService.show();
-    this.updateCategoryUseCase.updateCategory(body).subscribe({
-      next: (result) => {
+    this.updateCategoryUseCase.updateCategory(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -84,7 +85,7 @@ export class EditCategoriesPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -99,8 +100,8 @@ export class EditCategoriesPage {
     }
 
     this.loadingService.show();
-    this.deleteCategoryUseCase.deleteCategory({ id: this.category.id }).subscribe({
-      next: (result) => {
+    this.deleteCategoryUseCase.deleteCategory({ id: this.category.id }).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success) {
           this.cambiosPendientes = false;
@@ -110,7 +111,7 @@ export class EditCategoriesPage {
           this.showUnauthorizedAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.messageError = 'Error al eliminar la categoría';
         this.showGenericAlert = true;

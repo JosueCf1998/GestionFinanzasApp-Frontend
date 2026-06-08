@@ -37,7 +37,7 @@ export class CreateTransferUseCase {
   ) {}
 
   createTransfer(body: CreateTransferRequest): Observable<Result<CreateTransferResponse>> {
-    const endpoint = 'create-transfers';
+    const endpoint = 'transfers/create';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateTransferResponse>(endpoint, encryptedBody);

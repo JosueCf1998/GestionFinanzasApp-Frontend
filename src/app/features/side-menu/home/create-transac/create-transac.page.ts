@@ -12,6 +12,7 @@ import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/l
 import { Categoria } from "src/app/shared/models/categoria.model";
 import { AccountSelectorModalComponent } from "src/app/shared/components/account-selector-modal/account-selector-modal.component";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-create-transac",
@@ -61,16 +62,16 @@ export class CreateTransacPage implements OnInit {
 
   private executeListCategories() {
     this.loadingService.show();
-    this.listCategoriesUseCase.execute().subscribe({
-      next: (result) => {
+    this.listCategoriesUseCase.execute().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.categoriasIngresos = result.data.items.filter(cat => cat.tipo === "ingresos");
           this.categoriasGastos = result.data.items.filter(cat => cat.tipo === "gastos");
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -78,7 +79,7 @@ export class CreateTransacPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -87,8 +88,8 @@ export class CreateTransacPage implements OnInit {
 
   private executeListAccounts() {
     this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().subscribe({
-      next: (result) => {
+    this.listAccountsUseCase.listAccounts().service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cuentas = result.data.items;
@@ -98,9 +99,9 @@ export class CreateTransacPage implements OnInit {
             this.cuentaAmount = this.cuentas[0].amount;
           }
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -108,7 +109,7 @@ export class CreateTransacPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -117,18 +118,18 @@ export class CreateTransacPage implements OnInit {
 
   private executeCreateTransaction(body: any) {
     this.loadingService.show();
-    this.createTransactionsUseCase.execute(body).subscribe({
-      next: (result) => {
+    this.createTransactionsUseCase.execute(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success) {
           this.cambiosPendientes = false;
           this.resetForm();
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.alertService.showAlert(
               'Error',
-              result.error.description,
+              (result as any).error.description,
               'Aceptar'
             );
           } else {
@@ -142,7 +143,7 @@ export class CreateTransacPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

@@ -12,6 +12,7 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/accounts/create-account.usecase";
 import { Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
+import 'src/app/core/utils/observable-extensions';
 
 @Component({
   selector: "app-create-account",
@@ -73,16 +74,16 @@ export class CreateAccountPage {
 
   private executeCreateAccount(body: CreateAccountRequest) {
     this.loadingService.show();
-    this.createAccountUseCase.createAccount(body).subscribe({
-      next: (result) => {
+    this.createAccountUseCase.createAccount(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -90,7 +91,7 @@ export class CreateAccountPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
@@ -99,16 +100,16 @@ export class CreateAccountPage {
 
   private executeUpdateAccount(body: UpdateAccountRequest) {
     this.loadingService.show();
-    this.updateAccountUseCase.updateAccount(body).subscribe({
-      next: (result) => {
+    this.updateAccountUseCase.updateAccount(body).service({
+      success: (result) => {
         this.loadingService.hide();
         if (result.success && result.data) {
           this.cambiosPendientes = false;
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -116,7 +117,7 @@ export class CreateAccountPage {
           this.showGenericAlert = true;
         }
       },
-      error: (err) => {
+      failure: (error) => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }

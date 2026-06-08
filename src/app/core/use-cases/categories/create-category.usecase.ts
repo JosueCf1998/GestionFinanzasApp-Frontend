@@ -35,7 +35,7 @@ export class CreateCategoryUseCase {
   ) {}
 
   createCategory(body: CreateCategoryRequest): Observable<Result<CreateCategoryResponse>> {
-    const endpoint = 'create-category';
+    const endpoint = 'categories/create';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateCategoryResponse>(endpoint, encryptedBody);

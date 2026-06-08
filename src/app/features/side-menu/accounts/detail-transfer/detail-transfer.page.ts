@@ -190,17 +190,17 @@ export class DetailTransferPage implements OnInit {
     
     this.loadingService.show();
     
-    this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).subscribe({
-      next: (result) => {
+    this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).service({
+      success: (result) => {
         this.loadingService.hide();
         
         if (result.success) {
           console.log('✅ Transferencia eliminada exitosamente');
           this.navService.back();
         } else if (result.error) {
-          if (result.error.description) {
+          if ((result as any).error?.description) {
             this.showUnauthorizedAlert = true;
-            this.messageError = result.error.description;
+            this.messageError = (result as any).error.description;
           } else {
             this.showGenericAlert = true;
           }
@@ -208,7 +208,7 @@ export class DetailTransferPage implements OnInit {
           this.showGenericAlert = true;
         }
       },
-      error: (error) => {
+      failure: (error) => {
         this.loadingService.hide();
         console.error('❌ Error en la petición:', error);
         this.showGenericAlert = true;

@@ -17,7 +17,7 @@ import {
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { LogoutServiceUseCase } from '../../core/use-cases/logoutService.usecase';
+import { LogoutUserUseCase } from '../../core/use-cases/users/logout-user.usecase';
 import { NavigationService } from '../../core/services/navigation.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
 
@@ -64,7 +64,7 @@ export class SideMenuPage implements OnInit {
   usuario: User | null = null;
   
   constructor(
-    private logoutService: LogoutServiceUseCase,
+    private logoutUserUseCase: LogoutUserUseCase,
     private navigationService: NavigationService,
     private localManagementService: LocalManagementService
   ) { }
@@ -91,7 +91,7 @@ export class SideMenuPage implements OnInit {
   }
 
   logOut() {
-    this.logoutService.logout();
+    this.logoutUserUseCase.logout();
     this.navigationService.replaceToLogin();
   }
 }
