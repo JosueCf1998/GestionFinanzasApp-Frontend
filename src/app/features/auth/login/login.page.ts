@@ -33,6 +33,8 @@ import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants"
 import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 import { validate } from "src/app/core/utils/password-validation.util";
+import { DecryptionCryptoUseCase } from "src/app/core/use-cases/crypto/decryption.usecase";
+import { EncryptionCryptoUseCase } from "src/app/core/use-cases/crypto/encryption.usecase";
 
 @Component({
   selector: "app-login",
@@ -69,7 +71,9 @@ export class LoginPage implements OnInit {
     private navService: NavigationService,
     private loginUserUseCase: LoginUserUseCase,
     private listAccountsUseCase: ListAccountsUseCase,
-    private loadingService: SpinnerService
+    private loadingService: SpinnerService,
+    private encryptionService: EncryptionCryptoUseCase,
+    private decryptionService: DecryptionCryptoUseCase
   ) {}
 
   ngOnInit() {
@@ -231,7 +235,9 @@ export class LoginPage implements OnInit {
   }
 
   forgotPassword() {
-    this.navService.push('/forgot-password');
+    // this.navService.push('/forgot-password');
+    this.encryptionService.execute().subscribe();
+    this.decryptionService.execute().subscribe();
   }
 
   goToRegister() {
