@@ -9,8 +9,16 @@ export const routes: Routes = [
   },
   // PRE-LOGIN ROUTES
   {
+    path: 'splash',
+    loadComponent: () => import('./features/splash/splash.page').then(m => m.SplashPage)
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.page').then(m => m.LoginPage)
+  },
+  {
+    path: 'login-recurrent',
+    loadComponent: () => import('./features/auth/login-recurrent/login-recurrent.page').then(m => m.LoginRecurrentPage)
   },
   {
     path: 'register',

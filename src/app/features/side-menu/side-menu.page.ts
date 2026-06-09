@@ -20,13 +20,7 @@ import { CommonModule } from '@angular/common';
 import { LogoutUserUseCase } from '../../core/use-cases/users/logout-user.usecase';
 import { NavigationService } from '../../core/services/navigation.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
-
-interface User {
-  id?: string;
-  nombre: string;
-  correo: string;
-  imagen: string;
-}
+import { ProfileUserRequest } from 'src/app/core/use-cases/users/profile-user.usecase';
 
 @Component({
   selector: 'app-side-menu',
@@ -61,7 +55,7 @@ export class SideMenuPage implements OnInit {
     { title: "Categorias", url: "/main/categories", icon: "category" },
   ];
   
-  usuario: User | null = null;
+  usuario: ProfileUserRequest | null = null;
   
   constructor(
     private logoutUserUseCase: LogoutUserUseCase,
@@ -92,6 +86,6 @@ export class SideMenuPage implements OnInit {
 
   logOut() {
     this.logoutUserUseCase.logout();
-    this.navigationService.replaceToLogin();
+    this.navigationService.replace('/splash');
   }
 }

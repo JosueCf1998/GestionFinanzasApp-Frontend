@@ -13,14 +13,28 @@ import { NavigationService } from 'src/app/core/services/navigation.service';
 })
 export class SplashPage implements OnInit {
 
+  isFirstLogin: boolean = false;
+
   constructor(
-    private navigationService: NavigationService
-  ) { }
+    private navService: NavigationService
+  ) {
+    const state = window.history.state;
+    if (!state || !state.type ) {
+      this.isFirstLogin = true;
+      return;
+    }
+    this.isFirstLogin = state.type === 'first-login';
+  }
 
   ngOnInit() {
+    let time = !this.isFirstLogin ? 2500 : 1500;
     setTimeout(() => {
-      this.navigationService.replace('/login');
-    }, 2500);
+      if (this.isFirstLogin) {
+        this.navService.replace('/login');
+      } else {
+        this.navService.replace('/login-recurrent');
+      }
+    }, time);
   }
 
 }
