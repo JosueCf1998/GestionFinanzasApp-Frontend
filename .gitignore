@@ -8,6 +8,26 @@ www/
 build/
 dist/
 
+# Android / Capacitor generated files
+android/.gradle/
+android/.idea/
+android/app/build/
+android/build/
+android/capacitor-cordova-android-plugins/
+android/local.properties
+android/app/src/main/assets/
+android/app/src/main/res/xml/config.xml
+android/app/src/main/res/xml/file_paths.xml
+
+# iOS / Capacitor generated files
+ios/App/Pods/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcworkspace/xcuserdata/
+ios/capacitor-cordova-ios-plugins/
+
 # Environment files
 .env
 .env.local
@@ -41,12 +61,12 @@ coverage/
 # Angular/Ionic specific files
 .angular/
 .angular-cache/
+.angular/cache/
 *.js.map
 *.d.ts
 *.metadata.json
 
 # Generated files
-package-lock.json
 .pnp.*
 .pnpm-debug.log
 
