@@ -10,7 +10,7 @@ export const routes: Routes = [
   // PRE-LOGIN ROUTES
   {
     path: 'splash',
-    loadComponent: () => import('./features/splash/splash.page').then(m => m.SplashPage)
+    loadComponent: () => import('./features/auth/splash/splash.page').then(m => m.SplashPage)
   },
   {
     path: 'login',
@@ -120,6 +120,6 @@ export const routes: Routes = [
   },
   {
     path: 'splash',
-    loadComponent: () => import('./features/splash/splash.page').then( m => m.SplashPage)
+    loadComponent: () => import('./features/auth/splash/splash.page').then( m => m.SplashPage)
   }
 ];
