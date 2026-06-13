@@ -1,10 +1,14 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
 :root {
-  /* Nuevo color personalizado */
-  --ion-color-side-menu: linear-gradient(135deg, #3a0ca3 0%, #4361ee 100%);/* Color base */
-  --ion-color-side-menu-contrast: #ffffff; /* Color del texto */
+  --ion-color-side-menu-blue: #4361ee;
+  --ion-color-side-menu-dark: #3a0ca3;
+  --ion-color-side-menu-icon: #3F45D5;
 
+  --ion-color-side-menu:
+    linear-gradient(
+      135deg,
+      #3a0ca3 0%,
+      #4361ee 100%
+    );
 }
-
-

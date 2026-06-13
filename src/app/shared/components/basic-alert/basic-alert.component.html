@@ -1,6 +1,6 @@
 <div class="dynamic-alert-backdrop" (click)="closeOnBackdrop && cancel()" role="presentation"></div>
-<div 
-  class="dynamic-alert" 
+<div
+  class="dynamic-alert"
   [ngClass]="alertSize"
   role="alertdialog"
   aria-modal="true"
@@ -8,8 +8,8 @@
   [attr.aria-describedby]="ariaDescribedBy"
 >
   <div class="dynamic-alert-content">
-    <ion-icon 
-      class="dynamic-alert-image" 
+    <ion-icon
+      class="dynamic-alert-image"
       [src]="imageUrl"
       [attr.aria-label]="imageAlt"
       [attr.title]="imageAlt"

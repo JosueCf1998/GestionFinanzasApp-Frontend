@@ -2,102 +2,157 @@
   <div class="background-curve"></div>
 
   <div class="login-container">
-    <!-- Logo/Header -->
-    <div class="header">
-      <ion-img src="assets/image/logo-finvia-white.png" class="logo"></ion-img>
-      <h1 class="text-title">Hola Josue</h1>
-      <p class="text-body text-secondary">Ingresa tu Contraseña</p>
-    </div>
 
-    <!-- Formulario -->
-    <form class="login-form" [formGroup]="loginForm">
+    <!-- TOP -->
+    <div class="top-section">
 
-      <ion-item lines="none" class="form-item">
+      <ion-button
+        fill="outline"
+        shape="round"
+        class="switch-account-btn"
+        (click)="goToChangeUser()">
+
         <ion-icon
           slot="start"
-          src="assets/icon/password.svg"
-          color="medium"
-        ></ion-icon>
-        <ion-input
-          [type]="showPassword ? 'text' : 'password'"
-          placeholder="Contraseña"
-          formControlName="password"
-          required
-        >
-        </ion-input>
-        <ion-button
-          type="button"
-          fill="clear"
-          slot="end"
-          class="eye-toggle-btn"
-          (click)="togglePassword()"
-        >
-          <ion-icon
-            [src]="showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'"
-          ></ion-icon>
-        </ion-button>
-      </ion-item>
+          src="assets/icon/user.svg">
+        </ion-icon>
 
-      <div class="section">
-        <div class="label-links">
-          <ion-button
-            expand="block"
-            fill="clear"
-            size="small"
-            class="ion-text-center label-links text-link"
-            (click)="forgotPassword()"
-          >
-            ¿Olvidaste tu contraseña?
-          </ion-button>
+        Usar otra cuenta
+
+      </ion-button>
+
+    </div>
+
+    <!-- CENTER -->
+    <div class="main-content">
+
+      <div class="header">
+
+        <ion-img
+          src="assets/image/logo-finvia-white.png"
+          class="logo">
+        </ion-img>
+
+        <div class="user-avatar">
+          J
         </div>
 
-        <ion-button
-          expand="block"
-          shape="round"
-          class="login-btn text-button"
-          (click)="login()"
-        >
-          Iniciar sesión
-        </ion-button>
+        <h1 class="text-title text-white">
+          Hola Josue
+        </h1>
 
-        <ion-text class="ion-text-center label-links">
-          <p class="text-caption text-secondary">¿No eres tú?</p>
-        </ion-text>
+        <p class="text-body text-white">
+          Ingresa tu contraseña para continuar
+        </p>
 
-        <ion-button
-          expand="block"
-          shape="round"
-          class="login-btn text-button"
-          (click)="goToChangeUser()"
-        >
-          Cambiar usuario
-        </ion-button>
       </div>
-    </form>
+
+      <form
+        class="login-form"
+        [formGroup]="loginForm">
+
+        <ion-item
+          lines="none"
+          class="form-item">
+
+          <ion-icon
+            slot="start"
+            src="assets/icon/password.svg">
+          </ion-icon>
+
+          <ion-input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Contraseña"
+            formControlName="password"
+            required>
+          </ion-input>
+
+          <ion-button
+            type="button"
+            fill="clear"
+            slot="end"
+            class="eye-toggle-btn"
+            (click)="togglePassword()">
+
+            <ion-icon
+              [src]="showPassword
+                ? 'assets/icon/eye-outline.svg'
+                : 'assets/icon/eye-off-outline.svg'">
+            </ion-icon>
+
+          </ion-button>
+
+        </ion-item>
+
+        <ion-button
+          expand="block"
+          shape="round"
+          class="login-btn text-button"
+          (click)="login()">
+
+          Ingresar
+
+        </ion-button>
+
+        <ion-button
+          fill="clear"
+          class="forgot-link"
+          (click)="forgotPassword()">
+
+          ¿Olvidaste tu contraseña?
+
+        </ion-button>
+
+      </form>
+
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="security-info">
+
+      <ion-icon
+        src="assets/icon/shield-security.svg"
+        class="security-icon">
+      </ion-icon>
+
+      <div class="security-text">
+
+        <h4>
+          Tu información está protegida
+        </h4>
+
+        <p>
+          Aplicamos tecnologías de seguridad para proteger tu información.
+        </p>
+
+      </div>
+
+    </div>
+
   </div>
 
   <app-basic-alert
     *ngIf="showGenericAlert"
+    header="Error"
     [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
     [imageUrl]="'assets/icon/alert-triangle.svg'"
     [confirmText]="'Entendido'"
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showGenericAlert = false"
-  >
+    (onConfirm)="showGenericAlert = false">
   </app-basic-alert>
 
   <app-basic-alert
     *ngIf="showUnauthorizedAlert"
+    header="Error"
     [message]="messageError"
     [imageUrl]="'assets/icon/alert-triangle.svg'"
     [confirmText]="'Entendido'"
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showUnauthorizedAlert = false"
-  >
+    (onConfirm)="showUnauthorizedAlert = false">
   </app-basic-alert>
-  
+
 </ion-content>
