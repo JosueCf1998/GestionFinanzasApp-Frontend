@@ -1,32 +1,74 @@
+:root {
+
+  /* ==========================
+     CARD TOKENS
+     ========================== */
+
+  --fv-card-radius: 24px;
+
+  --fv-card-background:
+    var(--fv-surface);
+
+  --fv-card-shadow:
+    var(--fv-shadow-sm);
+
+  --fv-card-shadow-elevated:
+    var(--fv-shadow-md);
+
+  --fv-card-shadow-gradient:
+    var(--fv-shadow-primary);
+}
+
+/* ==========================
+   BASE CARD
+   ========================== */
+
 .fv-card {
 
-  background: var(--fv-surface);
+  background:
+    var(--fv-card-background);
 
-  border-radius: 24px;
+  border-radius:
+    var(--fv-card-radius);
 
-  box-shadow: var(--shadow-sm);
+  box-shadow:
+    var(--fv-card-shadow);
 
   overflow: hidden;
 }
+
+/* ==========================
+   ELEVATED CARD
+   ========================== */
 
 .fv-card-elevated {
 
-  background: var(--fv-surface);
+  background:
+    var(--fv-card-background);
 
-  border-radius: 24px;
+  border-radius:
+    var(--fv-card-radius);
 
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    var(--fv-card-shadow-elevated);
 
   overflow: hidden;
 }
 
+/* ==========================
+   GRADIENT CARD
+   ========================== */
+
 .fv-card-gradient {
 
-  background: var(--fv-gradient-card);
+  background:
+    var(--fv-gradient-primary);
 
-  border-radius: 24px;
+  border-radius:
+    var(--fv-card-radius);
 
-  box-shadow: var(--shadow-primary);
+  box-shadow:
+    var(--fv-card-shadow-gradient);
 
   overflow: hidden;
 }

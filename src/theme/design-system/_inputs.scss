@@ -1,17 +1,21 @@
-.fv-input {
+:root {
 
-  --background: #ffffff;
+  --fv-input-radius: 16px;
 
-  --border-radius: 16px;
+  --fv-input-padding-start: 16px;
+  --fv-input-padding-end: 16px;
 
-  --padding-start: 14px;
+  --fv-input-background: var(--fv-surface);
 
-  border: 1px solid var(--fv-border);
+  --fv-input-background-focus:
+    var(--fv-surface-soft);
 
-  border-radius: 16px;
-}
+  --fv-input-border:
+    var(--fv-border);
 
-.fv-input:focus-within {
+  --fv-input-border-focus:
+    var(--fv-primary-light);
 
-  border-color: var(--fv-primary);
+  --fv-input-shadow-focus:
+    var(--fv-shadow-sm);
 }

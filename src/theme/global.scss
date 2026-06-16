@@ -41,12 +41,16 @@
 @import "./design-system/menu";
 
 /* ==========================
-   GLOBAL APP
+   GLOBAL RESET
    ========================== */
 
 * {
   box-sizing: border-box;
 }
+
+/* ==========================
+   APP ROOT
+   ========================== */
 
 html,
 body,
@@ -55,47 +59,75 @@ ion-app {
   height: 100%;
 }
 
+/* ==========================
+   GLOBAL TYPOGRAPHY
+   ========================== */
+
+html {
+  font-family: var(--fv-font-family);
+}
+
 body {
   background: var(--fv-background);
 
   color: var(--fv-text-primary);
 
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family: var(--fv-font-family);
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* ==========================
-   IONIC OVERRIDES
+   IONIC COMPONENTS
    ========================== */
 
-ion-menu {
-  width: 250px;
-  max-width: 80%;
-}
-
-ion-split-pane {
-  height: 100%;
+ion-app,
+ion-content,
+ion-button,
+ion-input,
+ion-label,
+ion-title,
+ion-text,
+ion-item,
+ion-card,
+ion-toolbar {
+  font-family: var(--fv-font-family);
 }
 
 ion-content {
   --background: var(--fv-background);
 }
 
-/* Scroll más limpio */
+ion-split-pane {
+  height: 100%;
+}
+
+ion-menu {
+  width: 250px;
+  max-width: 80%;
+}
+
+/* ==========================
+   SCROLLBAR
+   ========================== */
 
 ::-webkit-scrollbar {
   width: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.3);
+  background: rgba(148, 163, 184, .30);
 
   border-radius: 999px;
+}
+
+/* ==========================
+   SELECTION
+   ========================== */
+
+::selection {
+  background: rgba(67, 97, 238, .18);
+
+  color: var(--fv-text-primary);
 }

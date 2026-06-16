@@ -1,63 +1,151 @@
+:root {
+
+  /* ==========================
+     FONT FAMILY
+     ========================== */
+
+  --fv-font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  /* ==========================
+     FONT SIZES
+     ========================== */
+
+  --fv-font-xs: 12px;
+  --fv-font-sm: 13px;
+  --fv-font-md: 15px;
+  --fv-font-lg: 18px;
+  --fv-font-xl: 24px;
+  --fv-font-2xl: 32px;
+  --fv-font-3xl: 44px;
+
+  /* ==========================
+     FONT WEIGHTS
+     ========================== */
+
+  --fv-fw-regular: 400;
+  --fv-fw-medium: 500;
+  --fv-fw-semibold: 600;
+  --fv-fw-bold: 700;
+}
+
+/* ==========================
+   TITLES
+   ========================== */
+
 .text-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-xl);
+  font-weight: var(--fv-fw-semibold);
   line-height: 1.3;
+
   color: var(--fv-text-primary);
 }
 
 .text-subtitle {
-  font-size: 18px;
-  font-weight: 500;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-lg);
+  font-weight: var(--fv-fw-medium);
   line-height: 1.4;
+
   color: var(--fv-text-primary);
 }
 
+/* ==========================
+   BODY
+   ========================== */
+
 .text-body {
-  font-size: 15px;
-  font-weight: 400;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-md);
+  font-weight: var(--fv-fw-regular);
   line-height: 1.5;
+
   color: var(--fv-text-primary);
 }
 
 .text-body-bold {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-md);
+  font-weight: var(--fv-fw-semibold);
   line-height: 1.5;
+
   color: var(--fv-text-primary);
 }
 
+/* ==========================
+   CAPTIONS
+   ========================== */
+
 .text-caption {
-  font-size: 13px;
-  font-weight: 400;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-sm);
+  font-weight: var(--fv-fw-regular);
   line-height: 1.4;
+
   color: var(--fv-text-secondary);
 }
 
 .text-small {
-  font-size: 12px;
-  font-weight: 400;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-xs);
+  font-weight: var(--fv-fw-regular);
   line-height: 1.3;
+
   color: var(--fv-text-muted);
 }
 
+/* ==========================
+   DISPLAY
+   ========================== */
+
 .text-display-large {
-  font-size: 44px;
-  font-weight: 700;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-3xl);
+  font-weight: var(--fv-fw-bold);
   line-height: 1.1;
+
   letter-spacing: -.5px;
+
+  color: var(--fv-text-primary);
 }
 
 .text-display {
-  font-size: 32px;
-  font-weight: 600;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-2xl);
+  font-weight: var(--fv-fw-semibold);
   line-height: 1.2;
+
+  color: var(--fv-text-primary);
 }
+
+/* ==========================
+   BUTTONS
+   ========================== */
 
 .text-button {
-  font-size: 15px;
-  font-weight: 500;
+  font-family: var(--fv-font-family);
+
+  font-size: var(--fv-font-md);
+  font-weight: var(--fv-fw-medium);
 }
 
+/* ==========================
+   HELPERS
+   ========================== */
+
 .text-white {
-  color: #ffffff;
+  color: var(--fv-surface);
 }

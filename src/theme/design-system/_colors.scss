@@ -17,11 +17,21 @@
   --fv-warning: #f59e0b;
 
   /* ==========================
+     FINANCIAL
+     ========================== */
+
+  --fv-income: #22c55e;
+  --fv-expense: #ef4444;
+
+  /* ==========================
      BACKGROUND
      ========================== */
 
   --fv-background: #f8fafc;
   --fv-surface: #ffffff;
+
+  --fv-surface-alt: #f1f5f9;
+  --fv-surface-soft: #eef2ff;
 
   /* ==========================
      TEXT
@@ -38,7 +48,7 @@
   --fv-border: #e2e8f0;
 
   /* ==========================
-     BRAND EFFECTS
+     GRADIENTS
      ========================== */
 
   --fv-gradient-primary: linear-gradient(
@@ -54,13 +64,4 @@
     rgba(58, 12, 163, .92) 50%,
     rgba(67, 97, 238, .92) 100%
   );
-
-  --fv-shadow-primary:
-    0 12px 30px rgba(58, 12, 163, .20);
-
-  --fv-shadow-card:
-    0 8px 24px rgba(15, 23, 42, .06);
-
-  --fv-shadow-fab:
-    0 10px 24px rgba(58, 12, 163, .28);
 }

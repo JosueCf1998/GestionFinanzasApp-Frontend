@@ -1,22 +1,92 @@
+:root {
+
+  /* ==========================
+     BUTTON TOKENS
+     ========================== */
+
+  --fv-button-radius: 14px;
+
+  --fv-button-font-weight: 600;
+
+  --fv-button-height: 54px;
+
+  --fv-button-primary-bg:
+    var(--fv-gradient-primary);
+
+  --fv-button-primary-shadow:
+    var(--fv-shadow-primary);
+
+  --fv-button-secondary-bg:
+    var(--fv-surface-soft);
+
+  --fv-button-secondary-color:
+    var(--fv-primary);
+}
+
+/* ==========================
+   PRIMARY BUTTON
+   ========================== */
+
 .fv-button-primary {
 
-  --background: var(--fv-primary);
+  --background:
+    var(--fv-button-primary-bg);
 
-  --border-radius: 14px;
+  --background-hover:
+    var(--fv-button-primary-bg);
 
-  font-weight: 600;
+  --background-activated:
+    var(--fv-primary);
+
+  --border-radius:
+    var(--fv-button-radius);
+
+  min-height:
+    var(--fv-button-height);
+
+  font-weight:
+    var(--fv-button-font-weight);
+
+  box-shadow:
+    var(--fv-button-primary-shadow);
+
+  transition:
+    transform .2s ease;
 }
+
+.fv-button-primary:active {
+
+  transform: scale(.98);
+}
+
+/* ==========================
+   SECONDARY BUTTON
+   ========================== */
 
 .fv-button-secondary {
 
-  --background: #eef2ff;
+  --background:
+    var(--fv-button-secondary-bg);
 
-  --color: var(--fv-primary);
+  --color:
+    var(--fv-button-secondary-color);
 
-  --border-radius: 14px;
+  --border-radius:
+    var(--fv-button-radius);
 
-  font-weight: 600;
+  min-height:
+    var(--fv-button-height);
+
+  font-weight:
+    var(--fv-button-font-weight);
+
+  transition:
+    all .2s ease;
 }
+
+/* ==========================
+   FAB
+   ========================== */
 
 .fv-fab {
 
@@ -25,7 +95,21 @@
 
   border-radius: 50%;
 
-  background: var(--fv-gradient-primary);
+  background:
+    var(--fv-gradient-primary);
 
-  box-shadow: var(--shadow-primary);
+  box-shadow:
+    var(--fv-shadow-fab);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    transform .2s ease;
+}
+
+.fv-fab:active {
+
+  transform: scale(.96);
 }

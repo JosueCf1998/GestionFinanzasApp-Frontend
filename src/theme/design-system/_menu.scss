@@ -1,14 +1,48 @@
+:root {
+
+  /* ==========================
+     MENU TOKENS
+     ========================== */
+
+  --fv-menu-header-radius: 20px;
+
+  --fv-menu-item-radius: 16px;
+
+  --fv-menu-item-active-bg:
+    rgba(67, 97, 238, .08);
+
+  --fv-menu-item-active-border:
+    var(--fv-primary);
+}
+
+/* ==========================
+   MENU HEADER
+   ========================== */
+
 .fv-menu-header {
 
-  background: var(--fv-gradient-primary);
+  background:
+    var(--fv-gradient-primary);
 
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  border-bottom-left-radius:
+    var(--fv-menu-header-radius);
+
+  border-bottom-right-radius:
+    var(--fv-menu-header-radius);
 }
+
+/* ==========================
+   ACTIVE MENU ITEM
+   ========================== */
 
 .fv-menu-item-active {
 
-  background: rgba(67,97,238,.08);
+  background:
+    var(--fv-menu-item-active-bg);
 
-  border-left: 3px solid var(--fv-primary);
+  border-left:
+    3px solid var(--fv-menu-item-active-border);
+
+  border-radius:
+    var(--fv-menu-item-radius);
 }
