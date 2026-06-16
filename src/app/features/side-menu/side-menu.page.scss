@@ -1,10 +1,14 @@
+/* ==========================
+   MENU
+   ========================== */
+
 ion-menu {
   --width: 290px;
   --max-width: 290px;
 }
 
 ion-menu ion-content {
-  --background: #ffffff;
+  --background: var(--fv-surface);
 }
 
 /* ==========================
@@ -14,23 +18,19 @@ ion-menu ion-content {
 .menu-header {
   position: relative;
 
-  background: linear-gradient(
-    135deg,
-    #3a0ca3 0%,
-    #4361ee 100%
-  );
-
-  padding:
-    max(22px, env(safe-area-inset-top))
-    20px
-    24px;
-
   display: flex;
   align-items: center;
 
   gap: 14px;
 
   overflow: hidden;
+
+  padding:
+    max(22px, env(safe-area-inset-top))
+    20px
+    24px;
+
+  background: var(--fv-gradient-primary);
 }
 
 .menu-header::before {
@@ -46,7 +46,7 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255,255,255,.06);
+  background: rgba(255, 255, 255, .06);
 }
 
 .menu-header::after {
@@ -62,8 +62,12 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
 }
+
+/* ==========================
+   AVATAR
+   ========================== */
 
 .avatar-container {
   position: relative;
@@ -72,25 +76,29 @@ ion-menu ion-content {
   width: 56px;
   height: 56px;
 
-  border-radius: 50%;
-
-  background: rgba(255,255,255,.12);
-
-  border: 1px solid rgba(255,255,255,.18);
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, .12);
+
+  border: 1px solid rgba(255, 255, 255, .18);
 }
 
-.user-avatar {
-  width: 24px;
-  height: 24px;
+.avatar {
+  color: white;
 
-  object-fit: contain;
+  font-size: 24px;
+  font-weight: 700;
 }
+
+/* ==========================
+   USER INFO
+   ========================== */
 
 .user-info {
   position: relative;
@@ -104,7 +112,7 @@ ion-menu ion-content {
 .user-name {
   margin: 0;
 
-  color: #ffffff;
+  color: white;
 
   font-size: 17px;
   font-weight: 700;
@@ -115,7 +123,7 @@ ion-menu ion-content {
 .user-email {
   margin-top: 3px;
 
-  color: rgba(255,255,255,.78);
+  color: rgba(255, 255, 255, .78);
 
   font-size: 12px;
 
@@ -125,7 +133,7 @@ ion-menu ion-content {
 }
 
 /* ==========================
-   MENU
+   MENU LIST
    ========================== */
 
 #inbox-list {
@@ -147,37 +155,38 @@ ion-menu ion-item {
   transition:
     background .2s ease,
     transform .2s ease;
+}
 
-  ion-icon {
-    width: 22px;
-    height: 22px;
+ion-menu ion-item ion-icon {
+  width: 22px;
+  height: 22px;
 
-    color: #64748b;
-  }
+  color: var(--fv-text-secondary);
+}
 
-  ion-label {
-    font-size: 16px;
-    font-weight: 500;
+ion-menu ion-item ion-label {
+  color: var(--fv-text-primary);
 
-    color: #334155;
-  }
+  font-size: 16px;
+  font-weight: 500;
 }
 
 ion-menu ion-item:hover {
-  --background: rgba(67,97,238,.05);
+  --background: rgba(95, 124, 255, .05);
 }
 
 ion-menu ion-item.selected {
-  --background: rgba(67,97,238,.08);
+  --background: rgba(95, 124, 255, .08);
+}
 
-  ion-icon {
-    color: #4361ee;
-  }
+ion-menu ion-item.selected ion-icon {
+  color: var(--fv-primary-light);
+}
 
-  ion-label {
-    color: #4361ee;
-    font-weight: 700;
-  }
+ion-menu ion-item.selected ion-label {
+  color: var(--fv-primary-light);
+
+  font-weight: 700;
 }
 
 /* ==========================
@@ -185,30 +194,29 @@ ion-menu ion-item.selected {
    ========================== */
 
 .menu-footer {
-  padding: 16px;
-
   margin-top: auto;
 
-  border-top: 1px solid #f1f5f9;
+  padding: 16px;
+
+  border-top: 1px solid var(--fv-border);
 }
 
 .logout-item {
-  --background: rgba(239,68,68,.05);
+  --background: rgba(239, 68, 68, .05);
 
   min-height: 54px;
 
-  border: none;
-
   border-radius: 18px;
+}
 
-  ion-icon {
-    color: #ef4444;
-  }
+.logout-item ion-icon {
+  color: var(--fv-danger);
+}
 
-  ion-label {
-    color: #ef4444;
-    font-weight: 600;
-  }
+.logout-item ion-label {
+  color: var(--fv-danger);
+
+  font-weight: 600;
 }
 
 /* ==========================
@@ -220,19 +228,15 @@ ion-menu ion-item.selected {
 
   position: relative;
 
-  background: linear-gradient(
-    135deg,
-    #3a0ca3 0%,
-    #4361ee 100%
-  );
-
   overflow: hidden;
 
   min-height: 56px;
 
-  ion-menu-button {
-    --color: #ffffff;
-  }
+  background: var(--fv-gradient-primary);
+}
+
+.side-menu ion-menu-button {
+  --color: white;
 }
 
 .side-menu::before {
@@ -248,7 +252,7 @@ ion-menu ion-item.selected {
 
   border-radius: 50%;
 
-  background: rgba(255,255,255,.05);
+  background: rgba(255, 255, 255, .05);
 }
 
 .side-menu::after {
@@ -256,15 +260,15 @@ ion-menu ion-item.selected {
 
   position: absolute;
 
-  bottom: -50px;
   left: 60px;
+  bottom: -50px;
 
   width: 100px;
   height: 100px;
 
   border-radius: 50%;
 
-  background: rgba(255,255,255,.04);
+  background: rgba(255, 255, 255, .04);
 }
 
 /* ==========================
@@ -298,6 +302,7 @@ ion-split-pane {
    ========================== */
 
 @media (max-width: 768px) {
+
   ion-menu {
     --width: 280px;
     --max-width: 280px;
@@ -313,18 +318,14 @@ ion-split-pane {
   .avatar-container {
     width: 52px;
     height: 52px;
-    color: #ffffff;
+  }
+
+  .avatar {
+    font-size: 22px;
   }
 
   .user-name {
     font-size: 16px;
-  }
-
-  .avatar {
-
-    font-size: 26px;
-
-    color: #ffffff;
   }
 
   ion-menu ion-item {

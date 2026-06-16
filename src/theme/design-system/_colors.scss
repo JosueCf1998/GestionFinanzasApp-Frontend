@@ -1,43 +1,66 @@
 :root {
 
-  /* Brand */
+  /* ==========================
+     BRAND
+     ========================== */
 
-  --fv-primary: #4361ee;
-  --fv-primary-dark: #3a0ca3;
-  --fv-primary-light: #5875ff;
+  --fv-primary-dark: #2b0a6b;
+  --fv-primary: #3a0ca3;
+  --fv-primary-light: #4361ee;
 
-  /* States */
+  /* ==========================
+     STATES
+     ========================== */
 
   --fv-success: #22c55e;
   --fv-danger: #ef4444;
   --fv-warning: #f59e0b;
 
-  /* Background */
+  /* ==========================
+     BACKGROUND
+     ========================== */
 
   --fv-background: #f8fafc;
   --fv-surface: #ffffff;
 
-  /* Text */
+  /* ==========================
+     TEXT
+     ========================== */
 
-  --fv-text-primary: #1e293b;
+  --fv-text-primary: #0f172a;
   --fv-text-secondary: #64748b;
   --fv-text-muted: #94a3b8;
 
-  /* Border */
+  /* ==========================
+     BORDER
+     ========================== */
 
   --fv-border: #e2e8f0;
 
-  /* Gradients */
+  /* ==========================
+     BRAND EFFECTS
+     ========================== */
 
   --fv-gradient-primary: linear-gradient(
-    135deg,
-    #3a0ca3 0%,
+    145deg,
+    #2b0a6b 0%,
+    #3a0ca3 50%,
     #4361ee 100%
   );
 
-  --fv-gradient-card: linear-gradient(
-    135deg,
-    #3a0ca3 0%,
-    #5875ff 100%
+  --fv-gradient-soft: linear-gradient(
+    145deg,
+    rgba(43, 10, 107, .92) 0%,
+    rgba(58, 12, 163, .92) 50%,
+    rgba(67, 97, 238, .92) 100%
   );
+
+  --fv-shadow-primary:
+    0 12px 30px rgba(58, 12, 163, .20);
+
+  --fv-shadow-card:
+    0 8px 24px rgba(15, 23, 42, .06);
+
+  --fv-shadow-fab:
+    0 10px 24px rgba(58, 12, 163, .28);
 }

@@ -17,8 +17,7 @@ import {
   IonButton,
   IonItem,
   IonText,
-  IonInput,
-} from "@ionic/angular/standalone";
+  IonInput, IonLabel } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import { EncryptionService } from "../../../core/services/encryption.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
@@ -39,7 +38,7 @@ import { ProfileUserRequest } from "src/app/core/use-cases/users/profile-user.us
   templateUrl: "./login-recurrent.page.html",
   styleUrls: ["./login-recurrent.page.scss"],
   standalone: true,
-  imports: [
+  imports: [IonLabel,
     IonInput,
     IonText,
     IonItem,
@@ -76,7 +75,7 @@ export class LoginRecurrentPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.fetchUserData() 
+    this.fetchUserData()
   }
 
   // MARK: - SERVICIOS
@@ -151,7 +150,7 @@ export class LoginRecurrentPage implements OnInit {
     if (!this.validationLogin(email, password)) {
       return;
     }
-    
+
     const body: LoginUserRequest = {
       email,
       password,

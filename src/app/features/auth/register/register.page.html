@@ -1,39 +1,57 @@
-<ion-content [fullscreen]="true" class="auth-content" scroll-y="false">
+<ion-content
+  [fullscreen]="true"
+  class="auth-content"
+  scroll-y="false">
+
   <div class="background-curve"></div>
+
+  <!-- BACK BUTTON -->
+
+  <div
+    class="back-icon"
+    (click)="goBack()">
+
+    <ion-icon
+      class="icon"
+      src="assets/icon/left.svg">
+    </ion-icon>
+
+  </div>
+
+  <!-- CONTAINER -->
 
   <div class="register-container">
 
+    <!-- HEADER -->
+
     <div class="header-section">
 
-      <div
-        class="back-icon"
-        (click)="goBack()">
-        <ion-icon
-          class="icon"
-          src="assets/icon/left.svg">
-        </ion-icon>
-      </div>
-
       <div class="icon-wrapper">
+
         <ion-icon
           src="assets/icon/user-plus.svg"
           class="main-icon">
         </ion-icon>
+
       </div>
 
-      <h1 class="text-title text-white">
+      <h1 class="text-title register-title">
         Crea tu Cuenta
       </h1>
 
-      <p class="text-body text-white">
+      <p class="text-body register-subtitle">
         Completa los siguientes datos
       </p>
 
     </div>
 
+    <!-- FORM -->
+
     <form
       class="register-form"
       [formGroup]="registerForm">
+
+      <!-- NOMBRE -->
 
       <ion-item
         lines="none"
@@ -53,6 +71,8 @@
 
       </ion-item>
 
+      <!-- APELLIDO -->
+
       <ion-item
         lines="none"
         class="form-item">
@@ -71,6 +91,8 @@
 
       </ion-item>
 
+      <!-- EMAIL -->
+
       <ion-item
         lines="none"
         class="form-item">
@@ -88,6 +110,8 @@
         </ion-input>
 
       </ion-item>
+
+      <!-- PASSWORD -->
 
       <ion-item
         lines="none"
@@ -112,12 +136,16 @@
           (click)="togglePassword()">
 
           <ion-icon
-            [src]="showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'">
+            [src]="showPassword
+              ? 'assets/icon/eye-outline.svg'
+              : 'assets/icon/eye-off-outline.svg'">
           </ion-icon>
 
         </ion-button>
 
       </ion-item>
+
+      <!-- REPEAT PASSWORD -->
 
       <ion-item
         lines="none"
@@ -142,12 +170,16 @@
           (click)="toggleRepeatPassword()">
 
           <ion-icon
-            [src]="showRepeatPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'">
+            [src]="showRepeatPassword
+              ? 'assets/icon/eye-outline.svg'
+              : 'assets/icon/eye-off-outline.svg'">
           </ion-icon>
 
         </ion-button>
 
       </ion-item>
+
+      <!-- SUBMIT -->
 
       <ion-button
         expand="block"
@@ -163,6 +195,8 @@
 
   </div>
 
+  <!-- SUCCESS ALERT -->
+
   <app-basic-alert
     *ngIf="showSuccessAlert"
     header="Éxito"
@@ -175,6 +209,8 @@
     (onConfirm)="handleSuccessConfirm()">
   </app-basic-alert>
 
+  <!-- GENERIC ERROR -->
+
   <app-basic-alert
     *ngIf="showGenericAlert"
     header="Error"
@@ -186,6 +222,8 @@
     [showCancel]="false"
     (onConfirm)="closeAlerts()">
   </app-basic-alert>
+
+  <!-- UNAUTHORIZED ERROR -->
 
   <app-basic-alert
     *ngIf="showUnauthorizedAlert"

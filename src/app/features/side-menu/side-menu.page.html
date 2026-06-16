@@ -2,6 +2,8 @@
   contentId="main-content"
   when="md">
 
+  <!-- MENU -->
+
   <ion-menu
     contentId="main-content"
     type="overlay"
@@ -9,14 +11,14 @@
 
     <ion-content>
 
-      <!-- USER CARD -->
+      <!-- USER HEADER -->
 
       <div class="menu-header">
 
         <div class="avatar-container">
 
           <div class="avatar">
-            {{ usuario?.nombre ? usuario?.nombre!.charAt(0).toUpperCase() : 'U' }}
+            {{ user?.nombre ? user?.nombre!.charAt(0).toUpperCase() : 'U' }}
           </div>
 
         </div>
@@ -24,18 +26,18 @@
         <div class="user-info">
 
           <ion-label class="user-name">
-            {{ usuario?.nombre || 'Usuario' }}
+            {{ user?.nombre || 'Usuario' }}
           </ion-label>
 
           <ion-label class="user-email">
-            {{ usuario?.correo || 'correo@ejemplo.com' }}
+            {{ user?.correo || 'usuario@ejemplo.com' }}
           </ion-label>
 
         </div>
 
       </div>
 
-      <!-- MENU -->
+      <!-- MENU ITEMS -->
 
       <ion-list id="inbox-list">
 
@@ -95,7 +97,7 @@
 
   </ion-menu>
 
-  <!-- CONTENT -->
+  <!-- PAGE CONTENT -->
 
   <div
     class="ion-page"

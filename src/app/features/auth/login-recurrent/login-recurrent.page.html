@@ -1,9 +1,18 @@
-<ion-content [fullscreen]="true" class="auth-content" scroll-y="false">
+<ion-content
+  [fullscreen]="true"
+  class="auth-content"
+  scroll-y="false">
+
+  <!-- BACKGROUND -->
+
   <div class="background-curve"></div>
+
+  <!-- CONTAINER -->
 
   <div class="login-container">
 
-    <!-- TOP -->
+    <!-- TOP ACTIONS -->
+
     <div class="top-section">
 
       <ion-button
@@ -23,8 +32,11 @@
 
     </div>
 
-    <!-- CENTER -->
+    <!-- MAIN CONTENT -->
+
     <div class="main-content">
+
+      <!-- HEADER -->
 
       <div class="header">
 
@@ -34,22 +46,26 @@
         </ion-img>
 
         <div class="user-avatar">
-          J
+          {{ user?.nombre ? user?.nombre!.charAt(0).toUpperCase() : 'U' }}
         </div>
 
-        <h1 class="text-title text-white">
-          Hola Josue
+        <h1 class="text-title login-title">
+          Hola {{ user?.nombre || 'Usuario' }}
         </h1>
 
-        <p class="text-body text-white">
+        <p class="text-body login-subtitle">
           Ingresa tu contraseña para continuar
         </p>
 
       </div>
 
+      <!-- FORM -->
+
       <form
         class="login-form"
         [formGroup]="loginForm">
+
+        <!-- PASSWORD -->
 
         <ion-item
           lines="none"
@@ -84,6 +100,8 @@
 
         </ion-item>
 
+        <!-- ACTIONS -->
+
         <ion-button
           expand="block"
           shape="round"
@@ -107,7 +125,8 @@
 
     </div>
 
-    <!-- BOTTOM -->
+    <!-- SECURITY INFO -->
+
     <div class="security-info">
 
       <ion-icon
@@ -130,6 +149,8 @@
     </div>
 
   </div>
+
+  <!-- ALERTS -->
 
   <app-basic-alert
     *ngIf="showGenericAlert"

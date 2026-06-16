@@ -1,20 +1,64 @@
 .auth-content {
-  --background: #ffffff;
+  --background: var(--fv-background);
+
+  position: relative;
+  overflow: hidden;
+
+  /* ==========================
+     BACKGROUND
+     ========================== */
 
   .background-curve {
     position: absolute;
+
     top: 0;
     left: 0;
 
     width: 100%;
     height: 60%;
 
-    background: var(--ion-color-side-menu);
+    background: var(--fv-gradient-primary);
 
-    clip-path: ellipse(100% 60% at 50% 40%);
+    clip-path: ellipse(
+      100% 60%
+      at 50% 40%
+    );
 
     z-index: 0;
   }
+
+  /* ==========================
+     BACK BUTTON
+     ========================== */
+
+  .back-icon {
+    position: absolute;
+
+    top: max(20px, env(safe-area-inset-top));
+    left: 8px;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 10;
+
+    cursor: pointer;
+
+    .icon {
+      width: 26px;
+      height: 26px;
+
+      color: white;
+    }
+  }
+
+  /* ==========================
+     CONTAINER
+     ========================== */
 
   .register-container {
     position: relative;
@@ -34,165 +78,177 @@
     padding-bottom: 64px;
 
     gap: 24px;
+  }
 
-    .header-section {
-      text-align: center;
+  /* ==========================
+     HEADER
+     ========================== */
 
-      .back-icon {
-        width: 48px;
-        height: 48px;
+  .header-section {
+    text-align: center;
+  }
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+  .icon-wrapper {
+    width: 88px;
+    height: 88px;
 
-        position: absolute;
+    background: white;
 
-        top: max(20px, env(safe-area-inset-top));
-        left: 8px;
+    border-radius: 50%;
 
-        z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        cursor: pointer;
+    margin: 0 auto 20px;
 
-        .icon {
-          width: 26px;
-          height: 26px;
+    box-shadow:
+      0 10px 24px rgba(58, 12, 163, .18);
+  }
 
-          color: white;
-        }
-      }
+  .main-icon {
+    font-size: 42px;
 
-      .icon-wrapper {
-        width: 88px;
-        height: 88px;
+    color: var(--fv-primary-light);
+  }
 
-        background: white;
+  .register-title {
+    margin-bottom: 8px;
 
-        border-radius: 50%;
+    color: white !important;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    text-shadow:
+      0 3px 8px rgba(0, 0, 0, .15);
+  }
 
-        margin: 0 auto 20px;
+  .register-subtitle {
+    margin: 0;
 
-        box-shadow:
-          0 10px 24px rgba(58, 12, 163, 0.18);
+    color: rgba(255, 255, 255, .9) !important;
 
-        .main-icon {
-          font-size: 42px;
+    text-shadow:
+      0 2px 6px rgba(0, 0, 0, .1);
+  }
 
-          color: var(--ion-color-side-menu);
-        }
-      }
+  /* ==========================
+     FORM CARD
+     ========================== */
 
-      h1 {
-        margin-bottom: 8px;
+  .register-form {
+    background: white;
 
-        text-shadow:
-          0 3px 8px rgba(0, 0, 0, 0.15);
-      }
+    border-radius: 28px;
 
-      p {
-        margin: 0;
+    padding: 24px;
 
-        color: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 16px 40px rgba(15, 23, 42, .08);
 
-        text-shadow:
-          0 2px 6px rgba(0, 0, 0, 0.1);
-      }
-    }
+    display: flex;
+    flex-direction: column;
 
-    .register-form {
-      background: white;
+    gap: 18px;
+  }
 
-      border-radius: 24px;
+  /* ==========================
+     INPUTS
+     ========================== */
 
-      padding: 28px 24px;
+  .form-item {
+    --background: #f8fafc;
 
-      box-shadow:
-        0 15px 50px rgba(0, 0, 0, 0.15);
+    --padding-start: 16px;
+    --inner-padding-end: 16px;
 
-      display: flex;
-      flex-direction: column;
+    border-radius: 16px;
 
-      gap: 16px;
+    border: 1px solid transparent;
 
-      .form-item {
-        --background: #f8f9fa;
-        --border-radius: 16px;
+    transition: all .25s ease;
+  }
 
-        --padding-start: 16px;
-        --inner-padding-end: 16px;
+  .form-item:focus-within {
+    --background: #eef2ff;
 
-        transition: all 0.25s ease;
+    border-color: var(--fv-primary-light);
 
-        &:focus-within {
-          --background: #eef2ff;
+    box-shadow:
+      0 4px 12px rgba(67, 97, 238, .12);
+  }
 
-          transform: translateY(-1px);
+  .form-item ion-icon {
+    font-size: 20px;
 
-          box-shadow:
-            0 4px 12px rgba(67, 97, 238, 0.12);
-        }
+    color: var(--fv-text-primary);
+  }
 
-        ion-icon {
-          font-size: 20px;
-        }
+  .form-item ion-input {
+    color: var(--fv-text-primary);
 
-        ion-input {
-          color: #212529;
+    font-size: 15px;
+  }
 
-          font-size: 15px;
-        }
-      }
-    }
+  .eye-toggle-btn {
+    --padding-start: 0;
+    --padding-end: 0;
 
-    .register-btn {
-      --background: linear-gradient(
-        135deg,
-        #4361ee 0%,
-        #3a0ca3 100%
-      );
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+  }
 
-      --background-activated: #3a0ca3;
+  .eye-toggle-btn ion-icon {
+    color: var(--fv-text-primary);
+  }
 
-      --box-shadow:
-        0 6px 20px rgba(67, 97, 238, 0.35);
+  /* ==========================
+     BUTTON
+     ========================== */
 
-      min-height: 54px;
+  .register-btn {
+    --background: var(--fv-gradient-primary);
 
-      font-weight: 600;
+    --background-hover: var(--fv-gradient-primary);
 
-      transition: transform .2s ease;
+    --background-activated: var(--fv-primary);
 
-      &:active {
-        transform: scale(.98);
-      }
-    }
+    --border-radius: 16px;
+
+    height: 54px;
+
+    margin-top: 8px;
+
+    box-shadow:
+      0 6px 20px rgba(67, 97, 238, .35);
+
+    transition: transform .2s ease;
+  }
+
+  .register-btn:active {
+    transform: scale(.98);
   }
 }
 
-/* iPhone pequeños */
+/* ==========================
+   SMALL DEVICES
+   ========================== */
 
 @media (max-height: 700px) {
+
   .auth-content {
+
     .register-container {
       justify-content: flex-start;
 
       padding-top: 72px;
+    }
 
-      .header-section {
-        .icon-wrapper {
-          width: 76px;
-          height: 76px;
+    .icon-wrapper {
+      width: 76px;
+      height: 76px;
+    }
 
-          .main-icon {
-            font-size: 36px;
-          }
-        }
-      }
+    .main-icon {
+      font-size: 36px;
     }
   }
 }

@@ -1,94 +1,158 @@
-<ion-content [fullscreen]="true" class="auth-content" scroll-y="false">
+<ion-content
+  [fullscreen]="true"
+  class="auth-content"
+  scroll-y="false">
+
+  <!-- BACKGROUND -->
+
   <div class="background-curve"></div>
 
+  <!-- CONTAINER -->
+
   <div class="login-container">
-    <!-- Logo/Header -->
+
+    <!-- HEADER -->
+
     <div class="header">
-      <ion-img src="assets/image/logo-finvia-white.png" class="logo"></ion-img>
-      <h1 class="text-title">Bienvenido</h1>
-      <p class="text-body text-secondary">Inicia sesión para continuar</p>
+
+      <ion-img
+        src="assets/image/logo-finvia-white.png"
+        class="logo">
+      </ion-img>
+
+      <h1 class="text-title login-title">
+        Bienvenido
+      </h1>
+
+      <p class="text-body login-subtitle">
+        Inicia sesión para continuar
+      </p>
+
     </div>
 
-    <!-- Formulario -->
-    <form class="login-form" [formGroup]="loginForm">
-      <ion-item lines="none" class="form-item">
+    <!-- FORM -->
+
+    <form
+      class="login-form"
+      [formGroup]="loginForm">
+
+      <!-- EMAIL -->
+
+      <ion-item
+        lines="none"
+        class="form-item">
+
         <ion-icon
           slot="start"
-          src="assets/icon/mail.svg"
-          color="medium"
-        ></ion-icon>
+          src="assets/icon/mail.svg">
+        </ion-icon>
+
         <ion-input
           type="email"
           placeholder="Correo electrónico"
           formControlName="email"
-          required
-        >
+          required>
         </ion-input>
+
       </ion-item>
 
-      <ion-item lines="none" class="form-item">
+      <!-- PASSWORD -->
+
+      <ion-item
+        lines="none"
+        class="form-item">
+
         <ion-icon
           slot="start"
-          src="assets/icon/password.svg"
-          color="medium"
-        ></ion-icon>
+          src="assets/icon/password.svg">
+        </ion-icon>
+
         <ion-input
           [type]="showPassword ? 'text' : 'password'"
           placeholder="Contraseña"
           formControlName="password"
-          required
-        >
+          required>
         </ion-input>
+
         <ion-button
           type="button"
           fill="clear"
           slot="end"
           class="eye-toggle-btn"
-          (click)="togglePassword()"
-        >
+          (click)="togglePassword()">
+
           <ion-icon
-            [src]="showPassword ? 'assets/icon/eye-outline.svg' : 'assets/icon/eye-off-outline.svg'"
-          ></ion-icon>
+            [src]="showPassword
+              ? 'assets/icon/eye-outline.svg'
+              : 'assets/icon/eye-off-outline.svg'">
+          </ion-icon>
+
         </ion-button>
+
       </ion-item>
 
+      <!-- ACTIONS -->
+
       <div class="section">
+
+        <!-- FORGOT PASSWORD -->
+
         <div class="label-links">
+
           <ion-button
             expand="block"
             fill="clear"
             size="small"
-            class="ion-text-center label-links text-link"
-            (click)="forgotPassword()"
-          >
+            class="forgot-link"
+            (click)="forgotPassword()">
+
             ¿Olvidaste tu contraseña?
+
           </ion-button>
+
         </div>
 
+        <!-- LOGIN -->
+
         <ion-button
           expand="block"
           shape="round"
           class="login-btn text-button"
-          (click)="login()"
-        >
+          (click)="login()">
+
           Iniciar sesión
+
         </ion-button>
+
+        <!-- DIVIDER -->
 
         <ion-text class="ion-text-center label-links">
-          <p class="text-caption text-secondary">ó</p>
+
+          <p class="text-caption">
+            ó
+          </p>
+
         </ion-text>
+
+        <!-- REGISTER -->
 
         <ion-button
           expand="block"
           shape="round"
           class="login-btn text-button"
-          (click)="goToRegister()"
-        >
+          (click)="goToRegister()">
+
           Crear una cuenta
+
         </ion-button>
+
       </div>
+
     </form>
+
   </div>
+
+  <!-- ALERTS -->
 
   <app-basic-alert
     *ngIf="showGenericAlert"
@@ -98,8 +162,7 @@
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showGenericAlert = false"
-  >
+    (onConfirm)="showGenericAlert = false">
   </app-basic-alert>
 
   <app-basic-alert
@@ -110,8 +173,7 @@
     [alertSize]="'medium'"
     [reverseButtons]="true"
     [showCancel]="false"
-    (onConfirm)="showUnauthorizedAlert = false"
-  >
+    (onConfirm)="showUnauthorizedAlert = false">
   </app-basic-alert>
-  
+
 </ion-content>
