@@ -33,9 +33,10 @@ export class HomePage {
   messageError = '';
 
   isModalOpen = false;
-  hideSecretValues = false
 
-  amount = 200;
+  hideSecretValues = false;
+
+  amount = 4580;
   newAmount = this.amount;
 
   errorMessage: string | null = null;
@@ -44,13 +45,19 @@ export class HomePage {
 
   notificationCount = 3;
 
-  userName = 'Usuario';
+  userName = 'Josue';
 
-  categoriesWithAmounts: Array<Categoria & { totalAmount: number }> = [];
+  categoriesWithAmounts: Array<Categoria & {
+    totalAmount: number;
+  }> = [];
 
-  gastosGrouped: Array<Categoria & { totalAmount: number }> = [];
+  gastosGrouped: Array<Categoria & {
+    totalAmount: number;
+  }> = [];
 
-  ingresosGrouped: Array<Categoria & { totalAmount: number }> = [];
+  ingresosGrouped: Array<Categoria & {
+    totalAmount: number;
+  }> = [];
 
   dataTabs = [
     {
@@ -63,6 +70,83 @@ export class HomePage {
     }
   ];
 
+  private readonly mockCategories: Array<Categoria & {
+    totalAmount: number;
+  }> = [
+      {
+        id: 1,
+        nombre: 'Compras',
+        icono: 'shopping-cart',
+        color: '#8B5CF6',
+        tipo: 'gastos',
+        usuario_id: 1,
+        totalAmount: 1250
+      },
+      {
+        id: 2,
+        nombre: 'Alimentación',
+        icono: 'food',
+        color: '#22C55E',
+        tipo: 'gastos',
+        usuario_id: 1,
+        totalAmount: 940
+      },
+      {
+        id: 3,
+        nombre: 'Transporte',
+        icono: 'car',
+        color: '#3B82F6',
+        tipo: 'gastos',
+        usuario_id: 1,
+        totalAmount: 705
+      },
+      {
+        id: 4,
+        nombre: 'Hogar',
+        icono: 'home',
+        color: '#F59E0B',
+        tipo: 'gastos',
+        usuario_id: 1,
+        totalAmount: 470
+      },
+      {
+        id: 5,
+        nombre: 'Salud',
+        icono: 'heart',
+        color: '#EC4899',
+        tipo: 'gastos',
+        usuario_id: 1,
+        totalAmount: 310
+      },
+      {
+        id: 6,
+        nombre: 'Salario',
+        icono: 'wallet',
+        color: '#22C55E',
+        tipo: 'ingresos',
+        usuario_id: 1,
+        totalAmount: 4200
+      },
+      {
+        id: 7,
+        nombre: 'Freelance',
+        icono: 'briefcase',
+        color: '#3B82F6',
+        tipo: 'ingresos',
+        usuario_id: 1,
+        totalAmount: 1200
+      },
+      {
+        id: 8,
+        nombre: 'Inversiones',
+        icono: 'trending-up',
+        color: '#8B5CF6',
+        tipo: 'ingresos',
+        usuario_id: 1,
+        totalAmount: 850
+      }
+    ];
+
   constructor(
     private listAccountsUseCase: ListAccountsUseCase,
     private listTransferUseCase: ListTransferUseCase,
@@ -71,11 +155,12 @@ export class HomePage {
     private loadingService: SpinnerService,
     private menuCtrl: MenuController
   ) {
-    // Temporalmente desactivados
 
+    this.loadMockData();
     // this.executeAccountList();
     // this.executeTransferList();
     // this.executeTransactionsList();
+
   }
 
   /* ==========================
@@ -95,10 +180,6 @@ export class HomePage {
           this.loadingService.hide();
 
           if (data) {
-
-            // TODO:
-            // guardar cuentas
-            // calcular balance
 
           } else {
 
@@ -172,11 +253,6 @@ export class HomePage {
 
           if (data) {
 
-            console.log(
-              'Transactions List:',
-              data.items
-            );
-
             this.groupTransactionsByCategory(
               data.items
             );
@@ -201,8 +277,22 @@ export class HomePage {
   }
 
   /* ==========================
-     AGRUPAR TRANSACCIONES
+     MÉTODOS
      ========================== */
+
+  private loadMockData(): void {
+
+    this.gastosGrouped = this.mockCategories.filter(
+      category => category.tipo === 'gastos'
+    );
+
+    this.ingresosGrouped = this.mockCategories.filter(
+      category => category.tipo === 'ingresos'
+    );
+
+    this.updateCategoriesDisplay();
+
+  }
 
   private groupTransactionsByCategory(
     transactions: any[]
@@ -271,16 +361,6 @@ export class HomePage {
       category => category.tipo === 'ingresos'
     );
 
-    console.log(
-      'Gastos agrupados:',
-      this.gastosGrouped
-    );
-
-    console.log(
-      'Ingresos agrupados:',
-      this.ingresosGrouped
-    );
-
     this.updateCategoriesDisplay();
 
   }
@@ -331,7 +411,10 @@ export class HomePage {
   }
 
   validationSecretValues(): void {
-    this.hideSecretValues = !this.hideSecretValues;
+
+    this.hideSecretValues =
+      !this.hideSecretValues;
+
   }
 
   onSegmentChanged(

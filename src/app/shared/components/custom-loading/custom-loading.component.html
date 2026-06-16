@@ -1,3 +1,14 @@
-<div class="spinner-overlay" *ngIf="spinnerService.loading$ | async">
-  <div class="spinner"></div>
+<div
+  class="spinner-overlay"
+  *ngIf="spinnerService.loading$ | async">
+
+  <div class="loader-container">
+
+    <img
+      class="loader-logo"
+      src="assets/image/logo.png"
+      alt="FinVia">
+
+  </div>
+
 </div>

@@ -1,147 +1,322 @@
 <ion-content class="home-page">
-  <!-- HERO -->
 
-  <div class="hero-section">
-    <div class="hero-text">
-      <h1 class="text-title hero-title">Hola, Usuario 👋</h1>
+  <div class="page-container">
 
-      <p class="text-caption hero-subtitle">Bienvenido de nuevo a FinVia</p>
-    </div>
+    <!-- HERO -->
 
-    <div class="hero-decoration">
-      <img src="assets/image/img-wallet.jpg" alt="Wallet" />
-    </div>
-  </div>
+    <div class="hero-section">
 
-  <!-- BALANCE -->
+      <div class="hero-text">
 
-  <div class="balance-card">
-    <div class="balance-header">
-      <span class="text-caption text-white"> Balance Total </span>
-    </div>
+        <h1 class="text-title hero-title">
+          Hola, Usuario 👋
+        </h1>
 
-    <div class="balance-body">
-      <div class="balance-left">
-        <h2 class="text-display-large text-white balance-amount">
-          S/. {{ amount | number:'1.2-2' }}
-        </h2>
+        <p class="text-caption hero-subtitle">
+          Bienvenido de nuevo a FinVia
+        </p>
+
       </div>
+
+      <div class="hero-decoration">
+
+        <img
+          src="assets/image/img-wallet.jpg"
+          alt="Wallet">
+
+      </div>
+
+    </div>
+
+    <!-- BALANCE -->
+
+    <div class="balance-card">
+
+      <div class="balance-header">
+
+        <span class="text-caption text-white">
+          Balance Total
+        </span>
+
+      </div>
+
+      <div class="balance-body">
+
+        <div class="balance-left">
+
+          <h2 class="text-display-large text-white balance-amount">
+            S/. {{ amount | number:'1.2-2' }}
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="balance-eye"
+          (click)="validationSecretValues()">
+
+          <ion-icon
+            [src]="hideSecretValues
+              ? 'assets/icon/eye-off-outline.svg'
+              : 'assets/icon/eye-outline.svg'">
+          </ion-icon>
+
+        </button>
+
+      </div>
+
+      <div
+        class="balance-footer"
+        (click)="openModal()">
+
+        <div class="account-chip">
+
+          <ion-icon
+            src="assets/icon/wallet.svg">
+          </ion-icon>
+
+        </div>
+
+        <span class="text-body text-white account-text">
+          Cuenta Principal
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- SEGMENT -->
+
+    <div class="segment-container">
+
+      <app-custom-segment
+        [options]="dataTabs"
+        [(model)]="segment"
+        segmentClass="main-tabs"
+        (modelChange)="onSegmentChanged($event)">
+      </app-custom-segment>
+
+    </div>
+
+    <!-- SECTION HEADER -->
+
+    <div class="section-header">
+
+      <h2 class="text-subtitle">
+        Resumen por categoría
+      </h2>
 
       <button
         type="button"
-        class="balance-eye"
-        (click)="validationSecretValues()"
-      >
+        class="view-all-button">
+
+        Ver todas
+
         <ion-icon
-          [src]="hideSecretValues ? 'assets/icon/eye-off-outline.svg' : 'assets/icon/eye-outline.svg'"
-        >
+          name="chevron-forward-outline">
         </ion-icon>
+
       </button>
+
     </div>
 
-    <div class="balance-footer" (click)="openModal()">
-      <div class="account-chip">
-        <ion-icon src="assets/icon/wallet.svg"></ion-icon>
-      </div>
+    <!-- CATEGORY LIST -->
 
-      <span class="text-body text-white account-text"> Cuenta Principal </span>
-    </div>
-  </div>
+    <ng-container
+      *ngIf="categoriesWithAmounts.length > 0; else noCategories">
 
-  <!-- SEGMENT -->
+      <div class="categories-container">
 
-  <div class="segment-container">
-    <app-custom-segment
-      [options]="dataTabs"
-      [(model)]="segment"
-      segmentClass="main-tabs"
-      (modelChange)="onSegmentChanged($event)"
-    >
-    </app-custom-segment>
-  </div>
-
-  <!-- HEADER -->
-
-  <div class="section-header">
-    <h2 class="text-subtitle">Resumen por categoría</h2>
-  </div>
-
-  <!-- LIST -->
-
-  <ion-list class="categories-list">
-    <ng-container *ngIf="categoriesWithAmounts.length > 0; else noCategories">
-      <ion-item *ngFor="let category of categoriesWithAmounts">
         <div
-          slot="start"
-          class="category-icon"
-          [style.background]="category.color"
-        >
-          <ion-icon [src]="'assets/icon/' + category.icono + '.svg'">
-          </ion-icon>
+          class="category-card"
+          *ngFor="let category of categoriesWithAmounts">
+
+          <!-- BLOQUE 1 : ICON -->
+
+          <div
+            class="category-icon"
+            [style.background]="category.color + '15'">
+
+            <ion-icon
+              class="category-main-icon"
+              [src]="'assets/icon/' + category.icono + '.svg'"
+              [style.color]="category.color">
+            </ion-icon>
+
+          </div>
+
+          <!-- BLOQUE 2 : INFO -->
+
+          <div class="category-info">
+
+            <div class="category-name text-body-bold">
+              {{ category.nombre }}
+            </div>
+
+            <div class="category-progress-row">
+
+              <span
+                class="category-percent"
+                [style.color]="category.color">
+
+                {{
+                  amount > 0
+                    ? ((category.totalAmount / amount) * 100).toFixed(0)
+                    : 0
+                }}%
+
+              </span>
+
+              <div class="category-progress">
+
+                <div class="progress-track">
+
+                  <div
+                    class="progress-fill"
+                    [style.background]="category.color"
+                    [style.width.%]="
+                      amount > 0
+                        ? (category.totalAmount / amount) * 100
+                        : 0
+                    ">
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- BLOQUE 3 : ACTION -->
+
+          <div class="category-action">
+
+            <span class="category-amount text-body-bold">
+              S/. {{ category.totalAmount | number:'1.2-2' }}
+            </span>
+
+            <ion-icon
+              class="category-arrow"
+              src="assets/icon/right-inline.svg">
+            </ion-icon>
+
+          </div>
+
         </div>
 
-        <ion-label>
-          <span class="text-body-bold"> {{ category.nombre }} </span>
-        </ion-label>
+      </div>
 
-        <ion-note slot="end">
-          S/. {{ category.totalAmount | number:'1.2-2' }}
-        </ion-note>
-      </ion-item>
     </ng-container>
 
+    <!-- EMPTY STATE -->
+
     <ng-template #noCategories>
+
       <div class="empty-state">
+
         <div class="empty-icon-container">
-          <ion-icon src="assets/icon/category.svg"> </ion-icon>
+
+          <ion-icon
+            src="assets/icon/category.svg">
+          </ion-icon>
+
         </div>
 
-        <h3 class="text-subtitle">Sin movimientos</h3>
+        <h3 class="text-subtitle">
+          Sin movimientos
+        </h3>
 
-        <p class="text-caption">Aún no tienes transacciones registradas.</p>
+        <p class="text-caption">
+          Aún no tienes transacciones registradas.
+        </p>
+
       </div>
+
     </ng-template>
-  </ion-list>
+
+  </div>
 
   <!-- MODAL -->
 
   <ion-modal
     [isOpen]="isModalOpen"
     (didDismiss)="closeModal()"
-    cssClass="custom-modal"
-  >
+    cssClass="custom-modal">
+
     <ng-template>
+
       <ion-header>
+
         <ion-toolbar>
-          <ion-title> Modificar monto </ion-title>
+
+          <ion-title>
+            Modificar monto
+          </ion-title>
 
           <ion-buttons slot="end">
-            <ion-button fill="clear" (click)="closeModal()">
-              <ion-icon name="close-outline"> </ion-icon>
+
+            <ion-button
+              fill="clear"
+              (click)="closeModal()">
+
+              <ion-icon name="close-outline">
+              </ion-icon>
+
             </ion-button>
+
           </ion-buttons>
+
         </ion-toolbar>
+
       </ion-header>
 
       <ion-content>
-        <div class="modal-content">
-          <ion-item>
-            <ion-label position="floating"> Nuevo monto </ion-label>
 
-            <ion-input type="number" [(ngModel)]="newAmount"> </ion-input>
+        <div class="modal-content">
+
+          <ion-item class="fv-input">
+
+            <ion-label position="floating">
+              Nuevo monto
+            </ion-label>
+
+            <ion-input
+              type="number"
+              [(ngModel)]="newAmount">
+            </ion-input>
+
           </ion-item>
 
-          <ion-button expand="block" shape="round" (click)="updateAmount()">
+          <ion-button
+            expand="block"
+            shape="round"
+            class="fv-button-primary"
+            (click)="updateAmount()">
+
             Guardar
+
           </ion-button>
+
         </div>
+
       </ion-content>
+
     </ng-template>
+
   </ion-modal>
 
   <!-- FAB -->
 
-  <button class="fab-button" (click)="navigateToCreateTransac()">
-    <ion-icon src="assets/icon/add.svg"> </ion-icon>
+  <button
+    class="fv-fab fab-button"
+    (click)="navigateToCreateTransac()">
+
+    <ion-icon
+      src="assets/icon/add.svg">
+    </ion-icon>
+
   </button>
+
 </ion-content>
