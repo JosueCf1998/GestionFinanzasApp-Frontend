@@ -1,0 +1,31 @@
+.fv-button-primary {
+
+  --background: var(--fv-primary);
+
+  --border-radius: 14px;
+
+  font-weight: 600;
+}
+
+.fv-button-secondary {
+
+  --background: #eef2ff;
+
+  --color: var(--fv-primary);
+
+  --border-radius: 14px;
+
+  font-weight: 600;
+}
+
+.fv-fab {
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  background: var(--fv-gradient-primary);
+
+  box-shadow: var(--shadow-primary);
+}

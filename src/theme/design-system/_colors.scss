@@ -1,0 +1,43 @@
+:root {
+
+  /* Brand */
+
+  --fv-primary: #4361ee;
+  --fv-primary-dark: #3a0ca3;
+  --fv-primary-light: #5875ff;
+
+  /* States */
+
+  --fv-success: #22c55e;
+  --fv-danger: #ef4444;
+  --fv-warning: #f59e0b;
+
+  /* Background */
+
+  --fv-background: #f8fafc;
+  --fv-surface: #ffffff;
+
+  /* Text */
+
+  --fv-text-primary: #1e293b;
+  --fv-text-secondary: #64748b;
+  --fv-text-muted: #94a3b8;
+
+  /* Border */
+
+  --fv-border: #e2e8f0;
+
+  /* Gradients */
+
+  --fv-gradient-primary: linear-gradient(
+    135deg,
+    #3a0ca3 0%,
+    #4361ee 100%
+  );
+
+  --fv-gradient-card: linear-gradient(
+    135deg,
+    #3a0ca3 0%,
+    #5875ff 100%
+  );
+}

@@ -1,5 +1,6 @@
 <ion-content [fullscreen]="true" scroll-y="false">
   <div class="welcome-screen">
+
     <!-- Animated Background -->
     <div class="animated-background">
       <div class="gradient-orb orb-1"></div>
@@ -8,31 +9,82 @@
 
     <!-- Content Container -->
     <div class="content-wrapper">
+
       <!-- Text Content -->
       <div class="text-content">
-        <h1 class="welcome-title">Configura tu cuenta principal</h1>
+
+        <h1 class="welcome-title">
+          Empecemos con tu saldo actual
+        </h1>
+
         <p class="welcome-description">
-          Ingresa el saldo inicial de tu cuenta. Podrás agregar más cuentas después.
+          Ingresa el dinero disponible actualmente en tu cuenta principal.
         </p>
+
+        <div class="progress-indicator">
+
+          <span class="dot"></span>
+
+          <span class="dot active"></span>
+
+        </div>
+
+      </div>
+
+      <!-- Hint -->
+
+      <div class="account-hint">
+
+        <ion-icon
+          name="wallet-outline">
+        </ion-icon>
+
+        <span>
+          Podrás agregar más cuentas después
+        </span>
+
       </div>
 
       <!-- Form Section -->
-      <form class="form-section" [formGroup]="dataForm">
-        <app-amount-input class="input-item" formControlName="amount" placeholder="0.00" [required]="true" currencyCode="PEN" variant="basic"></app-amount-input>
+
+      <form
+        class="form-section"
+        [formGroup]="dataForm">
+
+        <app-amount-input
+          class="input-item"
+          formControlName="amount"
+          placeholder="0.00"
+          [required]="true"
+          currencyCode="PEN"
+          variant="basic">
+        </app-amount-input>
+
       </form>
 
       <!-- CTA Button -->
+
       <div class="action-section">
+
         <ion-button
           expand="block"
           shape="round"
           class="cta-button"
           (click)="handleContinueButton()"
           [disabled]="dataForm.invalid">
-          Continuar
-          <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+
+          Finalizar
+
+          <ion-icon
+            slot="end"
+            name="checkmark-outline">
+          </ion-icon>
+
         </ion-button>
+
       </div>
+
     </div>
+
   </div>
 </ion-content>

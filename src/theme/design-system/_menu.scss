@@ -1,0 +1,14 @@
+.fv-menu-header {
+
+  background: var(--fv-gradient-primary);
+
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.fv-menu-item-active {
+
+  background: rgba(67,97,238,.08);
+
+  border-left: 3px solid var(--fv-primary);
+}

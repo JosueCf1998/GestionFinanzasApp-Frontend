@@ -117,9 +117,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
-  },
-  {
-    path: 'splash',
-    loadComponent: () => import('./features/auth/splash/splash.page').then( m => m.SplashPage)
   }
 ];

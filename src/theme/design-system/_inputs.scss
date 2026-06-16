@@ -1,0 +1,17 @@
+.fv-input {
+
+  --background: #ffffff;
+
+  --border-radius: 16px;
+
+  --padding-start: 14px;
+
+  border: 1px solid var(--fv-border);
+
+  border-radius: 16px;
+}
+
+.fv-input:focus-within {
+
+  border-color: var(--fv-primary);
+}

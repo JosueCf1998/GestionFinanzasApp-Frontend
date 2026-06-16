@@ -1,0 +1,32 @@
+.fv-card {
+
+  background: var(--fv-surface);
+
+  border-radius: 24px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+.fv-card-elevated {
+
+  background: var(--fv-surface);
+
+  border-radius: 24px;
+
+  box-shadow: var(--shadow-md);
+
+  overflow: hidden;
+}
+
+.fv-card-gradient {
+
+  background: var(--fv-gradient-card);
+
+  border-radius: 24px;
+
+  box-shadow: var(--shadow-primary);
+
+  overflow: hidden;
+}

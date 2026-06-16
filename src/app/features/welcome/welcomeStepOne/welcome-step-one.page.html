@@ -1,5 +1,6 @@
 <ion-content [fullscreen]="true" scroll-y="false">
   <div class="welcome-screen">
+
     <!-- Animated Background -->
     <div class="animated-background">
       <div class="gradient-orb orb-1"></div>
@@ -8,33 +9,67 @@
 
     <!-- Content Container -->
     <div class="content-wrapper">
+
       <!-- Logo Section -->
       <div class="logo-section">
+
         <div class="logo-wrapper">
-          <ion-img src="assets/image/logo-finvia-white.png" class="logo"></ion-img>
+
+          <ion-img
+            src="assets/image/logo-finvia-white.png"
+            class="logo">
+          </ion-img>
+
         </div>
+
       </div>
 
       <!-- Text Content -->
       <div class="text-content">
-        <h1 class="welcome-title">¡Bienvenido a Finvia!</h1>
-        <p class="welcome-subtitle">Tu aliado en la gestión financiera</p>
-        <p class="welcome-description">
-          Controla tus ingresos y gastos de manera inteligente y sencilla
+
+        <h1 class="welcome-title">
+          Tus finanzas en un solo lugar
+        </h1>
+
+        <p class="welcome-subtitle">
+          Bienvenido a FinVia
         </p>
+
+        <p class="welcome-description">
+          Registra ingresos, gastos y cuentas de manera simple para tener un mejor control de tu dinero.
+        </p>
+
+        <div class="progress-indicator">
+
+          <span class="dot active"></span>
+
+          <span class="dot"></span>
+
+        </div>
+
       </div>
 
       <!-- CTA Button -->
       <div class="action-section">
+
         <ion-button
           expand="block"
           shape="round"
           class="cta-button"
           (click)="toNavigate()">
-          Comenzar
-          <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+
+          Continuar
+
+          <ion-icon
+            slot="end"
+            name="arrow-forward-outline">
+          </ion-icon>
+
         </ion-button>
+
       </div>
+
     </div>
+
   </div>
 </ion-content>
