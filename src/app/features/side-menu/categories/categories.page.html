@@ -1,48 +1,144 @@
-<ion-content [fullscreen]="true" scroll-y="false">
+<ion-content
+  [fullscreen]="true"
+  class="categories-page">
+
   <app-custom-alert
     *ngIf="showGenericAlert"
     [header]="'Error'"
     [message]="'No se pudieron cargar las categorías. Por favor, intenta nuevamente.'"
     [confirmText]="'Aceptar'"
-    (onConfirm)="cerrarAlert()"
-  ></app-custom-alert>
+    (onConfirm)="cerrarAlert()">
+  </app-custom-alert>
 
-  <div class="content">
-    <!-- Tabs de Gastos e Ingresos -->
-    <div class="">
+  <div class="page-container">
+
+    <!-- SEGMENT -->
+
+    <div class="segment-container">
+
       <app-custom-segment
         [options]="dataTabs"
         [(model)]="segment"
         segmentClass="main-tabs"
         (modelChange)="onSegmentChanged($event)">
       </app-custom-segment>
+
     </div>
-    <!-- Cuadrícula de categorías dinámica -->
+
+    <!-- HEADER -->
+
+    <div class="section-header">
+
+      <h2 class="text-subtitle">
+        Mis categorías
+      </h2>
+
+    </div>
+
+    <!-- GRID -->
+
     <div class="categories-grid">
-      <ng-container *ngIf="categoriasActuales.length > 0; else soloAgregar">
-        <ng-container *ngFor="let cat of categoriasActuales">
-          <div class="category-btn" (click)="goToEditCategories(segment, cat)">
-            <div class="category-icon-circle" [ngStyle]="{'background': cat.color}">
-              <ion-icon src="assets/icon/{{cat.icono}}.svg"></ion-icon>
-            </div>
-            <span class="category-label text-small">{{cat.nombre}}</span>
+
+      <ng-container
+        *ngIf="categoriasActuales.length > 0; else onlyAdd">
+
+        <div
+          class="category-item"
+          *ngFor="let cat of categoriasActuales"
+          (click)="goToEditCategories(segment, cat)">
+
+          <div
+            class="category-icon"
+            [style.background]="cat.color">
+
+            <ion-icon
+              [src]="'assets/icon/' + cat.icono + '.svg'">
+            </ion-icon>
+
           </div>
-        </ng-container>
-        <div class="category-btn agregar-btn" (click)="goToCreateCategories(segment)">
-          <div class="category-icon-add">
-            <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
-          </div>
-          <span class="category-label agregar-label text-small">Agregar</span>
+
+          <span class="category-name">
+            {{ cat.nombre }}
+          </span>
+
         </div>
+
+        <div
+          class="category-item add-category"
+          (click)="goToCreateCategories(segment)">
+
+          <div class="category-icon add-icon">
+
+            <ion-icon
+              src="assets/icon/add.svg">
+            </ion-icon>
+
+          </div>
+
+          <span class="category-name">
+            Agregar
+          </span>
+
+        </div>
+
       </ng-container>
-      <ng-template #soloAgregar>
-        <div class="category-btn agregar-btn" (click)="goToCreateCategories(segment)">
-          <div class="category-icon-add">
-            <ion-icon slot="add" src="assets/icon/add.svg"></ion-icon>
+
+      <ng-template #onlyAdd>
+
+        <div
+          class="category-item add-category"
+          (click)="goToCreateCategories(segment)">
+
+          <div class="category-icon add-icon">
+
+            <ion-icon
+              src="assets/icon/add.svg">
+            </ion-icon>
+
           </div>
-          <span class="category-label agregar-label text-small">Agregar</span>
+
+          <span class="category-name">
+            Agregar
+          </span>
+
         </div>
+
       </ng-template>
+
     </div>
+
   </div>
+
+  <!-- FLOATING INSIGHT -->
+
+  <div class="floating-tip">
+
+    <div class="tip-card">
+
+      <div class="tip-header">
+
+        <div class="tip-badge">
+          ✨
+        </div>
+
+        <span class="tip-title">
+
+          Consejo FinVia
+
+        </span>
+
+      </div>
+
+      <p class="tip-description">
+
+        Mantén organizadas tus categorías
+        para obtener reportes más claros
+        y un mejor control financiero.
+
+      </p>
+
+    </div>
+
+  </div>
+
 </ion-content>

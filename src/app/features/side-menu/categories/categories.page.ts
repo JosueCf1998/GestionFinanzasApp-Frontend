@@ -23,20 +23,20 @@ export class CategoriesPage {
 
   showGenericAlert: boolean = false;
   dataTabs = [
-    { value: 'gastos', label: 'Gasto' },
-    { value: 'ingresos', label: 'Ingreso' }
+    { value: 'gasto', label: 'Gasto' },
+    { value: 'ingreso', label: 'Ingreso' }
   ];
 
   gastos: Categoria[] = [];
   ingresos: Categoria[] = [];
-  segment: "gastos" | "ingresos" = "gastos";
+  segment: "gasto" | "ingreso" = "gasto";
 
   constructor(
     private navService: NavigationService,
     private listCategoriesUseCase: ListCategoriesUseCase,
     private loadingService: SpinnerService,
     private alertService: AlertService
-  ) { 
+  ) {
     this.executeListCategories();
   }
 
@@ -48,8 +48,12 @@ export class CategoriesPage {
       success: (data) => {
         this.loadingService.hide();
         if (data) {
-          this.ingresos = data.items.filter(cat => cat.tipo === "ingresos");
-          this.gastos = data.items.filter(cat => cat.tipo === "gastos");
+          this.ingresos = data.items.filter(cat => cat.tipo === "ingreso");
+          this.gastos = data.items.filter(cat => cat.tipo === "gasto");
+          console.log(data);
+          console.log(this.ingresos);
+          console.log(this.gastos);
+
         } else {
           this.showGenericAlert = true;
         }
@@ -64,16 +68,16 @@ export class CategoriesPage {
   // MARK: - FUNCIONES
 
   onSegmentChanged(value: string) {
-    if (value === "gastos" || value === "ingresos") {
-      this.segment = value as "gastos" | "ingresos";
+    if (value === "gasto" || value === "ingreso") {
+      this.segment = value as "gasto" | "ingreso";
     }
   }
 
-  goToCreateCategories(type: "gastos" | "ingresos") {
+  goToCreateCategories(type: "gasto" | "ingreso") {
     this.navService.push('/categories/create', { type });
   }
 
-  goToEditCategories(type: "gastos" | "ingresos", category: Categoria) {
+  goToEditCategories(type: "gasto" | "ingreso", category: Categoria) {
     if (category.usuario_id == null) {
       this.alertService.showAlert(
         'Categoría del Sistema',
@@ -84,13 +88,13 @@ export class CategoriesPage {
     }
     this.navService.push('/categories/edit', { type, category });
   }
-  
+
   cerrarAlert() {
     this.showGenericAlert = false;
   }
-  
+
   get categoriasActuales(): Categoria[] {
-    return this.segment === 'gastos' ? this.gastos : this.ingresos;
+    return this.segment === 'gasto' ? this.gastos : this.ingresos;
   }
 
 }

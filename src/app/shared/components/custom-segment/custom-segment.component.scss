@@ -1,28 +1,42 @@
 .custom-segment {
+  position: relative;
+
   display: flex;
   align-items: center;
 
-  gap: var(--fv-space-xs);
+  gap: 4px;
 
-  padding: var(--fv-space-xs);
+  padding: 4px;
 
-  min-height: 46px;
-
-  background: var(--fv-surface);
+  min-height: 48px;
 
   border-radius: 18px;
 
-  box-shadow: var(--fv-shadow-sm);
+  background:
+    rgba(255,255,255,.85);
+
+  backdrop-filter: blur(12px);
+
+  border:
+    1px solid
+    rgba(255,255,255,.40);
+
+  box-shadow:
+    0 6px 20px rgba(15,23,42,.05);
+
+  overflow: hidden;
 }
 
 .custom-segment-btn {
   flex: 1;
 
-  height: 38px;
+  position: relative;
+
+  height: 40px;
 
   border: none;
 
-  border-radius: 12px;
+  border-radius: 14px;
 
   background: transparent;
 
@@ -34,20 +48,70 @@
   cursor: pointer;
 
   transition:
-    background .2s ease,
-    color .2s ease,
+    background .25s ease,
+    color .25s ease,
     transform .2s ease,
-    box-shadow .2s ease;
+    box-shadow .25s ease;
+}
+
+.segment-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+.segment-icon {
+  font-size: 18px;
+
+  transition: .25s ease;
+}
+
+.segment-label {
+  line-height: 1;
 }
 
 .custom-segment-btn.active {
   background: var(--fv-gradient-primary);
 
-  color: var(--fv-surface);
+  color: white;
 
-  box-shadow: var(--fv-shadow-primary);
+  box-shadow:
+    0 8px 20px rgba(67,97,238,.25);
+}
+
+.custom-segment-btn.active .segment-icon {
+  color: white;
+}
+
+.custom-segment-btn:not(.active):hover {
+  background:
+    rgba(67,97,238,.05);
 }
 
 .custom-segment-btn:active {
-  transform: scale(.98);
+  transform: scale(.97);
+}
+
+.custom-segment-btn:disabled {
+  opacity: .5;
+
+  pointer-events: none;
+}
+
+/* ==========================
+   RESPONSIVE
+   ========================== */
+
+@media (max-width: 380px) {
+
+  .custom-segment-btn {
+    font-size: 12px;
+  }
+
+  .segment-icon {
+    font-size: 13px;
+  }
+
 }

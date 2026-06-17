@@ -1,115 +1,212 @@
-<ion-header>
-  <ion-toolbar class="side-menu" color="side-menu">
-    <ion-buttons slot="start">
-      <button class="atras-btn" type="button" (click)="backToCategories()">
-        <ion-icon src="assets/icon/left.svg"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title class="header-title text-subtitle">Crear Categoría</ion-title>
-    <ion-buttons slot="end">
-      <!-- Acciones adicionales -->
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-page-layout
+  title="Crear categoría"
+  (back)="backToCategories()">
+</app-page-layout>
 
-<ion-content [fullscreen]="true" scroll-y="false">
-  <form class="edit-category-content" (ngSubmit)="anadirCategoria()">
-    <!-- Nombre de la categoría -->
-    <div class="input-row">
-      <div class="category-icon-circle icon-edit" [ngStyle]="{'background': colorCategoria}">
-        <ion-icon *ngIf="category" [src]="'assets/icon/' + iconoCategoria + '.svg'" class="input-icon"></ion-icon>
+<ion-content
+  [fullscreen]="false"
+  class="create-category-page">
+
+  <form
+    class="create-category-form"
+    (ngSubmit)="anadirCategoria()">
+
+    <!-- ==========================
+         PREVIEW
+         ========================== -->
+
+    <div class="preview-inline">
+
+      <div
+        class="preview-inline-icon"
+        [style.background]="colorCategoria">
+
+        <ion-icon
+          *ngIf="iconoCategoria"
+          [src]="'assets/icon/' + iconoCategoria + '.svg'">
+        </ion-icon>
+
       </div>
+
+      <div class="preview-inline-content">
+
+        <span class="preview-inline-title">
+
+          {{
+            nombreCategoria ||
+            'Nueva categoría'
+          }}
+
+        </span>
+
+        <span
+          class="preview-inline-type"
+          [class.income]="tipoCategoria === 'ingreso'">
+
+          {{
+            tipoCategoria === 'ingreso'
+              ? 'Ingreso'
+              : 'Gasto'
+          }}
+
+        </span>
+
+      </div>
+
+    </div>
+
+    <!-- ==========================
+         NOMBRE
+         ========================== -->
+
+    <div class="form-section">
+
+      <label class="section-label">
+
+        Nombre
+
+      </label>
+
       <ion-input
+        class="fv-input"
         type="text"
+        name="nombreCategoria"
+        maxlength="30"
+        autocomplete="off"
         placeholder="Nombre de la categoría"
         [(ngModel)]="nombreCategoria"
-        name="nombreCategoria"
-        required
-        autocomplete="off"
-        maxlength="30"
-        class="input-edit"
-        (ionInput)="onInputNombreCategoria($event)"
-      ></ion-input>
-      <button type="button" class="clear-btn" *ngIf="nombreCategoria" (click)="clearNombreCategoria()">
-        <!-- <ion-icon name="close-circle"></ion-icon> -->
-      </button>
+        required>
+
+      </ion-input>
+
     </div>
 
-    <!-- Tipo de Categoría (seleccionable, con diseño informativo) -->
-    <div class="tipo-row">
-      <label class="label-tipo text-body">Tipo</label>
-      <div class="tipo-selectores">
-        <button
-          type="button"
-          class="tipo-btn text-body"
-          [class.selected]="tipoCategoria === 'gastos'"
-          (click)="tipoCategoria = 'gastos'"
-        >
-          Gasto
-        </button>
-        <button
-          type="button"
-          class="tipo-btn text-body"
-          [class.selected]="tipoCategoria === 'ingresos'"
-          (click)="tipoCategoria = 'ingresos'"
-        >
-          Ingreso
-        </button>
-      </div>
+    <!-- ==========================
+         TIPO
+         ========================== -->
+
+    <div class="form-section">
+
+      <label class="section-label">
+
+        Tipo de categoría
+
+      </label>
+
+      <app-custom-segment
+        [options]="categoryTypes"
+        [(model)]="tipoCategoria">
+
+      </app-custom-segment>
+
     </div>
 
-    <!-- Selección de símbolo -->
-    <div class="simbolos-row">
-      <label class="label-simbolos text-body">Símbolo</label>
-      <div class="simbolos-grid">
+    <!-- ==========================
+         ICONOS
+         ========================== -->
+
+    <div class="form-section">
+
+      <label class="section-label">
+
+        Símbolo
+
+      </label>
+
+      <div class="icons-grid">
+
         <button
-          type="button"
-          class="simbolo-btn"
           *ngFor="let icon of iconos"
+          type="button"
+          class="icon-button"
           [class.selected]="icon.archivo === iconoSeleccionado"
-          (click)="seleccionarIcono(icon)"
           [attr.aria-label]="icon.nombre"
-        >
-          <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
+          (click)="seleccionarIcono(icon)">
+
+          <ion-icon
+            [src]="'assets/icon/' + icon.archivo + '.svg'">
+          </ion-icon>
+
         </button>
+
       </div>
+
     </div>
 
-    <!-- Selección de color -->
-    <div class="color-row">
-      <label class="label-color text-body">Color</label>
-      <div class="color-grid">
+    <!-- ==========================
+         COLORES
+         ========================== -->
+
+    <div class="form-section">
+
+      <label class="section-label">
+
+        Color
+
+      </label>
+
+      <div class="colors-grid">
+
         <button
-          type="button"
-          class="color-btn"
           *ngFor="let color of colores"
-          [ngStyle]="{'background': color.valor}"
+          type="button"
+          class="color-button"
+          [style.background]="color.valor"
           [class.selected]="color.valor === colorSeleccionado"
-          (click)="seleccionarColor(color)"
           [attr.aria-label]="color.nombre"
-        >
+          (click)="seleccionarColor(color)">
+
           <ion-icon
             *ngIf="color.valor === colorSeleccionado"
-            src="assets/icon/check.svg"
-            class="color-check"
-          ></ion-icon>
+            src="assets/icon/check.svg">
+          </ion-icon>
+
         </button>
+
       </div>
+
     </div>
 
-    <!-- Botón de acción -->
-    <ion-button expand="block" class="btn-anadir text-button" [disabled]="!puedeGuardar" type="submit">
-      Guardar
+    <!-- ==========================
+         ACCIONES
+         ========================== -->
+
+    <ion-button
+      expand="block"
+      class="save-button"
+      type="submit"
+      [disabled]="!puedeGuardar">
+
+      Guardar categoría
+
     </ion-button>
+
   </form>
 
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
 </ion-content>
+
+<!-- ==========================
+     ALERTA CAMBIOS
+     ========================== -->
+
+<app-custom-alert
+  *ngIf="showCustomAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="showCustomAlert = false"
+  (onConfirm)="salirSinGuardar()">
+</app-custom-alert>
+
+<!-- ==========================
+     ALERTA ERROR
+     ========================== -->
+
+<app-custom-alert
+  *ngIf="showGenericAlert"
+  header="Error"
+  message="No se pudo crear la categoría. Inténtalo nuevamente."
+  confirmText="Aceptar"
+  (onConfirm)="showGenericAlert = false">
+</app-custom-alert>
