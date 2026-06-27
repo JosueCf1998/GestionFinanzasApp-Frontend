@@ -6,7 +6,7 @@ import { EncryptionService } from '../../services/encryption.service';
 import { encryptBody } from '../../utils/encryption.util';
 import { mapObjectKeys } from '../../utils/mapping.util';
 
-export interface CreateCategoryRequest {
+export interface RegisterCategoryRequest {
   name: string;
   type: string;
   icon: string;
@@ -21,7 +21,7 @@ const REQUEST_KEY_MAP = {
   color: 'color'
 } as const;
 
-export interface CreateCategoryResponse {
+export interface RegisterCategoryResponse {
 }
 
 @Injectable({
@@ -34,11 +34,11 @@ export class CreateCategoryUseCase {
     private encryptionService: EncryptionService
   ) {}
 
-  createCategory(body: CreateCategoryRequest): Observable<Result<CreateCategoryResponse>> {
-    const endpoint = 'categories/create';
+  registerCategory(body: RegisterCategoryRequest): Observable<Result<RegisterCategoryResponse>> {
+    const endpoint = 'categories/register';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
-    return this.apiService.post<CreateCategoryResponse>(endpoint, encryptedBody);
+    return this.apiService.post<RegisterCategoryResponse>(endpoint, encryptedBody);
   }
 
 }

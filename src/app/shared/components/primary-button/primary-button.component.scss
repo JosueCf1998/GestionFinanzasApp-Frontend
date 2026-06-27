@@ -1,0 +1,94 @@
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+.fv-button {
+
+  margin: 0;
+
+  width: 100%;
+  height: 56px;
+
+  --border-radius: 16px;
+
+  --background: var(--fv-gradient-primary);
+  --background-hover: var(--fv-gradient-primary);
+  --background-focused: var(--fv-gradient-primary);
+  --background-activated: var(--fv-gradient-primary);
+
+  --box-shadow:
+    0 10px 24px rgba(67, 97, 238, .22);
+
+  font-size: 16px;
+  font-weight: 700;
+
+  letter-spacing: -.01em;
+
+  text-transform: none;
+
+  transition:
+    transform .18s ease,
+    filter .18s ease,
+    box-shadow .18s ease;
+
+}
+
+/* ==========================================================
+   LABEL
+   ========================================================== */
+
+.fv-button span {
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+}
+
+/* ==========================================================
+   SPINNER
+   ========================================================== */
+
+.fv-button ion-spinner {
+
+  width: 18px;
+  height: 18px;
+
+  color: #fff;
+
+}
+
+/* ==========================================================
+   HOVER
+   ========================================================== */
+
+.fv-button:not(.button-disabled):hover {
+
+  filter: brightness(1.03);
+
+}
+
+/* ==========================================================
+   ACTIVE
+   ========================================================== */
+
+.fv-button::part(native):active {
+
+  transform: scale(.985);
+
+}
+
+/* ==========================================================
+   DISABLED
+   ========================================================== */
+
+.fv-button.button-disabled {
+
+  opacity: .55;
+
+  --box-shadow: none;
+
+}

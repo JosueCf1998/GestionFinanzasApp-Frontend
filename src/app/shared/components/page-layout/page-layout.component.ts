@@ -5,27 +5,73 @@ import {
   Output
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-page-layout',
-  templateUrl: './page-layout.component.html',
-  styleUrls: ['./page-layout.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     IonicModule
-  ]
+  ],
+  templateUrl: './page-layout.component.html',
+  styleUrls: ['./page-layout.component.scss']
 })
 export class PageLayoutComponent {
+
+  /* ==========================================================
+   * INPUTS
+   * ========================================================== */
 
   @Input()
   title = '';
 
+  @Input()
+  subtitle = '';
+
+  @Input()
+  showBack = true;
+
+  @Input()
+  loading = false;
+
+  /* ==========================================================
+   * OUTPUTS
+   * ========================================================== */
+
   @Output()
   back = new EventEmitter<void>();
 
+  /* ==========================================================
+   * STATE
+   * ========================================================== */
+
+  private navigating = false;
+
+  /* ==========================================================
+   * EVENTS
+   * ========================================================== */
+
   onBack(): void {
+
+    if (
+      this.loading ||
+      this.navigating
+    ) {
+      return;
+    }
+
+    this.navigating = true;
+
     this.back.emit();
+
+    setTimeout(() => {
+
+      this.navigating = false;
+
+    }, 600);
+
   }
 
 }

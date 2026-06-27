@@ -21,6 +21,7 @@ import { LogoutUserUseCase } from '../../core/use-cases/users/logout-user.usecas
 import { NavigationService } from '../../core/services/navigation.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
 import { ProfileUserRequest } from 'src/app/core/use-cases/users/profile-user.usecase';
+import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
 @Component({
   selector: 'app-side-menu',
@@ -41,8 +42,9 @@ import { ProfileUserRequest } from 'src/app/core/use-cases/users/profile-user.us
     IonMenuToggle,
     IonItem,
     IonLabel,
-    CommonModule
-  ],
+    CommonModule,
+    PageLayoutComponent
+],
 })
 export class SideMenuPage implements OnInit {
   public folder!: string;

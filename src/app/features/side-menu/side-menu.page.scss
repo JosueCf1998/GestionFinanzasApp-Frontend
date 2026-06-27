@@ -1,21 +1,26 @@
-/* ==========================
+/* ==========================================================
    MENU
-   ========================== */
+   ========================================================== */
 
 ion-menu {
+
   --width: 290px;
   --max-width: 290px;
+
 }
 
 ion-menu ion-content {
+
   --background: var(--fv-surface);
+
 }
 
-/* ==========================
+/* ==========================================================
    USER HEADER
-   ========================== */
+   ========================================================== */
 
 .menu-header {
+
   position: relative;
 
   display: flex;
@@ -31,9 +36,11 @@ ion-menu ion-content {
     24px;
 
   background: var(--fv-gradient-primary);
+
 }
 
 .menu-header::before {
+
   content: '';
 
   position: absolute;
@@ -46,10 +53,13 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, .06);
+  background:
+    rgba(255,255,255,.06);
+
 }
 
 .menu-header::after {
+
   content: '';
 
   position: absolute;
@@ -62,15 +72,19 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, .04);
+  background:
+    rgba(255,255,255,.04);
+
 }
 
-/* ==========================
+/* ==========================================================
    AVATAR
-   ========================== */
+   ========================================================== */
 
 .avatar-container {
+
   position: relative;
+
   z-index: 2;
 
   width: 56px;
@@ -84,32 +98,43 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, .12);
+  background:
+    rgba(255,255,255,.12);
 
-  border: 1px solid rgba(255, 255, 255, .18);
+  border:
+    1px solid rgba(255,255,255,.18);
+
 }
 
 .avatar {
+
   color: white;
 
   font-size: 24px;
   font-weight: 700;
+
 }
 
-/* ==========================
+/* ==========================================================
    USER INFO
-   ========================== */
+   ========================================================== */
 
 .user-info {
+
   position: relative;
+
   z-index: 2;
 
   flex: 1;
 
   min-width: 0;
+
 }
 
 .user-name {
+
+  display: block;
+
   margin: 0;
 
   color: white;
@@ -118,29 +143,38 @@ ion-menu ion-content {
   font-weight: 700;
 
   line-height: 1.2;
+
 }
 
 .user-email {
+
+  display: block;
+
   margin-top: 3px;
 
-  color: rgba(255, 255, 255, .78);
+  color:
+    rgba(255,255,255,.78);
 
   font-size: 12px;
 
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
+
 }
 
-/* ==========================
+/* ==========================================================
    MENU LIST
-   ========================== */
+   ========================================================== */
 
 #inbox-list {
+
   padding: 16px;
+
 }
 
 ion-menu ion-item {
+
   --background: transparent;
 
   --padding-start: 14px;
@@ -154,181 +188,202 @@ ion-menu ion-item {
 
   transition:
     background .2s ease,
-    transform .2s ease;
+    transform .18s ease;
+
 }
 
 ion-menu ion-item ion-icon {
+
   width: 22px;
   height: 22px;
 
   color: var(--fv-text-secondary);
+
 }
 
 ion-menu ion-item ion-label {
+
   color: var(--fv-text-primary);
 
   font-size: 16px;
   font-weight: 500;
-}
 
-ion-menu ion-item:hover {
-  --background: rgba(95, 124, 255, .05);
 }
 
 ion-menu ion-item.selected {
-  --background: rgba(95, 124, 255, .08);
+
+  --background:
+    rgba(95,124,255,.08);
+
 }
 
 ion-menu ion-item.selected ion-icon {
+
   color: var(--fv-primary-light);
+
 }
 
 ion-menu ion-item.selected ion-label {
+
   color: var(--fv-primary-light);
 
   font-weight: 700;
+
 }
 
-/* ==========================
+/* ==========================================================
    FOOTER
-   ========================== */
+   ========================================================== */
 
 .menu-footer {
+
   margin-top: auto;
 
   padding: 16px;
 
-  border-top: 1px solid var(--fv-border);
+  border-top:
+    1px solid var(--fv-border);
+
 }
 
 .logout-item {
-  --background: rgba(239, 68, 68, .05);
+
+  --background:
+    rgba(239,68,68,.05);
 
   min-height: 54px;
 
   border-radius: 18px;
+
 }
 
 .logout-item ion-icon {
+
   color: var(--fv-danger);
+
 }
 
 .logout-item ion-label {
+
   color: var(--fv-danger);
 
   font-weight: 600;
+
 }
 
-/* ==========================
-   TOP BAR
-   ========================== */
+/* ==========================================================
+   PAGE LAYOUT
+   ========================================================== */
 
-.side-menu {
-  --background: transparent;
+ion-header {
 
-  position: relative;
+  box-shadow: none;
 
-  overflow: hidden;
-
-  min-height: 56px;
-
-  background: var(--fv-gradient-primary);
 }
 
-.side-menu ion-menu-button {
-  --color: white;
+ion-header::after {
+
+  display: none;
+
 }
 
-.side-menu::before {
-  content: '';
+/* ==========================================================
+   MENU BUTTON
+   ========================================================== */
 
-  position: absolute;
+ion-menu-button {
 
-  top: -40px;
-  right: 30px;
+  --color: #fff;
 
-  width: 120px;
-  height: 120px;
+  width: 40px;
+  height: 40px;
 
-  border-radius: 50%;
+  margin: 0;
 
-  background: rgba(255, 255, 255, .05);
+  border-radius: 14px;
+
+  background:
+    rgba(255,255,255,.12);
+
 }
 
-.side-menu::after {
-  content: '';
-
-  position: absolute;
-
-  left: 60px;
-  bottom: -50px;
-
-  width: 100px;
-  height: 100px;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, .04);
-}
-
-/* ==========================
+/* ==========================================================
    MAIN CONTENT
-   ========================== */
+   ========================================================== */
 
 #main-content {
+
   display: flex;
   flex-direction: column;
 
   height: 100vh;
+
 }
 
 .router-container {
+
   flex: 1;
 
   overflow: hidden;
+
 }
 
-/* ==========================
+/* ==========================================================
    SPLIT PANE
-   ========================== */
+   ========================================================== */
 
 ion-split-pane {
+
   --side-width: 290px;
   --side-max-width: 290px;
+
 }
 
-/* ==========================
+/* ==========================================================
    RESPONSIVE
-   ========================== */
+   ========================================================== */
 
-@media (max-width: 768px) {
+@media (max-width:768px) {
 
   ion-menu {
+
     --width: 280px;
     --max-width: 280px;
+
   }
 
   .menu-header {
+
     padding:
       max(20px, env(safe-area-inset-top))
       16px
       20px;
+
   }
 
   .avatar-container {
+
     width: 52px;
     height: 52px;
+
   }
 
   .avatar {
+
     font-size: 22px;
+
   }
 
   .user-name {
+
     font-size: 16px;
+
   }
 
   ion-menu ion-item {
+
     min-height: 52px;
+
   }
+
 }

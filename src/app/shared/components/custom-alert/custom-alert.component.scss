@@ -1,279 +1,296 @@
-// ====================
-// Host del componente - Rompe el contexto de apilamiento
-// ====================
-:host {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 999999 !important;
-  pointer-events: none !important;
-  display: block !important;
-  
-  * {
-    pointer-events: auto !important;
-  }
-}
+/* ==========================================================
+   OVERLAY
+   ========================================================== */
 
-// ====================
-// Wrapper principal - Nivel raíz
-// ====================
-.custom-alert-wrapper {
+.alert-overlay {
+
   position: fixed;
+
   inset: 0;
-  z-index: 1;
-  pointer-events: none;
+
+  z-index: 9999;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  * {
-    pointer-events: auto;
-  }
+
+  padding: 24px;
+
 }
 
-// ====================
-// Backdrop con animación
-// ====================
-.custom-alert-backdrop {
-  position: fixed;
+/* ==========================================================
+   BACKDROP
+   ========================================================== */
+
+.alert-backdrop {
+
+  position: absolute;
+
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1;
-  animation: fadeIn 0.2s ease-out;
-  backdrop-filter: blur(2px);
+
+  background: rgba(15, 23, 42, .34);
+
+  backdrop-filter:
+    blur(18px)
+    brightness(.9);
+
+  animation: backdropIn .18s ease;
+
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+/* ==========================================================
+   CARD
+   ========================================================== */
 
-// ====================
-// Contenedor del Alert
-// ====================
-.custom-alert {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 90vw;
-  max-width: 360px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 
-    0 10px 40px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.08);
-  transform: translate(-50%, -50%);
+.alert-card {
+
+  position: relative;
+
   z-index: 2;
-  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
-}
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -45%) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
+  width: 100%;
+  max-width: 350px;
 
-// ====================
-// Contenido del Alert
-// ====================
-.custom-alert-content {
-  padding: 32px 24px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  padding: 28px 24px 22px;
+
+  background: var(--fv-surface);
+
+  border-radius: 24px;
+
+  border: 1px solid rgba(67,97,238,.05);
+
+  box-shadow:
+    0 22px 60px rgba(15,23,42,.16);
+
+  animation:
+    alertIn .20s cubic-bezier(.22,1,.36,1);
+
 }
 
-// ====================
-// Icono del Alert
-// ====================
-.custom-alert-icon {
+/* ==========================================================
+   ICON
+   ========================================================== */
+
+.alert-icon {
+
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  margin-bottom: 18px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;
-  
-  svg {
-    color: #fff;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  }
+
+  border-radius: 18px;
+
+  background: var(--fv-gradient-primary);
+
+  border: 1px solid rgba(255,255,255,.15);
+
+  box-shadow: var(--fv-shadow-primary);
+
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.alert-icon svg {
+
+  width: 28px;
+  height: 28px;
+
+  color: white;
+
 }
 
-// ====================
-// Header del Alert
-// ====================
-.custom-alert-header {
-  font-size: 20px;
+/* ==========================================================
+   TITLE
+   ========================================================== */
+
+.alert-title {
+
+  margin: 0;
+
+  color: var(--fv-text-primary);
+
+  font-size: 22px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 12px 0;
+
+  letter-spacing: -.03em;
+
   text-align: center;
-  line-height: 1.3;
-  letter-spacing: -0.3px;
-  animation: fadeInText 0.4s ease-out 0.15s backwards;
+
 }
 
-// ====================
-// Mensaje del Alert
-// ====================
-.custom-alert-message {
+/* ==========================================================
+   MESSAGE
+   ========================================================== */
+
+.alert-message {
+
+  max-width: 260px;
+
+  margin:
+    12px
+    0
+    28px;
+
+  color: var(--fv-text-secondary);
+
   font-size: 15px;
-  font-weight: 400;
-  color: #666;
-  margin: 0 0 28px 0;
+
+  line-height: 1.6;
+
   text-align: center;
-  line-height: 1.5;
-  max-width: 280px;
-  animation: fadeInText 0.4s ease-out 0.2s backwards;
+
 }
 
-@keyframes fadeInText {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ==========================================================
+   ACTIONS
+   ========================================================== */
 
-// ====================
-// Contenedor de Botones
-// ====================
-.custom-alert-actions {
-  display: flex;
-  gap: 12px;
+.alert-actions {
+
   width: 100%;
-  justify-content: center;
-  animation: fadeInText 0.4s ease-out 0.25s backwards;
-  
-  &.single-button {
-    .custom-btn {
-      min-width: 140px;
-    }
-  }
+
+  display: grid;
+
+  grid-template-columns: repeat(2,1fr);
+
+  gap: 12px;
+
 }
 
-// ====================
-// Estilos de Botones
-// ====================
-.custom-btn {
-  flex: 1;
-  max-width: 160px;
-  min-width: 100px;
-  padding: 14px 24px;
-  border-radius: 12px;
+.alert-actions.single-action {
+
+  grid-template-columns: 1fr;
+
+}
+
+/* ==========================================================
+   SECONDARY BUTTON
+   ========================================================== */
+
+.secondary-button {
+
+  height: 56px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: rgba(67,97,238,.08);
+
+  color: var(--fv-primary);
+
   font-size: 16px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: 0.3px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s;
-  }
-  
-  &:active::before {
-    width: 300px;
-    height: 300px;
-  }
-  
-  &:active {
-    transform: scale(0.96);
-  }
+  font-weight: 700;
+
+  transition:
+    background .18s ease,
+    transform .18s ease;
+
 }
 
-.custom-btn.cancel {
-  background: #fff;
-  color: #666;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  
-  &:hover {
-    background: #f9f9f9;
-    border-color: #d0d0d0;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-  }
+.secondary-button:hover {
+
+  background: rgba(67,97,238,.12);
+
 }
 
-.custom-btn.confirm {
-  background: var(--ion-color-side-menu, #667eea);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.4);
-  
-  &:hover {
-    background: #5568d3;
-    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
-    transform: translateY(-1px);
-  }
-  
-  &::before {
-    background: rgba(255, 255, 255, 0.25);
-  }
+.secondary-button:active {
+
+  transform: scale(.98);
+
 }
 
-// ====================
-// Responsive
-// ====================
-@media (max-width: 380px) {
-  .custom-alert {
-    max-width: 320px;
+/* ==========================================================
+   PRIMARY BUTTON
+   ========================================================== */
+
+.primary-button {
+
+  width: 100%;
+
+}
+
+/* ==========================================================
+   ANIMATIONS
+   ========================================================== */
+
+@keyframes backdropIn {
+
+  from {
+
+    opacity: 0;
+
   }
-  
-  .custom-alert-content {
-    padding: 28px 20px 20px;
+
+  to {
+
+    opacity: 1;
+
   }
-  
-  .custom-alert-header {
-    font-size: 18px;
+
+}
+
+@keyframes alertIn {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(10px)
+      scale(.94);
+
   }
-  
-  .custom-alert-message {
-    font-size: 14px;
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
   }
-  
-  .custom-btn {
-    font-size: 14px;
-    padding: 12px 16px;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width:420px){
+
+  .alert-card{
+
+    max-width:none;
+
+    border-radius:22px;
+
+    padding:24px 20px 20px;
+
   }
+
+  .alert-title{
+
+    font-size:20px;
+
+  }
+
+  .alert-message{
+
+    margin:
+      10px
+      0
+      24px;
+
+    font-size:14px;
+
+  }
+
 }

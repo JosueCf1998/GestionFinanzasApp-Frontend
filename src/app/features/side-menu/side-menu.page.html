@@ -2,94 +2,117 @@
   contentId="main-content"
   when="md">
 
-  <!-- MENU -->
+  <!-- ==========================================================
+       MENU
+       ========================================================== -->
 
   <ion-menu
+    menuId="main-menu"
     contentId="main-content"
-    type="overlay"
-    menuId="main-menu">
+    type="overlay">
 
-    <ion-content>
+    <ion-content
+      [scrollY]="false">
 
-      <!-- USER HEADER -->
+      <div class="menu-content">
 
-      <div class="menu-header">
+        <!-- ==========================================================
+             USER HEADER
+             ========================================================== -->
 
-        <div class="avatar-container">
+        <div class="menu-header">
 
-          <div class="avatar">
-            {{ user?.nombre ? user?.nombre!.charAt(0).toUpperCase() : 'U' }}
+          <div class="avatar-container">
+
+            <div class="avatar">
+
+              {{ user?.nombre ? user?.nombre!.charAt(0).toUpperCase() : 'U' }}
+
+            </div>
+
+          </div>
+
+          <div class="user-info">
+
+            <ion-label class="user-name">
+
+              {{ user?.nombre || 'Usuario' }}
+
+            </ion-label>
+
+            <ion-label class="user-email">
+
+              {{ user?.correo || 'usuario@ejemplo.com' }}
+
+            </ion-label>
+
           </div>
 
         </div>
 
-        <div class="user-info">
+        <!-- ==========================================================
+             MENU ITEMS
+             ========================================================== -->
 
-          <ion-label class="user-name">
-            {{ user?.nombre || 'Usuario' }}
-          </ion-label>
+        <ion-list id="inbox-list">
 
-          <ion-label class="user-email">
-            {{ user?.correo || 'usuario@ejemplo.com' }}
-          </ion-label>
+          @for (p of appPages; track p) {
+
+            <ion-menu-toggle auto-hide="false">
+
+              <ion-item
+                routerDirection="root"
+                [routerLink]="[p.url]"
+                routerLinkActive="selected"
+                lines="none"
+                detail="false">
+
+                <ion-icon
+                  slot="start"
+                  [src]="'assets/icon/' + p.icon + '.svg'">
+                </ion-icon>
+
+                <ion-label>
+
+                  {{ p.title }}
+
+                </ion-label>
+
+              </ion-item>
+
+            </ion-menu-toggle>
+
+          }
+
+        </ion-list>
+
+        <!-- ==========================================================
+             FOOTER
+             ========================================================== -->
+
+        <div class="menu-footer">
+
+          <ion-item
+            class="logout-item"
+            lines="none"
+            detail="false"
+            button
+            (click)="logOut()">
+
+            <ion-icon
+              slot="start"
+              src="assets/icon/exit.svg">
+            </ion-icon>
+
+            <ion-label>
+
+              Cerrar sesión
+
+            </ion-label>
+
+          </ion-item>
 
         </div>
-
-      </div>
-
-      <!-- MENU ITEMS -->
-
-      <ion-list id="inbox-list">
-
-        @for (p of appPages; track p) {
-
-          <ion-menu-toggle auto-hide="false">
-
-            <ion-item
-              routerDirection="root"
-              [routerLink]="[p.url]"
-              lines="none"
-              detail="false"
-              routerLinkActive="selected">
-
-              <ion-icon
-                slot="start"
-                [src]="'assets/icon/' + p.icon + '.svg'">
-              </ion-icon>
-
-              <ion-label>
-                {{ p.title }}
-              </ion-label>
-
-            </ion-item>
-
-          </ion-menu-toggle>
-
-        }
-
-      </ion-list>
-
-      <!-- FOOTER -->
-
-      <div class="menu-footer">
-
-        <ion-item
-          lines="none"
-          button
-          detail="false"
-          class="logout-item"
-          (click)="logOut()">
-
-          <ion-icon
-            slot="start"
-            src="assets/icon/exit.svg">
-          </ion-icon>
-
-          <ion-label>
-            Cerrar sesión
-          </ion-label>
-
-        </ion-item>
 
       </div>
 
@@ -97,7 +120,9 @@
 
   </ion-menu>
 
-  <!-- PAGE CONTENT -->
+  <!-- ==========================================================
+       PAGE
+       ========================================================== -->
 
   <div
     class="ion-page"
@@ -105,24 +130,22 @@
 
     <ion-header>
 
-      <ion-toolbar class="side-menu">
+      <app-page-layout
+        [showBack]="false">
 
-        <ion-buttons slot="start">
+        <ion-menu-button
+          header-left
+          menuId="main-menu">
+        </ion-menu-button>
 
-          <ion-menu-button
-            color="light"
-            menuId="main-menu">
-          </ion-menu-button>
-
-        </ion-buttons>
-
-      </ion-toolbar>
+      </app-page-layout>
 
     </ion-header>
 
     <div class="router-container">
 
-      <router-outlet></router-outlet>
+      <router-outlet>
+      </router-outlet>
 
     </div>
 

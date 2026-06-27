@@ -1,39 +1,233 @@
-.fv-header ion-toolbar {
-  --background: var(--fv-surface);
+:host {
 
-  --border-width: 0;
+  display: block;
 
-  padding-inline: 8px;
-
-  box-shadow:
-    0 2px 12px rgba(15,23,42,.04);
 }
 
-.back-button {
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.fv-header {
+
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: 44px 1fr 44px;
+
+  align-items: center;
+
+  min-height: 60px;
+
+  padding:
+    max(env(safe-area-inset-top), 0px)
+    16px
+    8px;
+
+  overflow: hidden;
+
+  background: var(--fv-gradient-primary);
+
+}
+
+/* ==========================================================
+   DECORATION
+   ========================================================== */
+
+.fv-header::before {
+
+  content: '';
+
+  position: absolute;
+
+  top: -45px;
+  right: -25px;
+
+  width: 140px;
+  height: 140px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.05);
+
+}
+
+.fv-header::after {
+
+  content: '';
+
+  position: absolute;
+
+  left: -35px;
+  bottom: -65px;
+
+  width: 120px;
+  height: 120px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,.04);
+
+}
+
+/* ==========================================================
+   LAYOUT
+   ========================================================== */
+
+.header-left,
+.header-center,
+.header-right {
+
+  position: relative;
+
+  z-index: 2;
+
+}
+
+.header-left,
+.header-right {
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.header-center {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+
+}
+
+/* ==========================================================
+   TITLE
+   ========================================================== */
+
+.header-center h1 {
+
+  margin: 0;
+
+  padding: 0 12px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #fff;
+
+  font-size: 19px;
+  font-weight: 700;
+
+  letter-spacing: -.02em;
+
+  line-height: 1.2;
+
+}
+
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+.header-button {
+
   width: 40px;
   height: 40px;
 
   border: none;
 
-  border-radius: 12px;
+  border-radius: 14px;
 
-  background: transparent;
+  background:
+    rgba(255,255,255,.12);
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition:
+    background .2s ease,
+    transform .18s ease;
+
 }
 
-.back-button ion-icon {
+.header-button:active {
+
+  transform: scale(.95);
+
+}
+
+.header-button:disabled {
+
+  opacity: .5;
+
+}
+
+.header-button ion-icon {
+
   width: 20px;
   height: 20px;
 
-  color: var(--fv-text-primary);
+  color: #fff;
+
 }
 
-ion-title {
-  color: var(--fv-text-primary);
+/* ==========================================================
+   ACTIONS
+   ========================================================== */
 
-  font-size: 18px;
-  font-weight: 700;
+.header-right:empty {
+
+  visibility: hidden;
+
+}
+
+.header-right ::ng-deep > * {
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(255,255,255,.12);
+
+  color: #fff;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 420px) {
+
+  .fv-header {
+
+    padding:
+      max(env(safe-area-inset-top), 0px)
+      14px
+      8px;
+
+  }
+
+  .header-center h1 {
+
+    font-size: 18px;
+
+  }
+
 }

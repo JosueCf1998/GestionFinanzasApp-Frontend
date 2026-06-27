@@ -11,11 +11,6 @@ import {
   COLORES_CATEGORIA
 } from 'src/app/shared/constants/category-options';
 
-import {
-  CreateCategoryRequest,
-  CreateCategoryUseCase
-} from 'src/app/core/use-cases/categories/create-category.usecase';
-
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 
@@ -24,6 +19,8 @@ import { CustomSegmentComponent } from 'src/app/shared/components/custom-segment
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 
 import 'src/app/core/utils/observable-extensions';
+import { CreateCategoryUseCase, RegisterCategoryRequest } from 'src/app/core/use-cases/categories/register-category.usecase';
+import { PrimaryButtonComponent } from "src/app/shared/components/primary-button/primary-button.component";
 
 @Component({
   selector: 'app-create-categories',
@@ -37,8 +34,9 @@ import 'src/app/core/utils/observable-extensions';
     HttpClientModule,
     CustomAlertComponent,
     CustomSegmentComponent,
-    PageLayoutComponent
-  ]
+    PageLayoutComponent,
+    PrimaryButtonComponent
+]
 })
 export class CreateCategoriesPage {
 
@@ -84,7 +82,7 @@ export class CreateCategoriesPage {
   showGenericAlert = false;
 
   constructor(
-    private createCategoryUseCase: CreateCategoryUseCase,
+    private registerCategoryUseCase: CreateCategoryUseCase,
     private navService: NavigationService,
     private loadingService: SpinnerService
   ) {
@@ -185,7 +183,7 @@ export class CreateCategoriesPage {
 
     this.showError = false;
 
-    const body: CreateCategoryRequest = {
+    const body: RegisterCategoryRequest = {
 
       name:
         this.nombreCategoria.trim(),
@@ -204,13 +202,13 @@ export class CreateCategoriesPage {
   }
 
   private executeCreateCategory(
-    body: CreateCategoryRequest
+    body: RegisterCategoryRequest
   ): void {
 
     this.loadingService.show();
 
-    this.createCategoryUseCase
-      .createCategory(body)
+    this.registerCategoryUseCase
+      .registerCategory(body)
       .service({
 
         success: (data) => {

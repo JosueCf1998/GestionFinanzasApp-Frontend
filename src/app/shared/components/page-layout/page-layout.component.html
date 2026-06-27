@@ -1,31 +1,60 @@
-<ion-header class="fv-header">
+<!-- ==========================================================
+     HEADER
+     ========================================================== -->
 
-  <ion-toolbar>
+<div class="fv-header">
 
-    <ion-buttons slot="start">
+  <!-- ==========================
+       LEFT
+       ========================== -->
 
-      <button
-        type="button"
-        class="back-button"
-        (click)="onBack()">
+  <div class="header-left">
 
-        <ion-icon
-          src="assets/icon/left.svg">
-        </ion-icon>
+    <button
+      *ngIf="showBack; else menuSlot"
+      type="button"
+      class="header-button"
+      [disabled]="loading"
+      (click)="onBack()">
 
-      </button>
+      <ion-icon
+        src="assets/icon/left.svg">
+      </ion-icon>
 
-    </ion-buttons>
+    </button>
 
-    <ion-title>
+    <ng-template #menuSlot>
+
+      <ng-content select="[header-left]">
+      </ng-content>
+
+    </ng-template>
+
+  </div>
+
+  <!-- ==========================
+       TITLE
+       ========================== -->
+
+  <div class="header-center">
+
+    <h1>
 
       {{ title }}
 
-    </ion-title>
+    </h1>
 
-  </ion-toolbar>
+  </div>
 
-</ion-header>
+  <!-- ==========================
+       RIGHT
+       ========================== -->
 
-<ng-content>
-</ng-content>
+  <div class="header-right">
+
+    <ng-content select="[header-actions]">
+    </ng-content>
+
+  </div>
+
+</div>
