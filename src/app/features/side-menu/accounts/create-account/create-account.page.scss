@@ -1,277 +1,412 @@
-
-ion-menu-button {
-  color: var(--ion-color-side-menu);
+.create-account-page {
+  --background: var(--fv-background);
 }
 
-.side-menu {
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+.create-account-form {
+
   display: flex;
-  height: 3.2em;
-  background: var(--ion-color-side-menu);
-  color: var(--ion-color-custom-gradient-contrast);
+  flex-direction: column;
+
+  gap: 20px;
+
+  padding: 16px;
+  padding-bottom: 24px;
+
 }
 
-.header-title {
-  font-size: 18px;
-  font-weight: 600;
-  text-align: center;
-  color: #fff;
-  letter-spacing: 0.3px;
+/* ==========================================================
+   ACCOUNT PREVIEW
+   ========================================================== */
+
+.account-preview {
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 12px;
+
+  padding:
+    8px
+    0
+    4px;
+
 }
 
-.atras-btn {
+.preview-icon {
+
+  width: 72px;
+  height: 72px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  cursor: pointer;
-  padding: 0;
+
+  border-radius: 20px;
+
+  box-shadow: var(--fv-shadow-primary);
+
+}
+
+.preview-icon ion-icon {
+
+  width: 30px;
+  height: 30px;
+
+  color: white;
+
+  filter: brightness(0) invert(1);
+
+}
+
+.preview-title {
+
   margin: 0;
-  border-radius: 50%;
-  transition: background 0.2s;
+
+  color: var(--fv-text-primary);
+
+  font-size: 22px;
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  text-align: center;
+
+}
+
+.preview-balance {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    6px
+    14px;
+
+  border-radius: 999px;
+
+  background: rgba(67,97,238,.08);
+
+  color: var(--fv-primary);
+
+  font-size: 14px;
+  font-weight: 700;
+
+  letter-spacing: .02em;
+
+}
+
+/* ==========================================================
+   FORM SECTION
+   ========================================================== */
+
+.form-section {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  background: var(--fv-surface);
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(67,97,238,.05);
+
+  box-shadow: var(--fv-shadow-sm);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+
+}
+
+.form-section:focus-within {
+
+  border-color: rgba(67,97,238,.15);
+
+  box-shadow:
+    0 0 0 3px rgba(67,97,238,.06);
+
+}
+
+/* ==========================================================
+   SECTION HEADER
+   ========================================================== */
+
+.section-header {
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+}
+
+.section-label {
+
+  margin: 0;
+
+  color: var(--fv-text-secondary);
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .08em;
+
+}
+
+/* ==========================================================
+   INPUT
+   ========================================================== */
+
+.fv-input {
+
+  --background: #f8faff;
+
+  --padding-start: 18px;
+  --padding-end: 18px;
+
+  --border-radius: 14px;
+
+  min-height: 52px;
+
+  border: 1px solid rgba(67,97,238,.08);
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+
+}
+
+.fv-input.ion-focused {
+
+  border-color: var(--fv-primary);
+
+  box-shadow:
+    0 0 0 3px rgba(67,97,238,.08);
+
+}
+
+/* ==========================================================
+   AMOUNT INPUT
+   ========================================================== */
+
+app-amount-input {
+
+  display: block;
+
+  width: 100%;
+
+}
+
+/* ==========================================================
+   ICONS
+   ========================================================== */
+
+.icons-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 12px;
+
+}
+
+.icon-button {
+
+  width: 100%;
+
+  aspect-ratio: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(67,97,238,.06);
+
+  border-radius: 14px;
+
+  background: transparent;
+
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .18s ease;
+
+}
+
+.icon-button:active {
+
+  transform: scale(.94);
+
+}
+
+.icon-button ion-icon {
+
+  width: 24px;
+  height: 24px;
+
+  color: var(--fv-text-primary);
+
+}
+
+.icon-button.selected {
+
+  background: rgba(67,97,238,.08);
+
+  border-color: var(--fv-primary);
+
+}
+
+.icon-button.selected ion-icon {
+
+  color: var(--fv-primary);
+
+}
+
+/* ==========================================================
+   COLORS
+   ========================================================== */
+
+.colors-grid {
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+}
+
+.color-button {
+
   width: 40px;
   height: 40px;
-  font-size: 25px;
-  &:hover {
-    background: #ececec;
-  }
-  ion-icon {
-    font-size: 28px;
-    color: #fff !important;
-    filter: brightness(0) invert(1);
-  }
-}
 
-// ====================
-// Contenedor principal
-// ====================
-.content {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: #fcfdf8;
-  min-height: 100dvh;
-  height: 100dvh;
-  max-height: 100dvh;
-  box-sizing: border-box;
-  padding: 16px; 
-  overflow: hidden !important;
-}
-
-#container {
-  text-align: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  strong {
-    font-size: 20px;
-    line-height: 26px;
-  }
-  p {
-    font-size: 16px;
-    line-height: 22px;
-    color: #8c8c8c;
-    margin: 0;
-  }
-  a {
-    text-decoration: none;
-  }
-}
-
-// ====================
-// Contenido principal
-// ====================
-.edit-category-content {
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  max-width: 420px;
-  margin: 0 auto;
-}
-
-// ====================
-// Monto inicial y moneda
-// ====================
-.amount-section {
-  background: transparent;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 8px 0 4px 0;
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
 
-  .amount-row {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+  border: none;
 
-  .amount-wrapper {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    background: transparent;
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-    overflow: visible;
-    border-radius: 0;
-  }
-
-  .amount-input {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-// ====================
-// Input de nombre de cuenta
-// ====================
-.input-row {
-  .input-label {
-    display: block;
-    color: #333;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-  .input-edit {
-    font-size: 16px;
-    color: #222;
-    border: none;
-    background: transparent;
-    width: 100%;
-    border-bottom: 2px solid #cfd8dc;
-    margin-bottom: 2px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-    line-height: 1.4;
-    transition: border-color 0.2s ease;
-    --placeholder-color: #8c8c8c;
-    --placeholder-opacity: 1;
-
-    &:focus-within {
-      border-bottom-color: #9aa9c0;
-    }
-  }
-}
-
-// ====================
-// Selección de símbolo
-// ====================
-.simbolos-row {
-  margin-bottom: 8px;
-}
-.label-simbolos {
-  font-size: 15px;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 8px;
-  display: block;
-  line-height: 1.4;
-}
-.simbolos-grid {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 6px;
-}
-.simbolo-btn {
-  width: 44px;
-  height: 44px;
   border-radius: 50%;
-  background: #f4f4f4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border 0.2s, background 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-  &:hover {
-    background: #e3f2fd;
-  }
-  &.selected {
-    border: 2px solid #1976d2;
-    background: #e3f2fd;
-  }
-  ion-icon {
-    font-size: 24px;
-    color: #0000;
-  }
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+
 }
 
-// ====================
-// Selección de color
-// ====================
-.color-row {
-  margin-bottom: 8px;
+.color-button:active {
+
+  transform: scale(.92);
+
 }
-.label-color {
-  font-size: 15px;
-  color: #333;
-  font-weight: 500;
-  margin-bottom: 8px;
-  display: block;
-  line-height: 1.4;
+
+.color-button.selected {
+
+  transform: scale(1.10);
+
+  box-shadow:
+    0 0 0 3px var(--fv-surface),
+    0 0 0 5px rgba(67,97,238,.18);
+
 }
-.color-grid {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 6px;
+
+.color-button ion-icon {
+
+  width: 16px;
+  height: 16px;
+
+  color: white;
+
+  filter: brightness(0) invert(1);
+
 }
-.color-btn {
-  position: relative;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+/* ==========================================================
+   ACTION
+   ========================================================== */
+
+.action-container {
+
+  padding-top: 4px;
+
 }
-.color-check {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 28px;
-  color: #fff !important;
-  pointer-events: none;
-  z-index: 2;
-}
-.add-color-btn {
-  background: #f4f4f4 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed #bbb;
-  ion-icon {
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width:420px) {
+
+  .create-account-form {
+
+    padding: 16px;
+
+  }
+
+  .preview-icon {
+
+    width: 64px;
+    height: 64px;
+
+  }
+
+  .preview-icon ion-icon {
+
+    width: 28px;
+    height: 28px;
+
+  }
+
+  .preview-title {
+
     font-size: 20px;
-    color: #888;
-  }
-}
 
-// ====================
-// Botón añadir
-// ====================
-.btn-anadir {
-  margin-top: 22px;
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 12px;
-  letter-spacing: 0.5px;
-  --background:  var(--ion-color-side-menu);
-  --color: #fff;
-  --box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
-  --border-radius: 12px;
+  }
+
+  .preview-balance {
+
+    font-size: 13px;
+
+  }
+
+  .form-section {
+
+    padding: 14px;
+
+  }
+
+  .icons-grid {
+
+    grid-template-columns: repeat(5, 1fr);
+
+    gap: 10px;
+
+  }
+
+  .icon-button ion-icon {
+
+    width: 22px;
+    height: 22px;
+
+  }
+
 }

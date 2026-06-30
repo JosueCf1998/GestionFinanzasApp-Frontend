@@ -1,104 +1,222 @@
-<!-- Content General -->
-<ion-content [fullscreen]="true" scroll-y="false">
-  <ion-header>
-    <ion-toolbar class="side-menu" color="side-menu">
-      <ion-buttons slot="start">
-        <button class="atras-btn" type="button" (click)="backToAccounts()">
-          <ion-icon src="assets/icon/left.svg"></ion-icon>
+<!-- ==========================================================
+     HEADER
+     ========================================================== -->
+
+<ion-header>
+
+  <app-page-layout
+    [title]="title"
+    [showBack]="true"
+    (back)="backToAccounts()">
+
+  </app-page-layout>
+
+</ion-header>
+
+<!-- ==========================================================
+     CONTENT
+     ========================================================== -->
+
+<ion-content
+  [fullscreen]="false"
+  class="create-account-page">
+
+  <form
+    class="create-account-form"
+    (ngSubmit)="guardarCuenta()">
+
+    <!-- ==========================================================
+         ACCOUNT PREVIEW
+         ========================================================== -->
+
+    <section class="account-preview">
+
+      <div
+        class="preview-icon"
+        [style.background]="colorSeleccionado">
+
+        <ion-icon
+          [src]="'assets/icon/' + iconoSeleccionado + '.svg'">
+        </ion-icon>
+
+      </div>
+
+      <h2 class="preview-title">
+
+        {{ nombreCuenta || 'Nueva cuenta' }}
+
+      </h2>
+
+      <div class="preview-balance">
+
+        S/. {{ montoInicial || '0.00' }}
+
+      </div>
+
+    </section>
+
+    <!-- ==========================================================
+         INITIAL BALANCE
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <div class="section-header">
+
+        <h3 class="section-label">
+
+          Monto inicial
+
+        </h3>
+
+      </div>
+
+      <app-amount-input
+        class="fv-input"
+        [(ngModel)]="montoInicial"
+        name="montoInicial"
+        placeholder="0.00"
+        currencyCode="PEN"
+        variant="enhanced"
+        [required]="true">
+
+      </app-amount-input>
+
+    </section>
+
+    <!-- ==========================================================
+         ACCOUNT NAME
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <div class="section-header">
+
+        <h3 class="section-label">
+
+          Nombre de la cuenta
+
+        </h3>
+
+      </div>
+
+      <ion-input
+        class="fv-input"
+        type="text"
+        name="nombreCuenta"
+        placeholder="Ej. Cuenta principal"
+        maxlength="30"
+        autocomplete="off"
+        [(ngModel)]="nombreCuenta"
+        required>
+
+      </ion-input>
+
+    </section>
+
+    <!-- ==========================================================
+         ICON
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <div class="section-header">
+
+        <h3 class="section-label">
+
+          Icono
+
+        </h3>
+
+      </div>
+
+      <div class="icons-grid">
+
+        <button
+          *ngFor="let icon of iconos"
+          type="button"
+          class="icon-button"
+          [class.selected]="icon.archivo === iconoSeleccionado"
+          (click)="seleccionarIcono(icon)">
+
+          <ion-icon
+            [src]="'assets/icon/' + icon.archivo + '.svg'">
+          </ion-icon>
+
         </button>
-      </ion-buttons>
-      <ion-title class="header-title">{{ title }}</ion-title>
-      <ion-buttons slot="end"></ion-buttons>
-    </ion-toolbar>
-  </ion-header>
 
-  <div class="content">
-      <form class="edit-category-content" (ngSubmit)="guardarCuenta()">
-        <!-- Monto inicial y moneda -->
-        <div class="amount-section">
-          <div class="amount-row">
-            <div class="amount-wrapper">
-                <app-amount-input
-                  class="amount-input"
-                  [(ngModel)]="montoInicial"
-                  name="montoInicial"
-                  placeholder="0.00"
-                  [required]="true"
-                  currencyCode="PEN"
-                  variant="enhanced"
-                ></app-amount-input>
-            </div>
-          </div>
-        </div>
+      </div>
 
-        <!-- Nombre de la cuenta -->
-        <div class="input-row">
-          <label class="label-simbolos text-body">Nombre de la cuenta</label>
-          <ion-input
-            type="text"
-            placeholder="Nombre de la cuenta"
-            [(ngModel)]="nombreCuenta"
-            name="nombreCuenta"
-            required
-            maxlength="30"
-            class="input-edit"
-          ></ion-input>
-        </div>
+    </section>
 
-        <!-- Selección de símbolo -->
-        <div class="simbolos-row">
-          <label class="label-simbolos text-body">Símbolo</label>
-          <div class="simbolos-grid">
-            <button
-              type="button"
-              class="simbolo-btn"
-              *ngFor="let icon of iconos"
-              [class.selected]="icon.archivo === iconoSeleccionado"
-              (click)="seleccionarIcono(icon)"
-              [attr.aria-label]="icon.nombre"
-            >
-              <ion-icon src="assets/icon/{{icon.archivo}}.svg"></ion-icon>
-            </button>
-          </div>
-        </div>
+    <!-- ==========================================================
+         COLOR
+         ========================================================== -->
 
-        <!-- Selección de color -->
-        <div class="color-row">
-          <label class="label-color text-body">Color</label>
-          <div class="color-grid">
-            <button
-              type="button"
-              class="color-btn"
-              *ngFor="let color of colores"
-              [ngStyle]="{'background': color.valor}"
-              [class.selected]="color.valor === colorSeleccionado"
-              (click)="seleccionarColor(color)"
-              [attr.aria-label]="color.nombre"
-            >
-              <ion-icon
-                *ngIf="color.valor === colorSeleccionado"
-                src="assets/icon/check.svg"
-                class="color-check"
-              ></ion-icon>
-            </button>
-          </div>
-        </div>
+    <section class="form-section">
 
-        <!-- Botón de acción -->
-        <ion-button expand="block" class="btn-anadir text-button" [disabled]="isValidateForm()" type="submit">
-          Guardar
-        </ion-button>
-      </form>
+      <div class="section-header">
+
+        <h3 class="section-label">
+
+          Color
+
+        </h3>
+
+      </div>
+
+      <div class="colors-grid">
+
+        <button
+          *ngFor="let color of colores"
+          type="button"
+          class="color-button"
+          [style.background]="color.valor"
+          [class.selected]="color.valor === colorSeleccionado"
+          (click)="seleccionarColor(color)">
+
+          <ion-icon
+            *ngIf="color.valor === colorSeleccionado"
+            src="assets/icon/check.svg">
+
+          </ion-icon>
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ==========================================================
+         ACTIONS
+         ========================================================== -->
+
+    <div class="action-container">
+
+      <app-button
+        text="Guardar cuenta"
+        type="submit"
+        [disabled]="isValidateForm()">
+
+      </app-button>
+
     </div>
 
-    <app-custom-alert
-      *ngIf="showCustomAlert"
-      header="Cambios sin guardar"
-      message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
-      cancelText="No"
-      confirmText="Sí"
-      (onCancel)="showCustomAlert = false"
-      (onConfirm)="salirSinGuardar()"
-    ></app-custom-alert>
-    
+  </form>
+
 </ion-content>
+
+<!-- ==========================================================
+     ALERT
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showCustomAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la cuenta. ¿Deseas salir sin guardar?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="showCustomAlert = false"
+  (onConfirm)="salirSinGuardar()">
+
+</app-custom-alert>

@@ -4,9 +4,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { IonContent, IonIcon, IonButton } from '@ionic/angular/standalone';
 import { NavigationService } from '../../../core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
-import { CreateAccountRequest, CreateAccountUseCase } from 'src/app/core/use-cases/accounts/create-account.usecase';
+
 import { AmountInputComponent } from 'src/app/shared/components/amount-input/amount-input.component';
 import 'src/app/core/utils/observable-extensions';
+import { CreateAccountRequest, CreateAccountUseCase } from 'src/app/core/use-cases/accounts/create-account.usecase';
 
 @Component({
   selector: 'app-welcome-step-two',
@@ -44,7 +45,7 @@ export class WelcomeStepTwoPage implements OnInit {
 
   private executeCreateAccount(body: CreateAccountRequest) {
       this.loadingService.show();
-      this.createAccountUseCase.createAccount(body).service({
+      this.createAccountUseCase.execute(body).service({
         success: (data) => {
           this.loadingService.hide();
           this.navService.push('/main');

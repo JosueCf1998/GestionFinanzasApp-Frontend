@@ -34,7 +34,7 @@ export class CreateAccountUseCase {
     private encryptionService: EncryptionService
   ) {}
 
-  createAccount(body: CreateAccountRequest): Observable<Result<CreateAccountResponse>> {
+  execute(body: CreateAccountRequest): Observable<Result<CreateAccountResponse>> {
     const endpoint = 'accounts/register';
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);

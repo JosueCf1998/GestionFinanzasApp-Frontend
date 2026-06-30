@@ -1,4 +1,3 @@
-import { UpdateAccountRequest, UpdateAccountUseCase } from '../../../../core/use-cases/accounts/update-account.usecase';
 import { Component } from "@angular/core";
 import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
@@ -13,13 +12,16 @@ import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cas
 import { Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 import 'src/app/core/utils/observable-extensions';
+import { ButtonComponent } from "src/app/shared/components/button/button.component";
+import { UpdateAccountRequest, UpdateAccountUseCase } from "src/app/core/use-cases/Accounts/update-account.usecase";
+import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
 @Component({
   selector: "app-create-account",
   templateUrl: "./create-account.page.html",
   styleUrls: ["./create-account.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AmountInputComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AmountInputComponent, ButtonComponent, PageLayoutComponent],
 })
 export class CreateAccountPage {
 
@@ -70,11 +72,11 @@ export class CreateAccountPage {
     }
   }
 
-  // MARK: - SERVICIOS 
+  // MARK: - SERVICIOS
 
   private executeCreateAccount(body: CreateAccountRequest) {
     this.loadingService.show();
-    this.createAccountUseCase.createAccount(body).service({
+    this.createAccountUseCase.execute(body).service({
       success: (data) => {
         this.loadingService.hide();
         if (data) {
@@ -93,7 +95,7 @@ export class CreateAccountPage {
 
   private executeUpdateAccount(body: UpdateAccountRequest) {
     this.loadingService.show();
-    this.updateAccountUseCase.updateAccount(body).service({
+    this.updateAccountUseCase.execute(body).service({
       success: (data) => {
         this.loadingService.hide();
         if (data) {
@@ -110,7 +112,7 @@ export class CreateAccountPage {
     });
   }
 
-  // MARK: - FUNCIONALDIDADES 
+  // MARK: - FUNCIONALDIDADES
 
   seleccionarIcono(icon: any) {
     this.iconoSeleccionado = icon.archivo;
@@ -121,7 +123,7 @@ export class CreateAccountPage {
     this.colorSeleccionado = color.valor;
     this.cambiosPendientes = true;
   }
-  
+
   isValidateForm(): boolean {
     return (
       !this.nombreCuenta ||
@@ -175,5 +177,5 @@ export class CreateAccountPage {
     (document.activeElement as HTMLElement)?.blur();
     this.navService.back();
   }
-  
+
 }
