@@ -1,63 +1,236 @@
-<ion-content [fullscreen]="true">
-  <div class="content">
-    <div class="scrollable-content">
-      <!-- Total -->
-      <div class="accounts-total-card">
-        <span class="total-label">Total cuentas</span>
-        <span class="currency">S/. {{ totalCuentas | number:'1.2-2' }}</span>
+<ion-content
+  [fullscreen]="false"
+  class="accounts-page">
+
+  <div class="accounts-content">
+
+    <!-- ==========================================================
+         SUMMARY
+         ========================================================== -->
+
+    <section class="accounts-summary">
+
+      <span class="summary-label">
+
+        Balance total
+
+      </span>
+
+      <h1 class="summary-amount">
+
+        S/. {{ totalCuentas | number:'1.2-2' }}
+
+      </h1>
+
+      <div class="summary-footer">
+
+        <div class="summary-chip">
+
+          <ion-icon
+            src="assets/icon/wallet.svg">
+          </ion-icon>
+
+          <span>
+
+            {{ accountList.length }} cuentas
+
+          </span>
+
+        </div>
+
       </div>
 
-      <!-- Acciones -->
-      <div class="accounts-actions">
-        <div class="action-btn" (click)="goToCreateAccount()">
-          <div class="action-icon">
-            <ion-icon src="assets/icon/add.svg"></ion-icon>
-          </div>
-          <span class="text-small">Crear Cuenta</span>
-        </div>
-        <div class="action-btn" (click)="goToHistoryTransfer()">
-          <div class="action-icon">
-            <ion-icon src="assets/icon/history.svg"></ion-icon>
-          </div>
-          <span class="text-small">Historial de transferencias</span>
-        </div>
-        <div class="action-btn" (click)="goToNewTransfer()">
-          <div class="action-icon">
-            <ion-icon src="assets/icon/transfer.svg"></ion-icon>
-          </div>
-          <span class="text-small">Nueva transferencia</span>
-        </div>
-      </div>
+    </section>
 
-      <!-- Lista de cuentas -->
-      <div class="accounts-list" *ngIf="accountList.length > 0">
-        <div *ngFor="let account of accountList">
-          <div class="account-item" (click)="goToEditAccount(account)">
-            <div class="account-icon" [ngStyle]="{'background': account.color}">
-              <ion-icon src="assets/icon/{{account.icon}}.svg"></ion-icon>
-            </div>
-            <div class="account-info">
-              <span class="text-body text-primary">{{ account.name }}</span>
-            </div>
-            <div class="account-balance text-body-bold text-primary">
-              S/. {{ +account.amount | number:'1.2-2' }}
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- ==========================================================
+         QUICK ACTIONS
+         ========================================================== -->
 
-      <!-- Mensaje cuando no hay cuentas -->
-      <div class="empty-state" *ngIf="accountList.length === 0">
-        <ion-icon src="assets/icon/wallet.svg" class="empty-icon"></ion-icon>
-        <h3 class="text-subtitle text-primary">No tienes cuentas registradas</h3>
-        <p class="text-caption text-secondary">Crea tu primera cuenta para comenzar a gestionar tus finanzas</p>
-        <button class="create-account-btn text-button text-white" (click)="goToCreateAccount()">
-          <ion-icon src="assets/icon/add.svg"></ion-icon>
+    <section class="actions-section">
+
+      <button
+        type="button"
+        class="action-card"
+        (click)="goToCreateAccount()">
+
+        <div class="action-icon">
+
+          <ion-icon
+            src="assets/icon/add.svg">
+          </ion-icon>
+
+        </div>
+
+        <span>
+
           Crear cuenta
-        </button>
+
+        </span>
+
+      </button>
+
+      <button
+        type="button"
+        class="action-card"
+        (click)="goToNewTransfer()">
+
+        <div class="action-icon">
+
+          <ion-icon
+            src="assets/icon/transfer.svg">
+          </ion-icon>
+
+        </div>
+
+        <span>
+
+          Transferir
+
+        </span>
+
+      </button>
+
+      <button
+        type="button"
+        class="action-card"
+        (click)="goToHistoryTransfer()">
+
+        <div class="action-icon">
+
+          <ion-icon
+            src="assets/icon/history.svg">
+          </ion-icon>
+
+        </div>
+
+        <span>
+
+          Historial
+
+        </span>
+
+      </button>
+
+    </section>
+
+    <!-- ==========================================================
+         ACCOUNTS
+         ========================================================== -->
+
+    <section
+      class="accounts-section"
+      *ngIf="accountList.length">
+
+      <div class="section-header">
+
+        <h2>
+
+          Tus cuentas
+
+        </h2>
+
+        <div class="accounts-counter">
+
+          {{ accountList.length }}
+
+        </div>
+
       </div>
-    </div>
+
+      <button
+        *ngFor="let account of accountList"
+        type="button"
+        class="account-card"
+        (click)="goToEditAccount(account)">
+
+        <!-- ICON -->
+
+        <div
+          class="account-icon"
+          [style.background]="account.color">
+
+          <ion-icon
+            [src]="'assets/icon/' + account.icon + '.svg'">
+          </ion-icon>
+
+        </div>
+
+        <!-- INFO -->
+
+        <div class="account-info">
+
+          <h3>
+
+            {{ account.name }}
+
+          </h3>
+
+          <span>
+
+            Cuenta financiera
+
+          </span>
+
+        </div>
+
+        <!-- BALANCE -->
+
+        <div class="account-right">
+
+          <div class="account-amount">
+
+            S/. {{ +account.amount | number:'1.2-2' }}
+
+          </div>
+
+          <ion-icon
+            class="account-arrow"
+            src="assets/icon/right.svg">
+          </ion-icon>
+
+        </div>
+
+      </button>
+
+    </section>
+
+    <!-- ==========================================================
+         EMPTY
+         ========================================================== -->
+
+    <section
+      class="empty-state"
+      *ngIf="!accountList.length">
+
+      <div class="empty-icon">
+
+        <ion-icon
+          src="assets/icon/wallet.svg">
+        </ion-icon>
+
+      </div>
+
+      <h2>
+
+        Aún no tienes cuentas
+
+      </h2>
+
+      <p>
+
+        Crea tu primera cuenta para comenzar a administrar tu dinero en FinVia.
+
+      </p>
+
+      <app-button
+        text="Crear cuenta"
+        icon="add"
+        (clicked)="goToCreateAccount()">
+
+      </app-button>
+
+    </section>
+
   </div>
 
 </ion-content>
-

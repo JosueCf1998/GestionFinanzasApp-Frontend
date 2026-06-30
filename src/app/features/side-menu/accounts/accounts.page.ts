@@ -5,13 +5,14 @@ import { NavigationService } from "src/app/core/services/navigation.service";
 import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import 'src/app/core/utils/observable-extensions';
+import { ButtonComponent } from "src/app/shared/components/button/button.component";
 
 @Component({
   selector: "app-accounts",
   templateUrl: "./accounts.page.html",
   styleUrls: ["./accounts.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, ButtonComponent],
 })
 export class AccountsPage {
 
@@ -60,8 +61,8 @@ export class AccountsPage {
   }
 
   goToEditAccount(account: Accounts) {
-    this.navService.push('/accounts/create-account', { 
-      type: 'editar', 
+    this.navService.push('/accounts/create-account', {
+      type: 'editar',
       account: account
     });
   }
