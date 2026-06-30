@@ -1,138 +1,283 @@
 <ion-header>
-  <ion-toolbar class="side-menu" color="side-menu">
-    <ion-buttons slot="start">
-      <button class="atras-btn" type="button" (click)="backToCategories()">
-        <ion-icon src="assets/icon/left.svg"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title class="header-title text-subtitle">Editar Categoría</ion-title>
-    <ion-buttons slot="end">
-      <!-- Acciones adicionales -->
-    </ion-buttons>
-  </ion-toolbar>
+
+  <app-page-layout
+    title="Editar categoría"
+    (back)="backToCategories()">
+  </app-page-layout>
+
 </ion-header>
 
-<ion-content [fullscreen]="true" scroll-y="false">
-  <form class="edit-category-content" (ngSubmit)="anadirCategoria()">
-    <!-- Nombre de la categoría -->
-    <div class="input-row">
-      <div class="category-icon-circle icon-edit" [ngStyle]="{'background': colorCategoria}">
-        <ion-icon *ngIf="category" [src]="'assets/icon/' + iconoCategoria + '.svg'" class="input-icon"></ion-icon>
+<ion-content
+  [fullscreen]="false"
+  class="edit-category-page">
+
+  <!-- ==========================================================
+       FORM
+       ========================================================== -->
+
+  <form
+    class="edit-category-form"
+    (ngSubmit)="anadirCategoria()">
+
+    <!-- ==========================================================
+         CATEGORY PREVIEW
+         ========================================================== -->
+
+    <section class="category-preview">
+
+      <div
+        class="preview-icon"
+        [style.background]="colorCategoria">
+
+        <ion-icon
+          *ngIf="iconoCategoria"
+          [src]="'assets/icon/' + iconoCategoria + '.svg'">
+        </ion-icon>
+
       </div>
+
+      <h2 class="preview-title">
+
+        {{
+          nombreCategoria ||
+          'Categoría'
+        }}
+
+      </h2>
+
+      <span
+        class="preview-type"
+        [class.income]="tipoCategoria === 'ingresos'">
+
+        {{
+          tipoCategoria === 'ingresos'
+            ? 'Ingreso'
+            : 'Gasto'
+        }}
+
+      </span>
+
+    </section>
+
+    <!-- ==========================================================
+         NAME
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <label class="section-label">
+
+        Nombre
+
+      </label>
+
       <ion-input
+        class="fv-input"
         type="text"
-        placeholder="Nombre de la categoría"
-        [(ngModel)]="nombreCategoria"
         name="nombreCategoria"
-        required
-        autocomplete="off"
         maxlength="30"
-        class="input-edit"
+        autocomplete="off"
+        placeholder="Ej. Alimentación"
+        [(ngModel)]="nombreCategoria"
         (ionInput)="onInputNombreCategoria($event)"
-      ></ion-input>
-      <button type="button" class="clear-btn" *ngIf="nombreCategoria" (click)="clearNombreCategoria()">
-        <!-- <ion-icon name="close-circle"></ion-icon> -->
-      </button>
-    </div>
-    <!-- Nombre de Tipo de Categoria -->
-    <div class="tipo-row">
-      <label class="label-tipo text-body">Tipo</label>
-      <div class="tipo-descripcion text-body">
-        {{ tipoCategoria   === 'gastos' ? 'Gasto' : 'Ingreso' }}
-      </div>
-    </div>
+        required>
 
-    <!-- Selección de símbolo -->
-    <div class="simbolos-row">
-      <label class="label-simbolos text-body">Símbolo</label>
-      <div class="simbolos-grid">
+      </ion-input>
+
+    </section>
+
+    <!-- ==========================================================
+         TYPE
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <label class="section-label">
+
+        Tipo de categoría
+
+      </label>
+
+      <div class="readonly-type">
+
+        <span
+          class="preview-type"
+          [class.income]="tipoCategoria === 'ingresos'">
+
+          {{
+            tipoCategoria === 'ingresos'
+              ? 'Ingreso'
+              : 'Gasto'
+          }}
+
+        </span>
+
+      </div>
+
+    </section>
+
+    <!-- ==========================================================
+         ICONS
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <div class="section-header">
+
+        <label class="section-label">
+
+          Ícono
+
+        </label>
+
+        <span>
+
+          {{ iconos.length }} disponibles
+
+        </span>
+
+      </div>
+
+      <div class="icons-grid">
+
         <button
-          type="button"
-          class="simbolo-btn"
           *ngFor="let icon of iconos"
-          [class.selected]="icon.archivo === iconoSeleccionado"
-          (click)="seleccionarIcono(icon)"
-          [attr.aria-label]="icon.nombre"
-        >
-          <ion-icon [src]="'assets/icon/' + icon.archivo + '.svg'"></ion-icon>
-        </button>
-      </div>
-    </div>
-
-    <!-- Selección de color -->
-    <div class="color-row">
-      <label class="label-color text-body">Color</label>
-      <div class="color-grid">
-        <button
           type="button"
-          class="color-btn"
+          class="icon-button"
+          [class.selected]="icon.archivo === iconoSeleccionado"
+          [attr.aria-label]="icon.nombre"
+          (click)="seleccionarIcono(icon)">
+
+          <ion-icon
+            [src]="'assets/icon/' + icon.archivo + '.svg'">
+          </ion-icon>
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ==========================================================
+         COLORS
+         ========================================================== -->
+
+    <section class="form-section">
+
+      <div class="section-header">
+
+        <label class="section-label">
+
+          Color
+
+        </label>
+
+        <span>
+
+          {{ colores.length }} disponibles
+
+        </span>
+
+      </div>
+
+      <div class="colors-grid">
+
+        <button
           *ngFor="let color of colores"
-          [ngStyle]="{'background': color.valor}"
+          type="button"
+          class="color-button"
+          [style.background]="color.valor"
           [class.selected]="color.valor === colorSeleccionado"
-          (click)="seleccionarColor(color)"
           [attr.aria-label]="color.nombre"
-        >
+          (click)="seleccionarColor(color)">
+
           <ion-icon
             *ngIf="color.valor === colorSeleccionado"
-            src="assets/icon/check.svg"
-            class="color-check"
-          ></ion-icon>
+            src="assets/icon/check.svg">
+
+          </ion-icon>
+
         </button>
+
       </div>
+
+    </section>
+
+    <!-- ==========================================================
+         ACTIONS
+         ========================================================== -->
+
+    <div class="action-container">
+
+      <app-button
+        text="Guardar cambios"
+        type="submit"
+        [disabled]="!puedeGuardar">
+
+      </app-button>
+
+      <app-button
+        text="Eliminar categoría"
+        icon="trash"
+        variant="danger"
+        (clicked)="eliminarCategoria()">
+
+      </app-button>
+
     </div>
 
-    <!-- Botones de acción -->
-    <div class="action-buttons">
-      <ion-button expand="block" class="btn-editar text-button" [disabled]="!puedeGuardar" type="submit">
-        <ion-icon [src]="'assets/icon/edit.svg'"></ion-icon>
-        Guardar
-      </ion-button>
-      <ion-button expand="block" class="btn-eliminar text-button" type="button" (click)="eliminarCategoria()">
-        <ion-icon slot="start" name="trash-outline"></ion-icon>
-        Eliminar
-      </ion-button>
-    </div>
   </form>
 
-  <!-- Alert de confirmación de salida sin guardar -->
-  <app-custom-alert
-    *ngIf="showExitAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="cerrarAlert()"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
-
-  <!-- Alert de confirmación de eliminación -->
-  <app-custom-alert
-    *ngIf="showDeleteAlert"
-    header="Eliminar categoría"
-    message="¿Estás seguro de que deseas eliminar esta categoría?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="cerrarAlert()"
-    (onConfirm)="confirmarEliminacion()"
-  ></app-custom-alert>
-
-  <!-- Alert de error genérico -->
-  <app-custom-alert
-    *ngIf="showGenericAlert"
-    header="Error"
-    message="Ocurrió un error al procesar la solicitud. Por favor, intenta nuevamente."
-    confirmText="OK"
-    (onConfirm)="cerrarAlert()"
-  ></app-custom-alert>
-
-  <!-- Alert de error con mensaje -->
-  <app-custom-alert
-    *ngIf="showUnauthorizedAlert"
-    header="Error"
-    [message]="messageError"
-    confirmText="OK"
-    (onConfirm)="cerrarAlert()"
-  ></app-custom-alert>
-
-  
 </ion-content>
+
+<!-- ==========================================================
+     ALERTA CAMBIOS
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showExitAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la categoría. ¿Deseas salir sin guardar?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="cerrarAlert()"
+  (onConfirm)="salirSinGuardar()">
+</app-custom-alert>
+
+<!-- ==========================================================
+     ALERTA ELIMINAR
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar categoría"
+  message="Esta acción no se puede deshacer. ¿Deseas continuar?"
+  cancelText="Cancelar"
+  confirmText="Eliminar"
+  (onCancel)="cerrarAlert()"
+  (onConfirm)="confirmarEliminacion()">
+</app-custom-alert>
+
+<!-- ==========================================================
+     ALERTA ERROR
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showGenericAlert"
+  header="Error"
+  message="Ocurrió un error al procesar la solicitud. Inténtalo nuevamente."
+  confirmText="Aceptar"
+  (onConfirm)="cerrarAlert()">
+</app-custom-alert>
+
+<!-- ==========================================================
+     ALERTA MENSAJE
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showUnauthorizedAlert"
+  header="Error"
+  [message]="messageError"
+  confirmText="Aceptar"
+  (onConfirm)="cerrarAlert()">
+</app-custom-alert>

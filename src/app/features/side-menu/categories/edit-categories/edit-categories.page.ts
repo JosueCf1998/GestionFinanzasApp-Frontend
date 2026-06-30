@@ -12,13 +12,15 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { UpdateCategoryRequest, UpdateCategoryUseCase } from "src/app/core/use-cases/categories/update-category.usecase";
 import { DeleteCategoryUseCase } from "src/app/core/use-cases/categories/delete-category.usecase";
 import 'src/app/core/utils/observable-extensions';
+import { ButtonComponent } from "src/app/shared/components/button/button.component";
+import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
 @Component({
   selector: "app-edit-categories",
   templateUrl: "./edit-categories.page.html",
   styleUrls: ["./edit-categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, ButtonComponent, PageLayoutComponent],
 })
 export class EditCategoriesPage {
   tipoCategoria: string;
@@ -128,7 +130,7 @@ export class EditCategoriesPage {
       return;
     }
     this.showError = false;
-    
+
     if (!this.category.id) {
       console.error('No se puede actualizar la categoría sin ID');
       this.showGenericAlert = true;
@@ -155,10 +157,10 @@ export class EditCategoriesPage {
     const nombreCambiado = this.nombreCategoria.trim() !== this.category.nombre;
     const iconoCambiado = this.iconoSeleccionado !== this.category.icono;
     const colorCambiado = this.colorSeleccionado !== this.category.color;
-    
+
     this.cambiosPendientes = nombreCambiado || iconoCambiado || colorCambiado;
   }
-  
+
   clearNombreCategoria() {
     this.nombreCategoria = '';
     this.isFirstInput = true;
@@ -198,7 +200,7 @@ export class EditCategoriesPage {
     const tieneIcono = this.iconoSeleccionado !== '';
     const tieneColor = this.colorSeleccionado !== '';
     const hayCambios = this.cambiosPendientes;
-    
+
     return tieneNombre && tieneIcono && tieneColor && hayCambios;
   }
 

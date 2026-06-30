@@ -86,23 +86,21 @@
       class="alert-actions"
       [class.single-action]="!cancelText || !confirmText">
 
-      <button
+      <app-button
         *ngIf="cancelText"
-        type="button"
-        class="secondary-button"
-        (click)="cancel()">
+        variant="secondary"
+        [text]="cancelText"
+        (clicked)="cancel()">
 
-        {{ cancelText }}
+      </app-button>
 
-      </button>
-
-      <app-primary-button
+      <app-button
         *ngIf="confirmText"
-        class="primary-button"
+        variant="primary"
         [text]="confirmText"
         (clicked)="confirm()">
 
-      </app-primary-button>
+      </app-button>
 
     </div>
 

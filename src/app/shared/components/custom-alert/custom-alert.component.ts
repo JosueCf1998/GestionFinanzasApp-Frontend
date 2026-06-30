@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PrimaryButtonComponent } from "../primary-button/primary-button.component";
+import { ButtonComponent } from "../button/button.component";
 
 @Component({
   selector: 'app-custom-alert',
   templateUrl: './custom-alert.component.html',
   standalone: true,
-  imports: [CommonModule, PrimaryButtonComponent],
+  imports: [CommonModule, ButtonComponent],
   styleUrls: ['./custom-alert.component.scss']
 })
 export class CustomAlertComponent {

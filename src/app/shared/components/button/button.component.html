@@ -1,0 +1,46 @@
+<!-- ==========================================================
+     BUTTON
+     ========================================================== -->
+
+<ion-button
+  class="fv-button"
+  [class.primary]="variant === 'primary'"
+  [class.secondary]="variant === 'secondary'"
+  [class.outline]="variant === 'outline'"
+  [class.ghost]="variant === 'ghost'"
+  [class.danger]="variant === 'danger'"
+  [expand]="expand"
+  [type]="type"
+  [disabled]="disabled || loading"
+  (click)="onClick()">
+
+  <!-- ========================================================
+       LOADING
+       ======================================================== -->
+
+  <ion-spinner
+    *ngIf="loading"
+    name="crescent">
+  </ion-spinner>
+
+  <!-- ========================================================
+       CONTENT
+       ======================================================== -->
+
+  <ng-container *ngIf="!loading">
+
+    <ion-icon
+      *ngIf="icon"
+      class="button-icon"
+      [src]="'assets/icon/' + icon + '.svg'">
+    </ion-icon>
+
+    <span class="button-label">
+
+      {{ text }}
+
+    </span>
+
+  </ng-container>
+
+</ion-button>

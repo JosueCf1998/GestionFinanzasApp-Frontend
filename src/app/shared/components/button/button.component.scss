@@ -1,0 +1,274 @@
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+.fv-button {
+
+  margin: 0;
+
+  width: 100%;
+  height: 56px;
+
+  --border-radius: 16px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  letter-spacing: -.01em;
+
+  text-transform: none;
+
+  transition:
+    transform .18s ease,
+    filter .18s ease,
+    box-shadow .18s ease,
+    color .18s ease;
+
+}
+
+/* ==========================================================
+   CONTENT
+   ========================================================== */
+
+.button-label {
+
+  white-space: nowrap;
+
+}
+
+.button-icon {
+
+  width: 20px;
+  height: 20px;
+
+}
+
+/* ==========================================================
+   PRIMARY
+   ========================================================== */
+
+.fv-button.primary {
+
+  --background: var(--fv-gradient-primary);
+  --background-hover: var(--fv-gradient-primary);
+  --background-focused: var(--fv-gradient-primary);
+  --background-activated: var(--fv-gradient-primary);
+
+  --color: #fff;
+
+  --box-shadow: var(--fv-shadow-primary);
+
+}
+
+.fv-button.primary .button-label,
+.fv-button.primary .button-icon {
+
+  color: #fff;
+
+}
+
+/* ==========================================================
+   SECONDARY
+   ========================================================== */
+
+.fv-button.secondary {
+
+  --background: rgba(67,97,238,.08);
+  --background-hover: rgba(67,97,238,.10);
+  --background-focused: rgba(67,97,238,.10);
+  --background-activated: rgba(67,97,238,.12);
+
+  --color: var(--fv-primary);
+
+  --box-shadow: none;
+
+}
+
+.fv-button.secondary .button-label,
+.fv-button.secondary .button-icon {
+
+  color: var(--fv-primary);
+
+}
+
+/* ==========================================================
+   OUTLINE
+   ========================================================== */
+
+.fv-button.outline {
+
+  --background: transparent;
+  --background-hover: rgba(67,97,238,.04);
+  --background-focused: rgba(67,97,238,.04);
+  --background-activated: rgba(67,97,238,.08);
+
+  --color: var(--fv-primary);
+
+  --box-shadow: none;
+
+  border: 1px solid rgba(67,97,238,.14);
+
+}
+
+.fv-button.outline .button-label,
+.fv-button.outline .button-icon {
+
+  color: var(--fv-primary);
+
+}
+
+/* ==========================================================
+   GHOST
+   ========================================================== */
+
+.fv-button.ghost {
+
+  --background: transparent;
+  --background-hover: rgba(67,97,238,.05);
+  --background-focused: rgba(67,97,238,.05);
+  --background-activated: rgba(67,97,238,.08);
+
+  --color: var(--fv-primary);
+
+  --box-shadow: none;
+
+}
+
+.fv-button.ghost .button-label,
+.fv-button.ghost .button-icon {
+
+  color: var(--fv-primary);
+
+}
+
+/* ==========================================================
+   DANGER
+   ========================================================== */
+
+.fv-button.danger {
+
+  height: 48px;
+
+  --background: transparent;
+  --background-hover: transparent;
+  --background-focused: transparent;
+  --background-activated: transparent;
+
+  --color: var(--fv-text-secondary);
+
+  --box-shadow: none;
+
+  font-size: 15px;
+  font-weight: 700;
+
+}
+
+.fv-button.danger .button-label {
+
+  color: var(--fv-text-secondary);
+
+}
+
+.fv-button.danger .button-icon {
+
+  width: 18px;
+  height: 18px;
+
+  color: var(--fv-text-secondary);
+
+}
+
+.fv-button.danger:hover,
+.fv-button.danger:active {
+
+  --color: var(--fv-danger);
+
+}
+
+.fv-button.danger:hover .button-label,
+.fv-button.danger:hover .button-icon,
+.fv-button.danger:active .button-label,
+.fv-button.danger:active .button-icon {
+
+  color: var(--fv-danger);
+
+}
+
+/* ==========================================================
+   SPINNER
+   ========================================================== */
+
+.fv-button ion-spinner {
+
+  width: 18px;
+  height: 18px;
+
+}
+
+.fv-button.primary ion-spinner {
+
+  color: #fff;
+
+}
+
+.fv-button.secondary ion-spinner,
+.fv-button.outline ion-spinner,
+.fv-button.ghost ion-spinner,
+.fv-button.danger ion-spinner {
+
+  color: currentColor;
+
+}
+
+/* ==========================================================
+   ACTIVE
+   ========================================================== */
+
+.fv-button::part(native):active {
+
+  transform: scale(.985);
+
+}
+
+/* ==========================================================
+   DISABLED
+   ========================================================== */
+
+.fv-button.button-disabled {
+
+  opacity: .55;
+
+  --box-shadow: none;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width:420px) {
+
+  .fv-button {
+
+    height: 54px;
+
+    font-size: 15px;
+
+  }
+
+  .fv-button.danger {
+
+    height: 46px;
+
+    font-size: 14px;
+
+  }
+
+  .button-icon {
+
+    width: 18px;
+    height: 18px;
+
+  }
+
+}

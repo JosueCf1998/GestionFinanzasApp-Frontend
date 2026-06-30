@@ -20,7 +20,7 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 
 import 'src/app/core/utils/observable-extensions';
 import { CreateCategoryUseCase, RegisterCategoryRequest } from 'src/app/core/use-cases/categories/register-category.usecase';
-import { PrimaryButtonComponent } from "src/app/shared/components/primary-button/primary-button.component";
+import { ButtonComponent } from "src/app/shared/components/button/button.component";
 
 @Component({
   selector: 'app-create-categories',
@@ -35,7 +35,7 @@ import { PrimaryButtonComponent } from "src/app/shared/components/primary-button
     CustomAlertComponent,
     CustomSegmentComponent,
     PageLayoutComponent,
-    PrimaryButtonComponent
+    ButtonComponent
 ]
 })
 export class CreateCategoriesPage {
