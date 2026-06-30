@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-
-import { Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
-
 import { ButtonComponent } from '../button/button.component';
+import { ItemIconComponent } from "../item-icon/item-icon.component";
+import { Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
 
 /* ==========================================================
    ENUMS
@@ -27,8 +26,9 @@ export enum AccountSelectionMode {
   imports: [
     CommonModule,
     IonicModule,
-    ButtonComponent
-  ]
+    ButtonComponent,
+    ItemIconComponent
+]
 })
 export class AccountSelectorModalComponent implements OnChanges {
 
@@ -63,7 +63,10 @@ export class AccountSelectorModalComponent implements OnChanges {
      ========================================================== */
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isOpen'] && this.isOpen) {
+    if (
+      changes['selectedAccounts'] ||
+      (changes['isOpen'] && this.isOpen)
+    ) {
       this.workingSelection = [...this.selectedAccounts];
     }
   }
@@ -75,6 +78,10 @@ export class AccountSelectorModalComponent implements OnChanges {
   get selectAll(): boolean {
     return this.accounts.length > 0 &&
       this.workingSelection.length === this.accounts.length;
+  }
+
+  get canConfirmSelection(): boolean {
+    return this.workingSelection.length > 0;
   }
 
   /* ==========================================================
@@ -113,12 +120,15 @@ export class AccountSelectorModalComponent implements OnChanges {
       return;
     }
 
-    const index = this.workingSelection.findIndex(item => item.id === account.id);
-
-    if (index >= 0) {
-      this.workingSelection.splice(index, 1);
+    if (this.isSelected(account)) {
+      this.workingSelection = this.workingSelection.filter(
+        item => item.id !== account.id
+      );
     } else {
-      this.workingSelection.push(account);
+      this.workingSelection = [
+        ...this.workingSelection,
+        account
+      ];
     }
   }
 
@@ -132,4 +142,5 @@ export class AccountSelectorModalComponent implements OnChanges {
     this.accountsSelected.emit([...this.workingSelection]);
     this.closeModal();
   }
+
 }

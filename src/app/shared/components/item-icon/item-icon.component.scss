@@ -1,0 +1,147 @@
+/* ==========================================================
+   CONTAINER
+   ========================================================== */
+
+.fv-item-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 -2px 4px rgba(0, 0, 0, .08),
+    0 4px 10px rgba(0, 0, 0, .08);
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    opacity .18s ease;
+}
+
+.fv-item-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .30),
+    transparent 70%
+  );
+}
+
+.fv-item-icon ion-icon {
+  position: relative;
+  z-index: 1;
+  filter: brightness(0) invert(1);
+}
+
+/* ==========================================================
+   SIZE
+   ========================================================== */
+
+.fv-item-icon--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.fv-item-icon--sm ion-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.fv-item-icon--md {
+  width: 40px;
+  height: 40px;
+}
+
+.fv-item-icon--md ion-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.fv-item-icon--lg {
+  width: 48px;
+  height: 48px;
+}
+
+.fv-item-icon--lg ion-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ==========================================================
+   SHAPE
+   ========================================================== */
+
+.fv-item-icon--rounded {
+  border-radius: 12px;
+}
+
+.fv-item-icon--circle {
+  border-radius: 50%;
+}
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+
+.fv-item-icon--selected {
+  transform: scale(1.05);
+  box-shadow:
+    inset 0 -2px 4px rgba(0, 0, 0, .08),
+    0 8px 18px rgba(67, 97, 238, .18);
+}
+
+.fv-item-icon--disabled {
+  opacity: .45;
+  filter: grayscale(1);
+}
+
+.fv-item-icon--disabled ion-icon {
+  opacity: .7;
+}
+
+/* ==========================================================
+   INTERACTION
+   ========================================================== */
+
+.fv-item-icon:hover:not(.fv-item-icon--disabled) {
+  transform: translateY(-1px);
+}
+
+.fv-item-icon:active:not(.fv-item-icon--disabled) {
+  transform: scale(.96);
+}
+
+.fv-item-icon--selected:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 420px) {
+
+  .fv-item-icon--md {
+    width: 38px;
+    height: 38px;
+  }
+
+  .fv-item-icon--md ion-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .fv-item-icon--lg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .fv-item-icon--lg ion-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+}

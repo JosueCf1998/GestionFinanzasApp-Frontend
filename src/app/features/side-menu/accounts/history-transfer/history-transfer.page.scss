@@ -1,680 +1,329 @@
 .transfer-history-page {
-
   --background: var(--fv-background);
-
 }
-
-/* ==========================================================
-   CONTENT
-   ========================================================== */
 
 .content-wrapper {
-
   display: flex;
   flex-direction: column;
-
-  gap: 20px;
-
-  padding: 16px;
-  padding-bottom: 96px;
-
+  gap: 24px;
+  padding: 18px;
+  padding-bottom: 110px;
 }
 
 /* ==========================================================
-   FILTERS
+   FILTER SECTION
    ========================================================== */
 
 .filter-section {
-
   display: flex;
   flex-direction: column;
-
-  gap: 18px;
-
-  padding: 18px;
-
-  background: var(--fv-surface);
-
-  border-radius: 20px;
-
-  border: 1px solid rgba(67, 97, 238, .05);
-
-  box-shadow: var(--fv-shadow-sm);
-
+  gap: 14px;
 }
 
 /* ==========================================================
-   ACCOUNT FILTER
+   ACCOUNT FILTER (FINETUNED CARD)
    ========================================================== */
 
 .account-filter {
-
   display: flex;
-
   align-items: center;
   justify-content: space-between;
-
   width: 100%;
-
-  padding: 14px 16px;
-
-  border: 1px solid transparent;
-
-  border-radius: 16px;
-
-  background: var(--fv-surface);
-
-  box-shadow: var(--fv-shadow-xs);
-
-  cursor: pointer;
-
-  transition:
-    transform .18s ease,
-    border-color .18s ease,
-    box-shadow .18s ease,
-    background .18s ease;
-
+  padding: 18px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(15,23,42,.05);
+  transition: .18s ease;
 }
 
 .account-filter:hover {
-
-  border-color: rgba(67,97,238,.08);
-
+  border-color: rgba(67,97,238,.12);
+  transform: translateY(-1px);
 }
 
 .account-filter:active {
-
   transform: scale(.985);
-
 }
 
 .account-filter.active {
-
-  border-color: rgba(67,97,238,.14);
-
-  box-shadow: var(--fv-shadow-sm);
-
+  background: rgba(67,97,238,.03);
+  border-color: rgba(67,97,238,.10);
 }
 
 /* ==========================================================
-   FILTER CONTENT
+   FILTER CONTENT (LEFT SIDE)
    ========================================================== */
 
 .filter-content {
-
   display: flex;
-
   align-items: center;
-
   gap: 14px;
-
   flex: 1;
-
   min-width: 0;
-
-}
-
-.filter-icon {
-
-  width: 46px;
-  height: 46px;
-
-  min-width: 46px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 15px;
-
-  background: var(--fv-gradient-primary);
-
-  box-shadow: var(--fv-shadow-primary);
-
-}
-
-.filter-icon.all {
-
-  background: rgba(67,97,238,.08);
-
-  box-shadow: none;
-
-}
-
-.filter-icon ion-icon {
-
-  width: 22px;
-  height: 22px;
-
-  filter: brightness(0) invert(1);
-
-}
-
-.filter-icon.all ion-icon {
-
-  filter: none;
-
-  color: var(--fv-primary);
-
 }
 
 .filter-text {
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  gap: 2px;
   flex: 1;
-
   min-width: 0;
-
 }
 
-.filter-text span {
-
-  display: block;
-
+.filter-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--fv-text-primary);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-
-  color: var(--fv-text-primary);
-
-  font-size: 15px;
-  font-weight: 700;
-
 }
+
+.filter-subtitle {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--fv-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ICON */
+.filter-content app-item-icon {
+  transform: scale(.95);
+  transition: .18s ease;
+}
+
+.account-filter:hover app-item-icon {
+  transform: scale(1);
+}
+
+/* ==========================================================
+   ARROW (RIGHT SIDE)
+   ========================================================== */
 
 .filter-arrow {
-
   width: 18px;
   height: 18px;
+  opacity: .45;
+  transition: .18s ease;
+}
 
-  flex-shrink: 0;
-
-  color: var(--fv-text-secondary);
-
-  opacity: .65;
-
+.account-filter:hover .filter-arrow {
+  opacity: .85;
+  transform: translateX(2px);
 }
 
 /* ==========================================================
-   PERIOD SEGMENT
+   PERIOD CARD
    ========================================================== */
 
-.period-tabs {
-
-  margin: 0;
-
+.period-card {
+  padding: 4px;
+  border-radius: 16px;
+  background: var(--fv-background);
 }
-
-/* ==========================================================
-   PERIOD NAVIGATION
-   ========================================================== */
 
 .period-navigation {
-
-  display: flex;
-
-  align-items: center;
-
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
   gap: 12px;
-
+  align-items: center;
 }
 
 .nav-btn {
-
   width: 42px;
   height: 42px;
-
-  flex-shrink: 0;
-
+  border-radius: 50%;
+  border: none;
+  background: rgba(67,97,238,.06);
   display: flex;
-
   align-items: center;
   justify-content: center;
-
-  border: none;
-
-  border-radius: 14px;
-
-  background: rgba(67,97,238,.08);
-
-  transition:
-    transform .18s ease,
-    background .18s ease;
-
-}
-
-.nav-btn:hover {
-
-  background: rgba(67,97,238,.12);
-
+  transition: .18s ease;
 }
 
 .nav-btn:active {
-
-  transform: scale(.94);
-
+  transform: scale(.92);
 }
 
-.nav-btn ion-icon {
-
-  width: 18px;
-  height: 18px;
-
-  color: var(--fv-primary);
-
+.nav-btn:hover {
+  background: rgba(67,97,238,.12);
 }
 
 .period-label {
-
-  flex: 1;
-
-  min-height: 42px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
-  padding: 0 12px;
-
+  min-height: 44px;
+  padding: 0 16px;
   border-radius: 14px;
-
   background: var(--fv-background);
-
-}
-
-.period-label span {
-
-  color: var(--fv-text-primary);
-
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
-
-  text-align: center;
-
-  line-height: 1.35;
-
+  color: var(--fv-text-primary);
 }
 
 /* ==========================================================
-   TRANSFERS
+   TRANSFERS LIST
    ========================================================== */
 
 .transfers-list {
-
   display: flex;
   flex-direction: column;
-
-  gap: 18px;
-
+  gap: 16px;
 }
 
 .transfer-group {
-
   display: flex;
   flex-direction: column;
-
-  gap: 10px;
-
+  gap: 8px;
 }
 
+/* ==========================================================
+   DATE HEADER
+   ========================================================== */
+
 .date-header {
-
-  padding: 0 4px;
-
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .date-text {
-
-  color: var(--fv-text-secondary);
-
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-
-  letter-spacing: .08em;
-
+  letter-spacing: .12em;
+  color: #98A2B3;
   text-transform: uppercase;
-
 }
 
 /* ==========================================================
-   TRANSFER CARD
+   TRANSFER ITEM
    ========================================================== */
 
 .transfer-item {
-
   display: flex;
-
   align-items: center;
-
-  gap: 14px;
-
-  width: 100%;
-
-  padding: 16px;
-
-  border: none;
-
+  justify-content: space-between;
+  padding: 14px 18px;
   border-radius: 18px;
-
-  background: var(--fv-surface);
-
-  box-shadow: var(--fv-shadow-sm);
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    background .18s ease;
-
-}
-
-.transfer-item:active {
-
-  transform: scale(.985);
-
+  background: #fff;
+  border: 1px solid rgba(15,23,42,.06);
+  transition: .18s ease;
 }
 
 .transfer-item:hover {
-
-  box-shadow: var(--fv-shadow-md);
-
+  border-color: rgba(67,97,238,.12);
 }
 
-/* ==========================================================
-   ICON
-   ========================================================== */
+.transfer-item:active {
+  transform: scale(.985);
+}
 
-.transfer-icon {
-
-  width: 48px;
-  height: 48px;
-
-  flex-shrink: 0;
-
+/* LEFT */
+.transfer-main {
   display: flex;
-
   align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-
-  box-shadow:
-    inset 0 -2px 4px rgba(0,0,0,.12),
-    0 4px 10px rgba(0,0,0,.08);
-
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
 }
-
-.transfer-icon ion-icon {
-
-  width: 22px;
-  height: 22px;
-
-  filter: brightness(0) invert(1);
-
-}
-
-.icon-inicial {
-
-  background: #22C55E;
-
-}
-
-.icon-ajuste {
-
-  background: #F59E0B;
-
-}
-
-.icon-realizado {
-
-  background: var(--fv-gradient-primary);
-
-}
-
-/* ==========================================================
-   INFO
-   ========================================================== */
 
 .transfer-info {
-
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   flex: 1;
-
   min-width: 0;
-
+  text-align: left;
 }
 
-.transfer-title {
-
-  color: var(--fv-text-primary);
-
+.transfer-title,
+.origin,
+.destination {
   font-size: 15px;
   font-weight: 700;
-
-  line-height: 1.35;
-
-  overflow: hidden;
-
+  color: var(--fv-text-primary);
   white-space: nowrap;
-
+  overflow: hidden;
   text-overflow: ellipsis;
-
 }
 
 .transfer-comment {
-
-  margin-top: 4px;
-
-  color: var(--fv-text-secondary);
-
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-
-  overflow: hidden;
-
+  color: var(--fv-text-secondary);
   white-space: nowrap;
-
+  overflow: hidden;
   text-overflow: ellipsis;
-
 }
 
 .transfer-accounts {
-
   display: flex;
-
   align-items: center;
-
   gap: 6px;
-
-  min-width: 0;
-
-}
-
-.transfer-accounts span {
-
-  overflow: hidden;
-
-  white-space: nowrap;
-
-  text-overflow: ellipsis;
-
 }
 
 .transfer-accounts ion-icon {
-
-  width: 14px;
-  height: 14px;
-
-  flex-shrink: 0;
-
+  width: 13px;
+  height: 13px;
   color: var(--fv-primary);
-
 }
 
-.origin,
-.destination {
-
-  color: var(--fv-text-primary);
-
-  font-size: 15px;
-  font-weight: 700;
-
+/* RIGHT */
+.transfer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .transfer-amount {
-
-  flex-shrink: 0;
-
-  color: var(--fv-text-primary);
-
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-
+  color: var(--fv-text-primary);
   font-variant-numeric: tabular-nums;
+}
 
+.transfer-arrow {
+  width: 16px;
+  height: 16px;
+  color: var(--fv-text-secondary);
+  opacity: .55;
+  transition: .18s ease;
+}
+
+.transfer-item:hover .transfer-arrow {
+  opacity: .9;
+  transform: translateX(2px);
 }
 
 /* ==========================================================
-   EMPTY
+   EMPTY STATE
    ========================================================== */
 
 .no-data {
-
   display: flex;
   flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
+  align-items: flex-start;
   gap: 18px;
-
-  padding: 72px 24px;
-
-  text-align: center;
-
-}
-
-.empty-icon {
-
-  width: 84px;
-  height: 84px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 22px;
-
-  background: rgba(67,97,238,.06);
-
-}
-
-.empty-icon ion-icon {
-
-  width: 40px;
-  height: 40px;
-
-  color: var(--fv-primary);
-
+  padding: 80px 24px;
+  text-align: left;
 }
 
 .no-data p {
-
   margin: 0;
-
-  max-width: 280px;
-
-  color: var(--fv-text-secondary);
-
   font-size: 15px;
-
-  line-height: 1.6;
-
+  color: var(--fv-text-secondary);
 }
 
 /* ==========================================================
    FAB
    ========================================================== */
 
-.fab-custom {
-
-  ion-fab-button {
-
-    --background: var(--fv-gradient-primary);
-
-    --box-shadow: var(--fv-shadow-primary);
-
-  }
-
-  ion-icon {
-
-    width: 24px;
-    height: 24px;
-
-    filter: brightness(0) invert(1);
-
-  }
-
-}
-
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media (max-width: 420px) {
-
-  .content-wrapper {
-
-    padding: 14px;
-
-    padding-bottom: 92px;
-
-  }
-
-  .filter-section {
-
-    padding: 16px;
-
-  }
-
-  .transfer-item {
-
-    padding: 15px;
-
-  }
-
-  .transfer-icon {
-
-    width: 44px;
-    height: 44px;
-
-  }
-
-  .transfer-icon ion-icon {
-
-    width: 20px;
-    height: 20px;
-
-  }
-
-  .transfer-title,
-  .origin,
-  .destination {
-
-    font-size: 14px;
-
-  }
-
-  .transfer-comment {
-
-    font-size: 12px;
-
-  }
-
-  .transfer-amount {
-
-    font-size: 15px;
-
-  }
-
+.fab-custom ion-fab-button {
+  --background: var(--fv-gradient-primary);
+  --box-shadow: 0 12px 28px rgba(67,97,238,.28);
 }

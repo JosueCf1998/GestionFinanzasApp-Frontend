@@ -91,8 +91,8 @@
           Categorías
         </label>
         <div class="categories-grid">
-          <div 
-            *ngFor="let categoria of obtenerCategorias()" 
+          <div
+            *ngFor="let categoria of obtenerCategorias()"
             class="category-item"
             [class.selected]="categoriaSeleccionada?.id === categoria.id"
             (click)="seleccionarCategoria(categoria)"
@@ -102,7 +102,7 @@
             </div>
             <span class="category-name">{{ categoria.nombre }}</span>
           </div>
-          
+
           <div class="category-item">
             <div class="category-icon-add">
               <ion-icon src="assets/icon/add.svg"></ion-icon>
@@ -119,15 +119,15 @@
           Fecha
         </label>
         <div class="date-options">
-          <button 
+          <button
             type="button"
-            class="date-btn" 
+            class="date-btn"
             [class.active]="fechaSeleccionada === 'hoy'"
             (click)="setFechaHoy()"
           >
             20/11<br>hoy
           </button>
-          <button 
+          <button
             type="button"
             class="date-btn"
             [class.active]="fechaSeleccionada === 'ayer'"
@@ -135,7 +135,7 @@
           >
             19/11<br>ayer
           </button>
-          <button 
+          <button
             type="button"
             class="date-btn"
             [class.active]="fechaSeleccionada === 'ultimo'"
@@ -143,9 +143,9 @@
           >
             23/6<br>último
           </button>
-          <button 
+          <button
             type="button"
-            class="calendar-btn" 
+            class="calendar-btn"
             (click)="abrirCalendario()"
           >
               <ion-icon src="assets/icon/calendar.svg"></ion-icon>
@@ -159,7 +159,7 @@
           <ion-icon name="create-outline" class="label-icon"></ion-icon>
           Comentario
         </label>
-        <ion-textarea 
+        <ion-textarea
           [(ngModel)]="comentario"
           [ngModelOptions]="{standalone: true}"
           placeholder="Ingrese un comentario (opcional)"
@@ -194,12 +194,12 @@
   ></app-custom-alert>
 
   <!-- Modal de selección de cuentas -->
-  <app-account-selector-modal
+  <!-- <app-account-selector-modal
     [isOpen]="isModalOpen"
     [accounts]="cuentas"
     [selectedAccountId]="cuentaId"
     (accountSelected)="onAccountSelected($event)"
     (modalClosed)="closeModal()"
-  ></app-account-selector-modal>
+  ></app-account-selector-modal> -->
 
 </ion-content>

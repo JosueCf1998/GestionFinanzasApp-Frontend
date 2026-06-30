@@ -15,8 +15,19 @@
       <div class="fv-selection-header">
 
         <div class="fv-selection-text">
-          <h2>{{ selectionMode === AccountSelectionMode.SINGLE ? 'Seleccionar cuenta' : 'Seleccionar cuentas' }}</h2>
-          <p>{{ selectionMode === AccountSelectionMode.SINGLE ? 'Elige la cuenta que deseas utilizar.' : 'Selecciona una o varias cuentas para filtrar.' }}</p>
+
+          <h2>
+
+            {{ selectionMode === AccountSelectionMode.SINGLE ? 'Seleccionar cuenta' : 'Seleccionar cuentas' }}
+
+          </h2>
+
+          <p>
+
+            {{ selectionMode === AccountSelectionMode.SINGLE ? 'Elige la cuenta que deseas utilizar.' : 'Selecciona una o varias cuentas para filtrar.' }}
+
+          </p>
+
         </div>
 
         <button
@@ -25,7 +36,10 @@
           (click)="closeModal()"
           aria-label="Cerrar">
 
-          <ion-icon src="assets/icon/cross.svg"></ion-icon>
+          <ion-icon
+            src="assets/icon/cross.svg">
+
+          </ion-icon>
 
         </button>
 
@@ -42,25 +56,46 @@
           <button
             *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
             type="button"
-            class="fv-account-item"
+            class="fv-account-item fv-all-account"
             [class.selected]="selectAll"
             (click)="toggleSelectAll()">
 
-            <div class="fv-account-icon fv-all-icon">
-              <ion-icon src="assets/icon/wallet.svg"></ion-icon>
+            <app-item-icon
+              icon="wallet"
+              color="var(--fv-primary)"
+              [selected]="selectAll">
+
+            </app-item-icon>
+
+            <div
+              class="fv-account-content"
+              [class.selected]="selectAll">
+
+              <span class="fv-account-name">
+
+                Todas las cuentas
+
+              </span>
+
+              <span class="fv-account-balance">
+
+                Mostrar todas las cuentas
+
+              </span>
+
             </div>
 
-            <div class="fv-account-content">
-              <span class="fv-account-name">Todas las cuentas</span>
-              <span class="fv-account-balance">Mostrar todas las cuentas</span>
-            </div>
+            <div
+              class="fv-account-status"
+              [class.selected]="selectAll">
 
-            <div class="fv-account-status">
               <ion-icon
                 *ngIf="selectAll"
                 class="fv-check-icon"
-                name="checkmark-circle">
+                name="checkmark">
+
               </ion-icon>
+
             </div>
 
           </button>
@@ -72,30 +107,45 @@
             [class.selected]="isSelected(account)"
             (click)="selectAccount(account)">
 
+            <app-item-icon
+              [icon]="account.icon"
+              [color]="account.color"
+              [selected]="isSelected(account)">
+            </app-item-icon>
+
             <div
-              class="fv-account-icon"
-              [style.background]="account.color">
+              class="fv-account-content"
+              [class.selected]="isSelected(account)">
 
-              <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
+              <span class="fv-account-name">
 
-            </div>
+                {{ account.name }}
 
-            <div class="fv-account-content">
-              <span class="fv-account-name">{{ account.name }}</span>
-              <span class="fv-account-balance">
-                S/. {{ +account.amount | number:'1.2-2' }}
               </span>
+
+              <span class="fv-account-balance">
+
+                S/. {{ +account.amount | number:'1.2-2' }}
+
+              </span>
+
             </div>
 
-            <div class="fv-account-status">
+            <div
+              class="fv-account-status"
+              [class.selected]="isSelected(account)">
+
               <ion-icon
                 *ngIf="isSelected(account)"
                 class="fv-check-icon"
-                name="checkmark-circle">
+                name="checkmark">
+
               </ion-icon>
+
             </div>
 
           </button>
+
         </div>
 
       </div>
@@ -108,10 +158,15 @@
         *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
         class="fv-selection-footer">
 
-        <app-button
-          text="Aplicar"
-          (clicked)="confirmSelection()">
-        </app-button>
+        <div class="fv-selection-actions">
+
+          <app-button
+            text="Aplicar"
+            [disabled]="!canConfirmSelection"
+            (clicked)="confirmSelection()">
+          </app-button>
+
+        </div>
 
       </div>
 

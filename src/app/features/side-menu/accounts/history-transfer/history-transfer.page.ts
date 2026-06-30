@@ -20,6 +20,7 @@ import {
   AccountSelectionMode
 } from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 
 /* ==========================================================
    COMPONENT
@@ -39,7 +40,8 @@ import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-
     CustomAlertComponent,
     DynamicAlertComponent,
     AccountSelectorModalComponent,
-    PageLayoutComponent
+    PageLayoutComponent,
+    ItemIconComponent
 ]
 })
 export class HistoryTransferPage implements OnInit {
@@ -333,16 +335,16 @@ export class HistoryTransferPage implements OnInit {
     return `${this.selectedAccounts.length} cuentas`;
   }
 
-  get selectedAccountColor(): string | null {
+  get selectedAccountColor(): string {
     return this.selectedAccounts.length === 1
-      ? this.selectedAccounts[0].color ?? null
-      : null;
+      ? this.selectedAccounts[0].color ?? 'var(--fv-primary)'
+      : 'var(--fv-primary)';
   }
 
-  get selectedAccountIcon(): string | null {
+  get selectedAccountIcon(): string {
     return this.selectedAccounts.length === 1
-      ? this.selectedAccounts[0].icon ?? null
-      : null;
+      ? this.selectedAccounts[0].icon ?? "wallet"
+      : "wallet";
   }
 
   /* ==========================================================
@@ -383,6 +385,19 @@ export class HistoryTransferPage implements OnInit {
     this.showCustomAlert = false;
     (document.activeElement as HTMLElement)?.blur();
     this.navigationService.back();
+  }
+
+  getTransferColor(type: string): string {
+    switch (type) {
+      case 'Inicial':
+        return '#10B981';
+
+      case 'Ajuste':
+        return '#F59E0B';
+
+      default:
+        return '#4361EE';
+    }
   }
 
   private getWeekOfMonth(date: Date): number {

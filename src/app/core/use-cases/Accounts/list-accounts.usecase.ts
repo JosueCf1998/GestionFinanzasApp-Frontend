@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { Result } from '../../models/result.model';
+
 export interface Accounts {
   id: number;
   name: string;

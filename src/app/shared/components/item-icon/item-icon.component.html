@@ -1,0 +1,16 @@
+<div
+  class="fv-item-icon"
+  [class.fv-item-icon--selected]="selected"
+  [class.fv-item-icon--disabled]="disabled"
+  [class.fv-item-icon--sm]="size === 'sm'"
+  [class.fv-item-icon--md]="size === 'md'"
+  [class.fv-item-icon--lg]="size === 'lg'"
+  [class.fv-item-icon--circle]="shape === 'circle'"
+  [class.fv-item-icon--rounded]="shape === 'rounded'"
+  [style.background]="color">
+
+  <ion-icon
+    [src]="'assets/icon/' + icon + '.svg'">
+  </ion-icon>
+
+</div>
