@@ -32,10 +32,11 @@
   flex-direction: column;
 
   align-items: center;
+  justify-content: center;
 
   gap: 10px;
 
-  padding: 26px 22px;
+  padding: 28px 24px;
 
   border-radius: 22px;
 
@@ -51,8 +52,8 @@
 
   position: absolute;
 
-  top: -50px;
-  right: -20px;
+  top: -48px;
+  right: -24px;
 
   width: 150px;
   height: 150px;
@@ -69,7 +70,7 @@
 
   position: absolute;
 
-  left: -40px;
+  left: -50px;
   bottom: -60px;
 
   width: 120px;
@@ -88,12 +89,12 @@
 
   color: rgba(255,255,255,.82);
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 
   text-transform: uppercase;
 
-  letter-spacing: .08em;
+  letter-spacing: .12em;
 
 }
 
@@ -104,10 +105,12 @@
 
   margin: 0;
 
-  color: #fff;
+  color: white;
 
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 800;
+
+  line-height: 1;
 
   letter-spacing: -.03em;
 
@@ -127,6 +130,7 @@
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 8px;
 
@@ -136,16 +140,18 @@
 
   background: rgba(255,255,255,.12);
 
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
 
 }
 
 .summary-chip ion-icon {
 
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 
   color: white;
+
+  filter: brightness(0) invert(1);
 
 }
 
@@ -166,7 +172,7 @@
 
   display: grid;
 
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 14px;
 
@@ -178,8 +184,9 @@
   flex-direction: column;
 
   align-items: center;
+  justify-content: center;
 
-  gap: 14px;
+  gap: 12px;
 
   padding: 18px 12px;
 
@@ -189,11 +196,14 @@
 
   background: var(--fv-surface);
 
+  border: 1px solid rgba(67,97,238,.05);
+
   box-shadow: var(--fv-shadow-sm);
 
   transition:
     transform .18s ease,
-    box-shadow .18s ease;
+    box-shadow .18s ease,
+    border-color .18s ease;
 
 }
 
@@ -208,11 +218,11 @@
   width: 52px;
   height: 52px;
 
-  border-radius: 16px;
-
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 16px;
 
   background: rgba(67,97,238,.08);
 
@@ -234,14 +244,14 @@
   font-size: 13px;
   font-weight: 600;
 
-  text-align: center;
-
   line-height: 1.35;
+
+  text-align: center;
 
 }
 
 /* ==========================================================
-   SECTION
+   ACCOUNTS
    ========================================================== */
 
 .accounts-section {
@@ -257,8 +267,10 @@
 
   display: flex;
 
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+
+  padding: 0 2px;
 
 }
 
@@ -268,21 +280,26 @@
 
   color: var(--fv-text-primary);
 
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
+
+  letter-spacing: -.02em;
 
 }
 
 .accounts-counter {
 
-  width: 28px;
+  min-width: 28px;
   height: 28px;
 
-  border-radius: 50%;
+  padding: 0 8px;
 
-  display: flex;
+  display: inline-flex;
+
   align-items: center;
   justify-content: center;
+
+  border-radius: 999px;
 
   background: rgba(67,97,238,.08);
 
@@ -294,7 +311,7 @@
 }
 
 /* ==========================================================
-   ACCOUNT
+   ACCOUNT CARD
    ========================================================== */
 
 .account-card {
@@ -303,9 +320,11 @@
 
   align-items: center;
 
-  gap: 16px;
+  gap: 14px;
 
-  padding: 18px;
+  min-height: 74px;
+
+  padding: 14px 16px;
 
   border: none;
 
@@ -313,11 +332,14 @@
 
   background: var(--fv-surface);
 
+  border: 1px solid rgba(67,97,238,.05);
+
   box-shadow: var(--fv-shadow-sm);
 
   transition:
     transform .18s ease,
-    box-shadow .18s ease;
+    box-shadow .18s ease,
+    border-color .18s ease;
 
 }
 
@@ -327,12 +349,18 @@
 
 }
 
+.account-card:hover {
+
+  border-color: rgba(67,97,238,.10);
+
+  box-shadow: var(--fv-shadow-primary);
+
+}
+
 .account-icon {
 
-  width: 56px;
-  height: 56px;
-
-  border-radius: 18px;
+  width: 44px;
+  height: 44px;
 
   flex-shrink: 0;
 
@@ -340,14 +368,16 @@
   align-items: center;
   justify-content: center;
 
-  box-shadow: var(--fv-shadow-primary);
+  border-radius: 14px;
+
+  box-shadow: var(--fv-shadow-sm);
 
 }
 
 .account-icon ion-icon {
 
-  width: 28px;
-  height: 28px;
+  width: 22px;
+  height: 22px;
 
   color: white;
 
@@ -365,31 +395,30 @@
 
 .account-info h3 {
 
-  margin: 0 0 4px;
+  margin: 0;
 
   color: var(--fv-text-primary);
 
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
 
-}
+  line-height: 1.2;
 
-.account-info span {
-
-  color: var(--fv-text-secondary);
-
-  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
 }
 
 .account-right {
 
   display: flex;
-  flex-direction: column;
 
-  align-items: flex-end;
+  align-items: center;
 
-  gap: 6px;
+  gap: 10px;
+
+  flex-shrink: 0;
 
 }
 
@@ -397,22 +426,26 @@
 
   color: var(--fv-text-primary);
 
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
+
+  white-space: nowrap;
 
 }
 
 .account-arrow {
 
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 
   color: var(--fv-text-tertiary);
+
+  opacity: .55;
 
 }
 
 /* ==========================================================
-   EMPTY
+   EMPTY STATE
    ========================================================== */
 
 .empty-state {
@@ -421,10 +454,11 @@
   flex-direction: column;
 
   align-items: center;
+  justify-content: center;
 
   gap: 18px;
 
-  padding: 60px 24px;
+  padding: 56px 24px;
 
   text-align: center;
 
@@ -432,14 +466,14 @@
 
 .empty-icon {
 
-  width: 92px;
-  height: 92px;
-
-  border-radius: 24px;
+  width: 88px;
+  height: 88px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 22px;
 
   background: rgba(67,97,238,.06);
 
@@ -447,10 +481,12 @@
 
 .empty-icon ion-icon {
 
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
 
   color: var(--fv-primary);
+
+  opacity: .75;
 
 }
 
@@ -469,11 +505,13 @@
 
   margin: 0;
 
-  max-width: 280px;
+  max-width: 290px;
 
   color: var(--fv-text-secondary);
 
-  line-height: 1.6;
+  font-size: 15px;
+
+  line-height: 1.55;
 
 }
 
@@ -481,24 +519,77 @@
    RESPONSIVE
    ========================================================== */
 
-@media (max-width:420px){
+@media (max-width: 420px) {
 
-  .summary-amount{
+  .accounts-content {
 
-    font-size:32px;
-
-  }
-
-  .account-card{
-
-    padding:16px;
+    gap: 20px;
 
   }
 
-  .account-icon{
+  .summary-amount {
 
-    width:52px;
-    height:52px;
+    font-size: 32px;
+
+  }
+
+  .actions-section {
+
+    gap: 10px;
+
+  }
+
+  .action-card {
+
+    padding: 16px 10px;
+
+  }
+
+  .action-icon {
+
+    width: 48px;
+    height: 48px;
+
+  }
+
+  .action-icon ion-icon {
+
+    width: 22px;
+    height: 22px;
+
+  }
+
+  .account-card {
+
+    min-height: 70px;
+
+    padding: 14px;
+
+  }
+
+  .account-icon {
+
+    width: 42px;
+    height: 42px;
+
+  }
+
+  .account-icon ion-icon {
+
+    width: 20px;
+    height: 20px;
+
+  }
+
+  .account-info h3 {
+
+    font-size: 15px;
+
+  }
+
+  .account-amount {
+
+    font-size: 15px;
 
   }
 
