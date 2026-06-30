@@ -2,6 +2,10 @@
   --background: var(--fv-background);
 }
 
+/* ==========================================================
+   LAYOUT
+   ========================================================== */
+
 .content-wrapper {
   display: flex;
   flex-direction: column;
@@ -21,18 +25,21 @@
 }
 
 /* ==========================================================
-   ACCOUNT FILTER (FINETUNED CARD)
+   ACCOUNT FILTER (FIX REAL)
    ========================================================== */
 
 .account-filter {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   width: 100%;
-  padding: 18px;
+  padding: 16px;
+
   border-radius: 18px;
   background: #fff;
   border: 1px solid rgba(15,23,42,.05);
+
   transition: .18s ease;
 }
 
@@ -47,61 +54,67 @@
 
 .account-filter.active {
   background: rgba(67,97,238,.03);
-  border-color: rgba(67,97,238,.10);
 }
 
 /* ==========================================================
-   FILTER CONTENT (LEFT SIDE)
+   FILTER CONTENT (FIX CRÍTICO)
    ========================================================== */
 
 .filter-content {
   display: flex;
   align-items: center;
   gap: 14px;
+
   flex: 1;
   min-width: 0;
 }
 
+/* ICON FIX (ROOT CAUSE) */
+.filter-content app-item-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* TEXT BLOCK FIX */
 .filter-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-align: left;
+
   gap: 2px;
-  flex: 1;
   min-width: 0;
+  flex: 1;
 }
 
+/* TITLE */
 .filter-title {
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 800;
   color: var(--fv-text-primary);
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* SUBTITLE */
 .filter-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--fv-text-secondary);
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* ICON */
-.filter-content app-item-icon {
-  transform: scale(.95);
-  transition: .18s ease;
-}
-
-.account-filter:hover app-item-icon {
-  transform: scale(1);
 }
 
 /* ==========================================================
-   ARROW (RIGHT SIDE)
+   ARROW
    ========================================================== */
 
 .filter-arrow {
@@ -117,7 +130,7 @@
 }
 
 /* ==========================================================
-   PERIOD CARD
+   PERIOD
    ========================================================== */
 
 .period-card {
@@ -139,61 +152,38 @@
   border-radius: 50%;
   border: none;
   background: rgba(67,97,238,.06);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: .18s ease;
 }
 
 .nav-btn:active {
   transform: scale(.92);
 }
 
-.nav-btn:hover {
-  background: rgba(67,97,238,.12);
-}
-
 .period-label {
   display: flex;
   align-items: center;
   justify-content: center;
+
   min-height: 44px;
   padding: 0 16px;
+
   border-radius: 14px;
   background: var(--fv-background);
-  font-size: 15px;
+
+  font-size: 14px;
   font-weight: 700;
   color: var(--fv-text-primary);
 }
 
 /* ==========================================================
-   TRANSFERS LIST
+   DATE
    ========================================================== */
-
-.transfers-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.transfer-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* ==========================================================
-   DATE HEADER
-   ========================================================== */
-
-.date-header {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
 
 .date-text {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   letter-spacing: .12em;
   color: #98A2B3;
@@ -201,17 +191,22 @@
 }
 
 /* ==========================================================
-   TRANSFER ITEM
+   TRANSFER ITEMS (OPTIMIZED)
    ========================================================== */
 
 .transfer-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
-  border-radius: 18px;
+
+  padding: 10px 14px;
+  border-radius: 14px;
+
   background: #fff;
   border: 1px solid rgba(15,23,42,.06);
+
+  min-height: 52px;
+
   transition: .18s ease;
 }
 
@@ -223,19 +218,28 @@
   transform: scale(.985);
 }
 
-/* LEFT */
+/* LEFT SIDE */
 .transfer-main {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+
   flex: 1;
   min-width: 0;
 }
 
+/* ICON FIX */
+.transfer-main app-item-icon {
+  flex-shrink: 0;
+  transform: scale(0.82);
+}
+
+/* TEXT */
 .transfer-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
+
   flex: 1;
   min-width: 0;
   text-align: left;
@@ -244,54 +248,44 @@
 .transfer-title,
 .origin,
 .destination {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--fv-text-primary);
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .transfer-comment {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--fv-text-secondary);
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.transfer-accounts {
+/* RIGHT SIDE */
+.transfer-right {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.transfer-accounts ion-icon {
-  width: 13px;
-  height: 13px;
-  color: var(--fv-primary);
-}
-
-/* RIGHT */
-.transfer-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .transfer-amount {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
   color: var(--fv-text-primary);
   font-variant-numeric: tabular-nums;
 }
 
 .transfer-arrow {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   color: var(--fv-text-secondary);
-  opacity: .55;
+  opacity: .5;
   transition: .18s ease;
 }
 
@@ -301,21 +295,36 @@
 }
 
 /* ==========================================================
-   EMPTY STATE
+   LIST SPACING
+   ========================================================== */
+
+.transfers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transfer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ==========================================================
+   EMPTY
    ========================================================== */
 
 .no-data {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 18px;
-  padding: 80px 24px;
-  text-align: left;
+  gap: 12px;
+  padding: 60px 16px;
 }
 
 .no-data p {
   margin: 0;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--fv-text-secondary);
 }
 

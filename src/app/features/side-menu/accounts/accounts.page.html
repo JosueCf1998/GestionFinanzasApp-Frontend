@@ -5,21 +5,17 @@
   <div class="accounts-content">
 
     <!-- ==========================================================
-         SUMMARY
+         SUMMARY (SIN COMPONENTE ICONO)
          ========================================================== -->
 
     <section class="accounts-summary">
 
       <span class="summary-label">
-
         Balance total
-
       </span>
 
       <h1 class="summary-amount">
-
         S/. {{ totalCuentas | number:'1.2-2' }}
-
       </h1>
 
       <div class="summary-footer">
@@ -31,9 +27,7 @@
           </ion-icon>
 
           <span>
-
             {{ accountList.length }} cuentas
-
           </span>
 
         </div>
@@ -43,78 +37,51 @@
     </section>
 
     <!-- ==========================================================
-         QUICK ACTIONS
+         QUICK ACTIONS (SIN COMPONENTE ICONO)
          ========================================================== -->
 
     <section class="actions-section">
 
-      <button
-        type="button"
-        class="action-card"
-        (click)="goToCreateAccount()">
+      <button class="action-card" (click)="goToCreateAccount()">
 
         <div class="action-icon">
 
-          <ion-icon
-            src="assets/icon/add.svg">
-          </ion-icon>
+          <ion-icon src="assets/icon/add.svg"></ion-icon>
 
         </div>
 
-        <span>
-
-          Crear cuenta
-
-        </span>
+        <span>Crear cuenta</span>
 
       </button>
 
-      <button
-        type="button"
-        class="action-card"
-        (click)="goToNewTransfer()">
+      <button class="action-card" (click)="goToNewTransfer()">
 
         <div class="action-icon">
 
-          <ion-icon
-            src="assets/icon/transfer.svg">
-          </ion-icon>
+          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
 
         </div>
 
-        <span>
-
-          Transferir
-
-        </span>
+        <span>Transferir</span>
 
       </button>
 
-      <button
-        type="button"
-        class="action-card"
-        (click)="goToHistoryTransfer()">
+      <button class="action-card" (click)="goToHistoryTransfer()">
 
         <div class="action-icon">
 
-          <ion-icon
-            src="assets/icon/history.svg">
-          </ion-icon>
+          <ion-icon src="assets/icon/history.svg"></ion-icon>
 
         </div>
 
-        <span>
-
-          Historial
-
-        </span>
+        <span>Historial</span>
 
       </button>
 
     </section>
 
     <!-- ==========================================================
-         ACCOUNTS
+         ACCOUNTS (AQUÍ SÍ SE USA COMPONENTE)
          ========================================================== -->
 
     <section
@@ -123,16 +90,10 @@
 
       <div class="section-header">
 
-        <h2>
-
-          Tus cuentas
-
-        </h2>
+        <h2>Tus cuentas</h2>
 
         <div class="accounts-counter">
-
           {{ accountList.length }}
-
         </div>
 
       </div>
@@ -143,44 +104,40 @@
         class="account-card"
         (click)="goToEditAccount(account)">
 
-        <!-- ICON -->
+        <!-- LEFT -->
 
-        <div
-          class="account-icon"
-          [style.background]="account.color">
+        <div class="account-left">
 
-          <ion-icon
-            [src]="'assets/icon/' + account.icon + '.svg'">
-          </ion-icon>
+          <div
+            class="account-icon"
+            [style.background]="account.color">
 
-        </div>
+            <app-item-icon
+              [icon]="account.icon"
+              size="sm"
+              [color]="account.color">
+            </app-item-icon>
 
-        <!-- INFO -->
+          </div>
 
-        <div class="account-info">
+          <div class="account-info">
 
-          <h3>
+            <h3>{{ account.name }}</h3>
 
-            {{ account.name }}
+            <span class="account-subtitle">
+              Cuenta financiera
+            </span>
 
-          </h3>
-
-          <span>
-
-            Cuenta financiera
-
-          </span>
+          </div>
 
         </div>
 
-        <!-- BALANCE -->
+        <!-- RIGHT -->
 
         <div class="account-right">
 
           <div class="account-amount">
-
             S/. {{ +account.amount | number:'1.2-2' }}
-
           </div>
 
           <ion-icon
@@ -195,38 +152,27 @@
     </section>
 
     <!-- ==========================================================
-         EMPTY
+         EMPTY STATE (SIN COMPONENTE ICONO)
          ========================================================== -->
 
-    <section
-      class="empty-state"
-      *ngIf="!accountList.length">
+    <section class="empty-state" *ngIf="!accountList.length">
 
       <div class="empty-icon">
 
-        <ion-icon
-          src="assets/icon/wallet.svg">
-        </ion-icon>
+        <ion-icon src="assets/icon/wallet.svg"></ion-icon>
 
       </div>
 
-      <h2>
-
-        Aún no tienes cuentas
-
-      </h2>
+      <h2>Aún no tienes cuentas</h2>
 
       <p>
-
         Crea tu primera cuenta para comenzar a administrar tu dinero en FinVia.
-
       </p>
 
       <app-button
         text="Crear cuenta"
         icon="add"
         (clicked)="goToCreateAccount()">
-
       </app-button>
 
     </section>
