@@ -8,11 +8,11 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { AlertService } from "src/app/core/services/alert.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
-import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { Categoria } from "src/app/shared/models/categoria.model";
 import { AccountSelectorModalComponent } from "src/app/shared/components/account-selector-modal/account-selector-modal.component";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 import 'src/app/core/utils/observable-extensions';
+import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 
 @Component({
   selector: "app-create-transac",
@@ -137,8 +137,8 @@ export class CreateTransacPage implements OnInit {
   }
 
   obtenerCategorias() {
-    return this.segmentoSeleccionado === 'ingresos' 
-      ? this.categoriasIngresos 
+    return this.segmentoSeleccionado === 'ingresos'
+      ? this.categoriasIngresos
       : this.categoriasGastos;
   }
 
@@ -222,7 +222,7 @@ export class CreateTransacPage implements OnInit {
   private detectarCambios() {
     const tieneMonto = this.monto !== null && this.monto > 0;
     const tieneCategoria = this.categoriaSeleccionada !== null;
-    
+
     this.cambiosPendientes = tieneMonto || tieneCategoria || this.comentario.trim() !== '';
   }
 
@@ -230,7 +230,7 @@ export class CreateTransacPage implements OnInit {
     const tieneMonto = this.monto !== null && this.monto > 0;
     const tieneCategoria = this.categoriaSeleccionada !== null;
     const tieneCuenta = this.cuentaId !== '';
-    
+
     return tieneMonto && tieneCategoria && tieneCuenta;
   }
 

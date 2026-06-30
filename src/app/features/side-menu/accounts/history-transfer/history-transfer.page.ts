@@ -1,166 +1,211 @@
-import { Component, OnInit } from "@angular/core";
-import { IonicModule } from "@ionic/angular";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
-import { NavigationService } from "src/app/core/services/navigation.service";
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { IonicModule } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
-import { CustomSegmentComponent } from "../../../../shared/components/custom-segment/custom-segment.component";
-import { ListTransferUseCase, Transfer } from "src/app/core/use-cases/transfer/list-transfer.usecase";
-import { ListAccountsUseCase, Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
-import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
-import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 
-interface AccountFilter {
-  id: number;
-  name: string;
-  selected: boolean;
-  amount: number;
-  color?: string;
-  icon?: string;
-}
+import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
+
+import { ListAccountsUseCase, Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
+import { ListTransferUseCase, Transfer } from 'src/app/core/use-cases/transfer/list-transfer.usecase';
+
+import { CustomSegmentComponent } from 'src/app/shared/components/custom-segment/custom-segment.component';
+import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
+import { DynamicAlertComponent } from 'src/app/shared/components/basic-alert/basic-alert.component';
+
+import {
+  AccountSelectorModalComponent,
+  AccountSelectionMode
+} from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
+import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
+
+/* ==========================================================
+   COMPONENT
+   ========================================================== */
 
 @Component({
-  selector: "app-history-transfer",
-  templateUrl: "./history-transfer.page.html",
-  styleUrls: ["./history-transfer.page.scss"],
+  selector: 'app-history-transfer',
+  templateUrl: './history-transfer.page.html',
+  styleUrls: ['./history-transfer.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent, DynamicAlertComponent],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    CustomSegmentComponent,
+    CustomAlertComponent,
+    DynamicAlertComponent,
+    AccountSelectorModalComponent,
+    PageLayoutComponent
+]
 })
 export class HistoryTransferPage implements OnInit {
-  title: string = "Transferencias";
 
-  showGenericAlert: boolean = false;
+  /* ==========================================================
+     HEADER
+     ========================================================== */
 
-  // Filtros
-  selectedPeriod: string = 'mes';
-  selectedYear: number = new Date().getFullYear();
-  selectedMonth: number = new Date().getMonth() + 1;
-  selectedWeekOfMonth: number = 1; // Semana del mes (1-5)
-  selectedDay: Date = new Date();
+  title = 'Transferencias';
 
-  // Opciones de periodos
+  /* ==========================================================
+     ENUMS
+     ========================================================== */
+
+  readonly AccountSelectionMode = AccountSelectionMode;
+
+  /* ==========================================================
+     ALERTS
+     ========================================================== */
+
+  showGenericAlert = false;
+  showCustomAlert = false;
+
+  /* ==========================================================
+     PERIOD FILTER
+     ========================================================== */
+
+  selectedPeriod = 'mes';
+  selectedYear = new Date().getFullYear();
+  selectedMonth = new Date().getMonth() + 1;
+  selectedWeekOfMonth = 1;
+
   periodTabs = [
     { value: 'semana', label: 'Semana' },
     { value: 'mes', label: 'Mes' },
     { value: 'anio', label: 'Año' }
   ];
 
-  // Filtro de cuentas
-  accounts: AccountFilter[] = [];
-  isAccountModalOpen: boolean = false;
-  selectAllAccounts: boolean = true;
+  private readonly WEEKS_PER_MONTH = 4;
+  /* ==========================================================
+     ACCOUNT FILTER
+     ========================================================== */
+
+  accounts: Accounts[] = [];
+  selectedAccounts: Accounts[] = [];
+  selectedAccount: Accounts | null = null;
+  isAccountModalOpen = false;
+
+  /* ==========================================================
+     TRANSFERS
+     ========================================================== */
 
   allTransfers: Transfer[] = [];
   filteredTransfers: Transfer[] = [];
   groupedTransfers: { fecha: string; items: Transfer[] }[] = [];
 
-  showCustomAlert = false;
+  /* ==========================================================
+     CONSTRUCTOR
+     ========================================================== */
 
   constructor(
-    private navService: NavigationService,
-    private router: Router,
-    private listTransferUseCase: ListTransferUseCase,
-    private listAccountsUseCase: ListAccountsUseCase,
-    private loadingService: SpinnerService
+    private readonly navigationService: NavigationService,
+    private readonly spinnerService: SpinnerService,
+    private readonly listAccountsUseCase: ListAccountsUseCase,
+    private readonly listTransferUseCase: ListTransferUseCase
   ) {}
 
-  ngOnInit() {
-    const currentDate = new Date();
-    this.selectedMonth = currentDate.getMonth() + 1;
-    this.selectedWeekOfMonth = this.getWeekOfMonth(currentDate);
+  /* ==========================================================
+     LIFECYCLE
+     ========================================================== */
+
+  ngOnInit(): void {
+    const today = new Date();
+    this.selectedMonth = today.getMonth() + 1;
+    this.selectedWeekOfMonth = this.getWeekOfMonth(today);
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(): void {
     this.loadData();
   }
 
-  // MARK: - SERVICIOS
+  /* ==========================================================
+     LOAD DATA
+     ========================================================== */
 
-  private loadData() {
-    this.loadingService.show();
-    
+  private loadData(): void {
+    this.spinnerService.show();
+
     forkJoin({
       accounts: this.listAccountsUseCase.listAccounts(),
       transfers: this.listTransferUseCase.listTransfer()
     }).subscribe({
-      next: (results) => {
-        this.loadingService.hide();
-        
-        // Procesar cuentas
-        if (results.accounts.success && results.accounts.data?.items) {
-          this.accounts = results.accounts.data.items.map(account => ({
-            id: account.id,
-            name: account.name,
-            selected: true,
-            amount: account.amount,
-            color: account.color,
-            icon: account.icon
-          }));
+      next: ({ accounts, transfers }) => {
+        this.spinnerService.hide();
+
+        if (accounts.success && accounts.data?.items) {
+          this.accounts = accounts.data.items;
+          this.selectedAccounts = [...this.accounts];
         }
-        
-        // Procesar transferencias y enriquecer con nombres de cuentas
-        if (results.transfers.success && results.transfers.data?.items) {
-          console.log('Transferencias cargadas:', results.transfers.data.items);
-          this.allTransfers = this.enrichTransfersWithAccountNames(results.transfers.data.items);
+
+        if (transfers.success && transfers.data?.items) {
+          this.allTransfers = this.enrichTransfersWithAccountNames(transfers.data.items);
           this.filterTransfers();
         }
       },
       error: () => {
-        this.loadingService.hide();
+        this.spinnerService.hide();
         this.showGenericAlert = true;
       }
     });
   }
 
-  // MARK: - FUNCIONALIDADES
-
   private enrichTransfersWithAccountNames(transfers: Transfer[]): Transfer[] {
     return transfers.map(transfer => {
-      const originAccount = this.accounts.find(acc => acc.id === transfer.originAccountId);
-      const destinationAccount = this.accounts.find(acc => acc.id === transfer.destinationAccountId);
-      
+      const originAccount = this.accounts.find(account => account.id === transfer.originAccountId);
+      const destinationAccount = this.accounts.find(account => account.id === transfer.destinationAccountId);
+
       return {
         ...transfer,
-        originAccountName: originAccount?.name || 'Cuenta desconocida',
-        destinationAccountName: destinationAccount?.name || 'Cuenta desconocida',
-        originAccountIcon: originAccount?.icon || '',
-        originAccountColor: originAccount?.color || '',
-        destinationAccountIcon: destinationAccount?.icon || '',
-        destinationAccountColor: destinationAccount?.color || ''
+        originAccountName: originAccount?.name ?? 'Cuenta desconocida',
+        destinationAccountName: destinationAccount?.name ?? 'Cuenta desconocida',
+        originAccountIcon: originAccount?.icon ?? '',
+        originAccountColor: originAccount?.color ?? '',
+        destinationAccountIcon: destinationAccount?.icon ?? '',
+        destinationAccountColor: destinationAccount?.color ?? ''
       };
     });
   }
 
-  async backToAccounts() {
+  /* ==========================================================
+     NAVIGATION
+     ========================================================== */
+
+  backToAccounts(): void {
     (document.activeElement as HTMLElement)?.blur();
-    this.navService.back();
+    this.navigationService.back();
   }
 
-  navigateToAddTransfer() {
-    this.navService.push('/accounts/new-transfer', { });
+  navigateToAddTransfer(): void {
+    this.navigationService.push('/accounts/new-transfer');
   }
 
-  editTransfer(transfer: Transfer) {
+  editTransfer(transfer: Transfer): void {
     localStorage.setItem('transferDetail', JSON.stringify(transfer));
-    this.navService.push('/accounts/detail-transfer', {
+
+    this.navigationService.push('/accounts/detail-transfer', {
       transferData: transfer
     });
   }
 
-  onPeriodChange() {
+  /* ==========================================================
+     PERIOD FILTER
+     ========================================================== */
+
+  onPeriodChange(): void {
     this.filterTransfers();
   }
 
-  changeYear(direction: number) {
+  changeYear(direction: number): void {
     this.selectedYear += direction;
     this.filterTransfers();
   }
 
-  changeMonth(direction: number) {
+  changeMonth(direction: number): void {
     this.selectedMonth += direction;
+
     if (this.selectedMonth > 12) {
       this.selectedMonth = 1;
       this.selectedYear++;
@@ -168,59 +213,50 @@ export class HistoryTransferPage implements OnInit {
       this.selectedMonth = 12;
       this.selectedYear--;
     }
+
     this.filterTransfers();
   }
 
-  changeWeek(direction: number) {
+  changeWeek(direction: number): void {
     this.selectedWeekOfMonth += direction;
-    
-    const weeksInMonth = this.getWeeksInMonth(this.selectedMonth, this.selectedYear);
-    
+
+    const weeksInMonth = this.WEEKS_PER_MONTH;
     if (this.selectedWeekOfMonth > weeksInMonth) {
-      // Avanzar al próximo mes
       this.selectedWeekOfMonth = 1;
       this.selectedMonth++;
+
       if (this.selectedMonth > 12) {
         this.selectedMonth = 1;
         this.selectedYear++;
       }
     } else if (this.selectedWeekOfMonth < 1) {
-      // Retroceder al mes anterior
       this.selectedMonth--;
+
       if (this.selectedMonth < 1) {
         this.selectedMonth = 12;
         this.selectedYear--;
       }
-      this.selectedWeekOfMonth = this.getWeeksInMonth(this.selectedMonth, this.selectedYear);
+
+      this.selectedWeekOfMonth = this.WEEKS_PER_MONTH;
     }
-    
+
     this.filterTransfers();
   }
 
-  changeDay(direction: number) {
-    const newDay = new Date(this.selectedDay);
-    newDay.setDate(newDay.getDate() + direction);
-    this.selectedDay = newDay;
-    this.filterTransfers();
-  }
+  /* ==========================================================
+     TRANSFER FILTER
+     ========================================================== */
 
-  filterTransfers() {
-    const selectedAccountIds = this.selectAllAccounts 
-      ? [] 
-      : this.accounts.filter(acc => acc.selected).map(acc => acc.id);
-    
+  private filterTransfers(): void {
+    const selectedIds = this.selectedAccounts.map(account => account.id);
+
     this.filteredTransfers = this.allTransfers.filter(transfer => {
-      // Filtro por cuenta
-      if (!this.selectAllAccounts) {
-        if (selectedAccountIds.length === 0) return false;
-        
-        const accountMatch = selectedAccountIds.includes(transfer.originAccountId) || 
-                             selectedAccountIds.includes(transfer.destinationAccountId);
-        if (!accountMatch) return false;
-      }
-      
-      // Filtro por período
-      return this.matchesPeriodFilter(transfer);
+      const accountMatch =
+        selectedIds.length === this.accounts.length ||
+        selectedIds.includes(transfer.originAccountId) ||
+        selectedIds.includes(transfer.destinationAccountId);
+
+      return accountMatch && this.matchesPeriodFilter(transfer);
     });
 
     this.groupByDate();
@@ -228,192 +264,135 @@ export class HistoryTransferPage implements OnInit {
 
   private matchesPeriodFilter(transfer: Transfer): boolean {
     const transferDate = new Date(transfer.date);
-      
+
     switch (this.selectedPeriod) {
       case 'semana':
-        const weekOfMonth = this.getWeekOfMonth(transferDate);
-        return weekOfMonth === this.selectedWeekOfMonth && 
-               transferDate.getMonth() + 1 === this.selectedMonth &&
-               transferDate.getFullYear() === this.selectedYear;
-      
+        return this.getWeekOfMonth(transferDate) === this.selectedWeekOfMonth &&
+          transferDate.getMonth() + 1 === this.selectedMonth &&
+          transferDate.getFullYear() === this.selectedYear;
+
       case 'mes':
-        return transferDate.getMonth() + 1 === this.selectedMonth && 
-               transferDate.getFullYear() === this.selectedYear;
-      
+        return transferDate.getMonth() + 1 === this.selectedMonth &&
+          transferDate.getFullYear() === this.selectedYear;
+
       case 'anio':
         return transferDate.getFullYear() === this.selectedYear;
-      
+
       default:
         return true;
     }
   }
 
-  groupByDate() {
+  private groupByDate(): void {
     const groups = new Map<string, Transfer[]>();
-    
-    // Agrupar transferencias por fecha
+
     this.filteredTransfers.forEach(transfer => {
-      const dateKey = this.formatDateKey(transfer.date);
-      const group = groups.get(dateKey);
-      if (group) {
-        group.push(transfer);
-      } else {
-        groups.set(dateKey, [transfer]);
-      }
+      const key = this.formatDateKey(transfer.date);
+      const group = groups.get(key);
+
+      group
+        ? group.push(transfer)
+        : groups.set(key, [transfer]);
     });
 
-    // Convertir a array y ordenar por fecha descendente (más reciente primero)
     this.groupedTransfers = Array.from(groups.entries())
-      .map(([fecha, items]) => ({ 
-        fecha, 
+      .map(([fecha, items]) => ({
+        fecha,
         items: items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       }))
-      .sort((a, b) => {
-        const dateA = new Date(a.items[0].date).getTime();
-        const dateB = new Date(b.items[0].date).getTime();
-        return dateB - dateA; // Descendente: más reciente primero
-      });
+      .sort((a, b) => new Date(b.items[0].date).getTime() - new Date(a.items[0].date).getTime());
   }
 
-  // MARK: - MODAL DE CUENTAS
+  /* ==========================================================
+     ACCOUNT FILTER
+     ========================================================== */
 
-  openAccountModal() {
+  openAccountModal(): void {
     this.isAccountModalOpen = true;
   }
 
-  closeAccountModal() {
+  closeAccountModal(): void {
+    this.isAccountModalOpen = false;
+  }
+
+  onAccountsSelected(accounts: Accounts[]): void {
+    this.selectedAccounts = accounts;
     this.isAccountModalOpen = false;
     this.filterTransfers();
   }
 
-  toggleSelectAll() {
-    this.selectAllAccounts = !this.selectAllAccounts;
-    if (this.selectAllAccounts) {
-      this.accounts.forEach(account => account.selected = true);
-    }
-    this.filterTransfers();
-  }
-
-  toggleAccountSelection(account: AccountFilter) {
-    if (this.selectAllAccounts) {
-      // Si está "Todas" activo, desactivarlo y seleccionar solo la cuenta clickeada
-      this.selectAllAccounts = false;
-      this.accounts.forEach(acc => acc.selected = false);
-      account.selected = true;
-    } else {
-      // Toggle normal de la cuenta
-      account.selected = !account.selected;
-      
-      // Si todas las cuentas están seleccionadas, activar "Todas"
-      if (this.accounts.every(acc => acc.selected)) {
-        this.selectAllAccounts = true;
-      }
-    }
-  }
-
-  onAccountSelectionChange() {
-    this.selectAllAccounts = this.accounts.every(acc => acc.selected);
-  }
-
-  applyAccountFilter() {
-    this.closeAccountModal();
-    this.filterTransfers();
-  }
-
-  getModalClass(): string {
-    const numCuentas = this.accounts.length + 1; // +1 por "Todas las cuentas"
-    if (numCuentas <= 2) return 'custom-modal modal-small';
-    if (numCuentas === 3) return 'custom-modal modal-medium';
-    if (numCuentas === 4) return 'custom-modal modal-large';
-    return 'custom-modal modal-xlarge';
-  }
-
-  get selectedAccountsCount(): number {
-    return this.accounts.filter(acc => acc.selected).length;
-  }
-
   get accountFilterLabel(): string {
-    if (this.selectAllAccounts || this.selectedAccountsCount === this.accounts.length) {
+    if (this.selectedAccounts.length === this.accounts.length) {
       return 'Todas las cuentas';
     }
-    const count = this.selectedAccountsCount;
-    if (count === 0) return 'Ninguna cuenta';
-    if (count === 1) {
-      const selected = this.accounts.find(acc => acc.selected);
-      return selected ? selected.name : 'Seleccionar cuentas';
+
+    if (this.selectedAccounts.length === 1) {
+      return this.selectedAccounts[0].name;
     }
-    return `${count} cuentas`;
+
+    return `${this.selectedAccounts.length} cuentas`;
   }
+
+  get selectedAccountColor(): string | null {
+    return this.selectedAccounts.length === 1
+      ? this.selectedAccounts[0].color ?? null
+      : null;
+  }
+
+  get selectedAccountIcon(): string | null {
+    return this.selectedAccounts.length === 1
+      ? this.selectedAccounts[0].icon ?? null
+      : null;
+  }
+
+  /* ==========================================================
+     HELPERS
+     ========================================================== */
 
   formatDateKey(dateString: string): string {
-    // Extraer directamente del string para evitar problemas de zona horaria
-    const parts = dateString.split('T')[0].split('-');
-    const year = parts[0];
-    const monthIndex = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
-    
-    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
-                    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    
-    return `${day} de ${months[monthIndex]} de ${year}`;
-  }
+    const [year, month, day] = dateString.split('T')[0].split('-');
 
-  getWeekNumber(date: Date): number {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  }
+    const months = [
+      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+    ];
 
-  formatCurrency(amount: number): string {
-    const prefix = amount >= 0 ? '+ ' : '- ';
-    return `${prefix}${Math.abs(amount)} S/.`;
+    return `${+day} de ${months[+month - 1]} de ${year}`;
   }
 
   getMonthName(month: number): string {
-    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    return months[month - 1];
-  }
-
-  salirSinGuardar() {
-    this.showCustomAlert = false;
-    (document.activeElement as HTMLElement)?.blur();
-    this.navService.back();
-  }
-
-  // Método auxiliar para comparar si dos fechas son el mismo día
-  private isSameDay(date1: Date, date2: Date): boolean {
-    return date1.getFullYear() === date2.getFullYear() &&
-           date1.getMonth() === date2.getMonth() &&
-           date1.getDate() === date2.getDate();
-  }
-
-  // Método para obtener la semana del mes (1-4)
-  private getWeekOfMonth(date: Date): number {
-    const day = date.getDate();
-    if (day <= 7) return 1;
-    if (day <= 14) return 2;
-    if (day <= 21) return 3;
-    return 4;
-  }
-
-  // Método para obtener cuántas semanas tiene un mes (siempre 4)
-  private getWeeksInMonth(month: number, year: number): number {
-    return 4;
+    return [
+      'Enero', 'Febrero', 'Marzo', 'Abril',
+      'Mayo', 'Junio', 'Julio', 'Agosto',
+      'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ][month - 1];
   }
 
   getTransferIcon(type: string): string {
-    switch(type) {
+    switch (type) {
       case 'Inicial':
         return 'salary';
       case 'Ajuste':
         return 'edit';
-      case 'Realizado':
       default:
         return 'send-money';
     }
   }
-  
+
+  salirSinGuardar(): void {
+    this.showCustomAlert = false;
+    (document.activeElement as HTMLElement)?.blur();
+    this.navigationService.back();
+  }
+
+  private getWeekOfMonth(date: Date): number {
+    const day = date.getDate();
+
+    if (day <= 7) return 1;
+    if (day <= 14) return 2;
+    if (day <= 21) return 3;
+
+    return 4;
+  }
+
 }

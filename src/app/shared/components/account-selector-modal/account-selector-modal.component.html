@@ -1,49 +1,122 @@
-<ion-modal 
-  [isOpen]="isOpen" 
-  (didDismiss)="closeModal()" 
+<ion-modal
+  [isOpen]="isOpen"
+  (didDismiss)="closeModal()"
   [cssClass]="getModalClass()"
-  [backdropDismiss]="false"
->
+  [backdropDismiss]="false">
+
   <ng-template>
-    <div class="modal-wrapper">
-      <!-- Header con gradiente sutil -->
-      <div class="modal-header">
-        <h2 class="modal-title">Seleccione una cuenta</h2>
-        <button class="btn-close" (click)="closeModal()" aria-label="Cerrar">
-          <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
+
+    <div class="fv-selection-modal">
+
+      <!-- ==========================================================
+           HEADER
+           ========================================================== -->
+
+      <div class="fv-selection-header">
+
+        <div class="fv-selection-text">
+          <h2>{{ selectionMode === AccountSelectionMode.SINGLE ? 'Seleccionar cuenta' : 'Seleccionar cuentas' }}</h2>
+          <p>{{ selectionMode === AccountSelectionMode.SINGLE ? 'Elige la cuenta que deseas utilizar.' : 'Selecciona una o varias cuentas para filtrar.' }}</p>
+        </div>
+
+        <button
+          type="button"
+          class="fv-close-button"
+          (click)="closeModal()"
+          aria-label="Cerrar">
+
+          <ion-icon src="assets/icon/cross.svg"></ion-icon>
+
         </button>
+
       </div>
-      
-      <!-- Body con las cuentas -->
-      <div class="modal-body">
-        <div class="cuentas-list">
-          <div
-            *ngFor="let account of accounts; let i = index"
-            class="cuenta-card"
-            [class.selected]="selectedAccount?.id === account.id"
-            [style.animation-delay]="i * 0.05 + 's'"
-            (click)="selectAccount(account)">
-            <div class="cuenta-content">
-              <div class="account-icon-wrapper">
-                <div class="account-icon-circle" [ngStyle]="{'background': account.color}">
-                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
-                </div>
-              </div>
-              <div class="cuenta-info">
-                <span class="cuenta-nombre">{{ account.name }}</span>
-                <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
-              </div>
+
+      <!-- ==========================================================
+           BODY
+           ========================================================== -->
+
+      <div class="fv-selection-body">
+
+        <div class="fv-account-list">
+
+          <button
+            *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
+            type="button"
+            class="fv-account-item"
+            [class.selected]="selectAll"
+            (click)="toggleSelectAll()">
+
+            <div class="fv-account-icon fv-all-icon">
+              <ion-icon src="assets/icon/wallet.svg"></ion-icon>
             </div>
-            <div class="cuenta-check">
-              <ion-icon 
-                name="checkmark-circle" 
-                class="check-icon"
-                *ngIf="selectedAccount?.id === account.id">
+
+            <div class="fv-account-content">
+              <span class="fv-account-name">Todas las cuentas</span>
+              <span class="fv-account-balance">Mostrar todas las cuentas</span>
+            </div>
+
+            <div class="fv-account-status">
+              <ion-icon
+                *ngIf="selectAll"
+                class="fv-check-icon"
+                name="checkmark-circle">
               </ion-icon>
             </div>
-          </div>
+
+          </button>
+
+          <button
+            *ngFor="let account of accounts"
+            type="button"
+            class="fv-account-item"
+            [class.selected]="isSelected(account)"
+            (click)="selectAccount(account)">
+
+            <div
+              class="fv-account-icon"
+              [style.background]="account.color">
+
+              <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
+
+            </div>
+
+            <div class="fv-account-content">
+              <span class="fv-account-name">{{ account.name }}</span>
+              <span class="fv-account-balance">
+                S/. {{ +account.amount | number:'1.2-2' }}
+              </span>
+            </div>
+
+            <div class="fv-account-status">
+              <ion-icon
+                *ngIf="isSelected(account)"
+                class="fv-check-icon"
+                name="checkmark-circle">
+              </ion-icon>
+            </div>
+
+          </button>
         </div>
+
       </div>
+
+      <!-- ==========================================================
+           FOOTER
+           ========================================================== -->
+
+      <div
+        *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
+        class="fv-selection-footer">
+
+        <app-button
+          text="Aplicar"
+          (clicked)="confirmSelection()">
+        </app-button>
+
+      </div>
+
     </div>
+
   </ng-template>
+
 </ion-modal>

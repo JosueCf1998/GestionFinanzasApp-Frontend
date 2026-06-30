@@ -66,10 +66,10 @@
     <div class="transfer-section">
       <label class="transfer-label text-body">Fecha</label>
       <ion-datetime-button datetime="fecha-transferencia"></ion-datetime-button>
-      
+
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-          <ion-datetime 
+          <ion-datetime
             id="fecha-transferencia"
             presentation="date"
             [(ngModel)]="fecha"
@@ -118,12 +118,12 @@
     (onConfirm)="salirSinGuardar()"
   ></app-custom-alert>
 
-  <app-account-selector-modal
+  <!-- <app-account-selector-modal
     [isOpen]="isModalOpen"
     [accounts]="cuentasDisponibles"
     [selectedAccountId]="selectedAccount?.id?.toString() || null"
     (accountSelected)="seleccionarYConfirmar($event)"
     (modalClosed)="closeModal()"
-  ></app-account-selector-modal>
+  ></app-account-selector-modal> -->
 
 </ion-content>

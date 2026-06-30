@@ -1,29 +1,80 @@
-<!-- Content General -->
-<ion-content [fullscreen]="true" scroll-y="false">
-  <ion-header>
-    <ion-toolbar class="side-menu" color="side-menu">
-      <ion-buttons slot="start">
-        <button class="atras-btn" type="button" (click)="backToAccounts()">
-          <ion-icon src="assets/icon/left.svg"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title class="header-title text-subtitle">{{ title }}</ion-title>
+<!-- ==========================================================
+     HEADER
+     ========================================================== -->
 
-    </ion-toolbar>
-  </ion-header>
+<ion-header>
+
+  <app-page-layout
+    [title]="title"
+    [showBack]="true"
+    (back)="backToAccounts()">
+  </app-page-layout>
+
+</ion-header>
+
+<!-- ==========================================================
+     CONTENT
+     ========================================================== -->
+
+<ion-content
+  [fullscreen]="true"
+  scroll-y="false"
+  class="transfer-history-page">
 
   <div class="content-wrapper">
-    <!-- Sección de filtros -->
-    <div class="filter-section">
-      <!-- Filtro de cuentas -->
-      <div class="account-filter-chip" (click)="openAccountModal()">
-        <div class="chip-content">
-          <ion-icon src="assets/icon/wallet.svg"></ion-icon>
-          <span>{{ accountFilterLabel }}</span>
-        </div>
-      </div>
 
-      <!-- Tabs de período -->
+    <!-- ==========================================================
+         FILTERS
+         ========================================================== -->
+
+    <section class="filter-section">
+
+      <!-- ==========================================================
+           ACCOUNT FILTER
+           ========================================================== -->
+
+      <button
+        type="button"
+        class="account-filter"
+        [class.active]="selectedAccounts.length !== accounts.length"
+        (click)="openAccountModal()">
+
+        <div class="filter-content">
+
+          <div
+            class="filter-icon"
+            [class.all]="selectedAccounts.length !== 1"
+            [style.background]="selectedAccounts.length === 1 ? selectedAccountColor : null">
+
+            <ion-icon
+              *ngIf="selectedAccounts.length !== 1"
+              src="assets/icon/wallet.svg">
+            </ion-icon>
+
+            <ion-icon
+              *ngIf="selectedAccounts.length === 1"
+              [src]="'assets/icon/' + selectedAccountIcon + '.svg'">
+            </ion-icon>
+
+          </div>
+
+          <div class="filter-text">
+            <span>{{ accountFilterLabel }}</span>
+          </div>
+
+        </div>
+
+        <ion-icon
+          class="filter-arrow"
+          src="assets/icon/down.svg">
+        </ion-icon>
+
+      </button>
+
+      <!-- ==========================================================
+           PERIOD
+           ========================================================== -->
+
       <app-custom-segment
         [options]="periodTabs"
         [(model)]="selectedPeriod"
@@ -31,173 +82,236 @@
         (modelChange)="onPeriodChange()">
       </app-custom-segment>
 
-      <!-- Navegación según el período seleccionado -->
+      <!-- ==========================================================
+           PERIOD NAVIGATION
+           ========================================================== -->
+
       <div class="period-navigation">
-        <button class="nav-btn" (click)="selectedPeriod === 'semana' ? changeWeek(-1) : selectedPeriod === 'mes' ? changeMonth(-1) : changeYear(-1)">
-          <ion-icon [src]="'assets/icon/left-inline.svg'"></ion-icon>
+
+        <button
+          type="button"
+          class="nav-btn"
+          (click)="selectedPeriod === 'semana'
+            ? changeWeek(-1)
+            : selectedPeriod === 'mes'
+              ? changeMonth(-1)
+              : changeYear(-1)">
+
+          <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
+
         </button>
 
         <div class="period-label">
+
           <span *ngIf="selectedPeriod === 'semana'">
-            Semana {{ selectedWeekOfMonth }} - {{ getMonthName(selectedMonth) }} {{ selectedYear }}
+            Semana {{ selectedWeekOfMonth }} · {{ getMonthName(selectedMonth) }} {{ selectedYear }}
           </span>
+
           <span *ngIf="selectedPeriod === 'mes'">
             {{ getMonthName(selectedMonth) }} {{ selectedYear }}
           </span>
+
           <span *ngIf="selectedPeriod === 'anio'">
             {{ selectedYear }}
           </span>
+
         </div>
 
-        <button class="nav-btn" (click)="selectedPeriod === 'semana' ? changeWeek(1) : selectedPeriod === 'mes' ? changeMonth(1) : changeYear(1)">
-          <ion-icon [src]="'assets/icon/right-inline.svg'"></ion-icon>
+        <button
+          type="button"
+          class="nav-btn"
+          (click)="selectedPeriod === 'semana'
+            ? changeWeek(1)
+            : selectedPeriod === 'mes'
+              ? changeMonth(1)
+              : changeYear(1)">
+
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+
         </button>
-      </div>
-    </div>
 
-    <!-- Lista de transferencias -->
-    <div class="transfers-list">
-      <div *ngIf="groupedTransfers.length === 0" class="no-data">
-        <ion-icon src="assets/icon/transfer.svg" class="empty-icon"></ion-icon>
+      </div>
+
+    </section>
+
+    <!-- ==========================================================
+         TRANSFERS
+         ========================================================== -->
+
+    <section class="transfers-list">
+
+      <div
+        *ngIf="groupedTransfers.length === 0"
+        class="no-data">
+
+        <ion-icon
+          class="empty-icon"
+          src="assets/icon/transfer.svg">
+        </ion-icon>
+
         <p>No hay transferencias para mostrar</p>
+
       </div>
 
-      <div *ngFor="let group of groupedTransfers" class="transfer-group">
+      <div
+        *ngFor="let group of groupedTransfers"
+        class="transfer-group">
+
         <div class="date-header">
-          <span class="date-text">{{ group.fecha }}</span>
+
+          <span class="date-text">
+
+            {{ group.fecha }}
+
+          </span>
+
         </div>
 
-        <div class="transfer-item" *ngFor="let transfer of group.items" (click)="editTransfer(transfer)">
-          <div class="transfer-icon" 
-               [class.icon-inicial]="transfer.type === 'Inicial'" 
-               [class.icon-ajuste]="transfer.type === 'Ajuste'"
-               [class.icon-realizado]="transfer.type === 'Realizado'">
-            <ion-icon [src]="'assets/icon/' + getTransferIcon(transfer.type) + '.svg'"></ion-icon>
+        <button
+          *ngFor="let transfer of group.items"
+          type="button"
+          class="transfer-item"
+          (click)="editTransfer(transfer)">
+
+          <div
+            class="transfer-icon"
+            [class.icon-inicial]="transfer.type === 'Inicial'"
+            [class.icon-ajuste]="transfer.type === 'Ajuste'"
+            [class.icon-realizado]="transfer.type === 'Realizado'">
+
+            <ion-icon
+              [src]="'assets/icon/' + getTransferIcon(transfer.type) + '.svg'">
+            </ion-icon>
+
           </div>
-          
+
           <div class="transfer-info">
-            <!-- Tipo: Initial -->
+
             <ng-container *ngIf="transfer.type === 'Inicial'">
-              <div class="transfer-title">{{ transfer.destinationAccountName }}</div>
-              <div class="transfer-comment">Monto Inicial</div>
+
+              <div class="transfer-title">
+                {{ transfer.destinationAccountName }}
+              </div>
+
+              <div class="transfer-comment">
+                Monto inicial
+              </div>
+
             </ng-container>
 
-            <!-- Tipo: Adjustment -->
             <ng-container *ngIf="transfer.type === 'Ajuste'">
-              <div class="transfer-title">{{ transfer.originAccountName }}</div>
-              <div class="transfer-comment">Ajuste del Monto</div>
+
+              <div class="transfer-title">
+                {{ transfer.originAccountName }}
+              </div>
+
+              <div class="transfer-comment">
+                Ajuste del monto
+              </div>
+
             </ng-container>
 
-            <!-- Tipo: Completed -->
             <ng-container *ngIf="transfer.type === 'Realizado'">
+
               <div class="transfer-accounts">
-                <span class="origin">{{ transfer.originAccountName }}</span>
-                <ion-icon src="assets/icon/right-double.svg" class="empty-icon"></ion-icon>
-                <span class="destination">{{ transfer.destinationAccountName }}</span>
+
+                <span class="origin">
+                  {{ transfer.originAccountName }}
+                </span>
+
+                <ion-icon src="assets/icon/right-double.svg"></ion-icon>
+
+                <span class="destination">
+                  {{ transfer.destinationAccountName }}
+                </span>
+
               </div>
-              <div class="transfer-comment" *ngIf="transfer.comment">
+
+              <div
+                *ngIf="transfer.comment"
+                class="transfer-comment">
+
                 {{ transfer.comment }}
+
               </div>
+
             </ng-container>
+
           </div>
 
           <div class="transfer-amount">
-            S/. {{ transfer.amount }} 
+
+            S/. {{ transfer.amount }}
+
           </div>
-        </div>
+
+        </button>
+
       </div>
-    </div>
+
+    </section>
+
   </div>
-  
-  <!-- Botón flotante para agregar transferencia -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-custom">
-    <ion-fab-button (click)="navigateToAddTransfer()">
+
+  <!-- ==========================================================
+       FAB
+       ========================================================== -->
+
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    class="fab-custom">
+
+    <ion-fab-button
+      (click)="navigateToAddTransfer()">
+
       <ion-icon src="assets/icon/add.svg"></ion-icon>
+
     </ion-fab-button>
+
   </ion-fab>
 
-  <!-- Modal de selección de cuentas -->
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
-
-  <!-- Alert de error genérico -->
-  <app-basic-alert
-    *ngIf="showGenericAlert"
-    [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
-    [imageUrl]="'assets/icon/alert-triangle.svg'"
-    [confirmText]="'Entendido'"
-    [alertSize]="'medium'"
-    [reverseButtons]="true"
-    [showCancel]="false"
-    (onConfirm)="showGenericAlert = false"
-  >
-  </app-basic-alert>
-
-  <ion-modal 
-    [isOpen]="isAccountModalOpen" 
-    (didDismiss)="closeAccountModal()" 
-    [cssClass]="getModalClass()"
-  >
-    <ng-template>
-      <div class="modal-wrapper">
-        <div class="modal-header">
-          <h2 class="modal-title">Filtrar por Cuentas</h2>
-          <button class="btn-close" (click)="closeAccountModal()">
-              <ion-icon [src]="'assets/icon/cross.svg'"></ion-icon>
-          </button>
-        </div>
-        
-        <div class="modal-body">
-          <div class="cuentas-list" [class.scrollable]="accounts.length >= 4">
-            <!-- Opción de todas las cuentas -->
-            <div
-              class="cuenta-card"
-              [class.selected]="selectAllAccounts"
-              (click)="toggleSelectAll()">
-              <div class="cuenta-left">
-                <div class="cuenta-icon all-accounts">
-                  <ion-icon [src]="'assets/icon/bank.svg'"></ion-icon>
-                </div>
-                <div class="cuenta-details">
-                  <span class="cuenta-nombre">Todas las cuentas</span>
-                  <span class="cuenta-saldo">Mostrar todas</span>
-                </div>
-              </div>
-              <div class="cuenta-check">
-                <ion-icon name="checkmark-circle" *ngIf="selectAllAccounts"></ion-icon>
-              </div>
-            </div>
-
-            <!-- Lista de cuentas individuales -->
-            <div
-              *ngFor="let account of accounts"
-              class="cuenta-card"
-              [class.selected]="account.selected && !selectAllAccounts"
-              (click)="toggleAccountSelection(account)">
-              <div class="cuenta-left">
-                <div class="cuenta-icon" [style.background]="account.color">
-                  <ion-icon [src]="'assets/icon/' + account.icon + '.svg'"></ion-icon>
-                </div>
-                <div class="cuenta-details">
-                  <span class="cuenta-nombre">{{ account.name }}</span>
-                  <span class="cuenta-saldo">S/. {{ +account.amount | number:'1.2-2' }}</span>
-                </div>
-              </div>
-              <div class="cuenta-check">
-                <ion-icon name="checkmark-circle" *ngIf="account.selected && !selectAllAccounts"></ion-icon>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-template>
-  </ion-modal>
-    
 </ion-content>
+
+<!-- ==========================================================
+     ALERT
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showCustomAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="showCustomAlert = false"
+  (onConfirm)="salirSinGuardar()">
+</app-custom-alert>
+
+<!-- ==========================================================
+     ERROR ALERT
+     ========================================================== -->
+
+<app-basic-alert
+  *ngIf="showGenericAlert"
+  [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
+  [imageUrl]="'assets/icon/alert-triangle.svg'"
+  [confirmText]="'Entendido'"
+  [alertSize]="'medium'"
+  [reverseButtons]="true"
+  [showCancel]="false"
+  (onConfirm)="showGenericAlert = false">
+</app-basic-alert>
+
+<!-- ==========================================================
+     ACCOUNT SELECTOR
+     ========================================================== -->
+
+<app-account-selector-modal
+  [isOpen]="isAccountModalOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (modalClosed)="closeAccountModal()"
+  (accountsSelected)="onAccountsSelected($event)">
+</app-account-selector-modal>
