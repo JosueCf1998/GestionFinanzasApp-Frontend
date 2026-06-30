@@ -27,10 +27,7 @@
 
     <section class="filter-section">
 
-      <!-- ==========================================================
-           ACCOUNT FILTER
-           ========================================================== -->
-
+      <!-- ACCOUNT FILTER -->
       <button
         type="button"
         class="account-filter"
@@ -72,10 +69,7 @@
 
       </button>
 
-      <!-- ==========================================================
-           PERIOD SEGMENT
-           ========================================================== -->
-
+      <!-- PERIOD SEGMENT -->
       <div class="period-card">
 
         <app-custom-segment
@@ -87,20 +81,13 @@
 
       </div>
 
-      <!-- ==========================================================
-           PERIOD NAVIGATION
-           ========================================================== -->
-
+      <!-- PERIOD NAVIGATION -->
       <div class="period-navigation">
 
         <button
           type="button"
           class="nav-btn"
-          (click)="selectedPeriod === 'semana'
-            ? changeWeek(-1)
-            : selectedPeriod === 'mes'
-              ? changeMonth(-1)
-              : changeYear(-1)">
+          (click)="prevPeriod()">
 
           <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
 
@@ -125,11 +112,7 @@
         <button
           type="button"
           class="nav-btn"
-          (click)="selectedPeriod === 'semana'
-            ? changeWeek(1)
-            : selectedPeriod === 'mes'
-              ? changeMonth(1)
-              : changeYear(1)">
+          (click)="nextPeriod()">
 
           <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
 
@@ -145,39 +128,38 @@
 
     <section class="transfers-list">
 
+      <!-- EMPTY STATE -->
       <div
         *ngIf="groupedTransfers.length === 0"
-        class="no-data">
+        class="empty-state">
 
-        <ion-icon
-          class="empty-icon"
-          src="assets/icon/transfer.svg">
-        </ion-icon>
+        <div class="empty-icon">
+          <ion-icon src="assets/icon/transfer.svg"></ion-icon>
+        </div>
 
-        <p>
-          No hay transferencias para mostrar
+        <h3 class="empty-title">
+          Sin transferencias
+        </h3>
+
+        <p class="empty-description">
+          Aquí verás tus movimientos entre cuentas cuando realices transferencias.
         </p>
 
       </div>
 
+      <!-- GROUPS -->
       <div
         *ngFor="let group of groupedTransfers"
         class="transfer-group">
 
-        <!-- ======================================================
-             DATE HEADER
-             ====================================================== -->
-
+        <!-- DATE HEADER -->
         <div class="date-header">
           <span class="date-text">
             {{ group.fecha }}
           </span>
         </div>
 
-        <!-- ======================================================
-             TRANSFER ITEM
-             ====================================================== -->
-
+        <!-- ITEMS -->
         <button
           *ngFor="let transfer of group.items"
           type="button"
@@ -189,38 +171,45 @@
 
             <app-item-icon
               [icon]="getTransferIcon(transfer.type)"
+              size="sm"
               [color]="getTransferColor(transfer.type)">
             </app-item-icon>
 
             <div class="transfer-info">
 
               <ng-container *ngIf="transfer.type === 'Inicial'">
+
                 <div class="transfer-title">
                   {{ transfer.destinationAccountName }}
                 </div>
+
                 <div class="transfer-comment">
-                  Monto inicial
+                  Saldo inicial
                 </div>
+
               </ng-container>
 
               <ng-container *ngIf="transfer.type === 'Ajuste'">
+
                 <div class="transfer-title">
                   {{ transfer.originAccountName }}
                 </div>
+
                 <div class="transfer-comment">
-                  Ajuste del monto
+                  Ajuste de saldo
                 </div>
+
               </ng-container>
 
               <ng-container *ngIf="transfer.type === 'Realizado'">
 
-                <div class="transfer-accounts">
+                <div class="transfer-route">
 
                   <span class="origin">
                     {{ transfer.originAccountName }}
                   </span>
 
-                  <ion-icon src="assets/icon/right-double.svg"></ion-icon>
+                  <ion-icon src="assets/icon/arrow-swap.svg"></ion-icon>
 
                   <span class="destination">
                     {{ transfer.destinationAccountName }}
@@ -262,10 +251,7 @@
 
   </div>
 
-  <!-- ==========================================================
-       FAB
-       ========================================================== -->
-
+  <!-- FAB -->
   <ion-fab
     vertical="bottom"
     horizontal="end"
@@ -305,10 +291,7 @@
   (onConfirm)="showGenericAlert = false">
 </app-basic-alert>
 
-<!-- ==========================================================
-     ACCOUNT MODAL
-     ========================================================== -->
-
+<!-- ACCOUNT MODAL -->
 <app-account-selector-modal
   [isOpen]="isAccountModalOpen"
   [accounts]="accounts"

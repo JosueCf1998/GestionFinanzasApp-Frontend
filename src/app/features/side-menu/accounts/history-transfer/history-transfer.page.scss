@@ -9,8 +9,9 @@
 .content-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 18px;
+  gap: 20px;
+
+  padding: 16px;
   padding-bottom: 110px;
 }
 
@@ -21,11 +22,11 @@
 .filter-section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 /* ==========================================================
-   ACCOUNT FILTER (FIX REAL)
+   ACCOUNT FILTER (PRO FINTECH)
    ========================================================== */
 
 .account-filter {
@@ -34,18 +35,19 @@
   justify-content: space-between;
 
   width: 100%;
-  padding: 16px;
+  padding: 14px;
 
-  border-radius: 18px;
-  background: #fff;
+  border-radius: 16px;
+
+  background: var(--fv-surface);
   border: 1px solid rgba(15,23,42,.05);
 
   transition: .18s ease;
 }
 
 .account-filter:hover {
-  border-color: rgba(67,97,238,.12);
   transform: translateY(-1px);
+  border-color: rgba(67,97,238,.12);
 }
 
 .account-filter:active {
@@ -56,44 +58,32 @@
   background: rgba(67,97,238,.03);
 }
 
-/* ==========================================================
-   FILTER CONTENT (FIX CRÍTICO)
-   ========================================================== */
-
+/* FILTER CONTENT */
 .filter-content {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 
   flex: 1;
   min-width: 0;
 }
 
-/* ICON FIX (ROOT CAUSE) */
 .filter-content app-item-icon {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* TEXT BLOCK FIX */
+/* TEXT */
 .filter-text {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-
+  text-align: left;
   gap: 2px;
+
   min-width: 0;
-  flex: 1;
 }
 
-/* TITLE */
 .filter-title {
-  font-size: 15.5px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--fv-text-primary);
 
@@ -102,30 +92,23 @@
   text-overflow: ellipsis;
 }
 
-/* SUBTITLE */
 .filter-subtitle {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--fv-text-secondary);
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* ==========================================================
-   ARROW
-   ========================================================== */
-
+/* ARROW */
 .filter-arrow {
-  width: 18px;
-  height: 18px;
-  opacity: .45;
+  width: 16px;
+  height: 16px;
+
+  opacity: .5;
   transition: .18s ease;
 }
 
 .account-filter:hover .filter-arrow {
-  opacity: .85;
+  opacity: .9;
   transform: translateX(2px);
 }
 
@@ -135,27 +118,31 @@
 
 .period-card {
   padding: 4px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--fv-background);
 }
 
 .period-navigation {
   display: grid;
-  grid-template-columns: 42px 1fr 42px;
-  gap: 12px;
+  grid-template-columns: 40px 1fr 40px;
+  gap: 10px;
   align-items: center;
 }
 
 .nav-btn {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
+
   border-radius: 50%;
   border: none;
+
   background: rgba(67,97,238,.06);
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: .18s ease;
 }
 
 .nav-btn:active {
@@ -167,31 +154,51 @@
   align-items: center;
   justify-content: center;
 
-  min-height: 44px;
-  padding: 0 16px;
+  min-height: 40px;
 
-  border-radius: 14px;
+  padding: 0 12px;
+
+  border-radius: 12px;
+
   background: var(--fv-background);
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--fv-text-primary);
 }
 
 /* ==========================================================
-   DATE
+   GROUP HEADER
    ========================================================== */
 
 .date-text {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
+
   letter-spacing: .12em;
-  color: #98A2B3;
   text-transform: uppercase;
+
+  color: #98A2B3;
 }
 
 /* ==========================================================
-   TRANSFER ITEMS (OPTIMIZED)
+   TRANSFER LIST
+   ========================================================== */
+
+.transfers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.transfer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ==========================================================
+   TRANSFER ITEM (FINTECH CLEAN)
    ========================================================== */
 
 .transfer-item {
@@ -199,13 +206,14 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 10px 14px;
+  padding: 10px 12px;
+
   border-radius: 14px;
 
-  background: #fff;
-  border: 1px solid rgba(15,23,42,.06);
+  background: var(--fv-surface);
+  border: 1px solid rgba(15,23,42,.05);
 
-  min-height: 52px;
+  min-height: 54px;
 
   transition: .18s ease;
 }
@@ -218,37 +226,36 @@
   transform: scale(.985);
 }
 
-/* LEFT SIDE */
+/* LEFT */
 .transfer-main {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 
   flex: 1;
   min-width: 0;
 }
 
-/* ICON FIX */
+/* ICON */
 .transfer-main app-item-icon {
   flex-shrink: 0;
-  transform: scale(0.82);
 }
 
-/* TEXT */
+/* INFO */
 .transfer-info {
   display: flex;
   flex-direction: column;
+  text-align: left;
   gap: 2px;
 
-  flex: 1;
   min-width: 0;
-  text-align: left;
 }
 
+/* TITLE */
 .transfer-title,
 .origin,
 .destination {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--fv-text-primary);
 
@@ -257,6 +264,7 @@
   text-overflow: ellipsis;
 }
 
+/* COMMENT */
 .transfer-comment {
   font-size: 11px;
   font-weight: 500;
@@ -267,7 +275,14 @@
   text-overflow: ellipsis;
 }
 
-/* RIGHT SIDE */
+/* ROUTE */
+.transfer-route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* RIGHT */
 .transfer-right {
   display: flex;
   align-items: center;
@@ -275,57 +290,91 @@
 }
 
 .transfer-amount {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--fv-text-primary);
+
   font-variant-numeric: tabular-nums;
 }
 
 .transfer-arrow {
   width: 14px;
   height: 14px;
-  color: var(--fv-text-secondary);
+
   opacity: .5;
-  transition: .18s ease;
-}
-
-.transfer-item:hover .transfer-arrow {
-  opacity: .9;
-  transform: translateX(2px);
 }
 
 /* ==========================================================
-   LIST SPACING
+   EMPTY STATE (LEVEL FINTECH)
    ========================================================== */
 
-.transfers-list {
+.empty-state {
   display: flex;
   flex-direction: column;
+  align-items: center;
+
   gap: 12px;
+
+  padding: 60px 20px;
+
+  text-align: center;
 }
 
-.transfer-group {
+.empty-icon {
+  width: 64px;
+  height: 64px;
+
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background: rgba(67,97,238,.06);
 }
 
-/* ==========================================================
-   EMPTY
-   ========================================================== */
+.empty-icon ion-icon {
+  width: 28px;
+  height: 28px;
 
-.no-data {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 60px 16px;
+  color: var(--fv-primary);
+  opacity: .8;
 }
 
-.no-data p {
-  margin: 0;
-  font-size: 13px;
+.empty-title {
+  font-size: 15px;
+  font-weight: 800;
+
+  color: var(--fv-text-primary);
+}
+
+.empty-description {
+  font-size: 12.5px;
   color: var(--fv-text-secondary);
+
+  max-width: 260px;
+  line-height: 1.4;
+}
+
+/* ACTION BUTTON */
+.empty-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 10px 14px;
+
+  border-radius: 12px;
+
+  border: none;
+
+  background: var(--fv-gradient-primary);
+  color: white;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  box-shadow: var(--fv-shadow-primary);
 }
 
 /* ==========================================================
