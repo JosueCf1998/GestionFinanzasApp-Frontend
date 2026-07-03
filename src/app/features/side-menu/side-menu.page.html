@@ -1,64 +1,48 @@
-<ion-split-pane
-  contentId="main-content"
-  when="md">
+<ion-split-pane contentId="main-content" when="false">
 
-  <!-- ==========================================================
-       MENU
-       ========================================================== -->
+  <!-- ================= MENU ================= -->
 
   <ion-menu
     menuId="main-menu"
     contentId="main-content"
-    type="overlay">
+    type="overlay"
+    [swipeGesture]="true">
 
-    <ion-content
-      [scrollY]="false">
+    <ion-content [scrollY]="true">
 
       <div class="menu-content">
 
-        <!-- ==========================================================
-             USER HEADER
-             ========================================================== -->
+        <!-- ================= HEADER ================= -->
 
         <div class="menu-header">
 
           <div class="avatar-container">
-
             <div class="avatar">
-
               {{ name ? name.charAt(0).toUpperCase() : 'U' }}
-
             </div>
-
           </div>
 
           <div class="user-info">
 
             <ion-label class="user-name">
-
-              {{ name.charAt(0).toUpperCase() + name.slice(1) || 'Usuario' }}
-
+              {{ name ? (name.charAt(0).toUpperCase() + name.slice(1)) : 'Usuario' }}
             </ion-label>
 
             <ion-label class="user-email">
-
               {{ email || 'usuario@ejemplo.com' }}
-
             </ion-label>
 
           </div>
 
         </div>
 
-        <!-- ==========================================================
-             MENU ITEMS
-             ========================================================== -->
+        <!-- ================= ITEMS ================= -->
 
         <ion-list id="inbox-list">
 
           @for (p of appPages; track p) {
 
-            <ion-menu-toggle auto-hide="false">
+            <ion-menu-toggle auto-hide="true">
 
               <ion-item
                 routerDirection="root"
@@ -73,9 +57,7 @@
                 </ion-icon>
 
                 <ion-label>
-
                   {{ p.title }}
-
                 </ion-label>
 
               </ion-item>
@@ -86,9 +68,7 @@
 
         </ion-list>
 
-        <!-- ==========================================================
-             FOOTER
-             ========================================================== -->
+        <!-- ================= FOOTER ================= -->
 
         <div class="menu-footer">
 
@@ -99,16 +79,9 @@
             button
             (click)="logOut()">
 
-            <ion-icon
-              slot="start"
-              src="assets/icon/exit.svg">
-            </ion-icon>
+            <ion-icon slot="start" src="assets/icon/exit.svg"></ion-icon>
 
-            <ion-label>
-
-              Cerrar sesión
-
-            </ion-label>
+            <ion-label>Cerrar sesión</ion-label>
 
           </ion-item>
 
@@ -120,18 +93,13 @@
 
   </ion-menu>
 
-  <!-- ==========================================================
-       PAGE
-       ========================================================== -->
+  <!-- ================= MAIN ================= -->
 
-  <div
-    class="ion-page"
-    id="main-content">
+  <div class="ion-page" id="main-content">
 
     <ion-header>
 
-      <app-page-layout
-        [showBack]="false">
+      <app-page-layout [showBack]="false">
 
         <ion-menu-button
           header-left
@@ -143,10 +111,7 @@
     </ion-header>
 
     <div class="router-container">
-
-      <router-outlet>
-      </router-outlet>
-
+      <router-outlet></router-outlet>
     </div>
 
   </div>

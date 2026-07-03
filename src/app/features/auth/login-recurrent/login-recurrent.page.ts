@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   Validators,
@@ -9,9 +8,6 @@ import {
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonImg,
   IonIcon,
   IonButton,
@@ -19,7 +15,6 @@ import {
   IonText,
   IonInput, IonLabel } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
-import { EncryptionService } from "../../../core/services/encryption.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
@@ -27,8 +22,6 @@ import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants"
 import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 import { validate } from "src/app/core/utils/password-validation.util";
-import { DecryptionCryptoUseCase } from "src/app/core/use-cases/crypto/decryption.usecase";
-import { EncryptionCryptoUseCase } from "src/app/core/use-cases/crypto/encryption.usecase";
 import 'src/app/core/utils/observable-extensions';
 import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usecase";
 import { ProfileUserRequest } from "src/app/core/use-cases/users/profile-user.usecase";
@@ -92,7 +85,7 @@ export class LoginRecurrentPage implements OnInit {
             this.messageError = responseError;
             return;
           }
-          this.executeAccountList();
+          this.navService.push('/main')
         } else {
           this.showGenericAlert = true;
         }
@@ -100,35 +93,6 @@ export class LoginRecurrentPage implements OnInit {
       failure: (error) => {
         this.loadingService.hide();
         if (error) {
-          this.showUnauthorizedAlert = true;
-          this.messageError = error.message;
-        } else {
-          this.showGenericAlert = true;
-        }
-      }
-    });
-  }
-
-  private executeAccountList() {
-    this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().service({
-      success: (data) => {
-        this.loadingService.hide();
-        if (data) {
-          if (data.items.length == 0) {
-            this.navService.push("/welcome-step-one");
-          } else {
-            this.navService.push('/main')
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
-      },
-      failure: (error) => {
-        this.loadingService.hide();
-        if (error?.code == "404") {
-            this.navService.push("/welcome-step-one");
-        } else if (error) {
           this.showUnauthorizedAlert = true;
           this.messageError = error.message;
         } else {
