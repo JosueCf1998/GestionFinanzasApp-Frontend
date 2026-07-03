@@ -59,11 +59,13 @@ export class LoginRecurrentPage implements OnInit {
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required]),
   });
-  user: ProfileUserRequest | null = null;
 
   showGenericAlert: boolean = false;
   showUnauthorizedAlert: boolean = false
   messageError: string = '';
+
+  email: string = this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) || "";
+  name: string = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
 
   constructor(
     private navService: NavigationService,
@@ -74,9 +76,7 @@ export class LoginRecurrentPage implements OnInit {
     private localManagementService: LocalManagementService
   ) {}
 
-  ngOnInit() {
-    this.fetchUserData()
-  }
+  ngOnInit() {}
 
   // MARK: - SERVICIOS
 
@@ -200,7 +200,7 @@ export class LoginRecurrentPage implements OnInit {
   }
 
   private sanitizeCredentials(): { email: string; password: string } {
-    const rawEmail = this.user?.correo || "";
+    const rawEmail = this.email;
     const rawPassword = this.loginForm.value.password || "";
 
     const email = rawEmail.trim().toLowerCase().replace(/\s+/g, "");
@@ -216,23 +216,11 @@ export class LoginRecurrentPage implements OnInit {
       return "No se recibió un token válido en el inicio de sesión.";
     }
 
-    if (data.user?.correo && data.user.correo.includes(" ")) {
+    if (this.email && this.email.includes(" ")) {
       return "El correo del usuario recibido no es válido.";
     }
 
     return null;
-  }
-
-  private fetchUserData() {
-    const userJson = this.localManagementService.getVariable('user');
-    if (userJson) {
-      try {
-        this.user = JSON.parse(userJson);
-      } catch (error) {
-        console.error('Error al parsear datos de usuario:', error);
-        this.user = null;
-      }
-    }
   }
 
   private showValidationError(message: string): false {

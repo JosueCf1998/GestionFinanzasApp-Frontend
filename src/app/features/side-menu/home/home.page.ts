@@ -12,6 +12,8 @@ import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { Categoria } from 'src/app/shared/models/categoria.model';
 
 import 'src/app/core/utils/observable-extensions';
+import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
+import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 
 @Component({
   selector: 'app-home',
@@ -58,6 +60,9 @@ export class HomePage {
   ingresosGrouped: Array<Categoria & {
     totalAmount: number;
   }> = [];
+
+  name: string = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
+  isFirstTime: boolean = this.localManagementService.getVariable(KEY_MANAGEMENT.IS_FIRST_TIME) === 'true';
 
   dataTabs = [
     {
@@ -151,6 +156,7 @@ export class HomePage {
     private listAccountsUseCase: ListAccountsUseCase,
     private listTransferUseCase: ListTransferUseCase,
     private listTransactionsUseCase: ListTransactionsUseCase,
+    private localManagementService: LocalManagementService,
     private navService: NavigationService,
     private loadingService: SpinnerService,
     private menuCtrl: MenuController

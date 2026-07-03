@@ -46,11 +46,11 @@
         </ion-img>
 
         <div class="user-avatar">
-          {{ user?.nombre ? user?.nombre!.charAt(0).toUpperCase() : 'U' }}
+          {{ name ? name.charAt(0).toUpperCase() : 'U' }}
         </div>
 
         <h1 class="text-title login-title">
-          Hola {{ user?.nombre || 'Usuario' }}
+          Hola {{ name || 'Usuario' }}
         </h1>
 
         <p class="text-body login-subtitle">

@@ -14,12 +14,8 @@ export interface LoginUserRequest {
 }
 export interface LoginUserResponse {
   token: string;
-  user?: {
-    id?: string;
-    nombre: string;
-    correo: string;
-    imagen?: string;
-  };
+  isFirstTime: boolean;
+  nombre: string;
 }
 
 @Injectable({
@@ -38,23 +34,17 @@ export class LoginUserUseCase {
     return this.apiService.post<LoginUserResponse>(endpoint, encryptedBody).pipe(
       tap(result => {
         if (result.success && result.data) {
-          this.saveUserData(result.data);
+          this.saveUserData(result.data, body.email);
         }
       })
     );
   }
 
-  private saveUserData(userData: LoginUserResponse): void {
+  private saveUserData(userData: LoginUserResponse, email: string): void {
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
-    if (userData.user) {
-      const user = {
-        id: userData.user.id,
-        nombre: userData.user.nombre,
-        correo: userData.user.correo,
-        imagen: userData.user.imagen || 'https://gravatar.com/avatar/placeholder?s=200&d=mp'
-      };
-      this.localManagementService.setVariable('user', JSON.stringify(user));
-    }
+    this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.nombre);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, userData.isFirstTime);
   }
-  
+
 }

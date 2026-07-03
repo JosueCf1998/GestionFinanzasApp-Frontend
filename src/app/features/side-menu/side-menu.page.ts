@@ -22,6 +22,7 @@ import { NavigationService } from '../../core/services/navigation.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
 import { ProfileUserRequest } from 'src/app/core/use-cases/users/profile-user.usecase';
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
+import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 
 @Component({
   selector: 'app-side-menu',
@@ -57,7 +58,8 @@ export class SideMenuPage implements OnInit {
     { title: "Categorias", url: "/main/categories", icon: "category" },
   ];
 
-  user: ProfileUserRequest | null = null;
+  email: string = this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) || "";
+  name: string = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
 
   constructor(
     private logoutUserUseCase: LogoutUserUseCase,
@@ -75,19 +77,9 @@ export class SideMenuPage implements OnInit {
    * Este método se ejecuta UNA SOLA VEZ cuando se carga el layout /main
    */
   private loadUserData(): void {
-    const userJson = this.localManagementService.getVariable('user');
-    if (userJson) {
-      try {
-        this.user = JSON.parse(userJson);
-      } catch (error) {
-        console.error('Error al parsear datos de usuario:', error);
-        this.user = null;
-      }
-    }
   }
 
   logOut() {
-    this.logoutUserUseCase.logout();
     this.navigationService.replace('/splash');
   }
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonImg } from '@ionic/angular/standalone';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
+import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 
 @Component({
   selector: 'app-splash',
@@ -13,26 +15,20 @@ import { NavigationService } from 'src/app/core/services/navigation.service';
 })
 export class SplashPage implements OnInit {
 
-  isFirstLogin: boolean = false;
+  isLoginRecurrent: boolean = this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) != null;
 
   constructor(
-    private navService: NavigationService
-  ) {
-    const state = window.history.state;
-    if (!state || !state.type ) {
-      this.isFirstLogin = true;
-      return;
-    }
-    this.isFirstLogin = state.type === 'first-login';
-  }
+    private navService: NavigationService,
+    private localManagementService: LocalManagementService
+  ) {}
 
   ngOnInit() {
-    let time = !this.isFirstLogin ? 2500 : 1500;
+    let time = this.isLoginRecurrent ? 2500 : 1500;
     setTimeout(() => {
-      if (this.isFirstLogin) {
-        this.navService.replace('/login');
-      } else {
+      if (this.isLoginRecurrent) {
         this.navService.replace('/login-recurrent');
+      } else {
+        this.navService.replace('/login');
       }
     }, time);
   }

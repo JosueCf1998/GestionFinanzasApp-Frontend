@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   Validators,
@@ -9,9 +8,6 @@ import {
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonImg,
   IonIcon,
   IonButton,
@@ -20,16 +16,11 @@ import {
   IonInput,
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
-import { EncryptionService } from "../../../core/services/encryption.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
-import { LocalManagementService } from "src/app/core/services/localManagementService.service";
-import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 import { validate } from "src/app/core/utils/password-validation.util";
-import { DecryptionCryptoUseCase } from "src/app/core/use-cases/crypto/decryption.usecase";
-import { EncryptionCryptoUseCase } from "src/app/core/use-cases/crypto/encryption.usecase";
 import 'src/app/core/utils/observable-extensions';
 
 @Component({
@@ -66,7 +57,6 @@ export class LoginPage implements OnInit {
   constructor(
     private navService: NavigationService,
     private loginUserUseCase: LoginUserUseCase,
-    private listAccountsUseCase: ListAccountsUseCase,
     private loadingService: SpinnerService,
   ) {}
 
@@ -87,7 +77,11 @@ export class LoginPage implements OnInit {
             this.messageError = responseError;
             return;
           }
-          this.executeAccountList();
+          if (data.isFirstTime) {
+            this.navService.push("/welcome-step-one");
+          } else {
+            this.navService.push('/main')
+          }
         } else {
           this.showGenericAlert = true;
         }
@@ -103,7 +97,7 @@ export class LoginPage implements OnInit {
       }
     });
   }
-
+/*
   private executeAccountList() {
     this.loadingService.show();
     this.listAccountsUseCase.listAccounts().service({
@@ -132,6 +126,7 @@ export class LoginPage implements OnInit {
       }
     });
   }
+    */
 
   // MARK: - FUNCTIONS
 
@@ -145,7 +140,7 @@ export class LoginPage implements OnInit {
     if (!this.validationLogin(email, password)) {
       return;
     }
-    
+
     const body: LoginUserRequest = {
       email,
       password,
@@ -207,14 +202,13 @@ export class LoginPage implements OnInit {
   }
 
   private validateLoginResponse(data: LoginUserResponse): string | null {
+    const email = this.loginForm.value.email || "";
     if (!data.token || data.token.trim().length === 0) {
       return "No se recibió un token válido en el inicio de sesión.";
     }
-
-    if (data.user?.correo && data.user.correo.includes(" ")) {
+    if (email && email.includes(" ")) {
       return "El correo del usuario recibido no es válido.";
     }
-
     return null;
   }
 
