@@ -1,129 +1,215 @@
-<!-- Content General -->
-<ion-content [fullscreen]="true" scroll-y="false">
-  <!-- Content Header -->
-  <ion-header>
-    <ion-toolbar class="side-menu" color="side-menu">
-      <ion-buttons slot="start">
-        <button class="atras-btn" type="button" (click)="backToCategories()">
-          <ion-icon src="assets/icon/left.svg"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title class="header-title text-subtitle">{{ title }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<!-- ==========================================================
+     HEADER
+     ========================================================== -->
 
-  <!-- Content Body -->
-  <div class="transfer-form">
-    
-    <!-- Card de información -->
+<ion-header>
+  <app-page-layout
+    [title]="title"
+    [showBack]="true"
+    (back)="backToCategories()">
+  </app-page-layout>
+</ion-header>
+
+<!-- ==========================================================
+     CONTENT
+     ========================================================== -->
+
+<ion-content [fullscreen]="true">
+
+  <div class="transfer-detail-page">
+
+    <!-- ==========================================================
+         MAIN CARD
+         ========================================================== -->
+
     <div class="detail-card">
-      <!-- Sección de Cuentas -->
-      <div class="accounts-section">
-        <!-- Cuenta de Origen -->
-        <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Ajuste'">
-          <div class="transfer-label text-body">{{ type === 'Realizado' ? 'Transfiere de una Cuenta' : 'Ajuste de la Cuenta' }}</div>
-          <div class="account-display">
-            <div class="account-icon" [style.background-color]="cuentaOrigenColor">
-              <ion-icon [src]="'assets/icon/' + cuentaOrigenIcon + '.svg'"></ion-icon>
-            </div>
-            <div class="account-info">{{ cuentaOrigen }}</div>
+
+      <!-- ======================================================
+           ACCOUNTS SECTION
+           ====================================================== -->
+
+      <div class="section">
+
+        <!-- ORIGIN -->
+        <div
+          class="row"
+          *ngIf="type === 'Realizado' || type === 'Ajuste'">
+
+          <span class="label">
+            {{ type === 'Realizado' ? 'Desde' : 'Cuenta' }}
+          </span>
+
+          <div class="account-row">
+
+            <app-item-icon
+              [icon]="cuentaOrigenIcon"
+              [color]="cuentaOrigenColor"
+              size="lg">
+            </app-item-icon>
+
+            <span class="value">
+              {{ cuentaOrigen }}
+            </span>
+
           </div>
+
         </div>
 
-        <!-- Cuenta de Destino -->
-        <div class="transfer-section" *ngIf="type === 'Realizado' || type === 'Inicial'">
-          <div class="transfer-label text-body">{{ type === 'Realizado' ? 'Transfiere a una Cuenta' : 'Cuenta Inicial' }}</div>
-          <div class="account-display">
-            <div class="account-icon" [style.background-color]="cuentaDestinoColor">
-              <ion-icon [src]="'assets/icon/' + cuentaDestinoIcon + '.svg'"></ion-icon>
-            </div>
-            <div class="account-info">{{ cuentaDestino }}</div>
+        <!-- DESTINATION -->
+        <div
+          class="row"
+          *ngIf="type === 'Realizado' || type === 'Inicial'">
+
+          <span class="label">
+            {{ type === 'Realizado' ? 'Hacia' : 'Cuenta inicial' }}
+          </span>
+
+          <div class="account-row">
+
+            <app-item-icon
+              [icon]="cuentaDestinoIcon"
+              [color]="cuentaDestinoColor"
+              size="lg">
+            </app-item-icon>
+
+            <span class="value">
+              {{ cuentaDestino }}
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
+      <!-- DIVIDER -->
       <div class="divider"></div>
 
-      <!-- Sección de Detalles -->
-      <div class="details-section">
-        <!-- Monto -->
-        <div class="transfer-section">
-          <div class="transfer-label text-body">Monto</div>
-          <div class="amount-display">S/. {{ monto | number:'1.2-2' }}</div>
+      <!-- ======================================================
+           DETAILS SECTION
+           ====================================================== -->
+
+      <div class="section">
+
+        <!-- AMOUNT -->
+        <div class="row">
+
+          <span class="label">
+            Monto
+          </span>
+
+          <span class="value strong">
+            S/. {{ monto | number:'1.2-2' }}
+          </span>
+
         </div>
 
-        <!-- Fecha -->
-        <div class="transfer-section">
-          <div class="transfer-label text-body">Fecha de Transferencia</div>
-          <div class="date-display">{{ formatDate(fecha) }}</div>
+        <!-- DATE -->
+        <div class="row">
+
+          <span class="label">
+            Fecha
+          </span>
+
+          <span class="value">
+            {{ formatDate(fecha) }}
+          </span>
+
         </div>
 
-        <!-- Comentario -->
-        <div class="transfer-section" *ngIf="comentario">
-          <div class="transfer-label text-body">Comentario</div>
-          <div class="comment-display">{{ comentario }}</div>
+        <!-- COMMENT -->
+        <div
+          class="row"
+          *ngIf="comentario">
+
+          <span class="label">
+            Comentario
+          </span>
+
+          <span class="value muted">
+            {{ comentario }}
+          </span>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- Botones de acción (solo para transferencias realizadas) -->
-    <div class="action-buttons" *ngIf="type === 'Realizado'">
-      <ion-button expand="block" class="btn-editar" (click)="editarTransferencia()">
-        <ion-icon [src]="'assets/icon/edit.svg'"></ion-icon>
+    <!-- ==========================================================
+         ACTIONS
+         ========================================================== -->
+
+    <div
+      class="actions"
+      *ngIf="type === 'Realizado'">
+
+      <ion-button
+        class="btn-primary"
+        expand="block"
+        (click)="editarTransferencia()">
+
+        <ion-icon src="assets/icon/edit.svg"></ion-icon>
+
         Editar
+
       </ion-button>
-      <ion-button expand="block" class="btn-eliminar" (click)="eliminarTransferencia()">
-        <ion-icon slot="start" name="trash-outline"></ion-icon>
+
+      <ion-button
+        class="btn-danger"
+        expand="block"
+        (click)="eliminarTransferencia()">
+
         Eliminar
+
       </ion-button>
+
     </div>
 
   </div>
 
-  <!-- Alert de confirmación de eliminación -->
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Eliminar transferencia"
-    message="¿Estás seguro de que deseas eliminar esta transferencia?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="cerrarAlert()"
-    (onConfirm)="confirmarEliminacion()"
-  ></app-custom-alert>
-
-  <!-- Alert de error -->
-  <app-custom-alert
-    *ngIf="showErrorAlert"
-    header="Error"
-    [message]="messageError"
-    confirmText="OK"
-    (onConfirm)="cerrarAlert()"
-  ></app-custom-alert>
-
-  <!-- Alert de error genérico -->
-  <app-basic-alert
-    *ngIf="showGenericAlert"
-    [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
-    [imageUrl]="'assets/icon/alert-triangle.svg'"
-    [confirmText]="'Entendido'"
-    [alertSize]="'medium'"
-    [reverseButtons]="true"
-    [showCancel]="false"
-    (onConfirm)="showGenericAlert = false"
-  >
-  </app-basic-alert>
-
-  <!-- Alert de error no autorizado -->
-  <app-basic-alert
-    *ngIf="showUnauthorizedAlert"
-    [message]="messageError"
-    [imageUrl]="'assets/icon/alert-triangle.svg'"
-    [confirmText]="'Entendido'"
-    [alertSize]="'medium'"
-    [reverseButtons]="true"
-    [showCancel]="false"
-    (onConfirm)="showUnauthorizedAlert = false"
-  >
-  </app-basic-alert>
-
 </ion-content>
+
+<!-- ==========================================================
+     ALERTS
+     ========================================================== -->
+
+<app-custom-alert
+  *ngIf="showCustomAlert"
+  header="Eliminar transferencia"
+  message="¿Estás seguro de que deseas eliminar esta transferencia?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="cerrarAlert()"
+  (onConfirm)="confirmarEliminacion()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showErrorAlert"
+  header="Error"
+  [message]="messageError"
+  confirmText="OK"
+  (onConfirm)="cerrarAlert()">
+</app-custom-alert>
+
+<app-basic-alert
+  *ngIf="showGenericAlert"
+  [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
+  [imageUrl]="'assets/icon/alert-triangle.svg'"
+  [confirmText]="'Entendido'"
+  [alertSize]="'medium'"
+  [reverseButtons]="true"
+  [showCancel]="false"
+  (onConfirm)="showGenericAlert = false">
+</app-basic-alert>
+
+<app-basic-alert
+  *ngIf="showUnauthorizedAlert"
+  [message]="messageError"
+  [imageUrl]="'assets/icon/alert-triangle.svg'"
+  [confirmText]="'Entendido'"
+  [alertSize]="'medium'"
+  [reverseButtons]="true"
+  [showCancel]="false"
+  (onConfirm)="showUnauthorizedAlert = false">
+</app-basic-alert>

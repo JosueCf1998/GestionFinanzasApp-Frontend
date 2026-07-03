@@ -200,6 +200,14 @@
 
       </app-button>
 
+      <app-button
+        *ngIf="!isCreateAccountActive"
+        text="Eliminar cuenta"
+        icon="trash"
+        variant="danger"
+        (clicked)="deleteAccount()">
+      </app-button>
+
     </div>
 
   </form>
@@ -218,5 +226,14 @@
   confirmText="Sí"
   (onCancel)="showCustomAlert = false"
   (onConfirm)="salirSinGuardar()">
+</app-custom-alert>
 
+<app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar cuenta"
+  message="¿Estás seguro de que deseas eliminar esta cuenta?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="cerrarAlert()"
+  (onConfirm)="confirmarEliminacion()">
 </app-custom-alert>

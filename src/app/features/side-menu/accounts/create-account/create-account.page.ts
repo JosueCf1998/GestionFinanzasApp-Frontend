@@ -1,118 +1,237 @@
-import { Component } from "@angular/core";
-import { IonicModule } from "@ionic/angular";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { Component } from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
+import { IonicModule } from '@ionic/angular';
+
 import { ICONOS_CUENTA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
-import { NavigationService } from "src/app/core/services/navigation.service";
-import { Router } from '@angular/router';
-import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
-import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { CreateAccountRequest, CreateAccountUseCase } from "src/app/core/use-cases/accounts/create-account.usecase";
-import { Accounts } from "src/app/core/use-cases/accounts/list-accounts.usecase";
-import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
-import 'src/app/core/utils/observable-extensions';
-import { ButtonComponent } from "src/app/shared/components/button/button.component";
-import { UpdateAccountRequest, UpdateAccountUseCase } from "src/app/core/use-cases/Accounts/update-account.usecase";
-import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
+
+import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
+
+import { CustomAlertComponent } from '../../../../shared/components/custom-alert/custom-alert.component';
+import { AmountInputComponent } from 'src/app/shared/components/amount-input/amount-input.component';
+import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
+
+import { CreateAccountUseCase, CreateAccountRequest } from 'src/app/core/use-cases/accounts/create-account.usecase';
+import { UpdateAccountUseCase, UpdateAccountRequest } from 'src/app/core/use-cases/Accounts/update-account.usecase';
+
+import { Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
+import { DeleteAccountRequest, DeleteAccountUseCase } from 'src/app/core/use-cases/Accounts/delete-accounts.usecase';
 
 @Component({
-  selector: "app-create-account",
-  templateUrl: "./create-account.page.html",
-  styleUrls: ["./create-account.page.scss"],
+  selector: 'app-create-account',
+  templateUrl: './create-account.page.html',
+  styleUrls: ['./create-account.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, AmountInputComponent, ButtonComponent, PageLayoutComponent],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    CustomAlertComponent,
+    AmountInputComponent,
+    ButtonComponent,
+    PageLayoutComponent
+  ],
 })
 export class CreateAccountPage {
 
+  // =========================
+  // STATE
+  // =========================
+
+  title = '';
+
+  isCreateAccountActive = false;
+
   showGenericAlert = false;
-  showUnauthorizedAlert: boolean = false
-  messageError: string = '';
+  showUnauthorizedAlert = false;
+  showCustomAlert = false;
+  showDeleteAlert = false;
 
-  isCreateAccountActive = false
+  messageError = '';
 
-  title: string = "";
+  cambiosPendientes = false;
+
+  // =========================
+  // DATA
+  // =========================
+
+  accountData: Accounts = {} as Accounts;
+
+  nombreCuenta = '';
+  montoInicial: number | null = null;
+
   iconos = ICONOS_CUENTA;
   colores = COLORES_CATEGORIA;
 
-  iconoSeleccionado: string = "";
-  colorSeleccionado: string = "";
+  iconoSeleccionado = '';
+  colorSeleccionado = '';
 
-  showError: boolean = false;
-  showCustomAlert = false;
-  cambiosPendientes = false;
+  maxDate = new Date().toISOString();
 
-  montoInicial: number | null = null;
-  nombreCuenta: string = '';
-  accountData: Accounts = {} as Accounts;
+  // =========================
+  // SNAPSHOT ORIGINAL (EDIT)
+  // =========================
+
+  private originalData = {
+    nombreCuenta: '',
+    montoInicial: null as number | null,
+    iconoSeleccionado: '',
+    colorSeleccionado: ''
+  };
 
   constructor(
     private createAccountUseCase: CreateAccountUseCase,
     private updateAccountUseCase: UpdateAccountUseCase,
+    private deleteAccountUseCase: DeleteAccountUseCase,
     private navService: NavigationService,
-    private loadingService: SpinnerService,
+    private loadingService: SpinnerService
   ) {
     const state = window.history.state;
-    if (!state || !state.type) {
+    if (!state?.type) {
       this.navService.forward('/main/accounts', 'slide-right');
-      throw new Error('No se recibió la información necesaria para crear o editar la cuenta.');
+      throw new Error('No se recibió información válida');
     }
     this.isCreateAccountActive = state.type === 'crear';
     this.updateView(this.isCreateAccountActive, state);
   }
 
-  updateView(value: Boolean, state: any) {
-    this.title = value ? 'Crear Cuenta' : 'Editar Cuenta';
+  // =========================
+  // INIT VIEW
+  // =========================
+
+  updateView(isCreate: boolean, state: any) {
+
+    this.title = isCreate ? 'Crear Cuenta' : 'Editar Cuenta';
+
     if (state.account) {
+
       this.accountData = state.account;
+
       this.nombreCuenta = state.account.name;
       this.montoInicial = state.account.amount ?? null;
       this.iconoSeleccionado = state.account.icon ?? '';
       this.colorSeleccionado = state.account.color ?? '';
+
+      // snapshot original
+      this.originalData = {
+        nombreCuenta: this.nombreCuenta,
+        montoInicial: this.montoInicial,
+        iconoSeleccionado: this.iconoSeleccionado,
+        colorSeleccionado: this.colorSeleccionado
+      };
     }
   }
 
-  // MARK: - SERVICIOS
+  // =========================
+  // SNAPSHOT ORIGINAL (EDIT)
+  // =========================
 
-  private executeCreateAccount(body: CreateAccountRequest) {
+  private createAccountService() {
+    const body: CreateAccountRequest = {
+      name: this.nombreCuenta,
+      amount: this.montoInicial || 0,
+      icon: this.iconoSeleccionado,
+      color: this.colorSeleccionado
+    };
     this.loadingService.show();
     this.createAccountUseCase.execute(body).service({
-      success: (data) => {
+      success: () => {
         this.loadingService.hide();
-        if (data) {
-          this.cambiosPendientes = false;
-          this.navService.back();
-        } else {
-          this.showGenericAlert = true;
-        }
+        this.cambiosPendientes = false;
+        this.navService.back();
       },
-      failure: (error) => {
+      failure: () => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
     });
   }
 
-  private executeUpdateAccount(body: UpdateAccountRequest) {
+  private updateAccountService() {
+    const body: UpdateAccountRequest = {
+      id: this.accountData.id,
+      name: this.nombreCuenta,
+      amount: this.montoInicial || 0,
+      icon: this.iconoSeleccionado,
+      color: this.colorSeleccionado
+    };
     this.loadingService.show();
     this.updateAccountUseCase.execute(body).service({
-      success: (data) => {
+      success: () => {
         this.loadingService.hide();
-        if (data) {
-          this.cambiosPendientes = false;
-          this.navService.back();
-        } else {
-          this.showGenericAlert = true;
-        }
+        this.cambiosPendientes = false;
+        this.navService.back();
       },
-      failure: (error) => {
+      failure: () => {
         this.loadingService.hide();
         this.showGenericAlert = true;
       }
     });
   }
 
-  // MARK: - FUNCIONALDIDADES
+  private deleteAccountService() {
+    const body: DeleteAccountRequest = {
+      accountId: this.accountData.id.toString()
+    };
+    this.loadingService.show();
+    this.deleteAccountUseCase.execute(body).service({
+      success: () => {
+        this.loadingService.hide();
+        this.cambiosPendientes = false;
+        this.navService.back();
+      },
+      failure: () => {
+        this.loadingService.hide();
+        this.showGenericAlert = true;
+      }
+    });
+  }
+
+  // =========================
+  // VALIDATION (FORM READY)
+  // =========================
+
+  isValidateForm(): boolean {
+    return (
+      !this.nombreCuenta?.trim() ||
+      this.montoInicial === null ||
+      !this.iconoSeleccionado ||
+      !this.colorSeleccionado
+    );
+  }
+
+  // =========================
+  // CHANGE DETECTION (REAL DIRTY CHECK)
+  // =========================
+
+  get hasChanges(): boolean {
+
+    if (this.isCreateAccountActive) {
+      return Boolean(
+        this.nombreCuenta ||
+        this.montoInicial !== null ||
+        this.iconoSeleccionado ||
+        this.colorSeleccionado
+      );
+    }
+
+    return (
+      this.nombreCuenta !== this.originalData.nombreCuenta ||
+      this.montoInicial !== this.originalData.montoInicial ||
+      this.iconoSeleccionado !== this.originalData.iconoSeleccionado ||
+      this.colorSeleccionado !== this.originalData.colorSeleccionado
+    );
+  }
+
+  // =========================
+  // UI ACTIONS
+  // =========================
 
   seleccionarIcono(icon: any) {
     this.iconoSeleccionado = icon.archivo;
@@ -124,58 +243,61 @@ export class CreateAccountPage {
     this.cambiosPendientes = true;
   }
 
-  isValidateForm(): boolean {
-    return (
-      !this.nombreCuenta ||
-      this.montoInicial === null ||
-      !this.colorSeleccionado ||
-      !this.iconoSeleccionado
-    );
-  }
-
-  isNumberInvalid(value: any): boolean {
-    return isNaN(Number(value));
-  }
+  // =========================
+  // SAVE
+  // =========================
 
   guardarCuenta() {
-    if (!this.montoInicial || !this.nombreCuenta || !this.iconoSeleccionado || !this.colorSeleccionado) {
-      this.showError = true;
+
+    if (this.isValidateForm()) {
+      this.showError();
       return;
     }
-    this.showError = false;
-    if (this.isCreateAccountActive) {
-      const body: CreateAccountRequest = {
-        name: this.nombreCuenta,
-        amount: this.montoInicial || 0,
-        icon: this.iconoSeleccionado,
-        color: this.colorSeleccionado
-      }
-      this.executeCreateAccount(body)
-    } else {
-      const body: UpdateAccountRequest = {
-        id: this.accountData.id,
-        name: this.nombreCuenta,
-        amount: this.montoInicial || 0,
-        icon: this.iconoSeleccionado,
-        color: this.colorSeleccionado
-      }
-      this.executeUpdateAccount(body)
-    }
+
+    this.isCreateAccountActive
+      ? this.createAccountService()
+      : this.updateAccountService();
   }
 
-  async backToAccounts() {
-    if (this.cambiosPendientes) {
+  // =========================
+  // DELETE
+  // =========================
+
+  deleteAccount() {
+    this.showDeleteAlert = true;
+  }
+
+  confirmarEliminacion() {
+    this.showDeleteAlert = false;
+    this.deleteAccountService();
+  }
+
+  cerrarAlert() {
+    this.showDeleteAlert = false;
+  }
+
+  // =========================
+  // NAVIGATION
+  // =========================
+
+  backToAccounts() {
+    if (this.hasChanges) {
       this.showCustomAlert = true;
-    } else {
-      (document.activeElement as HTMLElement)?.blur();
-      this.navService.back();
+      return;
     }
+    this.navService.back();
   }
 
   salirSinGuardar() {
     this.showCustomAlert = false;
-    (document.activeElement as HTMLElement)?.blur();
     this.navService.back();
   }
 
+  // =========================
+  // HELPERS
+  // =========================
+
+  private showError() {
+    this.showGenericAlert = true;
+  }
 }

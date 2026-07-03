@@ -1,52 +1,80 @@
-<!-- Content General -->
+<!-- HEADER -->
+<ion-header>
+  <app-page-layout
+    [title]="title"
+    [showBack]="true"
+    (back)="backToCategories()">
+  </app-page-layout>
+</ion-header>
+
+<!-- CONTENT -->
 <ion-content [fullscreen]="true" scroll-y="false">
-  <!-- Content Header -->
-  <ion-header>
-    <ion-toolbar class="side-menu" color="side-menu">
-      <ion-buttons slot="start">
-        <button class="atras-btn" type="button" (click)="backToCategories()">
-          <ion-icon src="assets/icon/left.svg"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title class="header-title text-subtitle">{{ title }}</ion-title>
-      <ion-buttons slot="end">
-        <!-- Acciones adicionales -->
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
 
-  <!-- Content Body -->
   <form class="transfer-form" (ngSubmit)="crearTransferencia()">
+
+    <!-- ORIGEN -->
     <div class="transfer-section">
-      <label class="transfer-label text-body">Transfiere de una cuenta</label>
+
+      <label class="transfer-label">
+        Transfiere desde
+      </label>
+
       <button
         type="button"
         class="account-btn"
-        (click)="seleccionarCuentaOrigen()"
-      >
-        <div class="account-btn-content" [class.selected]="cuentaOrigen">
-          <span class="account-name">{{ cuentaOrigen || 'Selecciona una cuenta' }}</span>
-          <span class="account-amount" *ngIf="cuentaOrigenAmount !== null">S/. {{ cuentaOrigenAmount | number:'1.2-2' }}</span>
+        (click)="seleccionarCuentaOrigen()">
+
+        <div class="account-btn-content">
+
+          <span class="account-name">
+            {{ cuentaOrigen || 'Selecciona una cuenta' }}
+          </span>
+
+          <span class="account-amount" *ngIf="cuentaOrigenAmount !== null">
+            S/. {{ cuentaOrigenAmount | number:'1.2-2' }}
+          </span>
+
         </div>
+
       </button>
+
     </div>
 
+    <!-- DESTINO -->
     <div class="transfer-section">
-      <label class="transfer-label text-body">Transfiere a una cuenta</label>
+
+      <label class="transfer-label">
+        Transfiere hacia
+      </label>
+
       <button
         type="button"
         class="account-btn"
-        (click)="seleccionarCuentaDestino()"
-      >
-        <div class="account-btn-content" [class.selected]="cuentaDestino">
-          <span class="account-name">{{ cuentaDestino || 'Selecciona una cuenta' }}</span>
-          <span class="account-amount" *ngIf="cuentaDestinoAmount !== null">S/. {{ cuentaDestinoAmount | number:'1.2-2' }}</span>
+        (click)="seleccionarCuentaDestino()">
+
+        <div class="account-btn-content">
+
+          <span class="account-name">
+            {{ cuentaDestino || 'Selecciona una cuenta' }}
+          </span>
+
+          <span class="account-amount" *ngIf="cuentaDestinoAmount !== null">
+            S/. {{ cuentaDestinoAmount | number:'1.2-2' }}
+          </span>
+
         </div>
+
       </button>
+
     </div>
 
+    <!-- MONTO -->
     <div class="transfer-section">
-      <label class="transfer-label text-body">Transfiere una cantidad</label>
+
+      <label class="transfer-label">
+        Monto
+      </label>
+
       <div class="amount-row">
         <app-amount-input
           class="amount-input-component"
@@ -58,13 +86,19 @@
           variant="enhanced"
           locale="es-PE"
           [maxDigits]="11"
-          (ngModelChange)="onInputChange()"
-        ></app-amount-input>
+          (ngModelChange)="onInputChange()">
+        </app-amount-input>
       </div>
+
     </div>
 
+    <!-- FECHA -->
     <div class="transfer-section">
-      <label class="transfer-label text-body">Fecha</label>
+
+      <label class="transfer-label">
+        Fecha
+      </label>
+
       <ion-datetime-button datetime="fecha-transferencia"></ion-datetime-button>
 
       <ion-modal [keepContentsMounted]="true">
@@ -75,55 +109,67 @@
             [(ngModel)]="fecha"
             name="fecha"
             [max]="maxDate"
-            (ionChange)="onInputChange()"
-          ></ion-datetime>
+            (ionChange)="onInputChange()">
+          </ion-datetime>
         </ng-template>
       </ion-modal>
+
     </div>
 
+    <!-- COMENTARIO -->
     <div class="transfer-section">
-      <label class="transfer-label text-body">Comentario</label>
+
+      <label class="transfer-label">
+        Comentario
+      </label>
+
       <ion-textarea
         [(ngModel)]="comentario"
         name="comentario"
         maxlength="4096"
         placeholder="Agrega un comentario (opcional)"
         class="comment-input"
-        (ionChange)="onInputChange()"
-      >
+        (ionChange)="onInputChange()">
       </ion-textarea>
-      <div class="comment-count">{{ comentario.length || 0 }}/4096</div>
+
+      <div class="comment-count">
+        {{ comentario?.length || 0 }}/4096
+      </div>
+
     </div>
 
+    <!-- BOTÓN -->
     <ion-button
       expand="block"
       class="btn-transferir"
-      [disabled]="!cuentaOrigen || !cuentaDestino || !monto"
       type="submit"
-    >
-      Guardar
+      [disabled]="!canSubmit">
+
+      Guardar transferencia
+
     </ion-button>
+
   </form>
 
-
-  <!-- Modal -->
-
-  <app-custom-alert
-    *ngIf="showCustomAlert"
-    header="Cambios sin guardar"
-    message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
-    cancelText="No"
-    confirmText="Sí"
-    (onCancel)="showCustomAlert = false"
-    (onConfirm)="salirSinGuardar()"
-  ></app-custom-alert>
-
-  <!-- <app-account-selector-modal
-    [isOpen]="isModalOpen"
-    [accounts]="cuentasDisponibles"
-    [selectedAccountId]="selectedAccount?.id?.toString() || null"
-    (accountSelected)="seleccionarYConfirmar($event)"
-    (modalClosed)="closeModal()"
-  ></app-account-selector-modal> -->
-
 </ion-content>
+
+<!-- ALERT -->
+<app-custom-alert
+  *ngIf="showCustomAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
+  cancelText="No"
+  confirmText="Sí"
+  (onCancel)="showCustomAlert = false"
+  (onConfirm)="salirSinGuardar()">
+</app-custom-alert>
+
+<!-- MODAL (SINGLE MODE CORRECTO) -->
+<app-account-selector-modal
+  [isOpen]="isModalOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.SINGLE"
+  [selectedAccount]="selectedAccount"
+  (modalClosed)="closeModal()"
+  (accountSelected)="seleccionarYConfirmar($event)">
+</app-account-selector-modal>

@@ -7,18 +7,20 @@ import { DeleteTransferUseCase } from "src/app/core/use-cases/transfer/delete-tr
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
 import { DynamicAlertComponent } from "../../../../shared/components/basic-alert/basic-alert.component";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
+import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
 @Component({
   selector: "app-detail-transfer",
   templateUrl: "./detail-transfer.page.html",
   styleUrls: ["./detail-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, CustomAlertComponent, DynamicAlertComponent],
+  imports: [IonicModule, CommonModule, CustomAlertComponent, DynamicAlertComponent, ItemIconComponent, PageLayoutComponent],
 })
 export class DetailTransferPage implements OnInit {
 
   title: string = 'Detalle Transferencia';
-  
+
   transferId: number | null = null;
   cuentaOrigenId: number | null = null;
   cuentaDestinoId: number | null = null;
@@ -28,13 +30,13 @@ export class DetailTransferPage implements OnInit {
   fecha: string = '';
   comentario: string = '';
   type: string = '';
-  
+
   // Datos adicionales de las cuentas
   cuentaOrigenIcon: string = '';
   cuentaOrigenColor: string = '';
   cuentaDestinoIcon: string = '';
   cuentaDestinoColor: string = '';
-  
+
   showCustomAlert: boolean = false;
   showGenericAlert: boolean = false;
   showUnauthorizedAlert: boolean = false;
@@ -54,13 +56,6 @@ export class DetailTransferPage implements OnInit {
   ionViewWillEnter() {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras?.state || window.history.state;
-    
-    console.log('=== DETAIL TRANSFER - State recibido ===');
-    console.log('Navigation extras state:', navigation?.extras?.state);
-    console.log('Window history state:', window.history.state);
-    console.log('State final:', state);
-    console.log('transferData:', state?.transferData);
-    
     if (state?.transferData) {
       this.loadTransferData(state.transferData);
       localStorage.removeItem('transferDetail');
@@ -81,7 +76,7 @@ export class DetailTransferPage implements OnInit {
   private loadTransferData(transfer: any) {
     console.log('=== CARGANDO DATOS DE TRANSFERENCIA ===');
     console.log('Transfer recibido:', transfer);
-    
+
     this.transferId = transfer.id;
     this.cuentaOrigenId = transfer.originAccountId || null;
     this.cuentaDestinoId = transfer.destinationAccountId || null;
@@ -91,28 +86,12 @@ export class DetailTransferPage implements OnInit {
     this.fecha = transfer.date || '';
     this.comentario = transfer.comment || '';
     this.type = transfer.type || '';
-    
+
     // Cargar icono y color de las cuentas
     this.cuentaOrigenIcon = transfer.originAccountIcon || '';
     this.cuentaOrigenColor = transfer.originAccountColor || '';
     this.cuentaDestinoIcon = transfer.destinationAccountIcon || '';
     this.cuentaDestinoColor = transfer.destinationAccountColor || '';
-    
-    console.log('Datos cargados:', {
-      transferId: this.transferId,
-      cuentaOrigenId: this.cuentaOrigenId,
-      cuentaDestinoId: this.cuentaDestinoId,
-      cuentaOrigen: this.cuentaOrigen,
-      cuentaDestino: this.cuentaDestino,
-      monto: this.monto,
-      fecha: this.fecha,
-      comentario: this.comentario,
-      type: this.type,
-      cuentaOrigenIcon: this.cuentaOrigenIcon,
-      cuentaOrigenColor: this.cuentaOrigenColor,
-      cuentaDestinoIcon: this.cuentaDestinoIcon,
-      cuentaDestinoColor: this.cuentaDestinoColor
-    });
   }
 
   backToCategories() {
@@ -122,17 +101,17 @@ export class DetailTransferPage implements OnInit {
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
-    
+
     // Extraer directamente del string para evitar problemas de zona horaria
     const parts = dateString.split('T')[0].split('-');
     const year = parts[0];
     const monthIndex = parseInt(parts[1], 10) - 1;
     const day = parseInt(parts[2], 10);
-    
-    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     const month = months[monthIndex];
-    
+
     return `${day} de ${month} del ${year}`;
   }
 
@@ -152,7 +131,7 @@ export class DetailTransferPage implements OnInit {
   editarTransferencia() {
     // Desenfocar el elemento activo antes de navegar
     (document.activeElement as HTMLElement)?.blur();
-    
+
     // Navegar a la página de edición con los datos de la transferencia
     const transferData = {
       id: this.transferId,
@@ -169,7 +148,7 @@ export class DetailTransferPage implements OnInit {
       destinationAccountIcon: this.cuentaDestinoIcon,
       destinationAccountColor: this.cuentaDestinoColor
     };
-    
+
     localStorage.setItem('editTransfer', JSON.stringify(transferData));
     this.navService.push('/accounts/new-transfer', { transferData, isEdit: true });
   }
@@ -185,11 +164,11 @@ export class DetailTransferPage implements OnInit {
 
   confirmarEliminacion() {
     this.showCustomAlert = false;
-    
+
     if (!this.transferId) return;
-    
+
     this.loadingService.show();
-    
+
     this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).service({
       success: () => {
         this.loadingService.hide();
