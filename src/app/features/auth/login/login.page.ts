@@ -18,7 +18,6 @@ import {
 import { NavigationService } from "../../../core/services/navigation.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
-import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 import { validate } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
@@ -97,36 +96,6 @@ export class LoginPage implements OnInit {
       }
     });
   }
-/*
-  private executeAccountList() {
-    this.loadingService.show();
-    this.listAccountsUseCase.listAccounts().service({
-      success: (data) => {
-        this.loadingService.hide();
-        if (data) {
-          if (data.items.length == 0) {
-            this.navService.push("/welcome-step-one");
-          } else {
-            this.navService.push('/main')
-          }
-        } else {
-          this.showGenericAlert = true;
-        }
-      },
-      failure: (error) => {
-        this.loadingService.hide();
-        if (error?.code == "404") {
-            this.navService.push("/welcome-step-one");
-        } else if (error) {
-          this.showUnauthorizedAlert = true;
-          this.messageError = error.message;
-        } else {
-          this.showGenericAlert = true;
-        }
-      }
-    });
-  }
-    */
 
   // MARK: - FUNCTIONS
 

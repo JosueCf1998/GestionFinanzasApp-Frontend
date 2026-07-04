@@ -1,153 +1,53 @@
-/* ==========================
-   PAGE
-   ========================== */
+@use '../../../../theme/design-system/background' as background;
+@use '../../../../theme/design-system/animations';
 
 ion-content {
   --background: transparent;
 }
 
-/* ==========================
+/* ==========================================================================
    CONTAINER
-   ========================== */
+   ========================================================================== */
 
 .splash-container {
+  @include background.finvia-background;
+
   position: relative;
 
   width: 100%;
   min-height: 100vh;
 
-  overflow: hidden;
-
-  background: var(--fv-gradient-primary);
-
-  &::before {
-    content: '';
-
-    position: absolute;
-
-    width: 100%;
-    height: 100%;
-
-    background-image:
-      radial-gradient(2px 2px at 20% 30%, white, transparent),
-      radial-gradient(2px 2px at 60% 70%, white, transparent),
-      radial-gradient(1px 1px at 50% 50%, white, transparent),
-      radial-gradient(1px 1px at 80% 10%, white, transparent),
-      radial-gradient(2px 2px at 90% 60%, white, transparent),
-      radial-gradient(1px 1px at 33% 80%, white, transparent),
-      radial-gradient(1px 1px at 15% 90%, white, transparent);
-
-    background-size: 200% 200%;
-    background-position: 0% 0%;
-
-    opacity: .6;
-
-    animation: stars 60s linear infinite;
-  }
+  isolation: isolate;
 }
 
-/* ==========================
-   BACKGROUND ORBS
-   ========================== */
-
-.animated-background {
-  position: absolute;
-
-  width: 100%;
-  height: 100%;
-
-  overflow: hidden;
-}
-
-.gradient-orb {
-  position: absolute;
-
-  border-radius: 50%;
-
-  filter: blur(60px);
-
-  opacity: .55;
-
-  animation: float 20s ease-in-out infinite;
-}
-
-.orb-1 {
-  width: 400px;
-  height: 400px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(95, 124, 255, .80) 0%,
-      transparent 70%
-    );
-
-  top: -10%;
-  left: -10%;
-
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 350px;
-  height: 350px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(91, 76, 240, .70) 0%,
-      transparent 70%
-    );
-
-  bottom: -5%;
-  right: -5%;
-
-  animation-delay: 5s;
-}
-
-.orb-3 {
-  width: 300px;
-  height: 300px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(76, 29, 149, .60) 0%,
-      transparent 70%
-    );
-
-  top: 40%;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  animation-delay: 10s;
-}
-
-/* ==========================
+/* ==========================================================================
    CONTENT
-   ========================== */
+   ========================================================================== */
 
 .content-wrapper {
   position: relative;
 
-  min-height: 100vh;
-  height: 100%;
+  z-index: 10;
 
   display: flex;
   flex-direction: column;
-
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+  height: 100%;
 
   gap: 48px;
 
-  z-index: 10;
+  padding:
+    max(40px, env(safe-area-inset-top))
+    32px
+    max(40px, env(safe-area-inset-bottom));
 }
 
-/* ==========================
+/* ==========================================================================
    LOGO
-   ========================== */
+   ========================================================================== */
 
 .logo-wrapper {
   position: relative;
@@ -162,49 +62,48 @@ ion-content {
 .logo-glow {
   position: absolute;
 
-  width: 340px;
-  height: 340px;
+  width: 380px;
+  height: 380px;
 
   border-radius: 50%;
 
   background:
     radial-gradient(
       circle,
-      rgba(91, 76, 240, .40) 0%,
-      rgba(95, 124, 255, .30) 30%,
-      transparent 70%
+      rgba(91, 76, 240, .38) 0%,
+      rgba(95, 124, 255, .28) 35%,
+      transparent 72%
     );
 
-  filter: blur(40px);
+  filter: blur(55px);
 
-  animation: pulse 3s ease-in-out infinite;
+  animation: pulse 4s ease-in-out infinite;
 }
 
 .logo {
   position: relative;
+
+  z-index: 2;
 
   width: 280px;
   max-width: 75vw;
 
   height: auto;
 
-  z-index: 1;
-
   filter:
     drop-shadow(
-      0 10px 40px rgba(0, 0, 0, .30)
+      0 18px 45px rgba(0,0,0,.28)
     )
     drop-shadow(
-      0 0 60px rgba(95, 124, 255, .30)
+      0 0 70px rgba(95,124,255,.25)
     );
 
-  animation: logoFloat 3s ease-in-out infinite;
+  animation: logoFloat 4s ease-in-out infinite;
 }
 
-/* ==========================
-   LOADING DOTS
-   (future use)
-   ========================== */
+/* ==========================================================================
+   LOADING
+   ========================================================================== */
 
 .loading-indicator {
   display: flex;
@@ -212,15 +111,15 @@ ion-content {
   align-items: center;
   justify-content: center;
 
-  gap: 12px;
+  gap: 14px;
 
   animation:
     fadeIn 1.5s ease-out .5s both;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
 
   border-radius: 50%;
 
@@ -232,7 +131,7 @@ ion-content {
     );
 
   box-shadow:
-    0 0 20px rgba(95, 124, 255, .45);
+    0 0 24px rgba(95,124,255,.50);
 
   animation:
     bounce 1.4s ease-in-out infinite;
@@ -250,104 +149,37 @@ ion-content {
   }
 }
 
-/* ==========================
-   ANIMATIONS
-   ========================== */
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
-@keyframes float {
+@media (max-width: 500px) {
 
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
+  .content-wrapper {
+    gap: 40px;
+
+    padding:
+      max(32px, env(safe-area-inset-top))
+      24px
+      max(32px, env(safe-area-inset-bottom));
   }
 
-  33% {
-    transform: translate(30px, -30px) scale(1.1);
+  .logo-glow {
+    width: 300px;
+    height: 300px;
   }
 
-  66% {
-    transform: translate(-20px, 20px) scale(.9);
-  }
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-
-    opacity: .4;
+  .logo {
+    width: 220px;
   }
 
-  50% {
-    transform: scale(1.1);
-
-    opacity: .6;
-  }
-}
-
-@keyframes logoFloat {
-
-  0%,
-  100% {
-    transform: translateY(0);
+  .loading-indicator {
+    gap: 12px;
   }
 
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes fadeInUp {
-
-  0% {
-    opacity: 0;
-
-    transform: translateY(30px);
+  .dot {
+    width: 10px;
+    height: 10px;
   }
 
-  100% {
-    opacity: 1;
-
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes bounce {
-
-  0%,
-  80%,
-  100% {
-    transform: scale(.8) translateY(0);
-
-    opacity: .5;
-  }
-
-  40% {
-    transform: scale(1.2) translateY(-10px);
-
-    opacity: 1;
-  }
-}
-
-@keyframes stars {
-
-  0% {
-    background-position: 0% 0%;
-  }
-
-  100% {
-    background-position: 100% 100%;
-  }
 }

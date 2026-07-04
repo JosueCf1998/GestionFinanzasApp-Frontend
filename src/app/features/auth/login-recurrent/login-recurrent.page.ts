@@ -19,12 +19,10 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
-import { ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
 import { validate } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
 import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usecase";
-import { ProfileUserRequest } from "src/app/core/use-cases/users/profile-user.usecase";
 
 @Component({
   selector: "app-login-recurrent",
@@ -63,7 +61,6 @@ export class LoginRecurrentPage implements OnInit {
   constructor(
     private navService: NavigationService,
     private loginUserUseCase: LoginUserUseCase,
-    private listAccountsUseCase: ListAccountsUseCase,
     private logoutUserUseCase: LogoutUserUseCase,
     private loadingService: SpinnerService,
     private localManagementService: LocalManagementService
@@ -85,7 +82,8 @@ export class LoginRecurrentPage implements OnInit {
             this.messageError = responseError;
             return;
           }
-          this.navService.push('/main')
+          // this.navService.push('/main')
+          this.navService.push("/welcome-step-one");
         } else {
           this.showGenericAlert = true;
         }

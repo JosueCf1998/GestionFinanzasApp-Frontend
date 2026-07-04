@@ -1,0 +1,116 @@
+/* ==========================================================================
+   FINVIA BACKGROUND
+   ========================================================================== */
+
+@mixin finvia-background {
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: var(--fv-gradient-primary);
+
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 33% 80%, white, transparent),
+      radial-gradient(1px 1px at 15% 90%, white, transparent);
+
+    background-size: 200% 200%;
+    background-position: 0 0;
+
+    opacity: .6;
+
+    animation: stars 60s linear infinite;
+  }
+
+}
+
+/* ==========================================================================
+   BACKGROUND EFFECTS
+   ========================================================================== */
+
+.animated-background {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  z-index: 0;
+}
+
+.gradient-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(60px);
+
+  opacity: .55;
+
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+
+  top: -10%;
+  left: -10%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(95, 124, 255, .80) 0%,
+      transparent 70%
+    );
+
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 350px;
+  height: 350px;
+
+  right: -5%;
+  bottom: -5%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(91, 76, 240, .70) 0%,
+      transparent 70%
+    );
+
+  animation-delay: 5s;
+}
+
+.orb-3 {
+  width: 300px;
+  height: 300px;
+
+  top: 40%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(76, 29, 149, .60) 0%,
+      transparent 70%
+    );
+
+  animation-delay: 10s;
+}
