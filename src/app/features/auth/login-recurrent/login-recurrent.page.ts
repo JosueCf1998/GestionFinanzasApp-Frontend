@@ -82,8 +82,7 @@ export class LoginRecurrentPage implements OnInit {
             this.messageError = responseError;
             return;
           }
-          // this.navService.push('/main')
-          this.navService.push("/welcome-step-one");
+          this.navService.push('/main')
         } else {
           this.showGenericAlert = true;
         }
