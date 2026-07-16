@@ -65,6 +65,20 @@ export class BudgetsPage implements OnInit {
     }[this.selectedPeriod];
   }
 
+  get summaryBalance(): number {
+    return Math.abs(this.summary.budgeted - this.summary.used);
+  }
+
+  get summaryBalanceLabel(): string {
+    return this.summary.used > this.summary.budgeted
+      ? 'Monto excedido'
+      : 'Saldo disponible';
+  }
+
+  get summaryProgress(): number {
+    return Math.min(Math.max(this.summary.percentage, 0), 100);
+  }
+
   openPeriodSelector(): void {
     this.isPeriodSelectorOpen = true;
   }

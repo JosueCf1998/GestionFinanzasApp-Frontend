@@ -43,7 +43,7 @@
     display: block;
     margin-bottom: 3px;
     color: var(--fv-primary, #3a0ca3);
-    font-size: var(--fv-font-xs, 12px);
+    font-size: var(--fv-type-caption-1, 12px);
     font-weight: var(--fv-fw-bold, 700);
     letter-spacing: 0.45px;
     text-transform: uppercase;
@@ -52,7 +52,7 @@
   h2 {
     margin: 0;
     color: var(--fv-text-primary, #101828);
-    font-size: var(--fv-font-lg, 20px);
+    font-size: var(--fv-type-title-3, 20px);
     font-weight: var(--fv-fw-bold, 700);
     line-height: 1.25;
   }
@@ -60,7 +60,7 @@
   p {
     margin: 5px 0 0;
     color: var(--fv-text-secondary, #667085);
-    font-size: var(--fv-font-xs, 12px);
+    font-size: var(--fv-type-footnote, 13px);
     line-height: 1.4;
   }
 }
@@ -112,7 +112,7 @@
   box-shadow: 0 9px 20px rgba(58, 12, 163, 0.2);
   color: #ffffff;
   font-family: inherit;
-  font-size: var(--fv-font-sm, 14px);
+  font-size: var(--fv-type-subhead, 15px);
   font-weight: var(--fv-fw-bold, 700);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 

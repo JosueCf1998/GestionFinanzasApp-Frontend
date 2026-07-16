@@ -50,7 +50,7 @@
   h2 {
     margin: 0;
     color: var(--fv-text-primary);
-    font-size: var(--fv-font-xl);
+    font-size: var(--fv-type-title-2);
     font-weight: var(--fv-fw-bold);
     letter-spacing: -0.8px;
     line-height: 1.15;
@@ -61,7 +61,7 @@
     max-width: 280px;
     margin: 5px 0 0;
     color: var(--fv-text-secondary);
-    font-size: var(--fv-font-sm);
+    font-size: var(--fv-type-subhead);
     line-height: 1.45;
   }
 }
@@ -70,7 +70,7 @@
   display: block;
   margin-bottom: 4px;
   color: var(--fv-primary);
-  font-size: var(--fv-font-xs);
+  font-size: var(--fv-type-caption-1);
   font-weight: var(--fv-fw-bold);
   letter-spacing: 0.45px;
   text-transform: uppercase;
