@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg 
+<svg
    viewBox="0 0 600 600"
    version="1.1"
    id="svg9724"
    sodipodi:docname="exit.svg"
    inkscape:version="1.2.2 (1:1.2.2+202212051550+b0a8486541)"
-   width="600"
-   height="600"
+   width="24"
+   height="24"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -17,12 +17,12 @@
   <sodipodi:namedview
      id="namedview9726"
      pagecolor="#ffffff"
-     bordercolor="#666666"
+     bordercolor="currentColor"
      borderopacity="1.0"
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
+     inkscape:deskcolor="currentColor"
      showgrid="true"
      inkscape:zoom="0.84118632"
      inkscape:cx="445.79898"
@@ -70,7 +70,7 @@
        id="guide1077"
        inkscape:locked="false" />
   </sodipodi:namedview>
-  
+
   <path
      id="rect348"
      fill="currentColor"

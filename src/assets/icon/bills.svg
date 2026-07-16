@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<style>.cls-1,.cls-2{fill:none;stroke:#020202;stroke-miterlimit:10;stroke-width:1.91px;}.cls-2{stroke-linecap:square;}</style>
+<style>.cls-1,.cls-2{fill:none;stroke:currentColor;stroke-miterlimit:10;stroke-width:1.91px;}.cls-2{stroke-linecap:square;}</style>
 </defs>
 <g id="money_stack" data-name="money stack">
 <line class="cls-1" x1="4.36" y1="15.82" x2="6.27" y2="15.82"/>
