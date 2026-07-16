@@ -1,0 +1,133 @@
+<section class="period-picker" aria-label="Selector de periodo">
+  <app-custom-segment
+    [options]="periodOptions"
+    [model]="selectedPeriod"
+    segmentClass="period-picker__segment"
+    (modelChange)="changePeriod($event)">
+  </app-custom-segment>
+
+  <div *ngIf="selectedPeriod === 'monthly'" class="period-picker__monthly">
+    <div class="period-picker__option-nav">
+      <button type="button" aria-label="Año anterior" (click)="previousYear()">
+        <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
+      </button>
+      <div>
+        <small>Selecciona un mes</small>
+        <strong>{{ selectedYear }}</strong>
+      </div>
+      <button type="button" aria-label="Año siguiente" (click)="nextYear()">
+        <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+      </button>
+    </div>
+
+    <div class="period-picker__month-cards">
+      <button
+        *ngFor="let month of months; let index = index"
+        type="button"
+        [class.selected]="selectedMonth === index + 1"
+        (click)="selectMonth(index + 1)">
+        <span>{{ month }}</span>
+        <ion-icon *ngIf="selectedMonth === index + 1" src="assets/icon/check.svg"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedPeriod === 'weekly'" class="period-picker__weekly">
+    <div class="period-picker__option-nav">
+      <button type="button" aria-label="Mes anterior" (click)="previousWeeklyMonth()">
+        <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
+      </button>
+      <div>
+        <small>Selecciona una semana</small>
+        <strong>{{ weeklyMonthTitle }}</strong>
+      </div>
+      <button type="button" aria-label="Mes siguiente" (click)="nextWeeklyMonth()">
+        <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+      </button>
+    </div>
+
+    <div class="period-picker__week-cards" aria-label="Semanas del mes">
+      <button
+        *ngFor="let week of weeksForSelectedMonth"
+        type="button"
+        [class.selected]="selectedWeek === week.value"
+        (click)="selectWeek(week.value)">
+        <span>
+          <small>{{ week.label }}</small>
+          <strong>{{ week.range }}</strong>
+        </span>
+        <ion-icon *ngIf="selectedWeek === week.value" src="assets/icon/check.svg"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedPeriod === 'annual'" class="period-picker__annual-selector">
+    <button type="button" aria-label="Año anterior" (click)="previousYear()">
+      <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
+    </button>
+    <div>
+      <small>Selecciona un año</small>
+      <strong>{{ selectedYear }}</strong>
+    </div>
+    <button type="button" aria-label="Año siguiente" (click)="nextYear()">
+      <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+    </button>
+  </div>
+
+  <div *ngIf="selectedPeriod === 'custom'" class="period-picker__custom">
+    <div class="period-picker__range-summary">
+      <div
+        [class.selected]="customStartDate"
+        [class.active]="customStartDate && !customEndDate">
+        <span>
+          <small>Inicio</small>
+          <strong>{{ formatSelectedDate(customStartDate) }}</strong>
+        </span>
+        <ion-icon *ngIf="customStartDate" src="assets/icon/check.svg"></ion-icon>
+      </div>
+      <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+      <div [class.selected]="customEndDate">
+        <span>
+          <small>Fin</small>
+          <strong>{{ formatSelectedDate(customEndDate) }}</strong>
+        </span>
+        <ion-icon *ngIf="customEndDate" src="assets/icon/check.svg"></ion-icon>
+      </div>
+    </div>
+
+    <div class="period-picker__calendar">
+      <header>
+        <button type="button" aria-label="Mes anterior" (click)="previousMonth()">
+          <ion-icon src="assets/icon/left-inline.svg"></ion-icon>
+        </button>
+        <div>
+          <strong>{{ calendarTitle }}</strong>
+        </div>
+        <button type="button" aria-label="Mes siguiente" (click)="nextMonth()">
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="period-picker__weekdays">
+        <span *ngFor="let weekday of weekdays">{{ weekday }}</span>
+      </div>
+
+      <div class="period-picker__days">
+        <button
+          *ngFor="let day of calendarDays"
+          type="button"
+          [class.outside]="day.outside"
+          [class.in-range]="isInRange(day)"
+          [class.range-start]="isRangeStart(day)"
+          [class.range-end]="isRangeEnd(day)"
+          (click)="selectCalendarDay(day)">
+          {{ day.day }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="selectedPeriod === 'custom' && !isValid" class="period-picker__error">
+    Selecciona un rango de fechas válido.
+  </p>
+</section>

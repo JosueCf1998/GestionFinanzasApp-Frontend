@@ -8,32 +8,20 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { IonIcon, IonModal } from '@ionic/angular/standalone';
-import { Currency, CurrencyCode } from 'src/app/shared/models/currency.model';
-import { CustomSegmentComponent } from '../custom-segment/custom-segment.component';
+import { BudgetPeriod } from 'src/app/core/models/budgets/list-budgets.model';
+import {
+  PeriodPickerComponent,
+  PeriodPickerValue
+} from '../period-picker/period-picker.component';
 
-export interface FilterOption<T extends string = string> {
-  value: T;
-  label: string;
-}
-
-export interface FilterPeriodGroup<T extends string = string> {
-  frequency: T;
-  periods: string[];
-}
-
-export interface FilterSelection<T extends string = string> {
-  frequency: T;
-  currencyCode: CurrencyCode;
-  periodIndex: number;
-  period: string;
-}
+export type FilterSelection = PeriodPickerValue;
 
 @Component({
   selector: 'app-filter-modal',
   templateUrl: './filter-modal.component.html',
   styleUrls: ['./filter-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonIcon, IonModal, CustomSegmentComponent]
+  imports: [CommonModule, IonIcon, IonModal, PeriodPickerComponent]
 })
 export class FilterModalComponent implements OnChanges {
   @Input() isOpen = false;
@@ -41,23 +29,16 @@ export class FilterModalComponent implements OnChanges {
   @Input() title = 'Filtros';
   @Input() description = 'Ajusta la información que deseas consultar.';
   @Input() applyText = 'Aplicar filtros';
-  @Input() frequencyLabel = 'Frecuencia';
-  @Input() currencyLabel = 'Moneda';
-  @Input() periodLabel = 'Periodo';
-  @Input() frequencies: FilterOption[] = [];
-  @Input() currencies: Currency[] = [];
-  @Input() periodGroups: FilterPeriodGroup[] = [];
-  @Input() selectedFrequency = '';
-  @Input() selectedCurrencyCode: CurrencyCode = 'PEN';
-  @Input() selectedPeriodIndex = 0;
+  @Input() selectedPeriod: BudgetPeriod = 'monthly';
+  @Input() selectedPeriodValue = '';
+  @Input() selectedStartDate = '';
+  @Input() selectedEndDate = '';
   @Input() modalClass = '';
 
   @Output() readonly modalClosed = new EventEmitter<void>();
   @Output() readonly filtersApplied = new EventEmitter<FilterSelection>();
 
-  draftFrequency = '';
-  draftCurrencyCode: CurrencyCode = 'PEN';
-  draftPeriodIndex = 0;
+  draftSelection: FilterSelection | null = null;
   private closeEmitted = false;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -67,14 +48,19 @@ export class FilterModalComponent implements OnChanges {
     }
   }
 
-  get availablePeriods(): string[] {
-    return this.periodGroups.find(group => group.frequency === this.draftFrequency)?.periods ?? [];
+  get hasChanges(): boolean {
+    if (!this.draftSelection) return false;
+    return this.draftSelection.period !== this.selectedPeriod ||
+      this.draftSelection.periodValue !== this.selectedPeriodValue ||
+      this.draftSelection.startDate !== this.selectedStartDate ||
+      this.draftSelection.endDate !== this.selectedEndDate;
   }
 
-  get hasChanges(): boolean {
-    return this.draftFrequency !== this.selectedFrequency ||
-      this.draftCurrencyCode !== this.selectedCurrencyCode ||
-      this.draftPeriodIndex !== this.selectedPeriodIndex;
+  get isDateRangeValid(): boolean {
+    if (!this.draftSelection) return true;
+    if (this.draftSelection.period !== 'custom') return true;
+    return Boolean(this.draftSelection.startDate && this.draftSelection.endDate &&
+      this.draftSelection.startDate <= this.draftSelection.endDate);
   }
 
   get modalCssClass(): string {
@@ -90,48 +76,22 @@ export class FilterModalComponent implements OnChanges {
     }
   }
 
-  changeFrequency(frequency: string): void {
-    this.draftFrequency = frequency;
-    this.draftPeriodIndex = 0;
-  }
-
-  selectCurrency(code: CurrencyCode): void {
-    this.draftCurrencyCode = code;
-  }
-
-  selectPeriod(index: number): void {
-    this.draftPeriodIndex = index;
+  updatePeriod(selection: PeriodPickerValue): void {
+    this.draftSelection = selection;
   }
 
   apply(): void {
-    const period = this.availablePeriods[this.draftPeriodIndex];
+    if (!this.isDateRangeValid) return;
 
-    if (!period) {
-      return;
-    }
-
-    this.filtersApplied.emit({
-      frequency: this.draftFrequency,
-      currencyCode: this.draftCurrencyCode,
-      periodIndex: this.draftPeriodIndex,
-      period
+    this.filtersApplied.emit(this.draftSelection ?? {
+      period: this.selectedPeriod,
+      periodValue: this.selectedPeriodValue,
+      startDate: this.selectedStartDate,
+      endDate: this.selectedEndDate
     });
   }
 
-  trackByPeriod(index: number): number {
-    return index;
-  }
-
-  trackByCurrency(_: number, currency: Currency): CurrencyCode {
-    return currency.code;
-  }
-
   private resetDraft(): void {
-    this.draftFrequency = this.selectedFrequency || this.frequencies[0]?.value || '';
-    this.draftCurrencyCode = this.selectedCurrencyCode;
-    this.draftPeriodIndex = Math.min(
-      this.selectedPeriodIndex,
-      Math.max(this.availablePeriods.length - 1, 0)
-    );
+    this.draftSelection = null;
   }
 }

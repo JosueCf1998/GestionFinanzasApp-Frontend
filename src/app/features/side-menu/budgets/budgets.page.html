@@ -12,21 +12,15 @@
         type="button"
         class="filter-trigger"
         (click)="openPeriodSelector()">
-        <span class="filter-trigger__icon">
-          <ion-icon src="assets/icon/calendar.svg"></ion-icon>
-        </span>
-
         <span class="filter-trigger__content">
-          <small>Filtros del presupuesto</small>
-
-          <span class="filter-trigger__values">
-            <strong>{{ selectedPeriodLabel }}</strong>
-            <i></i>
-            <strong>{{ selectedDate }}</strong>
-            <i></i>
-            <strong>{{ currency.symbol }} {{ currency.code }}</strong>
-          </span>
+          <small>
+            <ion-icon src="assets/icon/calendar.svg"></ion-icon>
+            Periodo de consulta
+          </small>
+          <strong class="filter-trigger__date">{{ selectedDate }}</strong>
         </span>
+
+        <span class="filter-trigger__period">{{ selectedPeriodLabel }}</span>
 
         <span class="filter-trigger__action">
           <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
@@ -144,16 +138,14 @@
 
   <app-filter-modal
     [isOpen]="isPeriodSelectorOpen"
-    eyebrow="Personalizar vista"
+    eyebrow=""
     title="Filtrar presupuestos"
-    description="Configura el periodo y la moneda de tu resumen."
+    description=""
     applyText="Aplicar filtros"
-    [frequencies]="periodOptions"
-    [currencies]="currencyOptions"
-    [periodGroups]="filterPeriodGroups"
-    [selectedFrequency]="selectedPeriod"
-    [selectedCurrencyCode]="selectedCurrencyCode"
-    [selectedPeriodIndex]="selectedPeriodIndex"
+    [selectedPeriod]="selectedPeriod"
+    [selectedPeriodValue]="selectedPeriodValue"
+    [selectedStartDate]="selectedStartDate"
+    [selectedEndDate]="selectedEndDate"
     (modalClosed)="closePeriodSelector()"
     (filtersApplied)="applyFilters($event)">
   </app-filter-modal>
