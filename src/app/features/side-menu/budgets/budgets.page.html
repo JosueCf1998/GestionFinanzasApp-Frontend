@@ -1,0 +1,273 @@
+<ion-content
+  class="budget-content"
+  [fullscreen]="true">
+
+  <main class="budget-container">
+
+    <!-- ==========================================================
+         FILTERS
+         ========================================================== -->
+
+    <section class="period-section">
+
+      <button
+        type="button"
+        class="period-selector"
+        (click)="openMonthSelector()">
+
+        <div class="period-icon">
+          <ion-icon src="assets/icon/calendar.svg"></ion-icon>
+        </div>
+
+        <div class="period-info">
+          <span>Periodo</span>
+          <strong>{{ selectedMonth }}</strong>
+        </div>
+
+        <ion-icon
+          class="period-arrow"
+          src="assets/icon/chevron-down.svg">
+        </ion-icon>
+
+      </button>
+
+      <button
+        type="button"
+        class="create-budget-button"
+        (click)="goToCreateBudget()">
+
+        <ion-icon src="assets/icon/add.svg"></ion-icon>
+
+      </button>
+
+    </section>
+
+    <!-- ==========================================================
+         ALERT
+         ========================================================== -->
+
+    <section
+      *ngIf="hasExceededBudget"
+      class="budget-alert"
+      role="alert">
+
+      <div class="alert-icon">
+        <ion-icon src="assets/icon/alert-triangle.svg"></ion-icon>
+      </div>
+
+      <div class="alert-content">
+        <span>Presupuesto excedido</span>
+        <strong>
+          Gastaste
+          {{ summary.exceeded | currency:'PEN':'symbol':'1.2-2' }}
+          más de lo planificado.
+        </strong>
+
+        <button
+          type="button"
+          class="alert-action"
+          (click)="goToBudgetsDetail()">
+          Ver detalles
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         BALANCE
+         ========================================================== -->
+
+    <section class="balance-card">
+      <div class="balance-decoration balance-decoration-one"></div>
+      <div class="balance-decoration balance-decoration-two"></div>
+
+      <div class="balance-header">
+        <div>
+          <span>Disponible este mes</span>
+
+          <strong [class.negative]="summary.available < 0">
+            {{ summary.available | currency:'PEN':'symbol':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="balance-icon">
+          <ion-icon src="assets/icon/wallet.svg"></ion-icon>
+        </div>
+      </div>
+
+      <div class="balance-progress">
+        <span
+          [class.exceeded]="summary.progress > 100"
+          [style.width.%]="summary.progress > 100 ? 100 : summary.progress">
+        </span>
+      </div>
+
+      <div class="balance-summary">
+        <div>
+          <span>Gastado</span>
+          <strong>{{ summary.spent | currency:'PEN':'symbol':'1.2-2' }}</strong>
+        </div>
+
+        <div>
+          <span>Ingreso base</span>
+          <strong>{{ summary.income | currency:'PEN':'symbol':'1.2-2' }}</strong>
+        </div>
+
+        <div class="progress-percentage">
+          <span>Utilizado</span>
+          <strong>{{ summary.progress }}%</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SUMMARY
+         ========================================================== -->
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-income">
+          <ion-icon src="assets/icon/salary.svg"></ion-icon>
+        </div>
+
+        <div>
+          <span>Ingreso base</span>
+          <strong>{{ summary.income | currency:'PEN':'symbol':'1.2-2' }}</strong>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-budget">
+          <ion-icon src="assets/icon/money-bag.svg"></ion-icon>
+        </div>
+
+        <div>
+          <span>Presupuestado</span>
+          <strong>{{ summary.budgeted | currency:'PEN':'symbol':'1.2-2' }}</strong>
+        </div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-icon summary-icon-spent">
+          <ion-icon src="assets/icon/chart.svg"></ion-icon>
+        </div>
+
+        <div>
+          <span>Gastado</span>
+          <strong>{{ summary.spent | currency:'PEN':'symbol':'1.2-2' }}</strong>
+        </div>
+      </article>
+    </section>
+
+    <!-- ==========================================================
+         CATEGORIES
+         ========================================================== -->
+
+    <section class="categories-section">
+      <header class="section-header">
+        <div>
+          <span>Distribución mensual</span>
+          <h2>Presupuesto por categoría</h2>
+        </div>
+
+        <button
+          type="button"
+          class="section-action"
+          (click)="goToBudgetsDetail()">
+          Ver todo
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="category-list">
+        <article
+          *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
+          class="category-card"
+          [class.category-exceeded]="category.percentage > 100"
+          (click)="goToBudgetDetail(category)">
+
+          <div class="category-header">
+            <div class="category-main">
+              <div
+                class="category-icon"
+                [style.background]="category.color">
+                <ion-icon
+                  [src]="'assets/icon/' + category.icon + '.svg'">
+                </ion-icon>
+              </div>
+
+              <div class="category-info">
+                <strong>{{ category.name }}</strong>
+
+                <span>
+                  {{ category.spent | currency:'PEN':'symbol':'1.2-2' }}
+                  de
+                  {{ category.budget | currency:'PEN':'symbol':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="category-percentage">
+              <strong>{{ category.percentage }}%</strong>
+
+              <ion-icon
+                *ngIf="category.percentage > 100"
+                src="assets/icon/alert-triangle.svg">
+              </ion-icon>
+            </div>
+          </div>
+
+          <div class="category-progress">
+            <span
+              [style.width.%]="category.percentage > 100 ? 100 : category.percentage">
+            </span>
+          </div>
+
+          <div class="category-footer">
+            <span
+              *ngIf="category.remaining >= 0"
+              class="category-available">
+              Disponible
+              <strong>
+                {{ category.remaining | currency:'PEN':'symbol':'1.2-2' }}
+              </strong>
+            </span>
+
+            <span
+              *ngIf="category.remaining < 0"
+              class="category-overflow">
+              Excedido
+              <strong>
+                {{ category.remaining * -1 | currency:'PEN':'symbol':'1.2-2' }}
+              </strong>
+            </span>
+
+            <div class="category-arrow">
+              <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SUGGESTION
+         ========================================================== -->
+
+    <section
+      *ngIf="suggestion"
+      class="suggestion-card">
+
+      <div class="suggestion-icon">
+        <ion-icon src="assets/icon/question.svg"></ion-icon>
+      </div>
+
+      <div class="suggestion-content">
+        <span>Sugerencia FinVia</span>
+        <strong>{{ suggestion.title }}</strong>
+        <p>{{ suggestion.description }}</p>
+      </div>
+    </section>
+
+  </main>
+</ion-content>
