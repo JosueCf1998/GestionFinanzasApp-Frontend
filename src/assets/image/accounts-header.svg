@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="accounts" x1="11" y1="13" x2="53" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4361EE"/><stop offset=".55" stop-color="#5B4BE3"/><stop offset="1" stop-color="#6D28D9"/>
+    </linearGradient>
+    <filter id="accountsShadow" x="5" y="7" width="55" height="52" filterUnits="userSpaceOnUse"><feDropShadow dy="3" stdDeviation="3" flood-color="#3A0CA3" flood-opacity=".12"/></filter>
+  </defs>
+  <g filter="url(#accountsShadow)">
+    <rect x="14" y="11" width="39" height="28" rx="8" fill="#4361EE" opacity=".32" transform="rotate(6 14 11)"/>
+    <rect x="10" y="20" width="44" height="34" rx="9" fill="url(#accounts)" opacity=".94"/>
+    <path d="M10 30h44" stroke="#EEF2FF" stroke-opacity=".45" stroke-width="2"/>
+    <rect x="37" y="36" width="17" height="11" rx="5.5" fill="#3A0CA3" stroke="#8292F4" stroke-width="1.5"/>
+    <circle cx="43" cy="41.5" r="2" fill="#EEF2FF"/>
+  </g>
+</svg>

@@ -2,30 +2,20 @@
 
   <div class="page-container">
 
-    <!-- HERO -->
-
     <div class="hero-section">
-
       <div class="hero-text">
-
         <h1 class="text-title hero-title">
           Hola, {{ name.charAt(0).toUpperCase() + name.slice(1) }} 👋
         </h1>
 
         <p class="text-caption hero-subtitle">
-          {{ isFirstTime == true ? 'Bienvenido a FinVia' : 'Bienvenido de nuevo a FinVia' }}
+          {{ isFirstTime ? 'Bienvenido a FinVia' : 'Bienvenido de nuevo a FinVia' }}
         </p>
-
       </div>
 
       <div class="hero-decoration">
-
-        <img
-          src="assets/image/img-wallet.jpg"
-          alt="Wallet">
-
+        <img src="assets/image/img-wallet.jpg" alt="Billetera">
       </div>
-
     </div>
 
     <!-- BALANCE -->

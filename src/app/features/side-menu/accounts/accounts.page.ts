@@ -7,13 +7,14 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import 'src/app/core/utils/observable-extensions';
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
+import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
 
 @Component({
   selector: "app-accounts",
   templateUrl: "./accounts.page.html",
   styleUrls: ["./accounts.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, ButtonComponent, ItemIconComponent],
+  imports: [IonicModule, CommonModule, ButtonComponent, ItemIconComponent, FeatureHeaderComponent],
 })
 export class AccountsPage {
 

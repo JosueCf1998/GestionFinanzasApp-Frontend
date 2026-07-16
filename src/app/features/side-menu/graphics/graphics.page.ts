@@ -6,6 +6,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { CustomChartComponent } from "../../../shared/components/custom-chart/custom-chart.component";
 import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
 import { ApexAxisChartSeries, ApexXAxis } from "ng-apexcharts";
+import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,7 +24,8 @@ export type ChartOptions = {
     FormsModule,
     NgApexchartsModule,
     CustomChartComponent,
-    CustomSegmentComponent
+    CustomSegmentComponent,
+    FeatureHeaderComponent
   ],
 })
 export class GraphicsPage {

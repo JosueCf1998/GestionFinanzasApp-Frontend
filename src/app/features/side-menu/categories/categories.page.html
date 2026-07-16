@@ -12,6 +12,13 @@
 
   <div class="page-container">
 
+    <app-feature-header
+      title="Categorías"
+      description="Organiza tus ingresos y gastos para entender mejor tus finanzas."
+      imageSrc="assets/image/categories-header.svg"
+      imageAlt="Categorías">
+    </app-feature-header>
+
     <!-- SEGMENT -->
 
     <div class="segment-container">
@@ -51,7 +58,7 @@
             [icon]="cat.icono"
             [color]="cat.color"
             size="lg"
-            variant="soft">
+            variant="solid">
           </app-item-icon>
 
           <span class="category-name">
