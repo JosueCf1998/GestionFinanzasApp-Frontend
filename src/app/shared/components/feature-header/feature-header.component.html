@@ -1,0 +1,18 @@
+<header class="feature-header" [ngClass]="hostClasses">
+  <div class="feature-header__content">
+    <span *ngIf="eyebrow" class="feature-header__eyebrow">{{ eyebrow }}</span>
+
+    <h1 *ngIf="headingLevel === 1">{{ title }}</h1>
+    <h2 *ngIf="headingLevel === 2">{{ title }}</h2>
+
+    <p *ngIf="description">{{ description }}</p>
+
+    <div class="feature-header__actions">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div *ngIf="imageSrc" class="feature-header__visual" [attr.aria-hidden]="imageAlt ? null : true">
+    <img [src]="imageSrc" [alt]="imageAlt">
+  </div>
+</header>

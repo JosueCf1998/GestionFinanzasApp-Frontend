@@ -1,0 +1,336 @@
+<ion-content
+  class="budget-content"
+  [fullscreen]="true">
+
+  <main class="budget-container">
+
+    <!-- ==========================================================
+         HEADER
+         ========================================================== -->
+
+    <section class="budget-header">
+      <div class="budget-header__content">
+        <span>Detalle del presupuesto</span>
+        <h1>{{ budget.name }}</h1>
+      </div>
+
+      <button
+        type="button"
+        class="budget-header__action"
+        aria-label="Editar presupuesto"
+        (click)="goToEditBudget()">
+        <ion-icon src="assets/icon/edit.svg"></ion-icon>
+      </button>
+    </section>
+
+    <!-- ==========================================================
+         PERIOD
+         ========================================================== -->
+
+    <section class="period-section">
+      <button
+        type="button"
+        class="period-selector"
+        (click)="openPeriodSelector()">
+
+        <div class="period-icon">
+          <ion-icon src="assets/icon/calendar.svg"></ion-icon>
+        </div>
+
+        <div class="period-info">
+          <span>Periodo</span>
+          <strong>{{ selectedPeriod }}</strong>
+        </div>
+
+        <ion-icon
+          class="period-arrow"
+          src="assets/icon/chevron-down.svg">
+        </ion-icon>
+      </button>
+
+      <div
+        class="recurrence-badge"
+        *ngIf="budget.isRecurring">
+        <ion-icon src="assets/icon/history.svg"></ion-icon>
+        <span>{{ budget.recurrenceLabel }}</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ALERT
+         ========================================================== -->
+
+    <section
+      *ngIf="hasExceededBudget"
+      class="budget-alert"
+      role="alert">
+
+      <div class="alert-icon">
+        <ion-icon src="assets/icon/alert-triangle.svg"></ion-icon>
+      </div>
+
+      <div class="alert-content">
+        <span>Límite superado</span>
+
+        <strong>
+          Este presupuesto alcanzó el
+          {{ summary.progress }}% de lo planificado.
+        </strong>
+
+        <p>
+          Revisa las categorías que superaron el monto asignado.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         OVERVIEW
+         ========================================================== -->
+
+    <section
+      class="budget-overview"
+      [class.budget-overview--warning]="summary.status === 'WARNING'"
+      [class.budget-overview--exceeded]="summary.status === 'EXCEEDED'">
+
+      <div class="overview-decoration overview-decoration-one"></div>
+      <div class="overview-decoration overview-decoration-two"></div>
+
+      <div class="overview-header">
+        <div>
+          <span>Presupuesto total</span>
+
+          <strong>
+            {{ summary.budgeted | currency:budget.currency:'symbol-narrow':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div class="overview-icon">
+          <ion-icon src="assets/icon/money-bag.svg"></ion-icon>
+        </div>
+      </div>
+
+      <div class="overview-progress-header">
+        <span>Avance del presupuesto</span>
+        <strong>{{ summary.progress }}%</strong>
+      </div>
+
+      <div
+        class="overview-progress"
+        role="progressbar"
+        aria-label="Avance del presupuesto"
+        aria-valuemin="0"
+        [attr.aria-valuenow]="summary.progress"
+        [attr.aria-valuemax]="summary.progress > 100 ? summary.progress : 100">
+
+        <span
+          [class.warning]="summary.status === 'WARNING'"
+          [class.exceeded]="summary.status === 'EXCEEDED'"
+          [style.width.%]="summary.progress > 100 ? 100 : summary.progress">
+        </span>
+      </div>
+
+      <div class="overview-footer">
+        <div>
+          <span>Utilizado</span>
+
+          <strong>
+            {{ summary.used | currency:budget.currency:'symbol-narrow':'1.2-2' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Estado</span>
+
+          <strong
+            class="overview-status"
+            [class.overview-status--warning]="summary.status === 'WARNING'"
+            [class.overview-status--exceeded]="summary.status === 'EXCEEDED'">
+            {{ summary.statusLabel }}
+          </strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ACCOUNTS
+         ========================================================== -->
+
+    <section class="accounts-section">
+      <header class="section-header">
+        <div>
+          <span>Origen de movimientos</span>
+          <h2>Cuentas vinculadas</h2>
+        </div>
+
+        <button
+          type="button"
+          class="section-action"
+          (click)="goToEditAccounts()">
+          Gestionar
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="account-list">
+        <article
+          *ngFor="let account of budgetAccounts; trackBy: trackByAccount"
+          class="account-card">
+
+          <div
+            class="account-icon"
+            [style.background]="account.color">
+            <ion-icon
+              [src]="'assets/icon/' + account.icon + '.svg'">
+            </ion-icon>
+          </div>
+
+          <div class="account-info">
+            <strong>{{ account.name }}</strong>
+            <span>{{ account.typeLabel }}</span>
+          </div>
+
+          <span class="account-currency">
+            {{ account.currency }}
+          </span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         CATEGORIES
+         ========================================================== -->
+
+    <section class="categories-section">
+      <header class="section-header">
+        <div>
+          <span>Distribución del periodo</span>
+          <h2>Categorías presupuestadas</h2>
+        </div>
+
+        <button
+          type="button"
+          class="section-action"
+          (click)="goToBudgetCategories()">
+          Ver todo
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="category-list">
+        <article
+          *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
+          class="category-card"
+          [class.category-card--warning]="category.status === 'WARNING'"
+          [class.category-card--exceeded]="category.status === 'EXCEEDED'"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="'Abrir categoría ' + category.name"
+          (click)="goToBudgetCategoryDetail(category)"
+          (keydown.enter)="goToBudgetCategoryDetail(category)">
+
+          <div class="category-header">
+            <div class="category-main">
+              <div
+                class="category-icon"
+                [style.background]="category.color">
+                <ion-icon
+                  [src]="'assets/icon/' + category.icon + '.svg'">
+                </ion-icon>
+              </div>
+
+              <div class="category-info">
+                <strong>{{ category.name }}</strong>
+
+                <span>
+                  {{ category.used | currency:budget.currency:'symbol-narrow':'1.2-2' }}
+                  de
+                  {{ category.budgeted | currency:budget.currency:'symbol-narrow':'1.2-2' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="category-percentage">
+              <strong>{{ category.percentage }}%</strong>
+
+              <ion-icon
+                *ngIf="category.status === 'EXCEEDED'"
+                src="assets/icon/alert-triangle.svg">
+              </ion-icon>
+            </div>
+          </div>
+
+          <div
+            class="category-progress"
+            role="progressbar"
+            [attr.aria-label]="'Avance de ' + category.name"
+            aria-valuemin="0"
+            [attr.aria-valuenow]="category.percentage"
+            [attr.aria-valuemax]="category.percentage > 100 ? category.percentage : 100">
+
+            <span
+              [class.warning]="category.status === 'WARNING'"
+              [class.exceeded]="category.status === 'EXCEEDED'"
+              [style.width.%]="category.percentage > 100 ? 100 : category.percentage">
+            </span>
+          </div>
+
+          <div class="category-footer">
+            <span
+              class="category-status"
+              [class.category-status--warning]="category.status === 'WARNING'"
+              [class.category-status--exceeded]="category.status === 'EXCEEDED'">
+              <i></i>
+              {{ category.statusLabel }}
+            </span>
+
+            <div class="category-arrow">
+              <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SUGGESTION
+         ========================================================== -->
+
+    <section
+      *ngIf="suggestion"
+      class="suggestion-card">
+
+      <div class="suggestion-icon">
+        <ion-icon src="assets/icon/question.svg"></ion-icon>
+      </div>
+
+      <div class="suggestion-content">
+        <span>Sugerencia FinVia</span>
+        <strong>{{ suggestion.title }}</strong>
+        <p>{{ suggestion.description }}</p>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         ACTIONS
+         ========================================================== -->
+
+    <section class="budget-actions">
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="goToEditBudget()">
+        <ion-icon src="assets/icon/edit.svg"></ion-icon>
+        Editar presupuesto
+      </button>
+
+      <button
+        type="button"
+        class="archive-button"
+        (click)="archiveBudget()">
+        <ion-icon src="assets/icon/history.svg"></ion-icon>
+        Archivar presupuesto
+      </button>
+    </section>
+
+  </main>
+</ion-content>

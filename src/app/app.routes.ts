@@ -68,6 +68,11 @@ export const routes: Routes = [
       }
     ],
   },
+  // BUDGET ROUTES
+  {
+    path: 'budgets/detail',
+    loadComponent: () => import('./features/side-menu/budgets/budget-detail/budget-detail.page').then(m => m.BudgetDetailPage)
+  },
   // TRANSACTION ROUTES
   {
     path: 'home/create',

@@ -1,0 +1,76 @@
+<ion-modal
+  [cssClass]="modalCssClass"
+  [isOpen]="isOpen"
+  [backdropDismiss]="false"
+  (didDismiss)="close()">
+  <ng-template>
+    <section class="filter-modal__panel" role="dialog" [attr.aria-label]="title">
+      <header class="filter-modal__header">
+        <div class="filter-modal__heading">
+          <span *ngIf="eyebrow">{{ eyebrow }}</span>
+          <h2>{{ title }}</h2>
+          <p *ngIf="description">{{ description }}</p>
+        </div>
+
+        <button type="button" class="filter-modal__close" aria-label="Cerrar filtros" (click)="close()">
+          <ion-icon src="assets/icon/cross.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="filter-modal__body">
+        <section class="filter-group">
+          <span class="filter-group__label">{{ frequencyLabel }}</span>
+          <app-custom-segment
+            [options]="frequencies"
+            [model]="draftFrequency"
+            segmentClass="filter-modal-segment"
+            (modelChange)="changeFrequency($event)">
+          </app-custom-segment>
+        </section>
+
+        <section class="filter-group">
+          <span class="filter-group__label">{{ currencyLabel }}</span>
+          <div class="currency-options">
+            <button
+              *ngFor="let currency of currencies; trackBy: trackByCurrency"
+              type="button"
+              [class.selected]="currency.code === draftCurrencyCode"
+              [attr.aria-pressed]="currency.code === draftCurrencyCode"
+              (click)="selectCurrency(currency.code)">
+              <strong>{{ currency.symbol }}</strong>
+              <span>{{ currency.name }}</span>
+              <ion-icon *ngIf="currency.code === draftCurrencyCode" src="assets/icon/check.svg"></ion-icon>
+            </button>
+          </div>
+        </section>
+
+        <section class="filter-group filter-group--period">
+          <span class="filter-group__label">{{ periodLabel }}</span>
+          <div class="period-options">
+            <button
+              *ngFor="let period of availablePeriods; let index = index; trackBy: trackByPeriod"
+              type="button"
+              class="period-option"
+              [class.selected]="index === draftPeriodIndex"
+              [attr.aria-pressed]="index === draftPeriodIndex"
+              (click)="selectPeriod(index)">
+              <span class="period-option__icon">
+                <ion-icon src="assets/icon/calendar.svg"></ion-icon>
+              </span>
+              <span class="period-option__text">{{ period }}</span>
+              <span class="period-option__status">
+                <ion-icon *ngIf="index === draftPeriodIndex" src="assets/icon/check.svg"></ion-icon>
+              </span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <footer class="filter-modal__footer">
+        <button type="button" class="filter-modal__apply" (click)="apply()">
+          {{ applyText }}
+        </button>
+      </footer>
+    </section>
+  </ng-template>
+</ion-modal>
