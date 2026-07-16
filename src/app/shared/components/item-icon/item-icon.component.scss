@@ -2,6 +2,12 @@
    CONTAINER
    ========================================================== */
 
+:host {
+  display: inline-block;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
 .fv-item-icon {
   --fv-item-icon-color: var(--fv-primary);
   position: relative;
@@ -88,6 +94,17 @@
   height: 22px;
 }
 
+.fv-item-icon--xl {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+}
+
+.fv-item-icon--xl .fv-item-icon__glyph {
+  width: 30px;
+  height: 30px;
+}
+
 /* ==========================================================
    SHAPE
    ========================================================== */
@@ -160,6 +177,17 @@
   .fv-item-icon--lg .fv-item-icon__glyph {
     width: 20px;
     height: 20px;
+  }
+
+  .fv-item-icon--xl {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+
+  .fv-item-icon--xl .fv-item-icon__glyph {
+    width: 28px;
+    height: 28px;
   }
 
 }

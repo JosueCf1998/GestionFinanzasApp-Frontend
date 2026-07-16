@@ -5,6 +5,7 @@ import {
   IonIcon
 } from '@ionic/angular/standalone';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 
 type BudgetStatus = 'ON_TRACK' | 'WARNING' | 'EXCEEDED';
 
@@ -58,7 +59,8 @@ interface BudgetSuggestion {
   imports: [
     CommonModule,
     IonContent,
-    IonIcon
+    IonIcon,
+    ItemIconComponent
   ]
 })
 export class BudgetDetailPage {

@@ -14,6 +14,7 @@ import { Categoria } from 'src/app/shared/models/categoria.model';
 import 'src/app/core/utils/observable-extensions';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants'
     CommonModule,
     FormsModule,
     HttpClientModule,
-    CustomSegmentComponent
+    CustomSegmentComponent,
+    ItemIconComponent
   ],
 })
 export class HomePage {

@@ -47,15 +47,12 @@
           *ngFor="let cat of categoriasActuales"
           (click)="goToEditCategories(segment, cat)">
 
-          <div
-            class="category-icon"
-            [style.background]="cat.color">
-
-            <ion-icon
-              [src]="'assets/icon/' + cat.icono + '.svg'">
-            </ion-icon>
-
-          </div>
+          <app-item-icon
+            [icon]="cat.icono"
+            [color]="cat.color"
+            size="lg"
+            variant="soft">
+          </app-item-icon>
 
           <span class="category-name">
             {{ cat.nombre }}

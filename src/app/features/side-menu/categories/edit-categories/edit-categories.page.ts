@@ -14,13 +14,14 @@ import { DeleteCategoryUseCase } from "src/app/core/use-cases/categories/delete-
 import 'src/app/core/utils/observable-extensions';
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 
 @Component({
   selector: "app-edit-categories",
   templateUrl: "./edit-categories.page.html",
   styleUrls: ["./edit-categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, ButtonComponent, PageLayoutComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomAlertComponent, ButtonComponent, PageLayoutComponent, ItemIconComponent],
 })
 export class EditCategoriesPage {
   tipoCategoria: string;

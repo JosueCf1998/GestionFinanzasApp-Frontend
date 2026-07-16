@@ -13,13 +13,14 @@ import { AccountSelectorModalComponent } from "src/app/shared/components/account
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 import 'src/app/core/utils/observable-extensions';
 import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 
 @Component({
   selector: "app-create-transac",
   templateUrl: "./create-transac.page.html",
   styleUrls: ["./create-transac.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AccountSelectorModalComponent, AmountInputComponent],
+  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AccountSelectorModalComponent, AmountInputComponent, ItemIconComponent],
 })
 export class CreateTransacPage implements OnInit {
   segmentoSeleccionado = 'ingresos';

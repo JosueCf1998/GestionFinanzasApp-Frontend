@@ -15,6 +15,7 @@ import { CustomAlertComponent } from '../../../../shared/components/custom-alert
 import { AmountInputComponent } from 'src/app/shared/components/amount-input/amount-input.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 
 import { CreateAccountUseCase, CreateAccountRequest } from 'src/app/core/use-cases/accounts/create-account.usecase';
 import { UpdateAccountUseCase, UpdateAccountRequest } from 'src/app/core/use-cases/Accounts/update-account.usecase';
@@ -35,7 +36,8 @@ import { DeleteAccountRequest, DeleteAccountUseCase } from 'src/app/core/use-cas
     CustomAlertComponent,
     AmountInputComponent,
     ButtonComponent,
-    PageLayoutComponent
+    PageLayoutComponent,
+    ItemIconComponent
   ],
 })
 export class CreateAccountPage {

@@ -32,16 +32,13 @@
 
     <section class="category-preview">
 
-      <div
-        class="preview-icon"
-        [style.background]="colorCategoria">
-
-        <ion-icon
-          *ngIf="iconoCategoria"
-          [src]="'assets/icon/' + iconoCategoria + '.svg'">
-        </ion-icon>
-
-      </div>
+      <app-item-icon
+        *ngIf="iconoCategoria"
+        [icon]="iconoCategoria"
+        [color]="colorCategoria"
+        size="xl"
+        variant="soft">
+      </app-item-icon>
 
       <h2 class="preview-title">
 
@@ -148,9 +145,13 @@
           [attr.aria-label]="icon.nombre"
           (click)="seleccionarIcono(icon)">
 
-          <ion-icon
-            [src]="'assets/icon/' + icon.archivo + '.svg'">
-          </ion-icon>
+          <app-item-icon
+            [icon]="icon.archivo"
+            [color]="colorCategoria"
+            size="sm"
+            variant="soft"
+            [selected]="icon.archivo === iconoSeleccionado">
+          </app-item-icon>
 
         </button>
 

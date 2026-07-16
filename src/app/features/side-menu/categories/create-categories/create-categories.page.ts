@@ -21,6 +21,7 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import 'src/app/core/utils/observable-extensions';
 import { CreateCategoryUseCase, RegisterCategoryRequest } from 'src/app/core/use-cases/categories/register-category.usecase';
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 
 @Component({
   selector: 'app-create-categories',
@@ -35,7 +36,8 @@ import { ButtonComponent } from "src/app/shared/components/button/button.compone
     CustomAlertComponent,
     CustomSegmentComponent,
     PageLayoutComponent,
-    ButtonComponent
+    ButtonComponent,
+    ItemIconComponent
 ]
 })
 export class CreateCategoriesPage {

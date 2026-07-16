@@ -108,17 +108,12 @@
 
         <div class="account-left">
 
-          <div
-            class="account-icon"
-            [style.background]="account.color">
-
-            <app-item-icon
-              [icon]="account.icon"
-              size="sm"
-              [color]="account.color">
-            </app-item-icon>
-
-          </div>
+          <app-item-icon
+            [icon]="account.icon"
+            [color]="account.color"
+            size="sm"
+            variant="soft">
+          </app-item-icon>
 
           <div class="account-info">
 

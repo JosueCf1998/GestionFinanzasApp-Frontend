@@ -50,7 +50,7 @@
   h2 {
     margin: 0;
     color: var(--fv-text-primary);
-    font-size: var(--fv-type-title-2);
+    font-size: var(--fv-type-title-3);
     font-weight: var(--fv-fw-bold);
     letter-spacing: -0.8px;
     line-height: 1.15;
@@ -61,8 +61,8 @@
     max-width: 280px;
     margin: 5px 0 0;
     color: var(--fv-text-secondary);
-    font-size: var(--fv-type-subhead);
-    line-height: 1.45;
+    font-size: var(--fv-type-footnote);
+    line-height: 1.4;
   }
 }
 

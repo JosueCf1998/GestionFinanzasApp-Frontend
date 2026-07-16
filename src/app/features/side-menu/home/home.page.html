@@ -133,17 +133,12 @@
 
           <!-- BLOQUE 1 : ICON -->
 
-          <div
-            class="category-icon"
-            [style.background]="category.color + '15'">
-
-            <ion-icon
-              class="category-main-icon"
-              [src]="'assets/icon/' + category.icono + '.svg'"
-              [style.color]="category.color">
-            </ion-icon>
-
-          </div>
+          <app-item-icon
+            [icon]="category.icono"
+            [color]="category.color"
+            size="sm"
+            variant="soft">
+          </app-item-icon>
 
           <!-- BLOQUE 2 : INFO -->
 

@@ -97,9 +97,12 @@
             [class.selected]="categoriaSeleccionada?.id === categoria.id"
             (click)="seleccionarCategoria(categoria)"
           >
-            <div class="category-icon" [style.background-color]="categoria.color">
-              <ion-icon [src]="'assets/icon/' + categoria.icono + '.svg'"></ion-icon>
-            </div>
+            <app-item-icon
+              [icon]="categoria.icono"
+              [color]="categoria.color"
+              size="lg"
+              variant="soft">
+            </app-item-icon>
             <span class="category-name">{{ categoria.nombre }}</span>
           </div>
 

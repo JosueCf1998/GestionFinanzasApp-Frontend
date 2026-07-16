@@ -31,15 +31,12 @@
 
     <section class="account-preview">
 
-      <div
-        class="preview-icon"
-        [style.background]="colorSeleccionado">
-
-        <ion-icon
-          [src]="'assets/icon/' + iconoSeleccionado + '.svg'">
-        </ion-icon>
-
-      </div>
+      <app-item-icon
+        [icon]="iconoSeleccionado"
+        [color]="colorSeleccionado"
+        size="xl"
+        variant="soft">
+      </app-item-icon>
 
       <h2 class="preview-title">
 
@@ -139,9 +136,13 @@
           [class.selected]="icon.archivo === iconoSeleccionado"
           (click)="seleccionarIcono(icon)">
 
-          <ion-icon
-            [src]="'assets/icon/' + icon.archivo + '.svg'">
-          </ion-icon>
+          <app-item-icon
+            [icon]="icon.archivo"
+            [color]="colorSeleccionado"
+            size="sm"
+            variant="soft"
+            [selected]="icon.archivo === iconoSeleccionado">
+          </app-item-icon>
 
         </button>
 

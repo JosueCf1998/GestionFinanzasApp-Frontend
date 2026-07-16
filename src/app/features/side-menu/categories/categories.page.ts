@@ -10,6 +10,7 @@ import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { AlertService } from "src/app/core/services/alert.service";
+import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 import 'src/app/core/utils/observable-extensions';
 
 @Component({
@@ -17,7 +18,7 @@ import 'src/app/core/utils/observable-extensions';
   templateUrl: "./categories.page.html",
   styleUrls: ["./categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent, ItemIconComponent],
 })
 export class CategoriesPage {
 

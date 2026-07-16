@@ -176,13 +176,12 @@
           *ngFor="let account of budgetAccounts; trackBy: trackByAccount"
           class="account-card">
 
-          <div
-            class="account-icon"
-            [style.background]="account.color">
-            <ion-icon
-              [src]="'assets/icon/' + account.icon + '.svg'">
-            </ion-icon>
-          </div>
+          <app-item-icon
+            [icon]="account.icon"
+            [color]="account.color"
+            size="md"
+            variant="soft">
+          </app-item-icon>
 
           <div class="account-info">
             <strong>{{ account.name }}</strong>
@@ -230,13 +229,12 @@
 
           <div class="category-header">
             <div class="category-main">
-              <div
-                class="category-icon"
-                [style.background]="category.color">
-                <ion-icon
-                  [src]="'assets/icon/' + category.icon + '.svg'">
-                </ion-icon>
-              </div>
+              <app-item-icon
+                [icon]="category.icon"
+                [color]="category.color"
+                size="md"
+                variant="soft">
+              </app-item-icon>
 
               <div class="category-info">
                 <strong>{{ category.name }}</strong>
