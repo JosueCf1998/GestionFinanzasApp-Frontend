@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   apiUrl: 'https://api.gfinvia.com',
   // apiUrl: 'http://localhost/GestionFinanzasApp-Backend', // URL base para desarrollo
-  useMocks: false
+  useMocks: false,
+  useBudgetMocks: true
 };
 
 /*

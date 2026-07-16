@@ -26,6 +26,22 @@
 
 }
 
+.fv-button.auto {
+  width: auto;
+}
+
+.fv-button.compact {
+  height: 40px;
+  --border-radius: 12px;
+  font-size: var(--fv-type-footnote);
+  font-weight: var(--fv-fw-semibold);
+}
+
+.fv-button.compact .button-icon {
+  width: 17px;
+  height: 17px;
+}
+
 /* ==========================================================
    CONTENT
    ========================================================== */
@@ -40,6 +56,7 @@
 
   width: 20px;
   height: 20px;
+  margin-inline-end: 8px;
 
 }
 

@@ -9,7 +9,9 @@
   [class.outline]="variant === 'outline'"
   [class.ghost]="variant === 'ghost'"
   [class.danger]="variant === 'danger'"
-  [expand]="expand"
+  [class.compact]="size === 'compact'"
+  [class.auto]="expand === 'auto'"
+  [expand]="expand === 'auto' ? undefined : expand"
   [type]="type"
   [disabled]="disabled || loading"
   (click)="onClick()">

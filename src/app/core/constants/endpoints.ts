@@ -20,6 +20,12 @@ export const ENDPOINTS = {
 
   },
 
+  BUDGETS: {
+
+    LIST: 'budgets/list'
+
+  },
+
   TRANSFERS: {
 
     LIST: 'transfers/list'

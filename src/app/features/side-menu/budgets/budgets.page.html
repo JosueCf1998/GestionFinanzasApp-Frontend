@@ -28,11 +28,11 @@
       </button>
     </section>
 
-    <div class="summary-section-heading">
+    <div *ngIf="budgets.length > 0" class="summary-section-heading">
       <span>Resumen del periodo</span>
     </div>
 
-    <section class="summary-card" aria-label="Resumen de presupuestos">
+    <section *ngIf="budgets.length > 0" class="summary-card" aria-label="Resumen de presupuestos">
       <div class="summary-card__top">
         <div class="summary-card__heading">
           <span class="summary-card__period-icon">
@@ -75,69 +75,40 @@
     <section class="budget-list-section">
       <header class="list-heading">
         <h2>Mis presupuestos</h2>
-        <span>{{ budgets.length }} activos</span>
       </header>
 
       <div class="budget-list">
-        <article
+        <app-budget-list-item
           *ngFor="let budget of budgets; trackBy: trackByBudget"
-          class="budget-item"
-          [style.--item-color]="budget.color"
-          [class.budget-item--warning]="budget.status === 'WARNING'"
-          [class.budget-item--exceeded]="budget.status === 'EXCEEDED'"
-          tabindex="0"
-          role="button"
-          [attr.aria-label]="'Abrir ' + budget.name"
-          (click)="openBudget(budget)"
-          (keydown.enter)="openBudget(budget)">
+          [budget]="budget"
+          [currencySymbol]="currency.symbol"
+          (selected)="openBudget($event)">
+        </app-budget-list-item>
+      </div>
 
-          <div class="budget-item__icon">
-            <ion-icon [src]="'assets/icon/' + budget.icon + '.svg'"></ion-icon>
-          </div>
+      <div *ngIf="!isLoading && budgets.length === 0" class="budget-empty-state">
+        <app-item-icon
+          icon="wallet"
+          color="var(--fv-primary)"
+          size="lg"
+          shape="rounded"
+          variant="soft">
+        </app-item-icon>
 
-          <div class="budget-item__content">
-            <div class="budget-item__top">
-              <strong>{{ budget.name }}</strong>
-              <b>{{ budget.percentage }}%</b>
-            </div>
+        <h3>No hay presupuestos en este periodo</h3>
+        <p>Selecciona otro periodo para consultar tus presupuestos.</p>
 
-            <div class="budget-item__meta">
-              <span class="budget-status" [attr.data-status]="budget.status">
-                <i></i>
-                {{ budget.statusLabel }}
-              </span>
-
-              <span>
-                {{ currency.symbol }} {{ budget.used | number:'1.0-0' }}
-                de
-                {{ currency.symbol }} {{ budget.budgeted | number:'1.0-0' }}
-              </span>
-            </div>
-
-            <div class="budget-item__progress">
-              <span
-                [class.warning]="budget.status === 'WARNING'"
-                [class.exceeded]="budget.status === 'EXCEEDED'"
-                [style.width.%]="budget.percentage > 100 ? 100 : budget.percentage">
-              </span>
-            </div>
-          </div>
-
-          <ion-icon
-            class="budget-item__arrow"
-            src="assets/icon/right-inline.svg">
-          </ion-icon>
-        </article>
+        <app-button
+          class="budget-empty-state__action"
+          text="Cambiar periodo"
+          icon="calendar"
+          variant="secondary"
+          size="compact"
+          expand="auto"
+          (clicked)="openPeriodSelector()">
+        </app-button>
       </div>
     </section>
-
-    <button
-      type="button"
-      class="archived-button"
-      (click)="showArchivedBudgets()">
-      <ion-icon src="assets/icon/history.svg"></ion-icon>
-      Mostrar presupuestos archivados
-    </button>
 
   </main>
 

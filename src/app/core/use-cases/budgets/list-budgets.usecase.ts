@@ -1,153 +1,75 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   BudgetListItem,
   BudgetPeriod,
-  BudgetStatus,
+  isBudgetStatus,
+  ListBudgetsApiResponse,
   ListBudgetsRequest,
   ListBudgetsResponse
 } from 'src/app/core/models/budgets/list-budgets.model';
 import { Result } from 'src/app/core/models/result.model';
-import { CurrencyCode } from 'src/app/shared/models/currency.model';
-
-interface BudgetSource {
-  id: number;
-  name: string;
-  icon: string;
-  color: string;
-  currencyCode: CurrencyCode;
-  monthlyBudget: number;
-  monthlyUsed: number;
-}
+import { BudgetsRepository } from 'src/app/core/repositories/budgets.repository';
 
 @Injectable({ providedIn: 'root' })
 export class ListBudgetsUseCase {
-  private readonly averageDaysPerMonth = 365.25 / 12;
-
-  private readonly budgetSource: BudgetSource[] = [
-    {
-      id: 1,
-      name: 'Presupuesto Hogar',
-      icon: 'home',
-      color: '#4361ee',
-      currencyCode: 'PEN',
-      monthlyBudget: 1200,
-      monthlyUsed: 900
-    },
-    {
-      id: 2,
-      name: 'Presupuesto Personal',
-      icon: 'user',
-      color: '#8b5cf6',
-      currencyCode: 'PEN',
-      monthlyBudget: 1000,
-      monthlyUsed: 920
-    },
-    {
-      id: 3,
-      name: 'Viaje a Cusco',
-      icon: 'bus',
-      color: '#ec4899',
-      currencyCode: 'PEN',
-      monthlyBudget: 600,
-      monthlyUsed: 630
-    },
-    {
-      id: 4,
-      name: 'EIKON Operativo',
-      icon: 'account',
-      color: '#3a0ca3',
-      currencyCode: 'PEN',
-      monthlyBudget: 1000,
-      monthlyUsed: 670
-    }
-  ];
+  constructor(private readonly repository: BudgetsRepository) {}
 
   execute(request: ListBudgetsRequest): Observable<Result<ListBudgetsResponse>> {
+    return this.repository
+      .listBudgets(request)
+      .pipe(
+        map(result => ({
+          ...result,
+          data: result.data
+            ? this.mapApiResponse(
+                result.data,
+                this.buildDateRangeLabel(request)
+              )
+            : null
+        }))
+      );
+  }
+
+  private buildDateRangeLabel(request: ListBudgetsRequest): string {
     const startDate = this.parseDate(request.startDate);
     const endDate = this.parseDate(request.endDate);
 
-    if (!startDate || !endDate || startDate > endDate) {
-      return of<Result<ListBudgetsResponse>>({
-        success: false,
-        message: 'El rango de fechas no es válido.',
-        data: null,
-        statusCode: 400,
-        timestamp: new Date().toISOString()
-      });
-    }
+    if (!startDate || !endDate) return '';
 
-    const rangeDays = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
-    const rangeScale = rangeDays / this.averageDaysPerMonth;
-    const dateRangeLabel = this.formatPeriodLabel(request.period, startDate, endDate);
+    return this.formatPeriodLabel(request.period, startDate, endDate);
+  }
 
-    const items = this.budgetSource.map(budget => this.mapBudget(budget, rangeScale));
+  private mapApiResponse(
+    response: ListBudgetsApiResponse,
+    dateRangeLabel: string
+  ): ListBudgetsResponse {
+    const items = response.presupuestos.map(budget => {
+      if (!isBudgetStatus(budget.estado)) {
+        throw new Error(`Estado de presupuesto no válido: ${budget.estado}`);
+      }
 
-    const totals = items.reduce(
-      (result, budget) => ({
-        budgeted: result.budgeted + budget.budgeted,
-        used: result.used + budget.used
-      }),
-      { budgeted: 0, used: 0 }
-    );
+      return {
+        id: budget.id,
+        name: budget.nombre,
+        icon: budget.icono,
+        color: budget.color,
+        budgeted: budget.montoPresupuestado,
+        used: budget.montoUtilizado,
+        percentage: budget.porcentaje,
+        status: budget.estado
+      } satisfies BudgetListItem;
+    });
 
-    const response: ListBudgetsResponse = {
+    return {
       items,
       summary: {
-        dateLabel: dateRangeLabel,
-        budgeted: totals.budgeted,
-        used: totals.used,
-        percentage: totals.budgeted > 0
-          ? Math.round((totals.used / totals.budgeted) * 100)
-          : 0
+        budgeted: response.presupuestoTotal,
+        used: response.montoUtilizado,
+        percentage: response.porcentajeUtilizado
       },
       dateRangeLabel
     };
-
-    return of<Result<ListBudgetsResponse>>({
-      success: true,
-      message: 'Presupuestos obtenidos correctamente.',
-      data: response,
-      statusCode: 200,
-      timestamp: new Date().toISOString()
-    }).pipe(delay(250));
-  }
-
-  private mapBudget(
-    budget: BudgetSource,
-    rangeScale: number
-  ): BudgetListItem {
-    const budgeted = this.roundAmount(budget.monthlyBudget * rangeScale);
-    const used = this.roundAmount(budget.monthlyUsed * rangeScale);
-    const percentage = budgeted > 0 ? Math.round((used / budgeted) * 100) : 0;
-    const status = this.resolveStatus(percentage);
-
-    return {
-      id: budget.id,
-      name: budget.name,
-      icon: budget.icon,
-      color: budget.color,
-      currencyCode: budget.currencyCode,
-      budgeted,
-      used,
-      percentage,
-      status,
-      statusLabel: this.resolveStatusLabel(status)
-    };
-  }
-
-  private resolveStatus(percentage: number): BudgetStatus {
-    if (percentage >= 100) return 'EXCEEDED';
-    if (percentage >= 85) return 'WARNING';
-    return 'ON_TRACK';
-  }
-
-  private resolveStatusLabel(status: BudgetStatus): string {
-    return {
-      ON_TRACK: 'En objetivo',
-      WARNING: 'Tendencia al exceso',
-      EXCEEDED: 'Excedido'
-    }[status];
   }
 
   private parseDate(value: string): Date | null {
@@ -177,7 +99,4 @@ export class ListBudgetsUseCase {
     return period === 'weekly' ? `Semana: ${range}` : range;
   }
 
-  private roundAmount(amount: number): number {
-    return Math.round(amount * 100) / 100;
-  }
 }

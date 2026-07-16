@@ -9,11 +9,14 @@ import {
 } from 'src/app/core/models/budgets/list-budgets.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { ListBudgetsUseCase } from 'src/app/core/use-cases/budgets/list-budgets.usecase';
+import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import {
   FilterModalComponent,
   FilterSelection
 } from 'src/app/shared/components/filter-modal/filter-modal.component';
+import { BudgetListItemComponent } from 'src/app/shared/components/budget-list-item/budget-list-item.component';
 import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header/feature-header.component';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 @Component({
@@ -25,7 +28,10 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
     CommonModule,
     IonContent,
     IonIcon,
+    ButtonComponent,
+    BudgetListItemComponent,
     FeatureHeaderComponent,
+    ItemIconComponent,
     FilterModalComponent
   ]
 })
@@ -40,7 +46,6 @@ export class BudgetsPage implements OnInit {
   readonly currency: Currency = CURRENCIES.PEN;
   budgets: BudgetListItem[] = [];
   summary: BudgetSummary = {
-    dateLabel: '',
     budgeted: 0,
     used: 0,
     percentage: 0
@@ -105,10 +110,6 @@ export class BudgetsPage implements OnInit {
     });
   }
 
-  showArchivedBudgets(): void {
-    console.log('Mostrar presupuestos archivados');
-  }
-
   trackByBudget(_: number, budget: BudgetListItem): number {
     return budget.id;
   }
@@ -147,7 +148,6 @@ export class BudgetsPage implements OnInit {
   private clearBudgetData(): void {
     this.budgets = [];
     this.summary = {
-      dateLabel: '',
       budgeted: 0,
       used: 0,
       percentage: 0

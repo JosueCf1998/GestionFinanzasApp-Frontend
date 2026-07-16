@@ -3,6 +3,7 @@
    ========================================================== */
 
 .fv-item-icon {
+  --fv-item-icon-color: var(--fv-primary);
   position: relative;
   display: flex;
   align-items: center;
@@ -19,6 +20,16 @@
     opacity .18s ease;
 }
 
+.fv-item-icon--solid {
+  background: var(--fv-item-icon-color);
+}
+
+.fv-item-icon--soft {
+  border: 1px solid color-mix(in srgb, var(--fv-item-icon-color) 12%, transparent);
+  background: color-mix(in srgb, var(--fv-item-icon-color) 10%, white);
+  box-shadow: 0 3px 9px color-mix(in srgb, var(--fv-item-icon-color) 10%, transparent);
+}
+
 .fv-item-icon::before {
   content: '';
   position: absolute;
@@ -30,10 +41,17 @@
   );
 }
 
-.fv-item-icon ion-icon {
+.fv-item-icon__glyph {
   position: relative;
   z-index: 1;
-  filter: brightness(0) invert(1);
+  display: block;
+  background: #ffffff;
+  mask: var(--fv-item-icon-mask) center / contain no-repeat;
+  -webkit-mask: var(--fv-item-icon-mask) center / contain no-repeat;
+}
+
+.fv-item-icon--soft .fv-item-icon__glyph {
+  background: var(--fv-item-icon-color);
 }
 
 /* ==========================================================
@@ -45,7 +63,7 @@
   height: 32px;
 }
 
-.fv-item-icon--sm ion-icon {
+.fv-item-icon--sm .fv-item-icon__glyph {
   width: 14px;
   height: 14px;
 }
@@ -55,7 +73,7 @@
   height: 40px;
 }
 
-.fv-item-icon--md ion-icon {
+.fv-item-icon--md .fv-item-icon__glyph {
   width: 18px;
   height: 18px;
 }
@@ -65,7 +83,7 @@
   height: 48px;
 }
 
-.fv-item-icon--lg ion-icon {
+.fv-item-icon--lg .fv-item-icon__glyph {
   width: 22px;
   height: 22px;
 }
@@ -98,7 +116,7 @@
   filter: grayscale(1);
 }
 
-.fv-item-icon--disabled ion-icon {
+.fv-item-icon--disabled .fv-item-icon__glyph {
   opacity: .7;
 }
 
@@ -129,7 +147,7 @@
     height: 38px;
   }
 
-  .fv-item-icon--md ion-icon {
+  .fv-item-icon--md .fv-item-icon__glyph {
     width: 17px;
     height: 17px;
   }
@@ -139,7 +157,7 @@
     height: 44px;
   }
 
-  .fv-item-icon--lg ion-icon {
+  .fv-item-icon--lg .fv-item-icon__glyph {
     width: 20px;
     height: 20px;
   }

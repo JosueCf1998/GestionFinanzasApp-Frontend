@@ -1,6 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 
 /* ==========================================================
    TYPES
@@ -8,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 export type ItemIconSize = 'sm' | 'md' | 'lg';
 export type ItemIconShape = 'rounded' | 'circle';
+export type ItemIconVariant = 'solid' | 'soft';
 
 /* ==========================================================
    COMPONENT
@@ -18,10 +17,7 @@ export type ItemIconShape = 'rounded' | 'circle';
   templateUrl: './item-icon.component.html',
   styleUrls: ['./item-icon.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule
-  ]
+  imports: []
 })
 export class ItemIconComponent {
 
@@ -33,6 +29,7 @@ export class ItemIconComponent {
   @Input() color = 'var(--fv-primary)';
   @Input() size: ItemIconSize = 'md';
   @Input() shape: ItemIconShape = 'rounded';
+  @Input() variant: ItemIconVariant = 'solid';
   @Input() selected = false;
   @Input() disabled = false;
 

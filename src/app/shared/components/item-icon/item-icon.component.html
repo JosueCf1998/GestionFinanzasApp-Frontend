@@ -7,10 +7,11 @@
   [class.fv-item-icon--lg]="size === 'lg'"
   [class.fv-item-icon--circle]="shape === 'circle'"
   [class.fv-item-icon--rounded]="shape === 'rounded'"
-  [style.background]="color">
+  [class.fv-item-icon--soft]="variant === 'soft'"
+  [class.fv-item-icon--solid]="variant === 'solid'"
+  [style.--fv-item-icon-color]="color"
+  [style.--fv-item-icon-mask]="'url(assets/icon/' + icon + '.svg)'">
 
-  <ion-icon
-    [src]="'assets/icon/' + icon + '.svg'">
-  </ion-icon>
+  <span class="fv-item-icon__glyph" aria-hidden="true"></span>
 
 </div>
