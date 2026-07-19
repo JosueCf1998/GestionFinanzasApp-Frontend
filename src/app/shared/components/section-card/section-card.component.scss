@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.section-card-section {
+  display: grid;
+  gap: 9px;
+}
+
+.section-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 2px;
+
+  h3 {
+    flex: 0 0 auto;
+    margin: 0;
+    color: var(--fv-text-secondary, #64748b);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  &::after {
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(90deg, rgba(67, 97, 238, 0.22), transparent);
+    content: '';
+  }
+}
+
+.section-card {
+  padding: 17px;
+  border: 1px solid #edf0f5;
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 7px 22px rgba(34, 39, 76, 0.055);
+}
+
+.section-card__content {
+  display: grid;
+  gap: 14px;
+}
+
+@media (max-width: 420px) {
+  .section-card {
+    padding: 15px;
+  }
+}

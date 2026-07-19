@@ -1,0 +1,69 @@
+<div class="icon-picker" aria-label="Seleccionar icono">
+  <div class="icon-picker__row">
+    <button
+      *ngFor="let option of orderedOptions | slice:0:visibleCount"
+      type="button"
+      class="icon-picker__button"
+      [class.selected]="option.archivo === selected"
+      [attr.aria-label]="option.nombre"
+      [attr.aria-pressed]="option.archivo === selected"
+      (click)="select(option)">
+      <app-item-icon
+        [icon]="option.archivo"
+        [color]="iconColor(option)"
+        size="md"
+        variant="soft">
+      </app-item-icon>
+    </button>
+
+    <button
+      *ngIf="orderedOptions.length > visibleCount"
+      type="button"
+      class="icon-picker__more"
+      aria-label="Ver más iconos"
+      [attr.aria-expanded]="isModalOpen"
+      [class.active]="isModalOpen"
+      (click)="openModal()">
+      <span>…</span>
+    </button>
+  </div>
+</div>
+
+<ion-modal
+  class="picker-modal"
+  [isOpen]="isModalOpen"
+  [backdropDismiss]="false"
+  (didDismiss)="closeModal()">
+  <ng-template>
+    <section class="picker-modal__panel" aria-label="Iconos disponibles">
+      <header class="picker-modal__header">
+        <div>
+          <span>Personalización</span>
+          <h2>Selecciona un icono</h2>
+        </div>
+        <button type="button" aria-label="Cerrar" (click)="closeModal()">
+          <ion-icon src="assets/icon/cross.svg"></ion-icon>
+        </button>
+      </header>
+
+      <div class="picker-modal__grid">
+        <button
+          *ngFor="let option of orderedOptions"
+          type="button"
+          class="picker-modal__option"
+          [class.selected]="option.archivo === selected"
+          [attr.aria-label]="option.nombre"
+          [attr.aria-pressed]="option.archivo === selected"
+          (click)="select(option)">
+          <app-item-icon
+            [icon]="option.archivo"
+            [color]="iconColor(option)"
+            size="md"
+            variant="soft">
+          </app-item-icon>
+          <span>{{ option.nombre }}</span>
+        </button>
+      </div>
+    </section>
+  </ng-template>
+</ion-modal>

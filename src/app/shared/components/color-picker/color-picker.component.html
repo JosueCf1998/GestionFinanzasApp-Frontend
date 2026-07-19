@@ -1,0 +1,26 @@
+<div class="color-picker" aria-label="Seleccionar color">
+  <div class="color-picker__row">
+    <button *ngFor="let option of orderedOptions | slice:0:visibleCount" type="button" class="color-picker__button" [style.background]="option.valor" [class.selected]="option.valor === selected" [attr.aria-label]="option.nombre" [attr.aria-pressed]="option.valor === selected" (click)="select(option)"></button>
+    <button *ngIf="orderedOptions.length > visibleCount" type="button" class="color-picker__more" aria-label="Ver más colores" [attr.aria-expanded]="isModalOpen" [class.active]="isModalOpen" (click)="openModal()"><span>…</span></button>
+  </div>
+</div>
+
+<ion-modal
+  class="picker-modal"
+  [isOpen]="isModalOpen"
+  [backdropDismiss]="false"
+  (didDismiss)="closeModal()">
+  <ng-template>
+    <section class="picker-modal__panel" aria-label="Colores disponibles">
+      <header class="picker-modal__header">
+        <div><span>Personalización</span><h2>Selecciona un color</h2></div>
+        <button type="button" aria-label="Cerrar" (click)="closeModal()"><ion-icon src="assets/icon/cross.svg"></ion-icon></button>
+      </header>
+      <div class="picker-modal__grid">
+        <button *ngFor="let option of orderedOptions" type="button" class="picker-modal__option" [class.selected]="option.valor === selected" [attr.aria-label]="option.nombre" [attr.aria-pressed]="option.valor === selected" (click)="select(option)">
+          <span class="picker-modal__swatch" [style.background]="option.valor"></span><strong>{{ option.nombre }}</strong>
+        </button>
+      </div>
+    </section>
+  </ng-template>
+</ion-modal>

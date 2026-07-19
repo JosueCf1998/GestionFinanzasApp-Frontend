@@ -22,7 +22,9 @@ export const ENDPOINTS = {
 
   BUDGETS: {
 
-    LIST: 'budgets/filter'
+    LIST: 'budgets/filter',
+
+    CREATE: 'budgets/register'
 
   },
 

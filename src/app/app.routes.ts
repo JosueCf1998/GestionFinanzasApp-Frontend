@@ -73,6 +73,10 @@ export const routes: Routes = [
     path: 'budgets/detail',
     loadComponent: () => import('./features/side-menu/budgets/budget-detail/budget-detail.page').then(m => m.BudgetDetailPage)
   },
+  {
+    path: 'budgets/create',
+    loadComponent: () => import('./features/side-menu/budgets/create-budget/create-budget.page').then(m => m.CreateBudgetPage)
+  },
   // TRANSACTION ROUTES
   {
     path: 'home/create',
