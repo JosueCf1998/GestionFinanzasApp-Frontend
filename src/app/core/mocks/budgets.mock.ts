@@ -2,49 +2,49 @@ import { ListBudgetsApiResponse } from 'src/app/core/models/budgets/list-budgets
 
 /** Respuesta simulada con el mismo contrato que utilizará el backend. */
 export const BUDGETS_MOCK: ListBudgetsApiResponse = {
-  presupuestoTotal: 3800,
-  montoUtilizado: 3120,
-  porcentajeUtilizado: 82,
-  presupuestos: [
+  totalBudget: 3800,
+  totalSpent: 3120,
+  usagePercentage: 82,
+  budgetList: [
     {
       id: 1,
-      nombre: 'Presupuesto Hogar',
-      icono: 'home',
+      name: 'Presupuesto Hogar',
+      icon: 'home',
       color: '#4361ee',
-      estado: 'ON_TRACK',
-      porcentaje: 75,
-      montoUtilizado: 900,
-      montoPresupuestado: 1200
+      status: 'ON_TRACK',
+      percentage: 75,
+      spentAmount: 900,
+      budgetAmount: 1200
     },
     {
       id: 2,
-      nombre: 'Presupuesto Personal',
-      icono: 'user',
+      name: 'Presupuesto Personal',
+      icon: 'user',
       color: '#8b5cf6',
-      estado: 'WARNING',
-      porcentaje: 92,
-      montoUtilizado: 920,
-      montoPresupuestado: 1000
+      status: 'WARNING',
+      percentage: 92,
+      spentAmount: 920,
+      budgetAmount: 1000
     },
     {
       id: 3,
-      nombre: 'Viaje a Cusco',
-      icono: 'bus',
+      name: 'Viaje a Cusco',
+      icon: 'bus',
       color: '#ec4899',
-      estado: 'EXCEEDED',
-      porcentaje: 105,
-      montoUtilizado: 630,
-      montoPresupuestado: 600
+      status: 'EXCEEDED',
+      percentage: 105,
+      spentAmount: 630,
+      budgetAmount: 600
     },
     {
       id: 4,
-      nombre: 'EIKON Operativo',
-      icono: 'account',
+      name: 'EIKON Operativo',
+      icon: 'account',
       color: '#3a0ca3',
-      estado: 'ON_TRACK',
-      porcentaje: 67,
-      montoUtilizado: 670,
-      montoPresupuestado: 1000
+      status: 'ON_TRACK',
+      percentage: 67,
+      spentAmount: 670,
+      budgetAmount: 1000
     }
   ]
 };

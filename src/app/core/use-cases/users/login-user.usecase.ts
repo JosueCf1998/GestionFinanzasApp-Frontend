@@ -41,6 +41,7 @@ export class LoginUserUseCase {
   }
 
   private saveUserData(userData: LoginUserResponse, email: string): void {
+    console.log('Saving user data:', `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
     this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.nombre);

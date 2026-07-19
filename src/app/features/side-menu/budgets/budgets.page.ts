@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { Subscription } from 'rxjs';
+import 'src/app/core/utils/observable-extensions';
 import {
   BudgetListItem,
   BudgetPeriod,
   BudgetSummary,
+  ListBudgetsRequest,
   ListBudgetsResponse
 } from 'src/app/core/models/budgets/list-budgets.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
@@ -17,6 +20,7 @@ import {
 import { BudgetListItemComponent } from 'src/app/shared/components/budget-list-item/budget-list-item.component';
 import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header/feature-header.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 @Component({
@@ -32,10 +36,13 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
     BudgetListItemComponent,
     FeatureHeaderComponent,
     ItemIconComponent,
-    FilterModalComponent
+    FilterModalComponent,
+    FloatingActionButtonComponent
   ]
 })
-export class BudgetsPage implements OnInit {
+export class BudgetsPage implements OnInit, OnDestroy {
+  private budgetRequest?: Subscription;
+
   selectedPeriod: BudgetPeriod = 'monthly';
   selectedPeriodValue = this.getCurrentMonth();
   selectedStartDate = this.getFirstDayOfCurrentMonth();
@@ -59,6 +66,10 @@ export class BudgetsPage implements OnInit {
 
   ngOnInit(): void {
     this.loadBudgets();
+  }
+
+  ngOnDestroy(): void {
+    this.budgetRequest?.unsubscribe();
   }
 
   get selectedPeriodLabel(): string {
@@ -93,6 +104,11 @@ export class BudgetsPage implements OnInit {
   }
 
   applyFilters(selection: FilterSelection): void {
+    if (!this.isValidSelection(selection)) {
+      console.warn('Filtro de presupuestos inválido:', selection);
+      return;
+    }
+
     this.selectedPeriod = selection.period;
     this.selectedPeriodValue = selection.periodValue;
     this.selectedStartDate = selection.startDate;
@@ -110,38 +126,75 @@ export class BudgetsPage implements OnInit {
     });
   }
 
+  createBudget(): void {
+    this.navService.forward('/budgets/create');
+  }
+
   trackByBudget(_: number, budget: BudgetListItem): number {
     return budget.id;
   }
 
   private loadBudgets(): void {
-    this.isLoading = true;
+    const request = this.buildRequest();
 
-    this.listBudgetsUseCase.execute({
+    if (!request) {
+      this.clearBudgetData();
+      return;
+    }
+
+    this.budgetRequest?.unsubscribe();
+    this.isLoading = true;
+    console.log('Datos enviados al servicio de presupuestos:', request);
+
+    this.budgetRequest = this.listBudgetsUseCase
+      .execute(request)
+      .service({
+        success: data => {
+          this.isLoading = false;
+          console.log('Datos recibidos del servicio de presupuestos:', data);
+
+          if (data) {
+            this.setBudgetResponse(data);
+            return;
+          }
+
+          this.clearBudgetData();
+        },
+        failure: error => {
+          this.isLoading = false;
+          console.error('Error del servicio de presupuestos:', error);
+          this.clearBudgetData();
+        }
+      });
+  }
+
+  private buildRequest(): ListBudgetsRequest | null {
+    const request: ListBudgetsRequest = {
       period: this.selectedPeriod,
       startDate: this.selectedStartDate,
       endDate: this.selectedEndDate
-    }).subscribe({
-      next: result => {
-        this.isLoading = false;
+    };
 
-        if (result.success && result.data) {
-          this.setBudgetResponse(result.data);
-          return;
-        }
+    return this.isValidSelection({
+      ...request,
+      periodValue: this.selectedPeriodValue
+    }) ? request : null;
+  }
 
-        this.clearBudgetData();
-      },
-      error: () => {
-        this.isLoading = false;
-        this.clearBudgetData();
-      }
-    });
+  private isValidSelection(selection: FilterSelection): boolean {
+    return this.isIsoDate(selection.startDate) &&
+      this.isIsoDate(selection.endDate) &&
+      selection.startDate <= selection.endDate;
+  }
+
+  private isIsoDate(value: string): boolean {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    return !Number.isNaN(new Date(`${value}T00:00:00Z`).getTime());
   }
 
   private setBudgetResponse(response: ListBudgetsResponse): void {
-    this.budgets = response.items;
-    this.summary = response.summary;
+    this.budgets = [...response.items];
+    this.summary = { ...response.summary };
     this.selectedDate = response.dateRangeLabel.replace(/^Semana:\s*/i, '');
   }
 

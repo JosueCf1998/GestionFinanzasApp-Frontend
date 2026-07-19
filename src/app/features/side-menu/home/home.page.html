@@ -292,16 +292,9 @@
 
   </ion-modal>
 
-  <!-- FAB -->
-
-  <button
-    class="fv-fab fab-button"
-    (click)="navigateToCreateTransac()">
-
-    <ion-icon
-      src="assets/icon/add.svg">
-    </ion-icon>
-
-  </button>
+  <app-floating-action-button
+    ariaLabel="Crear transacción"
+    (clicked)="navigateToCreateTransac()">
+  </app-floating-action-button>
 
 </ion-content>

@@ -112,6 +112,11 @@
 
   </main>
 
+  <app-floating-action-button
+    ariaLabel="Crear presupuesto"
+    (clicked)="createBudget()">
+  </app-floating-action-button>
+
   <app-filter-modal
     [isOpen]="isPeriodSelectorOpen"
     eyebrow=""

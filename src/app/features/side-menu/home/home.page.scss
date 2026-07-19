@@ -477,24 +477,3 @@
 
   gap: var(--fv-space-xl);
 }
-
-/* ==========================
-   FAB
-   ========================== */
-
-.fab-button {
-  position: fixed;
-
-  right: 22px;
-  bottom: 22px;
-
-  z-index: 999;
-}
-
-.fab-button ion-icon {
-  font-size: 26px;
-
-  color: var(--fv-surface);
-
-  filter: brightness(0) invert(1);
-}

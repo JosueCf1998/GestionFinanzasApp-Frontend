@@ -22,6 +22,7 @@ import {
 
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 
 @Component({
   selector: 'app-history-transfer',
@@ -38,7 +39,8 @@ import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon
     DynamicAlertComponent,
     AccountSelectorModalComponent,
     PageLayoutComponent,
-    ItemIconComponent
+    ItemIconComponent,
+    FloatingActionButtonComponent
   ]
 })
 export class HistoryTransferPage implements OnInit {

@@ -1,0 +1,9 @@
+<ion-fab vertical="bottom" horizontal="end">
+  <ion-fab-button
+    [disabled]="disabled"
+    [attr.aria-label]="ariaLabel"
+    [attr.title]="ariaLabel"
+    (click)="onClick()">
+    <ion-icon [src]="'assets/icon/' + icon + '.svg'"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

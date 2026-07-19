@@ -1,0 +1,25 @@
+:host {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  pointer-events: none;
+}
+
+ion-fab {
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  margin: 0;
+  pointer-events: auto;
+}
+
+ion-fab-button {
+  --background: var(--fv-gradient-primary);
+  --background-activated: var(--fv-primary);
+  --background-hover: var(--fv-primary);
+  --box-shadow: 0 12px 28px rgba(67, 97, 238, 0.28);
+
+  ion-icon {
+    width: 24px;
+    height: 24px;
+  }
+}

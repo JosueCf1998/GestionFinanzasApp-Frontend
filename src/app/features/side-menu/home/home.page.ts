@@ -15,6 +15,7 @@ import 'src/app/core/utils/observable-extensions';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,8 @@ import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon
     FormsModule,
     HttpClientModule,
     CustomSegmentComponent,
-    ItemIconComponent
+    ItemIconComponent,
+    FloatingActionButtonComponent
   ],
 })
 export class HomePage {

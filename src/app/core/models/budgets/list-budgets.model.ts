@@ -20,21 +20,21 @@ export interface ListBudgetsRequest {
 /** Estructura recibida desde el backend. */
 export interface BudgetApiItem {
   id: number;
-  nombre: string;
-  icono: string;
+  name: string;
+  icon: string;
   color: string;
-  estado: BudgetStatus;
-  porcentaje: number;
-  montoUtilizado: number;
-  montoPresupuestado: number;
+  status: BudgetStatus;
+  percentage: number;
+  spentAmount: number;
+  budgetAmount: number;
 }
 
 /** Respuesta de datos del endpoint de presupuestos. */
 export interface ListBudgetsApiResponse {
-  presupuestoTotal: number;
-  montoUtilizado: number;
-  porcentajeUtilizado: number;
-  presupuestos: BudgetApiItem[];
+  totalBudget: number;
+  totalSpent: number;
+  usagePercentage: number;
+  budgetList: BudgetApiItem[];
 }
 
 /** Modelo interno utilizado por los componentes. */

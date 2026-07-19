@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import {
+  BudgetApiItem,
   BudgetListItem,
   BudgetPeriod,
   isBudgetStatus,
@@ -16,19 +17,15 @@ export class ListBudgetsUseCase {
   constructor(private readonly repository: BudgetsRepository) {}
 
   execute(request: ListBudgetsRequest): Observable<Result<ListBudgetsResponse>> {
-    return this.repository
-      .listBudgets(request)
-      .pipe(
-        map(result => ({
-          ...result,
-          data: result.data
-            ? this.mapApiResponse(
-                result.data,
-                this.buildDateRangeLabel(request)
-              )
-            : null
-        }))
-      );
+    return this.repository.listBudgets(request).pipe(
+      tap(result => console.log('Respuesta original del API de presupuestos:', result)),
+      map(result => ({
+        ...result,
+        data: result.data
+          ? this.mapApiResponse(result.data, this.buildDateRangeLabel(request))
+          : null
+      }))
+    );
   }
 
   private buildDateRangeLabel(request: ListBudgetsRequest): string {
@@ -44,31 +41,35 @@ export class ListBudgetsUseCase {
     response: ListBudgetsApiResponse,
     dateRangeLabel: string
   ): ListBudgetsResponse {
-    const items = response.presupuestos.map(budget => {
-      if (!isBudgetStatus(budget.estado)) {
-        throw new Error(`Estado de presupuesto no válido: ${budget.estado}`);
-      }
-
-      return {
-        id: budget.id,
-        name: budget.nombre,
-        icon: budget.icono,
-        color: budget.color,
-        budgeted: budget.montoPresupuestado,
-        used: budget.montoUtilizado,
-        percentage: budget.porcentaje,
-        status: budget.estado
-      } satisfies BudgetListItem;
-    });
+    const items = (response.budgetList ?? []).map(budget =>
+      this.mapBudgetItem(budget)
+    );
 
     return {
       items,
       summary: {
-        budgeted: response.presupuestoTotal,
-        used: response.montoUtilizado,
-        percentage: response.porcentajeUtilizado
+        budgeted: response.totalBudget,
+        used: response.totalSpent,
+        percentage: response.usagePercentage
       },
       dateRangeLabel
+    };
+  }
+
+  private mapBudgetItem(budget: BudgetApiItem): BudgetListItem {
+    if (!isBudgetStatus(budget.status)) {
+      throw new Error(`Estado de presupuesto no válido: ${budget.status}`);
+    }
+
+    return {
+      id: budget.id,
+      name: budget.name,
+      icon: budget.icon,
+      color: budget.color,
+      budgeted: budget.budgetAmount,
+      used: budget.spentAmount,
+      percentage: budget.percentage,
+      status: budget.status
     };
   }
 
@@ -81,22 +82,20 @@ export class ListBudgetsUseCase {
 
   private formatPeriodLabel(period: BudgetPeriod, startDate: Date, endDate: Date): string {
     if (period === 'monthly') {
-      return new Intl.DateTimeFormat('es-PE', {
-        month: 'long', year: 'numeric', timeZone: 'UTC'
-      }).format(startDate);
+      return this.getFormatter({ month: 'long', year: 'numeric' }).format(startDate);
     }
 
-    if (period === 'annual') return `Año ${startDate.getUTCFullYear()}`;
+    if (period === 'annual') {
+      return `Año ${startDate.getUTCFullYear()}`;
+    }
 
-    const formatter = new Intl.DateTimeFormat('es-PE', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'UTC'
-    });
-
+    const formatter = this.getFormatter({ day: 'numeric', month: 'short', year: 'numeric' });
     const range = `${formatter.format(startDate)} - ${formatter.format(endDate)}`;
     return period === 'weekly' ? `Semana: ${range}` : range;
+  }
+
+  private getFormatter(options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
+    return new Intl.DateTimeFormat('es-PE', { ...options, timeZone: 'UTC' });
   }
 
 }

@@ -251,18 +251,10 @@
 
   </div>
 
-  <!-- FAB -->
-  <ion-fab
-    vertical="bottom"
-    horizontal="end"
-    slot="fixed"
-    class="fab-custom">
-
-    <ion-fab-button (click)="navigateToAddTransfer()">
-      <ion-icon src="assets/icon/add.svg"></ion-icon>
-    </ion-fab-button>
-
-  </ion-fab>
+  <app-floating-action-button
+    ariaLabel="Agregar transferencia"
+    (clicked)="navigateToAddTransfer()">
+  </app-floating-action-button>
 
 </ion-content>
 
