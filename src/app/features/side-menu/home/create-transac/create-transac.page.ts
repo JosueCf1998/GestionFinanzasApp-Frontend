@@ -9,7 +9,6 @@ import { AlertService } from "src/app/core/services/alert.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
 import { Categoria } from "src/app/shared/models/categoria.model";
-import { AccountSelectorModalComponent } from "src/app/shared/components/account-selector-modal/account-selector-modal.component";
 import { AmountInputComponent } from "src/app/shared/components/amount-input/amount-input.component";
 import 'src/app/core/utils/observable-extensions';
 import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
@@ -20,7 +19,7 @@ import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon
   templateUrl: "./create-transac.page.html",
   styleUrls: ["./create-transac.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AccountSelectorModalComponent, AmountInputComponent, ItemIconComponent],
+  imports: [IonicModule, CommonModule, FormsModule, CustomAlertComponent, AmountInputComponent, ItemIconComponent],
 })
 export class CreateTransacPage implements OnInit {
   segmentoSeleccionado = 'ingresos';

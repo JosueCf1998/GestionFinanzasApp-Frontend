@@ -17,9 +17,9 @@ import { SectionCardComponent } from 'src/app/shared/components/section-card/sec
 import { IconPickerComponent } from 'src/app/shared/components/icon-picker/icon-picker.component';
 import { ColorPickerComponent } from 'src/app/shared/components/color-picker/color-picker.component';
 import {
-  PeriodPickerComponent,
-  PeriodPickerValue
-} from 'src/app/shared/components/period-picker/period-picker.component';
+  FilterModalComponent,
+  FilterSelection
+} from 'src/app/shared/components/filter-modal/filter-modal.component';
 import { COLORES_CATEGORIA, ICONOS_CATEGORIA } from 'src/app/shared/constants/category-options';
 import 'src/app/core/utils/observable-extensions';
 
@@ -37,7 +37,7 @@ import 'src/app/core/utils/observable-extensions';
     CustomAlertComponent,
     ItemIconComponent,
     PageLayoutComponent,
-    PeriodPickerComponent,
+    FilterModalComponent,
     SectionCardComponent,
     IconPickerComponent,
     ColorPickerComponent
@@ -59,6 +59,7 @@ export class CreateBudgetPage {
 
   showUnsavedAlert = false;
   showErrorAlert = false;
+  isPeriodModalOpen = false;
   isSaving = false;
 
   constructor(
@@ -94,7 +95,7 @@ export class CreateBudgetPage {
   }
 
   get periodLabel(): string {
-    const labels: Record<PeriodPickerValue['period'], string> = {
+    const labels: Record<FilterSelection['period'], string> = {
       weekly: 'Semanal',
       monthly: 'Mensual',
       annual: 'Anual',
@@ -119,8 +120,17 @@ export class CreateBudgetPage {
     return `${formatter.format(start)} — ${formatter.format(end)}`;
   }
 
-  updatePeriod(selection: PeriodPickerValue): void {
+  openPeriodModal(): void {
+    this.isPeriodModalOpen = true;
+  }
+
+  closePeriodModal(): void {
+    this.isPeriodModalOpen = false;
+  }
+
+  applyPeriod(selection: FilterSelection): void {
     this.periodSelection = selection;
+    this.closePeriodModal();
   }
 
   saveBudget(): void {
@@ -169,7 +179,7 @@ export class CreateBudgetPage {
     this.navService.back();
   }
 
-  private currentMonthSelection(): PeriodPickerValue {
+  private currentMonthSelection(): FilterSelection {
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');

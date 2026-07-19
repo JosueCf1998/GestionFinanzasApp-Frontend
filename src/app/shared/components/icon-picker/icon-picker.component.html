@@ -1,7 +1,7 @@
 <div class="icon-picker" aria-label="Seleccionar icono">
   <div class="icon-picker__row">
     <button
-      *ngFor="let option of orderedOptions | slice:0:visibleCount"
+      *ngFor="let option of quickOptions"
       type="button"
       class="icon-picker__button"
       [class.selected]="option.archivo === selected"
@@ -17,7 +17,7 @@
     </button>
 
     <button
-      *ngIf="orderedOptions.length > visibleCount"
+      *ngIf="options.length > visibleCount"
       type="button"
       class="icon-picker__more"
       aria-label="Ver más iconos"
@@ -29,41 +29,26 @@
   </div>
 </div>
 
-<ion-modal
-  class="picker-modal"
+<app-base-modal
   [isOpen]="isModalOpen"
-  [backdropDismiss]="false"
-  (didDismiss)="closeModal()">
-  <ng-template>
-    <section class="picker-modal__panel" aria-label="Iconos disponibles">
-      <header class="picker-modal__header">
-        <div>
-          <span>Personalización</span>
-          <h2>Selecciona un icono</h2>
-        </div>
-        <button type="button" aria-label="Cerrar" (click)="closeModal()">
-          <ion-icon src="assets/icon/cross.svg"></ion-icon>
-        </button>
-      </header>
-
-      <div class="picker-modal__grid">
+  title="Selecciona un icono"
+  description="Elige el icono que identificará este elemento."
+  (closed)="closeModal()">
+      <div class="picker-grid">
         <button
-          *ngFor="let option of orderedOptions"
+          *ngFor="let option of options"
           type="button"
-          class="picker-modal__option"
+          class="picker-option"
           [class.selected]="option.archivo === selected"
           [attr.aria-label]="option.nombre"
           [attr.aria-pressed]="option.archivo === selected"
-          (click)="select(option)">
+          (click)="select(option, true)">
           <app-item-icon
             [icon]="option.archivo"
             [color]="iconColor(option)"
             size="md"
             variant="soft">
           </app-item-icon>
-          <span>{{ option.nombre }}</span>
         </button>
       </div>
-    </section>
-  </ng-template>
-</ion-modal>
+</app-base-modal>

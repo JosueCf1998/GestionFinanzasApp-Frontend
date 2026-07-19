@@ -225,41 +225,15 @@
 
   <!-- MODAL -->
 
-  <ion-modal
+  <app-base-modal
     [isOpen]="isModalOpen"
-    (didDismiss)="closeModal()"
-    cssClass="custom-modal">
-
-    <ng-template>
-
-      <ion-header>
-
-        <ion-toolbar>
-
-          <ion-title>
-            Modificar monto
-          </ion-title>
-
-          <ion-buttons slot="end">
-
-            <ion-button
-              fill="clear"
-              (click)="closeModal()">
-
-              <ion-icon name="close-outline">
-              </ion-icon>
-
-            </ion-button>
-
-          </ion-buttons>
-
-        </ion-toolbar>
-
-      </ion-header>
-
-      <ion-content>
-
-        <div class="modal-content">
+    title="Modificar monto"
+    description="Actualiza el monto mostrado en tu resumen."
+    primaryText="Guardar"
+    size="sm"
+    (closed)="closeModal()"
+    (primary)="updateAmount()">
+      <div class="modal-content">
 
           <ion-item class="fv-input">
 
@@ -274,23 +248,8 @@
 
           </ion-item>
 
-          <ion-button
-            expand="block"
-            shape="round"
-            class="fv-button-primary"
-            (click)="updateAmount()">
-
-            Guardar
-
-          </ion-button>
-
-        </div>
-
-      </ion-content>
-
-    </ng-template>
-
-  </ion-modal>
+      </div>
+  </app-base-modal>
 
   <app-floating-action-button
     ariaLabel="Crear transacción"

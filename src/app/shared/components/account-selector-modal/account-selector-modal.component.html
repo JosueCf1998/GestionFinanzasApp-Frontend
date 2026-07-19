@@ -1,177 +1,43 @@
-<ion-modal
+<app-base-modal
   [isOpen]="isOpen"
-  (didDismiss)="closeModal()"
-  [cssClass]="getModalClass()"
-  [backdropDismiss]="false">
-
-  <ng-template>
-
-    <div class="fv-selection-modal">
-
-      <!-- ==========================================================
-           HEADER
-           ========================================================== -->
-
-      <div class="fv-selection-header">
-
-        <div class="fv-selection-text">
-
-          <h2>
-
-            {{ selectionMode === AccountSelectionMode.SINGLE ? 'Seleccionar cuenta' : 'Seleccionar cuentas' }}
-
-          </h2>
-
-          <p>
-
-            {{ selectionMode === AccountSelectionMode.SINGLE ? 'Elige la cuenta que deseas utilizar.' : 'Selecciona una o varias cuentas para filtrar.' }}
-
-          </p>
-
-        </div>
-
-        <button
-          type="button"
-          class="fv-close-button"
-          (click)="closeModal()"
-          aria-label="Cerrar">
-
-          <ion-icon
-            src="assets/icon/cross.svg">
-
-          </ion-icon>
-
-        </button>
-
+  [title]="selectionMode === AccountSelectionMode.SINGLE ? 'Seleccionar cuenta' : 'Seleccionar cuentas'"
+  [description]="selectionMode === AccountSelectionMode.SINGLE ? 'Elige la cuenta que deseas utilizar.' : 'Selecciona una o varias cuentas para filtrar.'"
+  [primaryText]="selectionMode === AccountSelectionMode.MULTIPLE ? 'Aplicar' : ''"
+  [primaryDisabled]="!canConfirmSelection"
+  size="lg"
+  (closed)="closeModal()"
+  (primary)="confirmSelection()">
+  <div class="fv-account-list">
+    <button
+      *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
+      type="button"
+      class="fv-account-item fv-all-account"
+      [class.selected]="selectAll"
+      (click)="toggleSelectAll()">
+      <app-item-icon icon="wallet" color="var(--fv-primary)" [selected]="selectAll"></app-item-icon>
+      <div class="fv-account-content" [class.selected]="selectAll">
+        <span class="fv-account-name">Todas las cuentas</span>
+        <span class="fv-account-balance">Mostrar todas las cuentas</span>
       </div>
-
-      <!-- ==========================================================
-           BODY
-           ========================================================== -->
-
-      <div class="fv-selection-body">
-
-        <div class="fv-account-list">
-
-          <button
-            *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
-            type="button"
-            class="fv-account-item fv-all-account"
-            [class.selected]="selectAll"
-            (click)="toggleSelectAll()">
-
-            <app-item-icon
-              icon="wallet"
-              color="var(--fv-primary)"
-              [selected]="selectAll">
-
-            </app-item-icon>
-
-            <div
-              class="fv-account-content"
-              [class.selected]="selectAll">
-
-              <span class="fv-account-name">
-
-                Todas las cuentas
-
-              </span>
-
-              <span class="fv-account-balance">
-
-                Mostrar todas las cuentas
-
-              </span>
-
-            </div>
-
-            <div
-              class="fv-account-status"
-              [class.selected]="selectAll">
-
-              <ion-icon
-                *ngIf="selectAll"
-                class="fv-check-icon"
-                name="checkmark">
-
-              </ion-icon>
-
-            </div>
-
-          </button>
-
-          <button
-            *ngFor="let account of accounts"
-            type="button"
-            class="fv-account-item"
-            [class.selected]="isSelected(account)"
-            (click)="selectAccount(account)">
-
-            <app-item-icon
-              [icon]="account.icon"
-              [color]="account.color"
-              [selected]="isSelected(account)">
-            </app-item-icon>
-
-            <div
-              class="fv-account-content"
-              [class.selected]="isSelected(account)">
-
-              <span class="fv-account-name">
-
-                {{ account.name }}
-
-              </span>
-
-              <span class="fv-account-balance">
-
-                S/. {{ +account.amount | number:'1.2-2' }}
-
-              </span>
-
-            </div>
-
-            <div
-              class="fv-account-status"
-              [class.selected]="isSelected(account)">
-
-              <ion-icon
-                *ngIf="isSelected(account)"
-                class="fv-check-icon"
-                name="checkmark">
-
-              </ion-icon>
-
-            </div>
-
-          </button>
-
-        </div>
-
+      <div class="fv-account-status" [class.selected]="selectAll">
+        <ion-icon *ngIf="selectAll" class="fv-check-icon" name="checkmark"></ion-icon>
       </div>
+    </button>
 
-      <!-- ==========================================================
-           FOOTER
-           ========================================================== -->
-
-      <div
-        *ngIf="selectionMode === AccountSelectionMode.MULTIPLE"
-        class="fv-selection-footer">
-
-        <div class="fv-selection-actions">
-
-          <app-button
-            text="Aplicar"
-            [disabled]="!canConfirmSelection"
-            (clicked)="confirmSelection()">
-          </app-button>
-
-        </div>
-
+    <button
+      *ngFor="let account of accounts"
+      type="button"
+      class="fv-account-item"
+      [class.selected]="isSelected(account)"
+      (click)="selectAccount(account)">
+      <app-item-icon [icon]="account.icon" [color]="account.color" [selected]="isSelected(account)"></app-item-icon>
+      <div class="fv-account-content" [class.selected]="isSelected(account)">
+        <span class="fv-account-name">{{ account.name }}</span>
+        <span class="fv-account-balance">S/. {{ +account.amount | number:'1.2-2' }}</span>
       </div>
-
-    </div>
-
-  </ng-template>
-
-</ion-modal>
+      <div class="fv-account-status" [class.selected]="isSelected(account)">
+        <ion-icon *ngIf="isSelected(account)" class="fv-check-icon" name="checkmark"></ion-icon>
+      </div>
+    </button>
+  </div>
+</app-base-modal>

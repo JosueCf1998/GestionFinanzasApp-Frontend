@@ -1,37 +1,16 @@
-<ion-modal
-  [cssClass]="modalCssClass"
+<app-base-modal
   [isOpen]="isOpen"
-  [backdropDismiss]="false"
-  (didDismiss)="close()">
-  <ng-template>
-    <section class="filter-modal__panel" role="dialog" [attr.aria-label]="title">
-      <header class="filter-modal__header">
-        <div class="filter-modal__heading">
-          <span *ngIf="eyebrow">{{ eyebrow }}</span>
-          <h2>{{ title }}</h2>
-          <p *ngIf="description">{{ description }}</p>
-        </div>
-
-        <button type="button" class="filter-modal__close" aria-label="Cerrar filtros" (click)="close()">
-          <ion-icon src="assets/icon/cross.svg"></ion-icon>
-        </button>
-      </header>
-
-      <div class="filter-modal__body">
-        <app-period-picker
-          [period]="selectedPeriod"
-          [periodValue]="selectedPeriodValue"
-          [startDate]="selectedStartDate"
-          [endDate]="selectedEndDate"
-          (valueChange)="updatePeriod($event)">
-        </app-period-picker>
-      </div>
-
-      <footer class="filter-modal__footer">
-        <button type="button" class="filter-modal__apply" [disabled]="!isDateRangeValid" (click)="apply()">
-          {{ applyText }}
-        </button>
-      </footer>
-    </section>
-  </ng-template>
-</ion-modal>
+  [title]="title"
+  [description]="description"
+  [primaryText]="applyText"
+  [primaryDisabled]="!isDateRangeValid"
+  (closed)="close()"
+  (primary)="apply()">
+  <app-period-picker
+    [period]="selectedPeriod"
+    [periodValue]="selectedPeriodValue"
+    [startDate]="selectedStartDate"
+    [endDate]="selectedEndDate"
+    (valueChange)="updatePeriod($event)">
+  </app-period-picker>
+</app-base-modal>

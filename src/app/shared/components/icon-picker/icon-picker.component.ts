@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { IonIcon, IonModal } from '@ionic/angular/standalone';
+import { BaseModalComponent } from '../base-modal/base-modal.component';
 import { ItemIconComponent } from '../item-icon/item-icon.component';
 
 export interface IconPickerOption {
@@ -13,7 +13,7 @@ export interface IconPickerOption {
   templateUrl: './icon-picker.component.html',
   styleUrls: ['./icon-picker.component.scss'],
   standalone: true,
-  imports: [CommonModule, ItemIconComponent, IonIcon, IonModal],
+  imports: [CommonModule, ItemIconComponent, BaseModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconPickerComponent {
@@ -25,16 +25,33 @@ export class IconPickerComponent {
   @Output() readonly selectedChange = new EventEmitter<string>();
 
   isModalOpen = false;
+  private promotedIcons: string[] = [];
 
-  get orderedOptions(): readonly IconPickerOption[] {
-    const selectedOption = this.options.find(option => option.archivo === this.selected);
-    if (!selectedOption) return this.options;
-    return [selectedOption, ...this.options.filter(option => option.archivo !== this.selected)];
+  get quickOptions(): readonly IconPickerOption[] {
+    const availableIcons = new Set(this.options.map(option => option.archivo));
+    this.promotedIcons = this.promotedIcons.filter(icon => availableIcons.has(icon));
+
+    const promotedOptions = this.promotedIcons
+      .map(icon => this.options.find(option => option.archivo === icon))
+      .filter((option): option is IconPickerOption => Boolean(option));
+    const promotedSet = new Set(this.promotedIcons);
+    const orderedOptions = [
+      ...promotedOptions,
+      ...this.options.filter(option => !promotedSet.has(option.archivo))
+    ];
+
+    return orderedOptions.slice(0, this.visibleCount);
   }
 
-  select(option: IconPickerOption): void {
+  select(option: IconPickerOption, fromModal = false): void {
+    if (fromModal && !this.quickOptions.some(item => item.archivo === option.archivo)) {
+      this.promotedIcons = [
+        option.archivo,
+        ...this.promotedIcons.filter(icon => icon !== option.archivo)
+      ].slice(0, this.visibleCount);
+    }
     this.selectedChange.emit(option.archivo);
-    this.closeModal();
+    if (fromModal) this.closeModal();
   }
 
   openModal(): void {

@@ -2,7 +2,6 @@
   --create-primary: var(--fv-primary, #4318b8);
   --create-accent: #5267f7;
   --create-background: #f7f8fc;
-  --create-border: #e9ebf4;
 }
 
 .create-budget-page {
@@ -74,104 +73,68 @@
   }
 }
 
-.field-card {
-  border: 1px solid var(--create-border);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 7px 22px rgba(34, 39, 76, 0.055);
-}
-
-.field-card {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 16px;
-}
-
-.field-card__icon {
-  display: grid;
-  flex: 0 0 auto;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #f0eaff, #f1f3ff);
-  color: var(--create-primary);
-  place-items: center;
-}
-
-.field-card__icon {
-  width: 38px;
-  height: 38px;
-
-  ion-icon {
-    width: 20px;
-    height: 20px;
-  }
-}
-
-.field-card__content {
-  min-width: 0;
-  flex: 1;
-
-  > label {
-    display: block;
-    margin-bottom: 2px;
-    color: #46506a;
-    font-size: 11px;
-    font-weight: 700;
-  }
-}
-
 .clean-input {
   --background: transparent;
   --padding-bottom: 0;
   --padding-start: 0;
   --padding-top: 0;
 
-  min-height: 28px;
+  min-height: 32px;
   color: var(--fv-text-primary);
   font-size: 14px;
   font-weight: 600;
 }
 
-.field-card--amount {
-  align-items: flex-start;
-}
-
-.field-card--amount .field-card__icon {
-  margin-top: 8px;
-}
-
-.field-card--amount app-amount-input {
+.amount-card app-amount-input {
   display: block;
-  margin-top: 5px;
 }
 
 .period-summary {
   display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 58px;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 10px 11px 10px 13px;
   border: 1px solid #eceefa;
   border-radius: 12px;
   background: #f8f8fd;
+  font: inherit;
+  text-align: left;
 
-  span {
+  &:active {
+    transform: scale(.99);
+  }
+
+  &__content {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  &__content > span {
     color: var(--create-primary);
     font-size: 11px;
     font-weight: 750;
   }
 
-  strong {
+  &__content > strong {
+    overflow: hidden;
     color: #5f687c;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
-    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-}
 
-:host ::ng-deep .period-card app-custom-segment {
-  margin-bottom: 7px;
+  > ion-icon {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    color: var(--create-primary);
+  }
 }
 
 .color-picker {

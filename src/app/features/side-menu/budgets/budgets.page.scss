@@ -155,63 +155,6 @@ app-custom-segment {
   }
 }
 
-.filter-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-  padding: 0 2px;
-
-  span {
-    color: var(--fv-text-secondary);
-    font-size: var(--fv-type-caption-1);
-    font-weight: var(--fv-fw-bold);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-}
-
-:host ::ng-deep .budget-period-tabs.custom-segment {
-  min-height: 44px;
-  padding: 3px;
-  border: 1px solid rgba(67, 97, 238, 0.06);
-  border-radius: 14px;
-  background: #f1f3f9;
-  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.045);
-}
-
-:host ::ng-deep .budget-period-tabs .custom-segment-btn {
-  height: 36px;
-  border-radius: 12px;
-  font-size: var(--fv-type-caption-1);
-  letter-spacing: -0.15px;
-}
-
-:host ::ng-deep .budget-period-tabs .custom-segment-btn:last-child {
-  flex: 1.25;
-}
-
-.period-card {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  min-height: 56px;
-  margin: 0;
-  padding: 10px 8px 12px;
-  border: 0;
-  border-bottom: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  text-align: left;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-
-  &:active {
-    transform: scale(0.985);
-  }
-}
-
 .summary-section-heading {
   display: flex;
   align-items: center;
@@ -233,107 +176,6 @@ app-custom-segment {
     flex: 1;
     background: linear-gradient(90deg, rgba(67, 97, 238, 0.18), transparent);
     content: '';
-  }
-}
-
-.period-card__icon {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
-  margin-right: 11px;
-  border-radius: 11px;
-  background: var(--fv-surface-soft);
-  color: var(--list-primary);
-  place-items: center;
-
-  ion-icon {
-    width: 19px;
-    height: 19px;
-  }
-}
-
-.period-card__content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-  gap: 2px;
-
-  small {
-    color: var(--fv-text-secondary);
-    font-size: var(--fv-type-caption-1);
-  }
-
-  strong {
-    color: var(--fv-text-primary);
-    font-size: var(--fv-type-footnote);
-    font-weight: var(--fv-fw-bold);
-  }
-}
-
-.period-card__action {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  flex: 0 0 auto;
-  color: var(--list-primary-dark);
-  font-size: var(--fv-type-caption-1);
-  font-weight: var(--fv-fw-semibold);
-
-  ion-icon {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-.currency-filter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 10px;
-  padding: 10px 8px 0;
-  border-top: 1px solid var(--list-border);
-}
-
-.currency-filter__label {
-  color: var(--fv-text-secondary);
-  font-size: var(--fv-type-caption-1);
-  font-weight: var(--fv-fw-semibold);
-}
-
-.currency-filter__options {
-  display: inline-flex;
-  gap: 4px;
-  padding: 3px;
-  border-radius: 12px;
-  background: #eef1f7;
-
-  button {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    min-height: 34px;
-    padding: 6px 11px;
-    border: 0;
-    border-radius: 9px;
-    background: transparent;
-    color: var(--fv-text-secondary);
-    font-size: var(--fv-type-caption-1);
-    font-weight: var(--fv-fw-semibold);
-    transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
-
-    span {
-      font-size: var(--fv-type-footnote);
-      font-weight: var(--fv-fw-bold);
-    }
-
-    &.selected {
-      background: var(--list-surface);
-      color: var(--list-primary-dark);
-      box-shadow: 0 3px 10px rgba(30, 41, 59, 0.08);
-    }
   }
 }
 
@@ -584,10 +426,6 @@ app-custom-segment {
   .budgets-container {
     padding-right: 14px;
     padding-left: 14px;
-  }
-
-  :host ::ng-deep .budget-period-tabs .custom-segment-btn {
-    font-size: var(--fv-type-caption-2);
   }
 
   .summary-card {

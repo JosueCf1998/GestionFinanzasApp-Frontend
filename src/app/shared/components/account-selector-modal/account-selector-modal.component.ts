@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { ButtonComponent } from '../button/button.component';
+import { IonIcon } from '@ionic/angular/standalone';
 import { ItemIconComponent } from "../item-icon/item-icon.component";
 import { Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
+import { BaseModalComponent } from '../base-modal/base-modal.component';
 
 /* ==========================================================
    ENUMS
@@ -25,9 +25,9 @@ export enum AccountSelectionMode {
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
-    ButtonComponent,
-    ItemIconComponent
+    IonIcon,
+    ItemIconComponent,
+    BaseModalComponent
 ]
 })
 export class AccountSelectorModalComponent implements OnChanges {
@@ -87,19 +87,6 @@ export class AccountSelectorModalComponent implements OnChanges {
   /* ==========================================================
      PUBLIC
      ========================================================== */
-
-  getModalClass(): string {
-    switch (this.accounts.length) {
-      case 1:
-        return 'custom-modal modal-small';
-      case 2:
-        return 'custom-modal modal-medium';
-      case 3:
-        return 'custom-modal modal-large';
-      default:
-        return 'custom-modal modal-xlarge';
-    }
-  }
 
   closeModal(): void {
     this.modalClosed.emit();

@@ -16,6 +16,7 @@ import { LocalManagementService } from 'src/app/core/services/localManagementSer
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
+import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ import { FloatingActionButtonComponent } from 'src/app/shared/components/floatin
     HttpClientModule,
     CustomSegmentComponent,
     ItemIconComponent,
-    FloatingActionButtonComponent
+    FloatingActionButtonComponent,
+    BaseModalComponent
   ],
 })
 export class HomePage {

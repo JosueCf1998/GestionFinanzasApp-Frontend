@@ -26,57 +26,49 @@
       <span>{{ periodLabel }} · {{ formattedDateRange }}</span>
     </section>
 
-    <section class="field-card">
-      <div class="field-card__icon">
-        <ion-icon src="assets/icon/budget-wallet.svg"></ion-icon>
-      </div>
-      <div class="field-card__content">
-        <label for="budget-name">Nombre del presupuesto</label>
-        <ion-input
-          id="budget-name"
-          class="clean-input"
-          type="text"
-          name="name"
-          maxlength="40"
-          autocomplete="off"
-          placeholder="Ej. Vacaciones en familia"
-          [(ngModel)]="name"
-          required>
-        </ion-input>
-      </div>
-    </section>
+    <app-section-card
+      class="name-card"
+      title="Nombre del presupuesto">
+      <ion-input
+        id="budget-name"
+        class="clean-input"
+        type="text"
+        name="name"
+        maxlength="40"
+        autocomplete="off"
+        aria-label="Nombre del presupuesto"
+        placeholder="Ej. Vacaciones en familia"
+        [(ngModel)]="name"
+        required>
+      </ion-input>
+    </app-section-card>
 
-    <section class="field-card field-card--amount">
-      <div class="field-card__icon">
-        <ion-icon src="assets/icon/wallet.svg"></ion-icon>
-      </div>
-      <div class="field-card__content">
-        <label>Presupuesto total</label>
-        <app-amount-input
-          [(ngModel)]="amount"
-          name="amount"
-          currencyCode="PEN"
-          variant="enhanced"
-          [required]="true">
-        </app-amount-input>
-      </div>
-    </section>
+    <app-section-card
+      class="amount-card"
+      title="Presupuesto total">
+      <app-amount-input
+        [(ngModel)]="amount"
+        name="amount"
+        currencyCode="PEN"
+        variant="enhanced"
+        [required]="true">
+      </app-amount-input>
+    </app-section-card>
 
     <app-section-card
       class="period-card"
       title="Periodo del presupuesto">
-      <div class="period-summary">
-        <span>{{ periodLabel }}</span>
-        <strong>{{ formattedDateRange }}</strong>
-      </div>
-
-      <app-period-picker
-        [period]="periodSelection.period"
-        [periodValue]="periodSelection.periodValue"
-        [startDate]="periodSelection.startDate"
-        [endDate]="periodSelection.endDate"
-        (valueChange)="updatePeriod($event)">
-      </app-period-picker>
+      <button
+        type="button"
+        class="period-summary"
+        aria-label="Cambiar periodo del presupuesto"
+        (click)="openPeriodModal()">
+        <span class="period-summary__content">
+          <span>{{ periodLabel }}</span>
+          <strong>{{ formattedDateRange }}</strong>
+        </span>
+        <ion-icon src="assets/icon/right-inline.svg" aria-hidden="true"></ion-icon>
+      </button>
     </app-section-card>
 
     <app-section-card
@@ -113,6 +105,19 @@
     </div>
   </form>
 </ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodModalOpen"
+  title="Selecciona un periodo"
+  description="Define durante cuánto tiempo se controlará este presupuesto."
+  applyText="Aplicar periodo"
+  [selectedPeriod]="periodSelection.period"
+  [selectedPeriodValue]="periodSelection.periodValue"
+  [selectedStartDate]="periodSelection.startDate"
+  [selectedEndDate]="periodSelection.endDate"
+  (modalClosed)="closePeriodModal()"
+  (filtersApplied)="applyPeriod($event)">
+</app-filter-modal>
 
 <app-custom-alert
   *ngIf="showUnsavedAlert"

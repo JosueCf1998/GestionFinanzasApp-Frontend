@@ -1,24 +1,15 @@
 :host { display: block; }
 .icon-picker { display: grid; gap: 10px; }
 .icon-picker__row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: center; gap: 8px; padding: 2px 0; }
-.icon-picker__button { display: grid; width: 100%; min-height: 46px; padding: 2px; border: 1px solid transparent; border-radius: 14px; background: transparent; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; place-items: center; }
+.icon-picker__button { display: grid; box-sizing: border-box; width: calc(100% - 4px); min-height: 42px; margin: 2px; padding: 1px; border: 0; border-radius: 12px; background: transparent; transition: transform .16s ease, box-shadow .16s ease; place-items: center; }
 .icon-picker__button:active { transform: scale(.94); }
-.icon-picker__button.selected { border-color: #7458ef; background: #fff; box-shadow: 0 0 0 2px rgba(116,88,239,.08), 0 4px 12px rgba(67,24,184,.09); }
+.icon-picker__button.selected { background: transparent; }
 :host ::ng-deep .icon-picker__button .fv-item-icon--md { width: clamp(36px,10vw,42px); height: clamp(36px,10vw,42px); border-radius: 12px; }
+:host ::ng-deep .icon-picker__button.selected .fv-item-icon--md { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #6847ef, 0 4px 10px rgba(67,24,184,.08); }
 :host ::ng-deep .icon-picker__button .fv-item-icon__glyph { width: clamp(16px,4.5vw,19px); height: clamp(16px,4.5vw,19px); }
 .icon-picker__more { display: grid; width: 100%; min-height: 36px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: #7a8295; aspect-ratio: 1; place-items: center; }
 .icon-picker__more span { font-size: 24px; font-weight: 800; line-height: .7; transform: translateY(-2px); }
 .icon-picker__more.active { color: var(--fv-primary); }
-.picker-modal { --width: calc(100% - 36px); --max-width: 420px; --height: auto; --max-height: min(680px, calc(100vh - 48px)); --background: transparent; --border-radius: 22px; --box-shadow: none; }
-.picker-modal::part(content) { position: relative; contain: content; }
-.picker-modal__panel { display: flex; width: 100%; max-height: min(680px, calc(100vh - 48px)); overflow: hidden; border: 1px solid rgba(67,97,238,.08); border-radius: 22px; background: var(--fv-surface, #fff); box-shadow: 0 26px 70px rgba(23,16,58,.22); flex-direction: column; animation: picker-modal-enter .22s ease-out; }
-.picker-modal__header { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex: 0 0 auto; padding: 14px 20px; border-bottom: 1px solid #edf0f7; }
-.picker-modal__header span { color: var(--fv-primary); font-size: 10px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
-.picker-modal__header h2 { margin: 3px 0 0; color: var(--fv-text-primary); font-size: 19px; font-weight: 750; }
-.picker-modal__header button { display: grid; width: 38px; height: 38px; flex: 0 0 38px; padding: 0; border: 1px solid #edf0f7; border-radius: 12px; background: #f7f8fc; color: var(--fv-primary); place-items: center; }
-.picker-modal__grid { display: grid; min-height: 0; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; padding: 16px 18px 18px; overflow-y: auto; overscroll-behavior: contain; }
-.picker-modal__option { display: flex; min-width: 0; padding: 11px 7px; border: 1px solid #eceef5; border-radius: 14px; background: #fafbfe; flex-direction: column; align-items: center; gap: 7px; color: #596276; }
-.picker-modal__option > span { width: 100%; overflow: hidden; font-size: 10px; font-weight: 650; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
-.picker-modal__option.selected { border-color: #7458ef; background: #f6f3ff; color: var(--fv-primary); }
-@keyframes picker-modal-enter { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@media (max-width: 380px) { .picker-modal { --width: calc(100% - 24px); } .picker-modal__header { padding: 14px 16px; } .picker-modal__grid { padding: 14px; } }
+.picker-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 9px; }
+.picker-option { display: grid; min-width: 0; padding: 6px; border: 1px solid #eceef5; border-radius: 14px; background: #fafbfe; aspect-ratio: 1; color: #596276; place-items: center; }
+.picker-option.selected { border-color: #7458ef; background: #f6f3ff; color: var(--fv-primary); }
