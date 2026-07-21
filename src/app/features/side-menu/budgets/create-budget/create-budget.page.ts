@@ -8,14 +8,23 @@ import {
 } from 'src/app/core/use-cases/budgets/create-budget.usecase';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
-import { AmountInputComponent } from 'src/app/shared/components/amount-input/amount-input.component';
 import { TextFieldComponent } from 'src/app/shared/components/text-field/text-field.component';
 import {
   AccountSelectionMode,
   AccountSelectorModalComponent
 } from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
-import { CategorySelectorModalComponent } from 'src/app/shared/components/category-selector-modal/category-selector-modal.component';
-import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
+import {
+  CategoryBudgetAllocation,
+  CategorySelectorModalComponent
+} from 'src/app/shared/components/category-selector-modal/category-selector-modal.component';
+import {
+  PersonalizationModalComponent,
+  PersonalizationValue
+} from 'src/app/shared/components/personalization-modal/personalization-modal.component';
+import {
+  SelectionSummaryComponent,
+  SelectionSummaryItem
+} from 'src/app/shared/components/selection-summary/selection-summary.component';
 import { Accounts, ListAccountsUseCase } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
 import {
   CategoryResponse,
@@ -23,11 +32,11 @@ import {
 } from 'src/app/core/use-cases/categories/list-categories.usecase';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
-import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { BudgetPreviewCardComponent } from 'src/app/shared/components/budget-preview-card/budget-preview-card.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
-import { IconPickerComponent } from 'src/app/shared/components/icon-picker/icon-picker.component';
-import { ColorPickerComponent } from 'src/app/shared/components/color-picker/color-picker.component';
+import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
+import { WarningMessageComponent } from 'src/app/shared/components/warning-message/warning-message.component';
 import {
   FilterModalComponent,
   FilterSelection
@@ -44,19 +53,19 @@ import 'src/app/core/utils/observable-extensions';
     CommonModule,
     FormsModule,
     IonicModule,
-    AmountInputComponent,
     TextFieldComponent,
     AccountSelectorModalComponent,
     CategorySelectorModalComponent,
-    BaseModalComponent,
+    PersonalizationModalComponent,
+    SelectionSummaryComponent,
     ButtonComponent,
     CustomAlertComponent,
-    ItemIconComponent,
+    BudgetPreviewCardComponent,
     PageLayoutComponent,
     FilterModalComponent,
     SectionCardComponent,
-    IconPickerComponent,
-    ColorPickerComponent
+    InfoBannerComponent,
+    WarningMessageComponent
   ]
 })
 export class CreateBudgetPage implements OnInit {
@@ -73,16 +82,14 @@ export class CreateBudgetPage implements OnInit {
   // MARK: - FORMULARIO Y DATOS
 
   name = '';
-  amount: number | null = null;
+  notes = '';
   selectedIcon = this.initialIcon;
   selectedColor = this.initialColor;
   periodSelection = { ...this.initialPeriod };
   accounts: Accounts[] = [];
   categories: CategoryResponse[] = [];
   selectedAccounts: Accounts[] = [];
-  selectedCategories: CategoryResponse[] = [];
-  draftIcon = this.initialIcon;
-  draftColor = this.initialColor;
+  selectedCategoryAllocations: CategoryBudgetAllocation[] = [];
 
   // MARK: - ESTADO
 
@@ -94,6 +101,7 @@ export class CreateBudgetPage implements OnInit {
   isPersonalizationModalOpen = false;
   isSaving = false;
   showDataError = false;
+  showAccountBalanceRequiredAlert = false;
 
   private pendingOptionRequests = 0;
 
@@ -111,157 +119,24 @@ export class CreateBudgetPage implements OnInit {
     this.loadSelectableData();
   }
 
-  // MARK: - VALIDACIÓN
-
-  get canSave(): boolean {
-    return !this.isSaving && Boolean(
-      this.name.trim() &&
-      this.amount !== null &&
-      Number.isFinite(this.amount) &&
-      this.amount > 0 &&
-      this.selectedIcon &&
-      this.selectedColor &&
-      this.selectedAccounts.length > 0 &&
-      this.selectedCategories.length > 0 &&
-      this.periodSelection.startDate &&
-      this.periodSelection.endDate &&
-      this.periodSelection.startDate <= this.periodSelection.endDate
-    );
-  }
-
-  get hasChanges(): boolean {
-    return Boolean(
-      this.name.trim() ||
-      (this.amount !== null && this.amount > 0) ||
-      this.selectedIcon !== this.initialIcon ||
-      this.selectedColor !== this.initialColor ||
-      this.selectedAccounts.length > 0 ||
-      this.selectedCategories.length > 0 ||
-      this.periodSelection.period !== this.initialPeriod.period ||
-      this.periodSelection.startDate !== this.initialPeriod.startDate ||
-      this.periodSelection.endDate !== this.initialPeriod.endDate
-    );
-  }
-
-  // MARK: - PRESENTACIÓN
-
-  get periodLabel(): string {
-    const labels: Record<FilterSelection['period'], string> = {
-      weekly: 'Semanal',
-      monthly: 'Mensual',
-      annual: 'Anual',
-      custom: 'Personalizado'
-    };
-    return labels[this.periodSelection.period];
-  }
-
-  get formattedDateRange(): string {
-    if (!this.periodSelection.startDate || !this.periodSelection.endDate) {
-      return 'Selecciona la vigencia';
-    }
-
-    const formatter = new Intl.DateTimeFormat('es-PE', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'UTC'
-    });
-    const start = new Date(`${this.periodSelection.startDate}T00:00:00Z`);
-    const end = new Date(`${this.periodSelection.endDate}T00:00:00Z`);
-    return `${formatter.format(start)} — ${formatter.format(end)}`;
-  }
-
-  get selectedAccountsLabel(): string {
-    return this.selectionLabel(this.selectedAccounts.map(account => account.name), 'Selecciona una o más cuentas');
-  }
-
-  get selectedAccountsTitle(): string {
-    const count = this.selectedAccounts.length;
-    if (count === 0) return 'Seleccionar cuentas';
-    return count === 1 ? '1 cuenta vinculada' : `${count} cuentas vinculadas`;
-  }
-
-  get selectedCategoriesLabel(): string {
-    return this.selectionLabel(this.selectedCategories.map(category => category.nombre), 'Selecciona una o más categorías');
-  }
-
-  get selectedCategoriesTitle(): string {
-    const count = this.selectedCategories.length;
-    if (count === 0) return 'Seleccionar categorías';
-    return count === 1 ? '1 categoría incluida' : `${count} categorías incluidas`;
-  }
-
-  // MARK: - MODALES
-
-  openAccountModal(): void {
-    this.isAccountModalOpen = true;
-  }
-
-  closeAccountModal(): void {
-    this.isAccountModalOpen = false;
-  }
-
-  applyAccounts(accounts: Accounts[]): void {
-    this.selectedAccounts = accounts;
-    this.closeAccountModal();
-  }
-
-  openCategoryModal(): void {
-    this.isCategoryModalOpen = true;
-  }
-
-  closeCategoryModal(): void {
-    this.isCategoryModalOpen = false;
-  }
-
-  applyCategories(categories: CategoryResponse[]): void {
-    this.selectedCategories = categories;
-    this.closeCategoryModal();
-  }
-
-  openPersonalizationModal(): void {
-    this.draftIcon = this.selectedIcon;
-    this.draftColor = this.selectedColor;
-    this.isPersonalizationModalOpen = true;
-  }
-
-  closePersonalizationModal(): void {
-    this.isPersonalizationModalOpen = false;
-  }
-
-  applyPersonalization(): void {
-    this.selectedIcon = this.draftIcon;
-    this.selectedColor = this.draftColor;
-    this.closePersonalizationModal();
-  }
-
-  openPeriodModal(): void {
-    this.isPeriodModalOpen = true;
-  }
-
-  closePeriodModal(): void {
-    this.isPeriodModalOpen = false;
-  }
-
-  applyPeriod(selection: FilterSelection): void {
-    this.periodSelection = selection;
-    this.closePeriodModal();
-  }
-
   // MARK: - SERVICIOS
 
   saveBudget(): void {
-    if (!this.canSave || this.amount === null) return;
+    if (!this.canSave) return;
 
     const request: CreateBudgetRequest = {
       name: this.name.trim(),
-      budgetAmount: Number(this.amount.toFixed(2)),
+      budgetAmount: Number(this.categoryAllocationTotal.toFixed(2)),
       startDate: this.periodSelection.startDate,
       endDate: this.periodSelection.endDate,
       icon: this.selectedIcon,
       color: this.selectedColor,
-      accountIds: this.selectedAccounts.map(account => account.id),
-      categoryIds: this.selectedCategories.map(category => category.id)
+      account_ids: this.selectedAccounts.map(account => account.id),
+      categories: this.selectedCategoryAllocations.map(item => ({
+        category_id: item.category.id,
+        amount: Number(item.amount.toFixed(2))
+      })),
+      notes: this.notes.trim()
     };
 
     console.log('Datos enviados para crear presupuesto:', request);
@@ -307,6 +182,205 @@ export class CreateBudgetPage implements OnInit {
         this.finishOptionRequest();
       }
     });
+  }
+
+  // MARK: - VALIDACIÓN
+
+  get canSave(): boolean {
+    return !this.isSaving && Boolean(
+      this.name.trim() &&
+      this.selectedIcon &&
+      this.selectedColor &&
+      this.selectedAccounts.length > 0 &&
+      this.selectedAccountBalanceTotal > 0 &&
+      this.selectedCategoryAllocations.length > 0 &&
+      this.selectedCategoryAllocations.every(item => item.amount > 0) &&
+      this.categoryAllocationTotal > 0 &&
+      this.periodSelection.startDate &&
+      this.periodSelection.endDate &&
+      this.periodSelection.startDate <= this.periodSelection.endDate
+    );
+  }
+
+  get hasChanges(): boolean {
+    return Boolean(
+      this.name.trim() ||
+      this.notes.trim() ||
+      this.selectedIcon !== this.initialIcon ||
+      this.selectedColor !== this.initialColor ||
+      this.selectedAccounts.length > 0 ||
+      this.selectedCategoryAllocations.length > 0 ||
+      this.periodSelection.period !== this.initialPeriod.period ||
+      this.periodSelection.startDate !== this.initialPeriod.startDate ||
+      this.periodSelection.endDate !== this.initialPeriod.endDate
+    );
+  }
+
+  // MARK: - PRESENTACIÓN
+
+  get periodLabel(): string {
+    const labels: Record<FilterSelection['period'], string> = {
+      weekly: 'Semanal',
+      monthly: 'Mensual',
+      annual: 'Anual',
+      custom: 'Personalizado'
+    };
+    return labels[this.periodSelection.period];
+  }
+
+  get formattedDateRange(): string {
+    if (!this.periodSelection.startDate || !this.periodSelection.endDate) {
+      return 'Selecciona la vigencia';
+    }
+
+    const formatter = new Intl.DateTimeFormat('es-PE', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC'
+    });
+    const start = new Date(`${this.periodSelection.startDate}T00:00:00Z`);
+    const end = new Date(`${this.periodSelection.endDate}T00:00:00Z`);
+    return `${formatter.format(start)} — ${formatter.format(end)}`;
+  }
+
+
+  get selectedAccountsLabel(): string {
+    return this.selectionLabel(this.selectedAccounts.map(account => account.name), 'Selecciona una o más cuentas');
+  }
+
+  get selectedAccountsTitle(): string {
+    const count = this.selectedAccounts.length;
+    if (count === 0) return 'Seleccionar cuentas';
+    return count === 1 ? '1 cuenta vinculada' : `${count} cuentas vinculadas`;
+  }
+
+  get accountSummaryItems(): SelectionSummaryItem[] {
+    return this.selectedAccounts.map(account => ({
+      id: account.id,
+      name: account.name,
+      icon: account.icon,
+      color: account.color
+    }));
+  }
+
+  get selectedCategoriesLabel(): string {
+    return this.selectionLabel(this.selectedCategories.map(category => category.nombre), 'Selecciona una o más categorías');
+  }
+
+  get selectedCategories(): CategoryResponse[] {
+    return this.selectedCategoryAllocations.map(item => item.category);
+  }
+
+  get categoryAllocationTotal(): number {
+    return this.selectedCategoryAllocations.reduce((total, item) => total + item.amount, 0);
+  }
+
+  get selectedAccountBalanceTotal(): number {
+    return this.selectedAccounts.reduce(
+      (total, account) => total + (Number(account.amount) || 0),
+      0
+    );
+  }
+
+  get hasInsufficientAccountBalance(): boolean {
+    return this.selectedAccounts.length > 0 &&
+      this.categoryAllocationTotal > this.selectedAccountBalanceTotal;
+  }
+
+  get accountBalanceWarningMessage(): string {
+    const difference = this.categoryAllocationTotal - this.selectedAccountBalanceTotal;
+    const formattedDifference = new Intl.NumberFormat('es-PE', {
+      style: 'currency',
+      currency: 'PEN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(Math.max(difference, 0));
+
+    return `Tu presupuesto supera el saldo actual de las cuentas vinculadas por ${formattedDifference}. Puedes continuar, pero revisa tu disponibilidad.`;
+  }
+
+  get budgetAdviceMessage(): string {
+    if (this.selectedCategoryAllocations.length === 0) {
+      return 'Asigna un monto a cada categoría. La suma se calculará automáticamente como tu presupuesto total.';
+    }
+
+    return 'El presupuesto total se calcula con los montos de tus categorías y se controlará durante el periodo seleccionado.';
+  }
+
+  get selectedCategoriesTitle(): string {
+    const count = this.selectedCategories.length;
+    if (count === 0) return 'Seleccionar categorías';
+    return count === 1 ? '1 categoría incluida' : `${count} categorías incluidas`;
+  }
+
+  get categorySummaryItems(): SelectionSummaryItem[] {
+    return this.selectedCategories.map(category => ({
+      id: category.id,
+      name: category.nombre,
+      icon: category.icono,
+      color: category.color
+    }));
+  }
+
+  // MARK: - MODALES
+
+  openAccountModal(): void {
+    this.isAccountModalOpen = true;
+  }
+
+  closeAccountModal(): void {
+    this.isAccountModalOpen = false;
+  }
+
+  applyAccounts(accounts: Accounts[]): void {
+    this.selectedAccounts = accounts;
+    this.closeAccountModal();
+  }
+
+  openCategoryModal(): void {
+    if (this.selectedAccounts.length === 0 || this.selectedAccountBalanceTotal <= 0) {
+      this.showAccountBalanceRequiredAlert = true;
+      return;
+    }
+
+    this.isCategoryModalOpen = true;
+  }
+
+  closeCategoryModal(): void {
+    this.isCategoryModalOpen = false;
+  }
+
+  applyCategoryAllocations(allocations: CategoryBudgetAllocation[]): void {
+    this.selectedCategoryAllocations = allocations;
+    this.closeCategoryModal();
+  }
+
+  openPersonalizationModal(): void {
+    this.isPersonalizationModalOpen = true;
+  }
+
+  closePersonalizationModal(): void {
+    this.isPersonalizationModalOpen = false;
+  }
+
+  applyPersonalization(value: PersonalizationValue): void {
+    this.selectedIcon = value.icon;
+    this.selectedColor = value.color;
+    this.closePersonalizationModal();
+  }
+
+  openPeriodModal(): void {
+    this.isPeriodModalOpen = true;
+  }
+
+  closePeriodModal(): void {
+    this.isPeriodModalOpen = false;
+  }
+
+  applyPeriod(selection: FilterSelection): void {
+    this.periodSelection = selection;
+    this.closePeriodModal();
   }
 
   // MARK: - NAVEGACIÓN
@@ -355,4 +429,5 @@ export class CreateBudgetPage implements OnInit {
     if (names.length <= 2) return names.join(', ');
     return `${names.slice(0, 2).join(', ')} y ${names.length - 2} más`;
   }
+
 }

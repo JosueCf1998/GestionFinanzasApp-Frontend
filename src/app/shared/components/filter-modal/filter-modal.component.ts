@@ -6,7 +6,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
-import { BudgetPeriod } from 'src/app/core/models/budgets/list-budgets.model';
+import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { BaseModalComponent } from '../base-modal/base-modal.component';
 import {
   PeriodPickerComponent,
@@ -27,7 +27,7 @@ export class FilterModalComponent implements OnChanges {
   @Input() title = 'Filtros';
   @Input() description = 'Ajusta la información que deseas consultar.';
   @Input() applyText = 'Aplicar filtros';
-  @Input() selectedPeriod: BudgetPeriod = 'monthly';
+  @Input() selectedPeriod: PeriodPreset = 'monthly';
   @Input() selectedPeriodValue = '';
   @Input() selectedStartDate = '';
   @Input() selectedEndDate = '';

@@ -1,0 +1,119 @@
+:host {
+  display: contents;
+}
+
+main {
+  display: grid;
+  min-height: 0;
+  gap: 14px;
+}
+
+main > header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border: 1px solid #ebeef5;
+  border-radius: 16px;
+  background: #fafbfe;
+}
+
+header > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+header strong {
+  color: var(--fv-text-primary, #252b38);
+  font-size: 13px;
+}
+
+header span {
+  color: var(--fv-text-secondary, #667085);
+  font-size: 11px;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: #f0f2f8;
+}
+
+nav button {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: #667085;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+nav button.active {
+  background: linear-gradient(135deg, #3a0ca3, #4361ee);
+  box-shadow: 0 5px 12px rgba(58, 12, 163, .16);
+  color: #fff;
+}
+
+section[role='tabpanel'] {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-content: start;
+  gap: 9px;
+  overflow-y: auto;
+  max-height: min(290px, calc(82dvh - 300px));
+  overscroll-behavior: contain;
+  padding: 2px 3px 6px 2px;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+section[role='tabpanel']::-webkit-scrollbar {
+  width: 4px;
+}
+
+section[role='tabpanel']::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(67, 24, 184, .18);
+}
+
+section[role='tabpanel'] > button {
+  display: grid;
+  min-width: 0;
+  padding: 6px;
+  border: 1px solid #eceef5;
+  border-radius: 14px;
+  background: #fafbfe;
+  aspect-ratio: 1;
+  place-items: center;
+}
+
+section[role='tabpanel'] > button.selected {
+  border-color: #7458ef;
+  background: #f6f3ff;
+  box-shadow: 0 0 0 2px rgba(116, 88, 239, .08);
+}
+
+section[data-picker='color'] button > span {
+  width: clamp(28px, 8vw, 36px);
+  height: clamp(28px, 8vw, 36px);
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(31, 37, 76, .12);
+}
+
+@media (max-width: 360px) {
+  section[role='tabpanel'] {
+    gap: 7px;
+  }
+
+  section[role='tabpanel'] > button {
+    padding: 4px;
+  }
+}

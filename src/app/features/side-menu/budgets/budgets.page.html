@@ -86,7 +86,9 @@
         </app-budget-list-item>
       </div>
 
-      <div *ngIf="!isLoading && budgets.length === 0" class="budget-empty-state">
+      <div
+        *ngIf="(loadingService.loading$ | async) === false && budgets.length === 0"
+        class="budget-empty-state">
         <app-item-icon
           icon="wallet"
           color="var(--fv-primary)"

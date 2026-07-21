@@ -5,12 +5,13 @@ import { Subscription } from 'rxjs';
 import 'src/app/core/utils/observable-extensions';
 import {
   BudgetListItem,
-  BudgetPeriod,
+  PeriodPreset,
   BudgetSummary,
   ListBudgetsRequest,
   ListBudgetsResponse
 } from 'src/app/core/models/budgets/list-budgets.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { ListBudgetsUseCase } from 'src/app/core/use-cases/budgets/list-budgets.usecase';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import {
@@ -43,12 +44,11 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 export class BudgetsPage implements OnInit, OnDestroy {
   private budgetRequest?: Subscription;
 
-  selectedPeriod: BudgetPeriod = 'monthly';
+  selectedPeriod: PeriodPreset = 'monthly';
   selectedPeriodValue = this.getCurrentMonth();
   selectedStartDate = this.getFirstDayOfCurrentMonth();
   selectedEndDate = this.getLastDayOfCurrentMonth();
   isPeriodSelectorOpen = false;
-  isLoading = false;
 
   readonly currency: Currency = CURRENCIES.PEN;
   budgets: BudgetListItem[] = [];
@@ -61,8 +61,11 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
   constructor(
     private readonly navService: NavigationService,
-    private readonly listBudgetsUseCase: ListBudgetsUseCase
+    private readonly listBudgetsUseCase: ListBudgetsUseCase,
+    public readonly loadingService: SpinnerService
   ) {}
+
+  // MARK: - CICLO DE VIDA
 
   ngOnInit(): void {
     this.loadBudgets();
@@ -70,7 +73,46 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.budgetRequest?.unsubscribe();
+    this.loadingService.hide();
   }
+
+  // MARK: - SERVICIOS
+
+  private loadBudgets(): void {
+    const request = this.buildRequest();
+
+    if (!request) {
+      this.clearBudgetData();
+      return;
+    }
+
+    this.budgetRequest?.unsubscribe();
+    this.loadingService.show();
+    console.log('Datos enviados al servicio de presupuestos:', request);
+
+    this.budgetRequest = this.listBudgetsUseCase
+      .execute(request)
+      .service({
+        success: data => {
+          this.loadingService.hide();
+          console.log('Datos recibidos del servicio de presupuestos:', data);
+
+          if (data) {
+            this.setBudgetResponse(data);
+            return;
+          }
+
+          this.clearBudgetData();
+        },
+        failure: error => {
+          this.loadingService.hide();
+          console.error('Error del servicio de presupuestos:', error);
+          this.clearBudgetData();
+        }
+      });
+  }
+
+  // MARK: - PRESENTACIÓN
 
   get selectedPeriodLabel(): string {
     return {
@@ -120,8 +162,6 @@ export class BudgetsPage implements OnInit, OnDestroy {
   openBudget(budget: BudgetListItem): void {
     this.navService.forward('/budgets/detail', {
       budgetId: budget.id,
-      frequency: this.selectedPeriod,
-      period: this.selectedDate,
       currency: this.currency.code
     });
   }
@@ -134,54 +174,18 @@ export class BudgetsPage implements OnInit, OnDestroy {
     return budget.id;
   }
 
-  private loadBudgets(): void {
-    const request = this.buildRequest();
-
-    if (!request) {
-      this.clearBudgetData();
-      return;
-    }
-
-    this.budgetRequest?.unsubscribe();
-    this.isLoading = true;
-    console.log('Datos enviados al servicio de presupuestos:', request);
-
-    this.budgetRequest = this.listBudgetsUseCase
-      .execute(request)
-      .service({
-        success: data => {
-          this.isLoading = false;
-          console.log('Datos recibidos del servicio de presupuestos:', data);
-
-          if (data) {
-            this.setBudgetResponse(data);
-            return;
-          }
-
-          this.clearBudgetData();
-        },
-        failure: error => {
-          this.isLoading = false;
-          console.error('Error del servicio de presupuestos:', error);
-          this.clearBudgetData();
-        }
-      });
-  }
-
   private buildRequest(): ListBudgetsRequest | null {
     const request: ListBudgetsRequest = {
-      period: this.selectedPeriod,
       startDate: this.selectedStartDate,
       endDate: this.selectedEndDate
     };
 
-    return this.isValidSelection({
-      ...request,
-      periodValue: this.selectedPeriodValue
-    }) ? request : null;
+    return this.isValidSelection(request) ? request : null;
   }
 
-  private isValidSelection(selection: FilterSelection): boolean {
+  private isValidSelection(
+    selection: Pick<FilterSelection, 'startDate' | 'endDate'>
+  ): boolean {
     return this.isIsoDate(selection.startDate) &&
       this.isIsoDate(selection.endDate) &&
       selection.startDate <= selection.endDate;
@@ -195,7 +199,7 @@ export class BudgetsPage implements OnInit, OnDestroy {
   private setBudgetResponse(response: ListBudgetsResponse): void {
     this.budgets = [...response.items];
     this.summary = { ...response.summary };
-    this.selectedDate = response.dateRangeLabel.replace(/^Semana:\s*/i, '');
+    this.selectedDate = response.dateRangeLabel;
   }
 
   private clearBudgetData(): void {

@@ -4,20 +4,37 @@
   [class.text-field--focused]="isFocused"
   [class.text-field--disabled]="isDisabled"
   [class.text-field--error]="errorText">
-  <ion-input
-    type="text"
-    [value]="value"
-    [placeholder]="placeholder"
-    [attr.aria-label]="ariaLabel"
-    [attr.aria-invalid]="errorText ? true : null"
-    [autocomplete]="autocomplete"
-    [maxlength]="maxLength"
-    [required]="required"
-    [disabled]="isDisabled"
-    (ionInput)="handleInput($event)"
-    (ionFocus)="handleFocus()"
-    (ionBlur)="handleBlur()">
-  </ion-input>
+  @if (multiline) {
+    <ion-textarea
+      [value]="value"
+      [placeholder]="placeholder"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-invalid]="errorText ? true : null"
+      [maxlength]="maxLength"
+      [required]="required"
+      [disabled]="isDisabled"
+      [rows]="rows"
+      [autoGrow]="true"
+      (ionInput)="handleInput($event)"
+      (ionFocus)="handleFocus()"
+      (ionBlur)="handleBlur()">
+    </ion-textarea>
+  } @else {
+    <ion-input
+      type="text"
+      [value]="value"
+      [placeholder]="placeholder"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-invalid]="errorText ? true : null"
+      [autocomplete]="autocomplete"
+      [maxlength]="maxLength"
+      [required]="required"
+      [disabled]="isDisabled"
+      (ionInput)="handleInput($event)"
+      (ionFocus)="handleFocus()"
+      (ionBlur)="handleBlur()">
+    </ion-input>
+  }
 
   @if (supportingText || (showCounter && maxLength)) {
     <div class="text-field__footer" aria-live="polite">

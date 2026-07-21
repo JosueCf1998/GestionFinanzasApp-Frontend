@@ -1,0 +1,71 @@
+<app-base-modal
+  [isOpen]="isOpen"
+  title="Personalizar presupuesto"
+  description="Elige el icono y color que identificarán este presupuesto."
+  primaryText="Aplicar personalización"
+  size="lg"
+  (closed)="close()"
+  (primary)="apply()">
+  <main>
+    <header>
+      <app-item-icon
+        [icon]="draftIcon"
+        [color]="draftColor"
+        size="lg"
+        variant="soft">
+      </app-item-icon>
+      <div>
+        <strong>Vista previa</strong>
+        <span>Así se identificará tu presupuesto</span>
+      </div>
+    </header>
+
+    <nav role="tablist" aria-label="Tipo de personalización">
+      <button
+        type="button"
+        role="tab"
+        [class.active]="activeTab === 'icon'"
+        [attr.aria-selected]="activeTab === 'icon'"
+        (click)="activeTab = 'icon'">
+        Icono
+      </button>
+      <button
+        type="button"
+        role="tab"
+        [class.active]="activeTab === 'color'"
+        [attr.aria-selected]="activeTab === 'color'"
+        (click)="activeTab = 'color'">
+        Color
+      </button>
+    </nav>
+
+    <section *ngIf="activeTab === 'icon'" data-picker="icon" role="tabpanel">
+      <button
+        *ngFor="let option of icons"
+        type="button"
+        [class.selected]="option.archivo === draftIcon"
+        [attr.aria-label]="option.nombre"
+        [attr.aria-pressed]="option.archivo === draftIcon"
+        (click)="selectIcon(option.archivo)">
+        <app-item-icon
+          [icon]="option.archivo"
+          [color]="option.archivo === draftIcon ? draftColor : '#8f97a8'"
+          size="md"
+          variant="soft">
+        </app-item-icon>
+      </button>
+    </section>
+
+    <section *ngIf="activeTab === 'color'" data-picker="color" role="tabpanel">
+      <button
+        *ngFor="let option of colors"
+        type="button"
+        [class.selected]="option.valor === draftColor"
+        [attr.aria-label]="option.nombre"
+        [attr.aria-pressed]="option.valor === draftColor"
+        (click)="selectColor(option.valor)">
+        <span [style.background]="option.valor"></span>
+      </button>
+    </section>
+  </main>
+</app-base-modal>

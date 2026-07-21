@@ -1,0 +1,16 @@
+<aside
+  [class.warning]="tone === 'warning'"
+  [attr.role]="tone === 'warning' ? 'alert' : 'note'">
+  <header>
+    <span aria-hidden="true">
+      @if (symbol) {
+        {{ symbol }}
+      } @else {
+        <ion-icon [src]="icon"></ion-icon>
+      }
+    </span>
+    <strong>{{ title }}</strong>
+  </header>
+
+  <p>{{ message }}</p>
+</aside>

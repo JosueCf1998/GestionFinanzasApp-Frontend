@@ -9,26 +9,16 @@
 
 <ion-content [fullscreen]="false" class="create-budget-page">
   <form class="create-budget-form" (ngSubmit)="saveBudget()">
-    <section class="identity-preview" aria-label="Vista previa del presupuesto">
-      <button
-        type="button"
-        class="identity-icon"
-        aria-label="Cambiar color e icono del presupuesto"
-        (click)="openPersonalizationModal()">
-        <app-item-icon
-          [icon]="selectedIcon"
-          [color]="selectedColor"
-          size="xl"
-          variant="soft">
-        </app-item-icon>
-        <span class="identity-edit">
-          <ion-icon src="assets/icon/edit.svg"></ion-icon>
-        </span>
-      </button>
-
-      <h2>{{ name || 'Nuevo presupuesto' }}</h2>
-      <span>{{ periodLabel }} · {{ formattedDateRange }}</span>
-    </section>
+    <app-budget-preview-card
+      [name]="name"
+      [icon]="selectedIcon"
+      [color]="selectedColor"
+      [budgetTotal]="categoryAllocationTotal"
+      [categoryCount]="selectedCategoryAllocations.length"
+      [startDate]="periodSelection.startDate"
+      [endDate]="periodSelection.endDate"
+      (personalize)="openPersonalizationModal()">
+    </app-budget-preview-card>
 
     <app-section-card title="Nombre del presupuesto">
       <app-text-field
@@ -42,106 +32,64 @@
       </app-text-field>
     </app-section-card>
 
-    <app-section-card title="Presupuesto total">
-      <app-amount-input
-        [(ngModel)]="amount"
-        name="amount"
+    <app-section-card title="Periodo del presupuesto">
+      <app-selection-summary
+        [primaryText]="periodLabel"
+        [secondaryText]="formattedDateRange"
+        ariaLabel="Cambiar periodo del presupuesto"
+        fallbackIcon="assets/icon/calendar.svg"
+        tone="primary"
+        (activated)="openPeriodModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-section-card title="Cuentas">
+      <app-selection-summary
+        [primaryText]="selectedAccountsTitle"
+        [secondaryText]="selectedAccountsLabel"
+        ariaLabel="Seleccionar cuentas vinculadas"
+        fallbackIcon="assets/icon/bank.svg"
+        [items]="accountSummaryItems"
+        (activated)="openAccountModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-warning-message
+      *ngIf="hasInsufficientAccountBalance"
+      title="Revisa la cobertura"
+      [message]="accountBalanceWarningMessage">
+    </app-warning-message>
+
+    <app-section-card title="Categorías">
+      <app-selection-summary
+        [primaryText]="selectedCategoriesTitle"
+        [secondaryText]="selectedCategoriesLabel"
+        ariaLabel="Seleccionar categorías del presupuesto"
+        fallbackIcon="assets/icon/category.svg"
+        tone="primary"
+        [items]="categorySummaryItems"
+        (activated)="openCategoryModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-section-card title="Notas (opcional)">
+      <app-text-field
+        name="notes"
         [embedded]="true"
-        currencyCode="PEN"
-        ariaLabel="Presupuesto total en soles"
-        variant="enhanced"
-        [required]="true">
-      </app-amount-input>
+        [multiline]="true"
+        [rows]="3"
+        [maxLength]="200"
+        ariaLabel="Notas del presupuesto"
+        placeholder="Añade un detalle o recordatorio para este presupuesto"
+        [(ngModel)]="notes">
+      </app-text-field>
     </app-section-card>
 
-    <app-section-card
-      class="period-card"
-      title="Periodo del presupuesto">
-      <button
-        type="button"
-        class="selection-summary"
-        aria-label="Cambiar periodo del presupuesto"
-        (click)="openPeriodModal()">
-        <span class="selection-summary__icon selection-summary__icon--period" aria-hidden="true">
-          <ion-icon src="assets/icon/calendar.svg"></ion-icon>
-        </span>
-        <span class="selection-summary__content">
-          <strong>{{ periodLabel }}</strong>
-          <small>{{ formattedDateRange }}</small>
-        </span>
-        <ion-icon class="selection-summary__arrow" src="assets/icon/right-inline.svg" aria-hidden="true"></ion-icon>
-      </button>
-    </app-section-card>
-
-    <app-section-card title="Cuentas vinculadas">
-      <button
-        type="button"
-        class="selection-summary"
-        aria-label="Seleccionar cuentas vinculadas"
-        (click)="openAccountModal()">
-        <span *ngIf="!selectedAccounts.length" class="selection-summary__icon">
-          <ion-icon src="assets/icon/bank.svg"></ion-icon>
-        </span>
-        <span
-          *ngIf="selectedAccounts.length"
-          class="selection-summary__preview"
-          [class.selection-summary__preview--single]="selectedAccounts.length === 1"
-          [class.selection-summary__preview--double]="selectedAccounts.length === 2"
-          aria-hidden="true">
-          <app-item-icon
-            *ngFor="let account of selectedAccounts | slice:0:3"
-            [icon]="account.icon"
-            [color]="account.color"
-            size="sm"
-            variant="soft">
-          </app-item-icon>
-        </span>
-        <span class="selection-summary__content">
-          <strong>{{ selectedAccountsTitle }}</strong>
-          <small>{{ selectedAccountsLabel }}</small>
-        </span>
-        <ion-icon class="selection-summary__arrow" src="assets/icon/right-inline.svg"></ion-icon>
-      </button>
-    </app-section-card>
-
-    <app-section-card title="Categorías incluidas">
-      <button
-        type="button"
-        class="selection-summary"
-        aria-label="Seleccionar categorías del presupuesto"
-        (click)="openCategoryModal()">
-        <span *ngIf="!selectedCategories.length" class="selection-summary__icon selection-summary__icon--category">
-          <ion-icon src="assets/icon/category.svg"></ion-icon>
-        </span>
-        <span
-          *ngIf="selectedCategories.length"
-          class="selection-summary__preview"
-          [class.selection-summary__preview--single]="selectedCategories.length === 1"
-          [class.selection-summary__preview--double]="selectedCategories.length === 2"
-          aria-hidden="true">
-          <app-item-icon
-            *ngFor="let category of selectedCategories | slice:0:3"
-            [icon]="category.icono"
-            [color]="category.color"
-            size="sm"
-            variant="soft">
-          </app-item-icon>
-        </span>
-        <span class="selection-summary__content">
-          <strong>{{ selectedCategoriesTitle }}</strong>
-          <small>{{ selectedCategoriesLabel }}</small>
-        </span>
-        <ion-icon class="selection-summary__arrow" src="assets/icon/right-inline.svg"></ion-icon>
-      </button>
-    </app-section-card>
-
-    <aside class="budget-tip">
-      <ion-icon src="assets/icon/question.svg"></ion-icon>
-      <p>
-        El monto se controlará únicamente durante el periodo seleccionado.
-        Podrás revisar su avance desde Presupuestos.
-      </p>
-    </aside>
+    <app-info-banner
+      title="Consejo FinVia"
+      [message]="budgetAdviceMessage"
+      symbol="✨">
+    </app-info-banner>
 
     <div class="action-container">
       <app-button
@@ -179,38 +127,21 @@
 <app-category-selector-modal
   [isOpen]="isCategoryModalOpen"
   [categories]="categories"
-  [selectedCategories]="selectedCategories"
-  (categoriesSelected)="applyCategories($event)"
+  [selectedAllocations]="selectedCategoryAllocations"
+  [availableBalance]="selectedAccounts.length ? selectedAccountBalanceTotal : null"
+  (allocationsSelected)="applyCategoryAllocations($event)"
   (modalClosed)="closeCategoryModal()">
 </app-category-selector-modal>
 
-<app-base-modal
+<app-personalization-modal
   [isOpen]="isPersonalizationModalOpen"
-  title="Personalizar presupuesto"
-  description="Elige el icono y color que identificarán este presupuesto."
-  primaryText="Aplicar personalización"
-  size="lg"
-  (closed)="closePersonalizationModal()"
-  (primary)="applyPersonalization()">
-  <div class="personalization-modal">
-    <section>
-      <span class="personalization-modal__label">Icono</span>
-      <app-icon-picker
-        [options]="icons"
-        [color]="draftColor"
-        [(selected)]="draftIcon">
-      </app-icon-picker>
-    </section>
-
-    <section>
-      <span class="personalization-modal__label">Color</span>
-      <app-color-picker
-        [options]="colors"
-        [(selected)]="draftColor">
-      </app-color-picker>
-    </section>
-  </div>
-</app-base-modal>
+  [selectedIcon]="selectedIcon"
+  [selectedColor]="selectedColor"
+  [icons]="icons"
+  [colors]="colors"
+  (modalClosed)="closePersonalizationModal()"
+  (applied)="applyPersonalization($event)">
+</app-personalization-modal>
 
 <app-custom-alert
   *ngIf="showUnsavedAlert"
@@ -228,6 +159,14 @@
   message="No fue posible obtener las cuentas o categorías. Inténtalo nuevamente."
   confirmText="Aceptar"
   (onConfirm)="showDataError = false">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showAccountBalanceRequiredAlert"
+  header="Cuenta sin saldo disponible"
+  message="Selecciona primero una cuenta con un saldo mayor que cero antes de asignar montos a las categorías."
+  confirmText="Aceptar"
+  (onConfirm)="showAccountBalanceRequiredAlert = false">
 </app-custom-alert>
 
 <app-custom-alert

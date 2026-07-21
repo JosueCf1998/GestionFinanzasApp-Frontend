@@ -12,6 +12,7 @@ import { CustomAlertComponent } from "src/app/shared/components/custom-alert/cus
 import { AlertService } from "src/app/core/services/alert.service";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
+import { InfoBannerComponent } from "src/app/shared/components/info-banner/info-banner.component";
 import 'src/app/core/utils/observable-extensions';
 
 @Component({
@@ -19,7 +20,7 @@ import 'src/app/core/utils/observable-extensions';
   templateUrl: "./categories.page.html",
   styleUrls: ["./categories.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent, ItemIconComponent, FeatureHeaderComponent],
+  imports: [IonicModule, CommonModule, FormsModule, HttpClientModule, CustomSegmentComponent, CustomAlertComponent, ItemIconComponent, FeatureHeaderComponent, InfoBannerComponent],
 })
 export class CategoriesPage {
 

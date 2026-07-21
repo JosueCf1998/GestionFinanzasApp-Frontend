@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { IonInput } from '@ionic/angular/standalone';
+import { IonInput, IonTextarea } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-text-field',
   templateUrl: './text-field.component.html',
   styleUrls: ['./text-field.component.scss'],
   standalone: true,
-  imports: [IonInput],
+  imports: [IonInput, IonTextarea],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -26,6 +26,8 @@ export class TextFieldComponent implements ControlValueAccessor {
   @Input() required = false;
   @Input() showCounter = false;
   @Input() embedded = false;
+  @Input() multiline = false;
+  @Input() rows = 3;
 
   private _maxLength?: number;
   value = '';

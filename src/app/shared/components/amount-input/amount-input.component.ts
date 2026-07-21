@@ -3,7 +3,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IonInput, IonItem } from '@ionic/angular/standalone';
 
 type CurrencyCode = 'PEN' | 'USD';
-type AmountInputVariant = 'basic' | 'enhanced';
+type AmountInputVariant = 'basic' | 'enhanced' | 'compact';
 
 @Component({
   selector: 'app-amount-input',
@@ -152,6 +152,10 @@ export class AmountInputComponent implements ControlValueAccessor {
 
   get isEnhanced(): boolean {
     return this.variant === 'enhanced';
+  }
+
+  get isCompact(): boolean {
+    return this.variant === 'compact';
   }
 
   private propagateAmountValue(): void {

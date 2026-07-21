@@ -1,0 +1,39 @@
+<article aria-label="Vista previa del presupuesto">
+  <button
+    type="button"
+    aria-label="Cambiar color e icono del presupuesto"
+    (click)="personalize.emit()">
+    <app-item-icon
+      [icon]="icon"
+      [color]="color"
+      size="xl"
+      variant="soft">
+    </app-item-icon>
+    <span>
+      <ion-icon src="assets/icon/edit.svg"></ion-icon>
+    </span>
+  </button>
+
+  <div>
+    <h2>{{ name || 'Nuevo presupuesto' }}</h2>
+    <dl class="financial-summary">
+      <div>
+        <dt>Presupuesto total</dt>
+        <dd>{{ formatAmount(budgetTotal) }}</dd>
+      </div>
+      <div>
+        <dt>Categorías</dt>
+        <dd>
+          {{ categoryCount }}
+          {{ categoryCount === 1 ? 'asignada' : 'asignadas' }}
+        </dd>
+      </div>
+    </dl>
+    <p class="date-range">
+      <ion-icon src="assets/icon/calendar.svg" aria-hidden="true"></ion-icon>
+      <span>{{ formatDate(startDate) }}</span>
+      <span aria-hidden="true">—</span>
+      <span>{{ formatDate(endDate) }}</span>
+    </p>
+  </div>
+</article>

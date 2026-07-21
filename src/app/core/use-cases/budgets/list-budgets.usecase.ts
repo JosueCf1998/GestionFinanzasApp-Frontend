@@ -3,7 +3,6 @@ import { map, Observable, tap } from 'rxjs';
 import {
   BudgetApiItem,
   BudgetListItem,
-  BudgetPeriod,
   isBudgetStatus,
   ListBudgetsApiResponse,
   ListBudgetsRequest,
@@ -34,7 +33,7 @@ export class ListBudgetsUseCase {
 
     if (!startDate || !endDate) return '';
 
-    return this.formatPeriodLabel(request.period, startDate, endDate);
+    return this.formatDateRangeLabel(startDate, endDate);
   }
 
   private mapApiResponse(
@@ -80,18 +79,37 @@ export class ListBudgetsUseCase {
     return Number.isNaN(date.getTime()) ? null : date;
   }
 
-  private formatPeriodLabel(period: BudgetPeriod, startDate: Date, endDate: Date): string {
-    if (period === 'monthly') {
+  private formatDateRangeLabel(startDate: Date, endDate: Date): string {
+    if (this.isFullCalendarMonth(startDate, endDate)) {
       return this.getFormatter({ month: 'long', year: 'numeric' }).format(startDate);
     }
 
-    if (period === 'annual') {
+    if (this.isFullCalendarYear(startDate, endDate)) {
       return `Año ${startDate.getUTCFullYear()}`;
     }
 
     const formatter = this.getFormatter({ day: 'numeric', month: 'short', year: 'numeric' });
-    const range = `${formatter.format(startDate)} - ${formatter.format(endDate)}`;
-    return period === 'weekly' ? `Semana: ${range}` : range;
+    return `${formatter.format(startDate)} - ${formatter.format(endDate)}`;
+  }
+
+  private isFullCalendarMonth(startDate: Date, endDate: Date): boolean {
+    if (startDate.getUTCDate() !== 1) return false;
+
+    const expectedEnd = new Date(Date.UTC(
+      startDate.getUTCFullYear(),
+      startDate.getUTCMonth() + 1,
+      0
+    ));
+
+    return endDate.getTime() === expectedEnd.getTime();
+  }
+
+  private isFullCalendarYear(startDate: Date, endDate: Date): boolean {
+    return startDate.getUTCMonth() === 0 &&
+      startDate.getUTCDate() === 1 &&
+      endDate.getUTCFullYear() === startDate.getUTCFullYear() &&
+      endDate.getUTCMonth() === 11 &&
+      endDate.getUTCDate() === 31;
   }
 
   private getFormatter(options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {

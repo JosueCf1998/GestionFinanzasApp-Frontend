@@ -1,0 +1,39 @@
+<button
+  type="button"
+  [attr.aria-label]="ariaLabel"
+  (click)="activated.emit()">
+  <app-item-icon
+    *ngIf="!items.length"
+    [icon]="fallbackIconName"
+    [color]="fallbackIconColor"
+    size="md"
+    variant="soft"
+    aria-hidden="true">
+  </app-item-icon>
+
+  <span
+    *ngIf="items.length"
+    class="selection-summary__preview"
+    [class.selection-summary__preview--single]="items.length === 1"
+    [class.selection-summary__preview--double]="items.length === 2"
+    aria-hidden="true">
+    <app-item-icon
+      *ngFor="let item of visibleItems"
+      [icon]="item.icon"
+      [color]="item.color"
+      size="sm"
+      variant="soft">
+    </app-item-icon>
+  </span>
+
+  <span class="selection-summary__content">
+    <strong>{{ primaryText }}</strong>
+    <small>{{ secondaryText }}</small>
+  </span>
+
+  <ion-icon
+    class="selection-summary__arrow"
+    src="assets/icon/right-inline.svg"
+    aria-hidden="true">
+  </ion-icon>
+</button>

@@ -1,5 +1,6 @@
 export type BudgetStatus = 'ON_TRACK' | 'WARNING' | 'EXCEEDED';
-export type BudgetPeriod = 'weekly' | 'monthly' | 'annual' | 'custom';
+/** Preset exclusivo de interfaz para construir un rango de fechas. */
+export type PeriodPreset = 'weekly' | 'monthly' | 'annual' | 'custom';
 
 export const BUDGET_STATUS_LABELS: Record<BudgetStatus, string> = {
   ON_TRACK: 'En objetivo',
@@ -12,7 +13,6 @@ export function isBudgetStatus(value: string): value is BudgetStatus {
 }
 
 export interface ListBudgetsRequest {
-  period: BudgetPeriod;
   startDate: string;
   endDate: string;
 }

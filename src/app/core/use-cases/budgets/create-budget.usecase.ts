@@ -11,8 +11,12 @@ export interface CreateBudgetRequest {
   endDate: string;
   icon: string;
   color: string;
-  accountIds: number[];
-  categoryIds: number[];
+  account_ids: number[];
+  categories: Array<{
+    category_id: number;
+    amount: number;
+  }>;
+  notes: string;
 }
 
 export interface CreateBudgetResponse {

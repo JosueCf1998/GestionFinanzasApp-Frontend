@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { IonIcon } from '@ionic/angular/standalone';
-import { BudgetPeriod } from 'src/app/core/models/budgets/list-budgets.model';
+import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { CustomSegmentComponent } from '../custom-segment/custom-segment.component';
 
 export interface PeriodPickerValue {
-  period: BudgetPeriod;
+  /** Estado de presentación; no debe enviarse al backend. */
+  period: PeriodPreset;
   periodValue: string;
   startDate: string;
   endDate: string;
@@ -31,7 +32,7 @@ interface WeekOption {
   imports: [CommonModule, IonIcon, CustomSegmentComponent]
 })
 export class PeriodPickerComponent implements OnChanges {
-  @Input() period: BudgetPeriod = 'monthly';
+  @Input() period: PeriodPreset = 'monthly';
   @Input() periodValue = '';
   @Input() startDate = '';
   @Input() endDate = '';
@@ -47,7 +48,7 @@ export class PeriodPickerComponent implements OnChanges {
   readonly months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
   readonly weekdays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
-  selectedPeriod: BudgetPeriod = 'monthly';
+  selectedPeriod: PeriodPreset = 'monthly';
   selectedYear = new Date().getFullYear();
   selectedMonth = new Date().getMonth() + 1;
   selectedWeek = 1;
@@ -97,7 +98,7 @@ export class PeriodPickerComponent implements OnChanges {
   }
 
   changePeriod(value: string): void {
-    this.selectedPeriod = value as BudgetPeriod;
+    this.selectedPeriod = value as PeriodPreset;
     if (this.selectedPeriod === 'custom') {
       this.focusCalendarOnSelection();
       this.refreshCalendar();
@@ -295,7 +296,7 @@ export class PeriodPickerComponent implements OnChanges {
     };
   }
 
-  private defaultPeriodValue(period: BudgetPeriod): string {
+  private defaultPeriodValue(period: PeriodPreset): string {
     const today = new Date();
     if (period === 'monthly') return this.localDate(today).slice(0, 7);
     if (period === 'annual') return String(today.getFullYear());

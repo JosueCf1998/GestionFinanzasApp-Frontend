@@ -11,7 +11,8 @@
   color: var(--text-field-color, #252b38);
   transition: box-shadow 180ms ease;
 
-  ion-input {
+  ion-input,
+  ion-textarea {
     min-height: var(--text-field-min-height, 22px);
     color: inherit;
     font-size: var(--text-field-font-size, 13px);
@@ -24,6 +25,12 @@
     --padding-end: 0;
     --placeholder-color: var(--text-field-placeholder-color, #8b93a7);
     --placeholder-opacity: 1;
+  }
+
+  ion-textarea {
+    min-height: 68px;
+    font-weight: 500;
+    line-height: 1.5;
   }
 
   &__footer {
