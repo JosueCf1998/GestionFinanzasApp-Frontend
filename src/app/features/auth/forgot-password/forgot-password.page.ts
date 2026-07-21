@@ -19,7 +19,7 @@ import {
   ForgotPassworUserdRequest
 } from "src/app/core/use-cases/users/forgot-password-user.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
+import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
 import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
 
@@ -36,7 +36,7 @@ import 'src/app/core/utils/observable-extensions';
     IonButton,
     IonItem,
     IonInput,
-    DynamicAlertComponent
+    CustomAlertComponent
   ],
 })
 export class ForgotPasswordPage {

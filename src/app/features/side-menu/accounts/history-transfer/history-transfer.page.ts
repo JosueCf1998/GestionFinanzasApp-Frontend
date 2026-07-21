@@ -13,7 +13,6 @@ import { ListTransferUseCase, Transfer } from 'src/app/core/use-cases/transfer/l
 
 import { CustomSegmentComponent } from 'src/app/shared/components/custom-segment/custom-segment.component';
 import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
-import { DynamicAlertComponent } from 'src/app/shared/components/basic-alert/basic-alert.component';
 
 import {
   AccountSelectorModalComponent,
@@ -36,7 +35,6 @@ import { FloatingActionButtonComponent } from 'src/app/shared/components/floatin
     HttpClientModule,
     CustomSegmentComponent,
     CustomAlertComponent,
-    DynamicAlertComponent,
     AccountSelectorModalComponent,
     PageLayoutComponent,
     ItemIconComponent,

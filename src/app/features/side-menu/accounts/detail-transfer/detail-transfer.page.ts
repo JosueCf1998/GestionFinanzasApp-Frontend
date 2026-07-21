@@ -6,7 +6,6 @@ import { Router } from "@angular/router";
 import { DeleteTransferUseCase } from "src/app/core/use-cases/transfer/delete-transfer.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "../../../../shared/components/custom-alert/custom-alert.component";
-import { DynamicAlertComponent } from "../../../../shared/components/basic-alert/basic-alert.component";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
@@ -15,7 +14,7 @@ import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-
   templateUrl: "./detail-transfer.page.html",
   styleUrls: ["./detail-transfer.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, CustomAlertComponent, DynamicAlertComponent, ItemIconComponent, PageLayoutComponent],
+  imports: [IonicModule, CommonModule, CustomAlertComponent, ItemIconComponent, PageLayoutComponent],
 })
 export class DetailTransferPage implements OnInit {
 

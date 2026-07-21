@@ -1,109 +1,42 @@
-<!-- ==========================================================
-     ALERT
-     ========================================================== -->
+<app-base-modal
+  [isOpen]="isOpen"
+  [title]="header"
+  [description]="message"
+  [primaryText]="showConfirm ? confirmText : ''"
+  [secondaryText]="showCancel ? cancelText : ''"
+  [backdropDismiss]="canDismissFromBackdrop"
+  [reverseActions]="reverseButtons"
+  [showHeader]="false"
+  [showClose]="false"
+  [size]="modalSize"
+  (closed)="handleClosed()"
+  (primary)="requestConfirm()"
+  (secondary)="requestCancel()">
+  <div class="custom-alert__content">
+    <div class="custom-alert__icon">
+      <ion-icon
+        *ngIf="imageUrl; else defaultAlertIcon"
+        [src]="imageUrl"
+        [attr.aria-label]="imageAlt">
+      </ion-icon>
 
-<div class="alert-overlay">
-
-  <!-- ========================================================
-       BACKDROP
-       ======================================================== -->
-
-  <div
-    class="alert-backdrop"
-    (click)="onBackdropClick()">
-  </div>
-
-  <!-- ========================================================
-       CARD
-       ======================================================== -->
-
-  <div class="alert-card">
-
-    <!-- ======================================================
-         ICON
-         ====================================================== -->
-
-    <div class="alert-icon">
-
+      <ng-template #defaultAlertIcon>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round">
-
-        <circle
-          cx="12"
-          cy="12"
-          r="10">
-        </circle>
-
-        <line
-          x1="12"
-          y1="8"
-          x2="12.01"
-          y2="8">
-        </line>
-
-        <line
-          x1="12"
-          y1="12"
-          x2="12"
-          y2="16">
-        </line>
-
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        <line x1="12" y1="12" x2="12" y2="16"></line>
       </svg>
-
+      </ng-template>
     </div>
 
-    <!-- ======================================================
-         TITLE
-         ====================================================== -->
-
-    <h2 class="alert-title">
-
-      {{ header }}
-
-    </h2>
-
-    <!-- ======================================================
-         MESSAGE
-         ====================================================== -->
-
-    <p class="alert-message">
-
-      {{ message }}
-
-    </p>
-
-    <!-- ======================================================
-         ACTIONS
-         ====================================================== -->
-
-    <div
-      class="alert-actions"
-      [class.single-action]="!cancelText || !confirmText">
-
-      <app-button
-        *ngIf="cancelText"
-        variant="secondary"
-        [text]="cancelText"
-        (clicked)="cancel()">
-
-      </app-button>
-
-      <app-button
-        *ngIf="confirmText"
-        variant="primary"
-        [text]="confirmText"
-        (clicked)="confirm()">
-
-      </app-button>
-
-    </div>
-
+    <h2>{{ header }}</h2>
+    <p>{{ message }}</p>
   </div>
-
-</div>
+</app-base-modal>

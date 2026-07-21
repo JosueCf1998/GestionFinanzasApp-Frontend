@@ -10,8 +10,6 @@ export interface SelectionSummaryItem {
   color: string;
 }
 
-export type SelectionSummaryTone = 'blue' | 'primary';
-
 @Component({
   selector: 'app-selection-summary',
   templateUrl: './selection-summary.component.html',
@@ -21,11 +19,12 @@ export type SelectionSummaryTone = 'blue' | 'primary';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectionSummaryComponent {
+  readonly fallbackIconColor = 'var(--fv-interactive-icon)';
+
   @Input({ required: true }) primaryText = '';
   @Input({ required: true }) secondaryText = '';
   @Input({ required: true }) ariaLabel = '';
   @Input() fallbackIcon = '';
-  @Input() tone: SelectionSummaryTone = 'blue';
   @Input() items: SelectionSummaryItem[] = [];
 
   @Output() readonly activated = new EventEmitter<void>();
@@ -38,9 +37,4 @@ export class SelectionSummaryComponent {
     return this.fallbackIcon.split('/').pop()?.replace(/\.svg$/i, '') ?? '';
   }
 
-  get fallbackIconColor(): string {
-    return this.tone === 'primary'
-      ? 'var(--fv-primary, #3a0ca3)'
-      : 'var(--fv-primary-light, #4361ee)';
-  }
 }

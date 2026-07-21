@@ -20,7 +20,7 @@
       (personalize)="openPersonalizationModal()">
     </app-budget-preview-card>
 
-    <app-section-card title="Nombre del presupuesto">
+    <app-section-card title="Nombre del Presupuesto">
       <app-text-field
         name="name"
         [maxLength]="30"
@@ -32,13 +32,12 @@
       </app-text-field>
     </app-section-card>
 
-    <app-section-card title="Periodo del presupuesto">
+    <app-section-card title="Programación">
       <app-selection-summary
-        [primaryText]="periodLabel"
-        [secondaryText]="formattedDateRange"
-        ariaLabel="Cambiar periodo del presupuesto"
+        [primaryText]="formattedDateRange"
+        [secondaryText]="periodLabel"
+        ariaLabel="Cambiar las fechas del presupuesto"
         fallbackIcon="assets/icon/calendar.svg"
-        tone="primary"
         (activated)="openPeriodModal()">
       </app-selection-summary>
     </app-section-card>
@@ -66,7 +65,6 @@
         [secondaryText]="selectedCategoriesLabel"
         ariaLabel="Seleccionar categorías del presupuesto"
         fallbackIcon="assets/icon/category.svg"
-        tone="primary"
         [items]="categorySummaryItems"
         (activated)="openCategoryModal()">
       </app-selection-summary>
@@ -104,9 +102,9 @@
 
 <app-filter-modal
   [isOpen]="isPeriodModalOpen"
-  title="Selecciona un periodo"
-  description="Define durante cuánto tiempo se controlará este presupuesto."
-  applyText="Aplicar periodo"
+  title="Elige las fechas"
+  description="Selecciona durante cuánto tiempo controlarás este presupuesto."
+  applyText="Aplicar fechas"
   [selectedPeriod]="periodSelection.period"
   [selectedPeriodValue]="periodSelection.periodValue"
   [selectedStartDate]="periodSelection.startDate"

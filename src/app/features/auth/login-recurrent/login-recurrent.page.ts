@@ -16,7 +16,7 @@ import {
   IonInput, IonLabel } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
-import { DynamicAlertComponent } from "src/app/shared/components/basic-alert/basic-alert.component";
+import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
@@ -39,7 +39,7 @@ import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usec
     IonContent,
     CommonModule,
     ReactiveFormsModule,
-    DynamicAlertComponent
+    CustomAlertComponent
 ],
 })
 export class LoginRecurrentPage implements OnInit {

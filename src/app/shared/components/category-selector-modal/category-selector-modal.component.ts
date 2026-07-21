@@ -76,7 +76,7 @@ export class CategorySelectorModalComponent implements OnChanges {
       maximumFractionDigits: 2
     }).format(this.balanceOverage);
 
-    return `La distribución supera el saldo de tus cuentas por ${difference}. Puedes continuar, pero revisa tu disponibilidad.`;
+    return `Excede el saldo de tus cuentas por ${difference}. Puedes continuar.`;
   }
 
   isSelected(category: CategoryResponse): boolean {

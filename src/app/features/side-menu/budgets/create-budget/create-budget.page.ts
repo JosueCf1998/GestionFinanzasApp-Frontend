@@ -76,8 +76,8 @@ export class CreateBudgetPage implements OnInit {
   readonly AccountSelectionMode = AccountSelectionMode;
 
   private readonly initialIcon = 'wallet';
-  private readonly initialColor = '#388e3c';
-  private readonly initialPeriod = this.currentMonthSelection();
+  private readonly initialColor = '#283593';
+  private initialPeriod = this.currentMonthSelection();
 
   // MARK: - FORMULARIO Y DATOS
 
@@ -117,6 +117,10 @@ export class CreateBudgetPage implements OnInit {
 
   ngOnInit(): void {
     this.loadSelectableData();
+  }
+
+  ionViewWillEnter(): void {
+    this.resetForm();
   }
 
   // MARK: - SERVICIOS
@@ -230,7 +234,7 @@ export class CreateBudgetPage implements OnInit {
 
   get formattedDateRange(): string {
     if (!this.periodSelection.startDate || !this.periodSelection.endDate) {
-      return 'Selecciona la vigencia';
+      return 'Selecciona las fechas';
     }
 
     const formatter = new Intl.DateTimeFormat('es-PE', {
@@ -305,7 +309,7 @@ export class CreateBudgetPage implements OnInit {
       return 'Asigna un monto a cada categoría. La suma se calculará automáticamente como tu presupuesto total.';
     }
 
-    return 'El presupuesto total se calcula con los montos de tus categorías y se controlará durante el periodo seleccionado.';
+    return 'El presupuesto total se calcula con los montos de tus categorías y se controlará durante las fechas seleccionadas.';
   }
 
   get selectedCategoriesTitle(): string {
@@ -428,6 +432,26 @@ export class CreateBudgetPage implements OnInit {
     if (names.length === 0) return emptyLabel;
     if (names.length <= 2) return names.join(', ');
     return `${names.slice(0, 2).join(', ')} y ${names.length - 2} más`;
+  }
+
+  private resetForm(): void {
+    this.initialPeriod = this.currentMonthSelection();
+    this.name = '';
+    this.notes = '';
+    this.selectedIcon = this.initialIcon;
+    this.selectedColor = this.initialColor;
+    this.periodSelection = { ...this.initialPeriod };
+    this.selectedAccounts = [];
+    this.selectedCategoryAllocations = [];
+
+    this.showUnsavedAlert = false;
+    this.showErrorAlert = false;
+    this.showAccountBalanceRequiredAlert = false;
+    this.isPeriodModalOpen = false;
+    this.isAccountModalOpen = false;
+    this.isCategoryModalOpen = false;
+    this.isPersonalizationModalOpen = false;
+    this.isSaving = false;
   }
 
 }

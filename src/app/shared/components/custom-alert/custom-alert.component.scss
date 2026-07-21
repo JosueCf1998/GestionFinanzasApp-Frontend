@@ -1,299 +1,66 @@
-/* ==========================================================
-   OVERLAY
-   ========================================================== */
+:host {
+  display: contents;
+}
 
-.alert-overlay {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 9999;
-
+.custom-alert__content {
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  padding: 24px;
-
-}
-
-/* ==========================================================
-   BACKDROP
-   ========================================================== */
-
-.alert-backdrop {
-
-  position: absolute;
-
-  inset: 0;
-
-  background: rgba(15, 23, 42, .34);
-
-  -webkit-backdrop-filter:
-    blur(18px)
-    brightness(.9);
-  backdrop-filter:
-    blur(18px)
-    brightness(.9);
-
-  animation: backdropIn .18s ease;
-
-}
-
-/* ==========================================================
-   CARD
-   ========================================================== */
-
-.alert-card {
-
-  position: relative;
-
-  z-index: 2;
-
-  width: 100%;
-  max-width: 350px;
-
-  display: flex;
+  padding: 12px 6px 8px;
   flex-direction: column;
-  align-items: center;
-
-  padding: 28px 24px 22px;
-
-  background: var(--fv-surface);
-
-  border-radius: 24px;
-
-  border: 1px solid rgba(67,97,238,.05);
-
-  box-shadow:
-    0 22px 60px rgba(15,23,42,.16);
-
-  animation:
-    alertIn .20s cubic-bezier(.22,1,.36,1);
-
+  text-align: center;
 }
 
-/* ==========================================================
-   ICON
-   ========================================================== */
-
-.alert-icon {
-
+.custom-alert__icon {
+  display: grid;
   width: 56px;
   height: 56px;
-
-  margin-bottom: 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  margin-bottom: 17px;
+  border: 1px solid rgba(255, 255, 255, .16);
   border-radius: 18px;
-
-  background: var(--fv-gradient-primary);
-
-  border: 1px solid rgba(255,255,255,.15);
-
-  box-shadow: var(--fv-shadow-primary);
-
+  background: var(
+    --fv-gradient-primary,
+    linear-gradient(135deg, #3a0ca3, #4361ee)
+  );
+  color: #fff;
+  box-shadow: var(--fv-shadow-primary, 0 10px 24px rgba(58, 12, 163, .22));
+  place-items: center;
 }
 
-.alert-icon svg {
-
+.custom-alert__icon svg,
+.custom-alert__icon ion-icon {
   width: 28px;
   height: 28px;
-
-  color: white;
-
 }
 
-/* ==========================================================
-   TITLE
-   ========================================================== */
-
-.alert-title {
-
+h2 {
   margin: 0;
-
-  color: var(--fv-text-primary);
-
-  font-size: 22px;
-  font-weight: 700;
-
-  letter-spacing: -.03em;
-
-  text-align: center;
-
+  color: var(--fv-text-primary, #252b38);
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -.025em;
+  line-height: 1.25;
 }
 
-/* ==========================================================
-   MESSAGE
-   ========================================================== */
-
-.alert-message {
-
-  max-width: 260px;
-
-  margin:
-    12px
-    0
-    28px;
-
-  color: var(--fv-text-secondary);
-
-  font-size: 15px;
-
-  line-height: 1.6;
-
-  text-align: center;
-
+p {
+  max-width: 280px;
+  margin: 10px 0 0;
+  color: var(--fv-text-secondary, #667085);
+  font-size: 13.5px;
+  line-height: 1.55;
 }
 
-/* ==========================================================
-   ACTIONS
-   ========================================================== */
-
-.alert-actions {
-
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns: repeat(2,1fr);
-
-  gap: 12px;
-
-}
-
-.alert-actions.single-action {
-
-  grid-template-columns: 1fr;
-
-}
-
-/* ==========================================================
-   SECONDARY BUTTON
-   ========================================================== */
-
-.secondary-button {
-
-  height: 56px;
-
-  border: none;
-
-  border-radius: 16px;
-
-  background: rgba(67,97,238,.08);
-
-  color: var(--fv-primary);
-
-  font-size: 16px;
-  font-weight: 700;
-
-  transition:
-    background .18s ease,
-    transform .18s ease;
-
-}
-
-.secondary-button:hover {
-
-  background: rgba(67,97,238,.12);
-
-}
-
-.secondary-button:active {
-
-  transform: scale(.98);
-
-}
-
-/* ==========================================================
-   PRIMARY BUTTON
-   ========================================================== */
-
-.primary-button {
-
-  width: 100%;
-
-}
-
-/* ==========================================================
-   ANIMATIONS
-   ========================================================== */
-
-@keyframes backdropIn {
-
-  from {
-
-    opacity: 0;
-
+@media (max-width: 380px) {
+  .custom-alert__content {
+    padding-top: 9px;
   }
 
-  to {
-
-    opacity: 1;
-
+  .custom-alert__icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 15px;
   }
 
-}
-
-@keyframes alertIn {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(10px)
-      scale(.94);
-
+  h2 {
+    font-size: 19px;
   }
-
-  to {
-
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-}
-
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media (max-width:420px){
-
-  .alert-card{
-
-    max-width:none;
-
-    border-radius:22px;
-
-    padding:24px 20px 20px;
-
-  }
-
-  .alert-title{
-
-    font-size:20px;
-
-  }
-
-  .alert-message{
-
-    margin:
-      10px
-      0
-      24px;
-
-    font-size:14px;
-
-  }
-
 }

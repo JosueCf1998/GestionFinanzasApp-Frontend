@@ -1,9 +1,9 @@
-<aside role="alert">
-  <ion-icon [src]="icon" aria-hidden="true"></ion-icon>
-  <div>
+<aside class="warning-message" role="alert">
+  <header class="warning-message__header">
+    <ion-icon class="warning-message__icon" [src]="icon" aria-hidden="true"></ion-icon>
     @if (title) {
-      <strong>{{ title }}</strong>
+      <strong class="warning-message__title">{{ title }}</strong>
     }
-    <p>{{ message }}</p>
-  </div>
+  </header>
+  <p class="warning-message__description">{{ message }}</p>
 </aside>

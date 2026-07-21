@@ -13,21 +13,25 @@ aside {
 }
 
 aside.warning {
-  border-color: rgba(217, 119, 6, .24);
-  background: linear-gradient(135deg, #fffaf0 0%, #fff6e5 100%);
-  box-shadow: 0 6px 18px rgba(180, 83, 9, .07);
+  border-color: var(--fv-warning-border);
+  background: linear-gradient(
+    135deg,
+    var(--fv-warning-surface-soft) 0%,
+    var(--fv-warning-surface) 100%
+  );
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--fv-warning-strong) 7%, transparent);
 
   header > span {
-    background: #ffedc7;
-    color: #b45309;
+    background: var(--fv-warning-icon-surface);
+    color: var(--fv-warning-strong);
   }
 
   strong {
-    color: #92400e;
+    color: var(--fv-warning-dark);
   }
 
   p {
-    color: #7c4a16;
+    color: var(--fv-warning-text);
   }
 }
 

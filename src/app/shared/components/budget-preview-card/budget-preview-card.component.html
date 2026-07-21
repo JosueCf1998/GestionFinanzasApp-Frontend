@@ -19,13 +19,16 @@
     <dl class="financial-summary">
       <div>
         <dt>Presupuesto total</dt>
-        <dd>{{ formatAmount(budgetTotal) }}</dd>
+        <dd>{{ budgetTotal > 0 ? formatAmount(budgetTotal) : 'Por asignar' }}</dd>
       </div>
       <div>
         <dt>Categorías</dt>
         <dd>
-          {{ categoryCount }}
-          {{ categoryCount === 1 ? 'asignada' : 'asignadas' }}
+          @if (categoryCount > 0) {
+            {{ categoryCount }} {{ categoryCount === 1 ? 'asignada' : 'asignadas' }}
+          } @else {
+            Sin asignar
+          }
         </dd>
       </div>
     </dl>

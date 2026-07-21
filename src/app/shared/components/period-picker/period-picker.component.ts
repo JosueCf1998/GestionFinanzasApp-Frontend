@@ -43,7 +43,7 @@ export class PeriodPickerComponent implements OnChanges {
     { value: 'weekly', label: 'Semanal' },
     { value: 'monthly', label: 'Mensual' },
     { value: 'annual', label: 'Anual' },
-    { value: 'custom', label: 'Periodo' }
+    { value: 'custom', label: 'Rango' }
   ];
   readonly months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
   readonly weekdays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];

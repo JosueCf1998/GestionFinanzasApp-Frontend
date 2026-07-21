@@ -22,6 +22,10 @@ export class BaseModalComponent implements OnChanges {
   @Input() primaryDisabled = false;
   @Input() secondaryDisabled = false;
   @Input() backdropDismiss = false;
+  @Input() showHeader = true;
+  @Input() showClose = true;
+  @Input() bodyless = false;
+  @Input() reverseActions = false;
   @Input() size: BaseModalSize = 'md';
 
   @Output() readonly closed = new EventEmitter<void>();

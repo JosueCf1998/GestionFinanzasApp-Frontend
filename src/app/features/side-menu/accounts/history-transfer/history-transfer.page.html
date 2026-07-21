@@ -272,8 +272,9 @@
   (onConfirm)="salirSinGuardar()">
 </app-custom-alert>
 
-<app-basic-alert
+  <app-custom-alert
   *ngIf="showGenericAlert"
+  header=""
   [message]="'No se pudo completar la acción. Por favor, intenta nuevamente.'"
   [imageUrl]="'assets/icon/alert-triangle.svg'"
   [confirmText]="'Entendido'"
@@ -281,7 +282,7 @@
   [reverseButtons]="true"
   [showCancel]="false"
   (onConfirm)="showGenericAlert = false">
-</app-basic-alert>
+  </app-custom-alert>
 
 <!-- ACCOUNT MODAL -->
 <app-account-selector-modal
