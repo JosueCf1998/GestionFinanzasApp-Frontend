@@ -6,6 +6,10 @@ import {
   ListBudgetsApiResponse,
   ListBudgetsRequest
 } from 'src/app/core/models/budgets/list-budgets.model';
+import {
+  DetailBudgetApiResponse,
+  DetailBudgetRequest
+} from 'src/app/core/models/budgets/detail-budget.model';
 import { Result } from 'src/app/core/models/result.model';
 import { ApiService } from 'src/app/core/services/api.service';
 import { environment } from 'src/environments/environment';
@@ -29,6 +33,15 @@ export class BudgetsRepository {
 
     return this.apiService.post<ListBudgetsApiResponse>(
       ENDPOINTS.BUDGETS.LIST,
+      request
+    );
+  }
+
+  getBudgetDetail(
+    request: DetailBudgetRequest
+  ): Observable<Result<DetailBudgetApiResponse>> {
+    return this.apiService.post<DetailBudgetApiResponse>(
+      ENDPOINTS.BUDGETS.DETAIL,
       request
     );
   }

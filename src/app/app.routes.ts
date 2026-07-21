@@ -70,8 +70,8 @@ export const routes: Routes = [
   },
   // BUDGET ROUTES
   {
-    path: 'budgets/detail',
-    loadComponent: () => import('./features/side-menu/budgets/budget-detail/budget-detail.page').then(m => m.BudgetDetailPage)
+    path: 'budgets/detail/:id',
+    loadComponent: () => import('./features/side-menu/budgets/detail-budget/detail-budget.page').then(m => m.DetailBudgetPage)
   },
   {
     path: 'budgets/create',

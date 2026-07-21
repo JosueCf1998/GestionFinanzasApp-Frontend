@@ -1,0 +1,77 @@
+<ion-header>
+  <app-page-layout
+    title="Detalle del presupuesto"
+    [showBack]="true"
+    (back)="backToBudgets()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="detail-budget-page">
+  <main class="detail-budget">
+    <app-budget-summary-card
+      mode="budget"
+      [title]="budget.name"
+      [dateRange]="dateRangeLabel"
+      [icon]="budget.icon"
+      [color]="budget.color"
+      [status]="budget.status"
+      [statusLabel]="statusLabel"
+      [progress]="budget.percentage"
+      [budgeted]="budget.budgeted"
+      [used]="budget.used"
+      [balance]="isExceeded ? exceededAmount : availableAmount"
+      [balanceLabel]="isExceeded ? 'Excedido' : 'Disponible'"
+      [currencySymbol]="currency === 'PEN' ? 'S/' : currency">
+    </app-budget-summary-card>
+
+    <app-warning-message
+      *ngIf="isExceeded"
+      title="Presupuesto excedido"
+      [message]="'Has superado el monto planificado por ' + (exceededAmount | currency:currency:'symbol-narrow':'1.2-2') + '.'">
+    </app-warning-message>
+
+    <app-section-card title="Cuentas vinculadas">
+      <div class="accounts-list">
+        <article *ngFor="let account of budgetAccounts; trackBy: trackByAccount" class="account-row">
+          <app-item-icon [icon]="account.icon" [color]="account.color" size="md" variant="soft"></app-item-icon>
+          <div>
+            <strong>{{ account.name }}</strong>
+            <span>{{ account.typeLabel }}</span>
+          </div>
+        </article>
+      </div>
+    </app-section-card>
+
+    <app-section-card title="Categorías">
+      <div class="categories-list">
+        <article
+          *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
+          class="category-row">
+          <app-item-icon [icon]="category.icon" [color]="category.color" size="md" variant="soft"></app-item-icon>
+
+          <div class="category-row__content">
+            <header>
+              <div>
+                <strong>{{ category.name }}</strong>
+                <span>{{ category.used | currency:currency:'symbol-narrow':'1.2-2' }} de {{ category.budgeted | currency:currency:'symbol-narrow':'1.2-2' }}</span>
+              </div>
+              <b [attr.data-status]="category.status">{{ category.percentage | number:'1.0-1' }}%</b>
+            </header>
+
+            <div class="category-progress">
+              <span [attr.data-status]="category.status" [style.width.%]="category.percentage > 100 ? 100 : category.percentage"></span>
+            </div>
+
+            <small [attr.data-status]="category.status">{{ categoryStatusLabel(category.status) }}</small>
+          </div>
+        </article>
+      </div>
+    </app-section-card>
+
+    <app-info-banner
+      title="Consejo FinVia"
+      [message]="adviceMessage"
+      symbol="✨">
+    </app-info-banner>
+  </main>
+</ion-content>

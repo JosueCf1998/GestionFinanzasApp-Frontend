@@ -22,6 +22,7 @@ import { BudgetListItemComponent } from 'src/app/shared/components/budget-list-i
 import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header/feature-header.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
+import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-summary-card/budget-summary-card.component';
 import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 @Component({
@@ -38,7 +39,8 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
     FeatureHeaderComponent,
     ItemIconComponent,
     FilterModalComponent,
-    FloatingActionButtonComponent
+    FloatingActionButtonComponent,
+    BudgetSummaryCardComponent
   ]
 })
 export class BudgetsPage implements OnInit, OnDestroy {
@@ -160,9 +162,10 @@ export class BudgetsPage implements OnInit, OnDestroy {
   }
 
   openBudget(budget: BudgetListItem): void {
-    this.navService.forward('/budgets/detail', {
-      budgetId: budget.id,
-      currency: this.currency.code
+    this.navService.forward(`/budgets/detail/${budget.id}`, {
+      budget,
+      currency: this.currency.code,
+      dateRangeLabel: this.selectedDate
     });
   }
 

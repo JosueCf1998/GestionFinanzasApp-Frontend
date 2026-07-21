@@ -1,0 +1,272 @@
+:host {
+  display: block;
+}
+
+.summary-card {
+  --progress: 0%;
+  --card-color: var(--fv-primary-light);
+  position: relative;
+  isolation: isolate;
+  padding: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--card-color) 26%, transparent), transparent 38%),
+    var(--fv-gradient-primary);
+  box-shadow: var(--fv-shadow-primary);
+  color: #fff;
+}
+
+.summary-card::before,
+.summary-card::after {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .055);
+  content: '';
+}
+
+.summary-card::before {
+  top: -62px;
+  right: -42px;
+  width: 142px;
+  height: 142px;
+}
+
+.summary-card::after {
+  right: 72px;
+  bottom: -86px;
+  width: 150px;
+  height: 150px;
+}
+
+.summary-card__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 76px;
+  align-items: center;
+  gap: 14px;
+}
+
+.summary-card__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+
+.summary-card__content {
+  min-width: 0;
+}
+
+.summary-card__eyebrow {
+  display: block;
+  margin-bottom: 3px;
+  color: rgba(255, 255, 255, .72);
+  font-size: var(--fv-type-caption-2);
+  font-weight: var(--fv-fw-semibold);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.summary-card h2 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #fff;
+  font-size: var(--fv-type-title-3);
+  font-weight: var(--fv-fw-bold);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.summary-card--budget h2 {
+  font-size: var(--fv-type-subhead);
+}
+
+.summary-card--budget .summary-card__progress {
+  width: 72px;
+  height: 72px;
+}
+
+.summary-card--budget .summary-card__progress::before {
+  width: 58px;
+  height: 58px;
+}
+
+.summary-card__content p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, .72);
+  font-size: var(--fv-type-caption-2);
+}
+
+.summary-card__content p ion-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.summary-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, .22);
+  color: #d9ffe6;
+  font-size: 9px;
+  font-weight: var(--fv-fw-semibold);
+}
+
+.summary-card__status i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.summary-card__status[data-status='WARNING'] {
+  background: rgba(245, 158, 11, .22);
+  color: #fff1c7;
+}
+
+.summary-card__status[data-status='EXCEEDED'] {
+  background: rgba(239, 68, 68, .22);
+  color: #ffe0e0;
+}
+
+.summary-card__progress {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  justify-self: end;
+  border-radius: 50%;
+  background: conic-gradient(#fff 0%, #a5b4fc var(--progress), rgba(255, 255, 255, .16) var(--progress));
+  box-shadow: 0 8px 18px rgba(24, 10, 83, .18);
+  place-items: center;
+}
+
+.summary-card__progress::before {
+  grid-area: 1 / 1;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #3b218f;
+  content: '';
+}
+
+.summary-card__progress > div {
+  z-index: 1;
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.summary-card__progress strong,
+.summary-card__progress span,
+.summary-card__metrics span,
+.summary-card__metrics strong {
+  display: block;
+}
+
+.summary-card__progress strong {
+  font-size: 16px;
+  letter-spacing: -.025em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.summary-card__progress span {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .7);
+  font-size: var(--fv-type-caption-2);
+}
+
+.summary-card__metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 13px -15px -15px;
+  padding: 12px 15px 13px;
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(24, 10, 83, .2);
+}
+
+.summary-card__metrics--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.summary-card__metrics > div {
+  min-width: 0;
+}
+
+.summary-card__metrics > div + div {
+  margin-left: 14px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, .2);
+}
+
+.summary-card__metrics span {
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, .7);
+  font-size: 11px;
+}
+
+.summary-card__metrics strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-card__metrics--three span {
+  font-size: 10px;
+}
+
+.summary-card__metrics--three strong {
+  font-size: 12px;
+}
+
+.summary-card__balance {
+  color: #d5ffe2;
+}
+
+.summary-card__balance--danger {
+  color: #ffd7d7 !important;
+}
+
+@media (max-width: 360px) {
+  .summary-card {
+    padding: 13px;
+  }
+
+  .summary-card__metrics {
+    margin-right: -13px;
+    margin-bottom: -13px;
+    margin-left: -13px;
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+
+  .summary-card__top {
+    grid-template-columns: minmax(0, 1fr) 68px;
+    gap: 10px;
+  }
+
+  .summary-card__progress {
+    width: 68px;
+    height: 68px;
+  }
+
+  .summary-card__progress::before {
+    width: 56px;
+    height: 56px;
+  }
+
+  .summary-card__metrics > div + div {
+    margin-left: 7px;
+    padding-left: 7px;
+  }
+}

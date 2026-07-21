@@ -32,45 +32,18 @@
       <span>Resumen del periodo</span>
     </div>
 
-    <section *ngIf="budgets.length > 0" class="summary-card" aria-label="Resumen de presupuestos">
-      <div class="summary-card__top">
-        <div class="summary-card__heading">
-          <span class="summary-card__period-icon">
-            <img src="assets/icon/budget-wallet.svg" alt="">
-          </span>
-          <div>
-            <span>{{ summaryBalanceLabel }}</span>
-            <h1>{{ currency.symbol }} {{ summaryBalance | number:'1.2-2' }}</h1>
-          </div>
-        </div>
-
-        <div
-          class="summary-progress"
-          role="progressbar"
-          aria-label="Porcentaje total utilizado"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          [attr.aria-valuenow]="summary.percentage"
-          [style.--progress]="summaryProgress + '%'">
-          <div>
-            <strong>{{ summary.percentage | number:'1.0-1' }}%</strong>
-            <span>Utilizado</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="summary-card__values">
-        <div>
-          <span>Total presupuestado</span>
-          <strong>{{ currency.symbol }} {{ summary.budgeted | number:'1.2-2' }}</strong>
-        </div>
-
-        <div>
-          <span>Total utilizado</span>
-          <strong>{{ currency.symbol }} {{ summary.used | number:'1.2-2' }}</strong>
-        </div>
-      </div>
-    </section>
+    <app-budget-summary-card
+      *ngIf="budgets.length > 0"
+      class="period-summary"
+      mode="period"
+      [title]="summaryBalanceLabel"
+      [headline]="currency.symbol + ' ' + (summaryBalance | number:'1.2-2')"
+      icon="wallet"
+      [progress]="summary.percentage"
+      [budgeted]="summary.budgeted"
+      [used]="summary.used"
+      [currencySymbol]="currency.symbol">
+    </app-budget-summary-card>
 
     <section class="budget-list-section">
       <header class="list-heading">

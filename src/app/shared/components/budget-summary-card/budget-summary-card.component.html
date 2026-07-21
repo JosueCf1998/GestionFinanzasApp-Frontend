@@ -1,0 +1,65 @@
+<article
+  class="summary-card"
+  [class.summary-card--budget]="mode === 'budget'"
+  [style.--card-color]="color">
+  <div class="summary-card__top">
+    <div class="summary-card__identity">
+      <app-item-icon
+        [icon]="icon"
+        color="#ffffff"
+        [size]="mode === 'budget' ? 'lg' : 'md'"
+        variant="glass">
+      </app-item-icon>
+
+      <div class="summary-card__content">
+        <span *ngIf="mode === 'period'" class="summary-card__eyebrow">{{ title }}</span>
+        <h2>{{ mode === 'period' ? headline : title }}</h2>
+
+        <p *ngIf="mode === 'budget' && dateRange">
+          <ion-icon src="assets/icon/calendar.svg" aria-hidden="true"></ion-icon>
+          {{ dateRange }}
+        </p>
+
+        <span
+          *ngIf="mode === 'budget' && statusLabel"
+          class="summary-card__status"
+          [attr.data-status]="status">
+          <i></i>{{ statusLabel }}
+        </span>
+      </div>
+    </div>
+
+    <div
+      class="summary-card__progress"
+      role="progressbar"
+      aria-label="Porcentaje utilizado"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="progress"
+      [style.--progress]="normalizedProgress + '%'">
+      <div>
+        <strong>{{ progressLabel }}</strong>
+        <span>Utilizado</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-card__metrics" [class.summary-card__metrics--three]="showBalance">
+    <div>
+      <span>Presupuestado</span>
+      <strong>{{ currencySymbol }} {{ budgeted | number:'1.2-2' }}</strong>
+    </div>
+    <div>
+      <span>Utilizado</span>
+      <strong>{{ currencySymbol }} {{ used | number:'1.2-2' }}</strong>
+    </div>
+    <div *ngIf="showBalance">
+      <span>{{ balanceLabel }}</span>
+      <strong
+        [class.summary-card__balance]="status !== 'EXCEEDED'"
+        [class.summary-card__balance--danger]="status === 'EXCEEDED'">
+        {{ currencySymbol }} {{ balance | number:'1.2-2' }}
+      </strong>
+    </div>
+  </div>
+</article>
