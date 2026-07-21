@@ -1,9 +1,16 @@
-<ion-item lines="none" class="amount-input-item" [class.enhanced]="isEnhanced" [class.is-disabled]="isDisabled">
+<ion-item
+  lines="none"
+  class="amount-input-item"
+  [class.enhanced]="isEnhanced"
+  [class.embedded]="embedded"
+  [class.is-disabled]="isDisabled">
   <span class="currency-label">{{ currencyLabel }}</span>
   <ion-input
     type="text"
+    [inputmode]="inputMode"
     [value]="displayValue"
     [placeholder]="placeholder"
+    [attr.aria-label]="ariaLabel"
     [required]="required"
     [disabled]="isDisabled"
     (ionInput)="onAmountInput($event)"

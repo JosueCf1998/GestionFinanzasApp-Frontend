@@ -15,7 +15,7 @@
   margin: 0 auto;
   padding: 18px 14px calc(30px + env(safe-area-inset-bottom));
   flex-direction: column;
-  gap: 13px;
+  gap: 18px;
 }
 
 .identity-preview {
@@ -26,14 +26,17 @@
   text-align: center;
 
   h2 {
-    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
     margin: 13px 0 4px;
-    overflow: hidden;
+    padding: 0 18px;
     color: var(--fv-text-primary);
     font-size: 20px;
     font-weight: 750;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    text-align: center;
+    white-space: normal;
   }
 
   > span {
@@ -48,9 +51,21 @@
   width: 90px;
   height: 90px;
   border-radius: 27px;
+  border: 0;
+  padding: 0;
   background: linear-gradient(145deg, #f0eaff, #f7f7ff);
   box-shadow: 0 12px 28px rgba(67, 24, 184, 0.1);
   place-items: center;
+  cursor: pointer;
+
+  &:active {
+    transform: scale(.97);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(67, 24, 184, 0.16);
+    outline-offset: 3px;
+  }
 }
 
 .identity-edit {
@@ -73,34 +88,15 @@
   }
 }
 
-.clean-input {
-  --background: transparent;
-  --padding-bottom: 0;
-  --padding-start: 0;
-  --padding-top: 0;
-
-  min-height: 32px;
-  color: var(--fv-text-primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.amount-card app-amount-input {
-  display: block;
-}
-
-.period-summary {
+.selection-summary {
   display: flex;
-  box-sizing: border-box;
   width: 100%;
-  min-height: 58px;
+  min-height: 36px;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 11px 10px 13px;
-  border: 1px solid #eceefa;
-  border-radius: 12px;
-  background: #f8f8fd;
+  gap: 11px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   font: inherit;
   text-align: left;
 
@@ -108,28 +104,112 @@
     transform: scale(.99);
   }
 
+  &:focus-visible {
+    border-radius: 12px;
+    outline: 2px solid rgba(67, 24, 184, 0.15);
+    outline-offset: 4px;
+  }
+
+  &__icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    border-radius: 11px;
+    background: #eaf0ff;
+    color: #4359c7;
+    place-items: center;
+
+    &--category {
+      background: #f0ebff;
+      color: var(--create-primary);
+    }
+
+    &--period {
+      background: #eeeaff;
+      color: var(--create-primary);
+    }
+
+    ion-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__preview {
+    position: relative;
+    display: block;
+    width: 42px;
+    height: 32px;
+    flex: 0 0 42px;
+
+    &--single {
+      width: 34px;
+      flex-basis: 34px;
+    }
+
+    &--double {
+      width: 38px;
+      flex-basis: 38px;
+    }
+
+    app-item-icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      margin: 0;
+      border-radius: 12px;
+
+      &:first-child {
+        z-index: 3;
+      }
+
+      &:nth-child(2) {
+        top: -4px;
+        left: 4px;
+        z-index: 2;
+      }
+
+      &:nth-child(3) {
+        top: -8px;
+        left: 8px;
+        z-index: 1;
+      }
+    }
+
+    &--single app-item-icon {
+      top: 0;
+      left: 1px;
+    }
+  }
+
   &__content {
     display: grid;
     min-width: 0;
+    flex: 1;
     gap: 4px;
+
+    strong,
+    small {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      color: #2e3442;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    small {
+      color: #7b8498;
+      font-size: 11px;
+    }
   }
 
-  &__content > span {
-    color: var(--create-primary);
-    font-size: 11px;
-    font-weight: 750;
-  }
-
-  &__content > strong {
-    overflow: hidden;
-    color: #5f687c;
-    font-size: 11px;
-    font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  > ion-icon {
+  &__arrow {
     width: 17px;
     height: 17px;
     flex: 0 0 17px;
@@ -137,11 +217,27 @@
   }
 }
 
-.color-picker {
-  display: block;
-  margin-top: 2px;
-  padding-top: 15px;
-  border-top: 1px solid #edf0f6;
+.personalization-modal {
+  display: grid;
+  gap: 20px;
+
+  section {
+    display: grid;
+    gap: 11px;
+
+    & + section {
+      padding-top: 18px;
+      border-top: 1px solid #edf0f6;
+    }
+  }
+
+  &__label {
+    color: var(--fv-text-secondary, #64748b);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
 }
 
 .budget-tip {
@@ -180,6 +276,10 @@
 
   .identity-preview {
     padding-top: 14px;
+  }
+
+  .create-budget-form {
+    gap: 16px;
   }
 
 }

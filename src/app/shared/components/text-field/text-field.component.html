@@ -1,0 +1,30 @@
+<div
+  class="text-field"
+  [class.text-field--embedded]="embedded"
+  [class.text-field--focused]="isFocused"
+  [class.text-field--disabled]="isDisabled"
+  [class.text-field--error]="errorText">
+  <ion-input
+    type="text"
+    [value]="value"
+    [placeholder]="placeholder"
+    [attr.aria-label]="ariaLabel"
+    [attr.aria-invalid]="errorText ? true : null"
+    [autocomplete]="autocomplete"
+    [maxlength]="maxLength"
+    [required]="required"
+    [disabled]="isDisabled"
+    (ionInput)="handleInput($event)"
+    (ionFocus)="handleFocus()"
+    (ionBlur)="handleBlur()">
+  </ion-input>
+
+  @if (supportingText || (showCounter && maxLength)) {
+    <div class="text-field__footer" aria-live="polite">
+      <span>{{ supportingText }}</span>
+      @if (showCounter && maxLength) {
+        <span class="text-field__counter">{{ value.length }}/{{ maxLength }}</span>
+      }
+    </div>
+  }
+</div>

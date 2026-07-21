@@ -14,7 +14,7 @@
       class="fv-account-item fv-all-account"
       [class.selected]="selectAll"
       (click)="toggleSelectAll()">
-      <app-item-icon icon="wallet" color="var(--fv-primary)" [selected]="selectAll"></app-item-icon>
+      <app-item-icon icon="wallet" color="var(--fv-primary)" variant="soft" [selected]="selectAll"></app-item-icon>
       <div class="fv-account-content" [class.selected]="selectAll">
         <span class="fv-account-name">Todas las cuentas</span>
         <span class="fv-account-balance">Mostrar todas las cuentas</span>
@@ -30,7 +30,12 @@
       class="fv-account-item"
       [class.selected]="isSelected(account)"
       (click)="selectAccount(account)">
-      <app-item-icon [icon]="account.icon" [color]="account.color" [selected]="isSelected(account)"></app-item-icon>
+      <app-item-icon
+        [icon]="account.icon"
+        [color]="account.color"
+        variant="soft"
+        [selected]="isSelected(account)">
+      </app-item-icon>
       <div class="fv-account-content" [class.selected]="isSelected(account)">
         <span class="fv-account-name">{{ account.name }}</span>
         <span class="fv-account-balance">S/. {{ +account.amount | number:'1.2-2' }}</span>

@@ -11,6 +11,8 @@ export interface CreateBudgetRequest {
   endDate: string;
   icon: string;
   color: string;
+  accountIds: number[];
+  categoryIds: number[];
 }
 
 export interface CreateBudgetResponse {

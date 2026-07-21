@@ -27,6 +27,8 @@ export class AmountInputComponent implements ControlValueAccessor {
   private static readonly MAX_ALLOWED_DIGITS = 15;
 
   @Input() placeholder: string = '0.00';
+  @Input() ariaLabel: string = 'Monto';
+  @Input() embedded: boolean = false;
   @Input() required: boolean = false;
   @Input() currencyCode: CurrencyCode = 'PEN';
   @Input() variant: AmountInputVariant = 'basic';
@@ -142,6 +144,10 @@ export class AmountInputComponent implements ControlValueAccessor {
 
   get currencyLabel(): string {
     return this.currencyCode === 'USD' ? 'USD' : 'S/';
+  }
+
+  get inputMode(): 'numeric' {
+    return 'numeric';
   }
 
   get isEnhanced(): boolean {
