@@ -6,7 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ICONOS_CUENTA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
+import { ACCOUNT_ICONS, IconOption } from 'src/app/shared/constants/category-options';
+import { ColorOption, PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
@@ -68,8 +69,8 @@ export class CreateAccountPage {
   nombreCuenta = '';
   montoInicial: number | null = null;
 
-  iconos = ICONOS_CUENTA;
-  colores = COLORES_CATEGORIA;
+  iconos = ACCOUNT_ICONS;
+  colores = PERSONALIZATION_COLORS;
 
   iconoSeleccionado = '';
   colorSeleccionado = '';
@@ -235,13 +236,13 @@ export class CreateAccountPage {
   // UI ACTIONS
   // =========================
 
-  seleccionarIcono(icon: any) {
-    this.iconoSeleccionado = icon.archivo;
+  seleccionarIcono(option: IconOption) {
+    this.iconoSeleccionado = option.icon;
     this.cambiosPendientes = true;
   }
 
-  seleccionarColor(color: any) {
-    this.colorSeleccionado = color.valor;
+  seleccionarColor(option: ColorOption) {
+    this.colorSeleccionado = option.value;
     this.cambiosPendientes = true;
   }
 

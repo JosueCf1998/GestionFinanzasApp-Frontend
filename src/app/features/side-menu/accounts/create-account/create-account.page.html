@@ -133,15 +133,15 @@
           *ngFor="let icon of iconos"
           type="button"
           class="icon-button"
-          [class.selected]="icon.archivo === iconoSeleccionado"
+          [class.selected]="icon.icon === iconoSeleccionado"
           (click)="seleccionarIcono(icon)">
 
           <app-item-icon
-            [icon]="icon.archivo"
+            [icon]="icon.icon"
             [color]="colorSeleccionado"
             size="sm"
             variant="soft"
-            [selected]="icon.archivo === iconoSeleccionado">
+            [selected]="icon.icon === iconoSeleccionado">
           </app-item-icon>
 
         </button>
@@ -172,12 +172,12 @@
           *ngFor="let color of colores"
           type="button"
           class="color-button"
-          [style.background]="color.valor"
-          [class.selected]="color.valor === colorSeleccionado"
+          [style.background]="color.value"
+          [class.selected]="color.value === colorSeleccionado"
           (click)="seleccionarColor(color)">
 
           <ion-icon
-            *ngIf="color.valor === colorSeleccionado"
+            *ngIf="color.value === colorSeleccionado"
             src="assets/icon/check.svg">
 
           </ion-icon>

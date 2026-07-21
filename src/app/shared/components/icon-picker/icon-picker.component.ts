@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { IconOption } from '../../constants/category-options';
 import { BaseModalComponent } from '../base-modal/base-modal.component';
 import { ItemIconComponent } from '../item-icon/item-icon.component';
 
-export interface IconPickerOption {
-  nombre: string;
-  archivo: string;
-}
+export type IconPickerOption = IconOption;
 
 @Component({
   selector: 'app-icon-picker',
@@ -28,29 +26,29 @@ export class IconPickerComponent {
   private promotedIcons: string[] = [];
 
   get quickOptions(): readonly IconPickerOption[] {
-    const availableIcons = new Set(this.options.map(option => option.archivo));
+    const availableIcons = new Set(this.options.map(option => option.icon));
     this.promotedIcons = this.promotedIcons.filter(icon => availableIcons.has(icon));
 
     const promotedOptions = this.promotedIcons
-      .map(icon => this.options.find(option => option.archivo === icon))
+      .map(icon => this.options.find(option => option.icon === icon))
       .filter((option): option is IconPickerOption => Boolean(option));
     const promotedSet = new Set(this.promotedIcons);
     const orderedOptions = [
       ...promotedOptions,
-      ...this.options.filter(option => !promotedSet.has(option.archivo))
+      ...this.options.filter(option => !promotedSet.has(option.icon))
     ];
 
     return orderedOptions.slice(0, this.visibleCount);
   }
 
   select(option: IconPickerOption, fromModal = false): void {
-    if (fromModal && !this.quickOptions.some(item => item.archivo === option.archivo)) {
+    if (fromModal && !this.quickOptions.some(item => item.icon === option.icon)) {
       this.promotedIcons = [
-        option.archivo,
-        ...this.promotedIcons.filter(icon => icon !== option.archivo)
+        option.icon,
+        ...this.promotedIcons.filter(icon => icon !== option.icon)
       ].slice(0, this.visibleCount);
     }
-    this.selectedChange.emit(option.archivo);
+    this.selectedChange.emit(option.icon);
     if (fromModal) this.closeModal();
   }
 
@@ -63,7 +61,7 @@ export class IconPickerComponent {
   }
 
   iconColor(option: IconPickerOption): string {
-    if (option.archivo !== this.selected) return '#a3a8b3';
+    if (option.icon !== this.selected) return '#a3a8b3';
     return this.color.toLowerCase() === '#222' ? '#111111' : this.color;
   }
 }

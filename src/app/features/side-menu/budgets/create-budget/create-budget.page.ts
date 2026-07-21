@@ -42,7 +42,8 @@ import {
   FilterModalComponent,
   FilterSelection
 } from 'src/app/shared/components/filter-modal/filter-modal.component';
-import { COLORES_CATEGORIA, ICONOS_CATEGORIA } from 'src/app/shared/constants/category-options';
+import { CATEGORY_ICONS } from 'src/app/shared/constants/category-options';
+import { PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 import 'src/app/core/utils/observable-extensions';
 
 @Component({
@@ -73,8 +74,8 @@ import 'src/app/core/utils/observable-extensions';
 export class CreateBudgetPage implements OnInit {
   // MARK: - CONFIGURACIÓN
 
-  readonly icons = ICONOS_CATEGORIA;
-  readonly colors = COLORES_CATEGORIA;
+  readonly icons = CATEGORY_ICONS;
+  readonly colors = PERSONALIZATION_COLORS;
   readonly AccountSelectionMode = AccountSelectionMode;
 
   private readonly initialIcon = 'wallet';

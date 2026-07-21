@@ -43,13 +43,13 @@
       <button
         *ngFor="let option of icons"
         type="button"
-        [class.selected]="option.archivo === draftIcon"
-        [attr.aria-label]="option.nombre"
-        [attr.aria-pressed]="option.archivo === draftIcon"
-        (click)="selectIcon(option.archivo)">
+        [class.selected]="option.icon === draftIcon"
+        [attr.aria-label]="option.label"
+        [attr.aria-pressed]="option.icon === draftIcon"
+        (click)="selectIcon(option.icon)">
         <app-item-icon
-          [icon]="option.archivo"
-          [color]="option.archivo === draftIcon ? draftColor : '#8f97a8'"
+          [icon]="option.icon"
+          [color]="option.icon === draftIcon ? draftColor : '#8f97a8'"
           size="md"
           variant="soft">
         </app-item-icon>
@@ -60,11 +60,11 @@
       <button
         *ngFor="let option of colors"
         type="button"
-        [class.selected]="option.valor === draftColor"
-        [attr.aria-label]="option.nombre"
-        [attr.aria-pressed]="option.valor === draftColor"
-        (click)="selectColor(option.valor)">
-        <span [style.background]="option.valor"></span>
+        [class.selected]="option.value === draftColor"
+        [attr.aria-label]="option.label"
+        [attr.aria-pressed]="option.value === draftColor"
+        (click)="selectColor(option.value)">
+        <span [style.background]="option.value"></span>
       </button>
     </section>
   </main>

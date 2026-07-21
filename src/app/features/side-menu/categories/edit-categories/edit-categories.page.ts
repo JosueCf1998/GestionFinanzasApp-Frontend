@@ -3,7 +3,8 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { ICONOS_CATEGORIA, COLORES_CATEGORIA } from 'src/app/shared/constants/category-options';
+import { CATEGORY_ICONS, IconOption } from 'src/app/shared/constants/category-options';
+import { ColorOption, PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Router } from '@angular/router';
 import { Categoria } from 'src/app/shared/models/categoria.model';
@@ -27,8 +28,8 @@ export class EditCategoriesPage {
   tipoCategoria: string;
   category: Categoria;
 
-  iconos = ICONOS_CATEGORIA;
-  colores = COLORES_CATEGORIA;
+  iconos = CATEGORY_ICONS;
+  colores = PERSONALIZATION_COLORS;
 
   nombreCategoria: string = '';
   colorCategoria: string;
@@ -112,15 +113,15 @@ export class EditCategoriesPage {
 
   // MARK: - FUNCIONALIDADES
 
-  seleccionarIcono(icon: any) {
-    this.iconoSeleccionado = icon.archivo;
-    this.iconoCategoria = icon.archivo;
+  seleccionarIcono(option: IconOption) {
+    this.iconoSeleccionado = option.icon;
+    this.iconoCategoria = option.icon;
     this.detectarCambios();
   }
 
-  seleccionarColor(color: any) {
-    this.colorSeleccionado = color.valor;
-    this.colorCategoria = color.valor;
+  seleccionarColor(option: ColorOption) {
+    this.colorSeleccionado = option.value;
+    this.colorCategoria = option.value;
     this.detectarCambios();
   }
 

@@ -6,10 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule } from '@ionic/angular';
 
-import {
-  ICONOS_CATEGORIA,
-  COLORES_CATEGORIA
-} from 'src/app/shared/constants/category-options';
+import { CATEGORY_ICONS, IconOption } from 'src/app/shared/constants/category-options';
+import { ColorOption, PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
@@ -57,9 +55,9 @@ export class CreateCategoriesPage {
     }
   ];
 
-  readonly iconos = ICONOS_CATEGORIA;
+  readonly iconos = CATEGORY_ICONS;
 
-  readonly colores = COLORES_CATEGORIA;
+  readonly colores = PERSONALIZATION_COLORS;
 
   /* ==========================
      FORM
@@ -151,16 +149,16 @@ export class CreateCategoriesPage {
      FORM ACTIONS
      ========================== */
 
-  seleccionarIcono(icon: { archivo: string }): void {
+  seleccionarIcono(option: IconOption): void {
 
     this.iconoSeleccionado =
-      icon.archivo;
+      option.icon;
   }
 
-  seleccionarColor(color: { valor: string }): void {
+  seleccionarColor(option: ColorOption): void {
 
     this.colorSeleccionado =
-      color.valor;
+      option.value;
   }
 
   clearNombreCategoria(): void {

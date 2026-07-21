@@ -1,6 +1,6 @@
 <div class="color-picker" aria-label="Seleccionar color">
   <div class="color-picker__row">
-    <button *ngFor="let option of quickOptions" type="button" class="color-picker__button" [style.background]="option.valor" [class.selected]="option.valor === selected" [attr.aria-label]="option.nombre" [attr.aria-pressed]="option.valor === selected" (click)="select(option)"></button>
+    <button *ngFor="let option of quickOptions" type="button" class="color-picker__button" [style.background]="option.value" [class.selected]="option.value === selected" [attr.aria-label]="option.label" [attr.aria-pressed]="option.value === selected" (click)="select(option)"></button>
     <button *ngIf="options.length > visibleCount" type="button" class="color-picker__more" aria-label="Ver más colores" [attr.aria-expanded]="isModalOpen" [class.active]="isModalOpen" (click)="openModal()"><span>…</span></button>
   </div>
 </div>
@@ -11,8 +11,8 @@
   description="Elige el color que identificará este elemento."
   (closed)="closeModal()">
       <div class="picker-grid">
-        <button *ngFor="let option of options" type="button" class="picker-option" [class.selected]="option.valor === selected" [attr.aria-label]="option.nombre" [attr.aria-pressed]="option.valor === selected" (click)="select(option, true)">
-          <span class="picker-swatch" [style.background]="option.valor"></span>
+        <button *ngFor="let option of options" type="button" class="picker-option" [class.selected]="option.value === selected" [attr.aria-label]="option.label" [attr.aria-pressed]="option.value === selected" (click)="select(option, true)">
+          <span class="picker-swatch" [style.background]="option.value"></span>
         </button>
       </div>
 </app-base-modal>
