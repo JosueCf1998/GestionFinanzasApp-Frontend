@@ -37,6 +37,7 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
 import { WarningMessageComponent } from 'src/app/shared/components/warning-message/warning-message.component';
+import { BudgetSuccessModalComponent } from 'src/app/shared/components/budget-success-modal/budget-success-modal.component';
 import {
   FilterModalComponent,
   FilterSelection
@@ -65,7 +66,8 @@ import 'src/app/core/utils/observable-extensions';
     FilterModalComponent,
     SectionCardComponent,
     InfoBannerComponent,
-    WarningMessageComponent
+    WarningMessageComponent,
+    BudgetSuccessModalComponent
   ]
 })
 export class CreateBudgetPage implements OnInit {
@@ -100,6 +102,7 @@ export class CreateBudgetPage implements OnInit {
   isCategoryModalOpen = false;
   isPersonalizationModalOpen = false;
   isSaving = false;
+  isSuccessModalOpen = false;
   showDataError = false;
   showAccountBalanceRequiredAlert = false;
 
@@ -150,7 +153,7 @@ export class CreateBudgetPage implements OnInit {
       success: () => {
         this.loadingService.hide();
         this.isSaving = false;
-        this.navService.back();
+        this.isSuccessModalOpen = true;
       },
       failure: error => {
         this.loadingService.hide();
@@ -405,6 +408,11 @@ export class CreateBudgetPage implements OnInit {
     this.navService.back();
   }
 
+  viewBudgets(): void {
+    this.isSuccessModalOpen = false;
+    void this.navService.replace('/main/budgets');
+  }
+
   // MARK: - FUNCIONES PRIVADAS
 
   private currentMonthSelection(): FilterSelection {
@@ -431,7 +439,8 @@ export class CreateBudgetPage implements OnInit {
   private selectionLabel(names: string[], emptyLabel: string): string {
     if (names.length === 0) return emptyLabel;
     if (names.length <= 2) return names.join(', ');
-    return `${names.slice(0, 2).join(', ')} y ${names.length - 2} más`;
+    const remaining = names.length - 2;
+    return `${names.slice(0, 2).join(', ')} y ${remaining} mas}`;
   }
 
   private resetForm(): void {
@@ -452,6 +461,7 @@ export class CreateBudgetPage implements OnInit {
     this.isCategoryModalOpen = false;
     this.isPersonalizationModalOpen = false;
     this.isSaving = false;
+    this.isSuccessModalOpen = false;
   }
 
 }

@@ -1,6 +1,6 @@
 <ion-header>
   <app-page-layout
-    title="Nuevo presupuesto"
+    title="Crear Presupuesto"
     [showBack]="true"
     [loading]="isSaving"
     (back)="backToBudgets()">
@@ -140,6 +140,17 @@
   (modalClosed)="closePersonalizationModal()"
   (applied)="applyPersonalization($event)">
 </app-personalization-modal>
+
+<app-budget-success-modal
+  [isOpen]="isSuccessModalOpen"
+  [budgetName]="name"
+  [budgetTotal]="categoryAllocationTotal"
+  [dateRange]="formattedDateRange"
+  [accountsLabel]="selectedAccountsLabel"
+  [categoriesLabel]="selectedCategoriesLabel"
+  [note]="notes.trim()"
+  (viewBudgets)="viewBudgets()">
+</app-budget-success-modal>
 
 <app-custom-alert
   *ngIf="showUnsavedAlert"
