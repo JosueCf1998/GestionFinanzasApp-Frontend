@@ -26,7 +26,11 @@ export const ENDPOINTS = {
 
     CREATE: 'budgets/register',
 
-    DETAIL: 'budgets/detail'
+    DETAIL: 'budgets/detail',
+
+    UPDATE: 'budgets/update',
+
+    DELETE: 'budgets/delete'
 
   },
 

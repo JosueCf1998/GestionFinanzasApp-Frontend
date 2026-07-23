@@ -227,6 +227,12 @@ export class DetailBudgetPage implements OnInit {
     void this.navService.back();
   }
 
+  editBudget(): void {
+    if (this.availableActions?.canEdit === false || this.budget.id <= 0) return;
+
+    void this.navService.forward(`/budgets/${this.budget.id}/edit`);
+  }
+
   // MARK: - TRACKING
 
   trackByCategory(_: number, category: CategoryBudget): number {

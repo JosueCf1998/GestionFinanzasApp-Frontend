@@ -77,6 +77,10 @@ export const routes: Routes = [
     path: 'budgets/create',
     loadComponent: () => import('./features/side-menu/budgets/create-budget/create-budget.page').then(m => m.CreateBudgetPage)
   },
+  {
+    path: 'budgets/:id/edit',
+    loadComponent: () => import('./features/side-menu/budgets/create-budget/create-budget.page').then(m => m.CreateBudgetPage)
+  },
   // TRANSACTION ROUTES
   {
     path: 'home/create',

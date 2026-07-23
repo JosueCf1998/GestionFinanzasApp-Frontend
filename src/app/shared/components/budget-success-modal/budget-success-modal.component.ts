@@ -13,6 +13,7 @@ import { BaseModalComponent } from '../base-modal/base-modal.component';
 })
 export class BudgetSuccessModalComponent implements OnChanges {
   @Input() isOpen = false;
+  @Input() mode: 'create' | 'edit' = 'create';
   @Input() budgetName = '';
   @Input() budgetTotal = 0;
   @Input() dateRange = '';
@@ -23,23 +24,37 @@ export class BudgetSuccessModalComponent implements OnChanges {
   @Output() readonly viewBudgets = new EventEmitter<void>();
 
   modalOpen = false;
+  modalAnimated = true;
   private shouldNavigate = false;
+
+  get modalTitle(): string {
+    return this.mode === 'edit' ? 'Presupuesto actualizado' : 'Presupuesto creado';
+  }
+
+  get eyebrow(): string {
+    return this.mode === 'edit' ? '¡Cambios guardados!' : '¡Presupuesto creado!';
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isOpen']) {
       this.modalOpen = this.isOpen;
+      if (this.isOpen) {
+        this.modalAnimated = true;
+        this.shouldNavigate = false;
+      }
     }
   }
 
   requestViewBudgets(): void {
     this.shouldNavigate = true;
+    this.modalAnimated = false;
     this.modalOpen = false;
   }
 
   handleClosed(): void {
-    if (this.shouldNavigate) {
-      this.shouldNavigate = false;
-      this.viewBudgets.emit();
-    }
+    if (!this.shouldNavigate) return;
+
+    this.shouldNavigate = false;
+    this.viewBudgets.emit();
   }
 }

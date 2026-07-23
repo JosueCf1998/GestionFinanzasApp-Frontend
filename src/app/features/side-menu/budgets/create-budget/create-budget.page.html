@@ -1,8 +1,8 @@
 <ion-header>
   <app-page-layout
-    title="Crear Presupuesto"
+    [title]="isEditMode ? 'Editar presupuesto' : 'Crear presupuesto'"
     [showBack]="true"
-    [loading]="isSaving"
+    [loading]="isSaving || isDeleting"
     (back)="backToBudgets()">
   </app-page-layout>
 </ion-header>
@@ -84,6 +84,7 @@
     </app-section-card>
 
     <app-info-banner
+      *ngIf="!isEditMode"
       title="Consejo FinVia"
       [message]="budgetAdviceMessage"
       symbol="✨">
@@ -91,10 +92,22 @@
 
     <div class="action-container">
       <app-button
-        [text]="isSaving ? 'Creando...' : 'Crear presupuesto'"
+        [text]="isSaving
+          ? (isEditMode ? 'Guardando...' : 'Creando...')
+          : (isEditMode ? 'Guardar cambios' : 'Crear presupuesto')"
         type="submit"
         [loading]="isSaving"
         [disabled]="!canSave">
+      </app-button>
+
+      <app-button
+        *ngIf="isEditMode && canDeleteBudget"
+        text="Eliminar presupuesto"
+        icon="trash"
+        variant="danger"
+        [loading]="isDeleting"
+        [disabled]="isSaving || isDeleting"
+        (clicked)="requestDeleteBudget()">
       </app-button>
     </div>
   </form>
@@ -149,6 +162,7 @@
   [accountsLabel]="selectedAccountsLabel"
   [categoriesLabel]="selectedCategoriesLabel"
   [note]="notes.trim()"
+  [mode]="isEditMode ? 'edit' : 'create'"
   (viewBudgets)="viewBudgets()">
 </app-budget-success-modal>
 
@@ -160,6 +174,24 @@
   confirmText="Sí"
   (onCancel)="showUnsavedAlert = false"
   (onConfirm)="leaveWithoutSaving()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar presupuesto"
+  [message]="'Esta acción eliminará definitivamente “' + name.trim() + '” y no se puede deshacer. ¿Deseas continuar?'"
+  cancelText="Cancelar"
+  confirmText="Eliminar"
+  (onCancel)="cancelDeleteBudget()"
+  (onConfirm)="confirmDeleteBudget()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteError"
+  header="No se pudo eliminar"
+  message="Ocurrió un error al eliminar el presupuesto. Inténtalo nuevamente."
+  confirmText="Aceptar"
+  (onConfirm)="showDeleteError = false">
 </app-custom-alert>
 
 <app-custom-alert
@@ -181,7 +213,9 @@
 <app-custom-alert
   *ngIf="showErrorAlert"
   header="Error"
-  message="No se pudo crear el presupuesto. Inténtalo nuevamente."
+  [message]="isEditMode
+    ? 'No se pudo actualizar el presupuesto. Inténtalo nuevamente.'
+    : 'No se pudo crear el presupuesto. Inténtalo nuevamente.'"
   confirmText="Aceptar"
   (onConfirm)="showErrorAlert = false">
 </app-custom-alert>

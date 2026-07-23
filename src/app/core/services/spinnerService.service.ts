@@ -7,13 +7,21 @@ import { BehaviorSubject } from "rxjs";
 })
 export class SpinnerService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  loading$ = this.loadingSubject.asObservable();
+  readonly loading$ = this.loadingSubject.asObservable();
 
-  show() {
-    this.loadingSubject.next(true);
+  show(): void {
+    this.setLoading(true);
   }
 
-  hide() {
-    this.loadingSubject.next(false);
+  hide(): void {
+    this.setLoading(false);
+  }
+
+  private setLoading(value: boolean): void {
+    queueMicrotask(() => {
+      if (this.loadingSubject.value !== value) {
+        this.loadingSubject.next(value);
+      }
+    });
   }
 }

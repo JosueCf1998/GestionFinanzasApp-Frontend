@@ -1,19 +1,20 @@
 <app-base-modal
   [isOpen]="modalOpen"
-  title="Presupuesto creado"
+  [title]="modalTitle"
   primaryText="Ir a mis presupuestos"
   [showHeader]="false"
   [showClose]="false"
   [backdropDismiss]="false"
+  [animated]="modalAnimated"
   size="sm"
   (closed)="handleClosed()"
   (primary)="requestViewBudgets()">
-  <section class="success-content" aria-label="Presupuesto creado correctamente">
+  <section class="success-content" [attr.aria-label]="modalTitle + ' correctamente'">
     <div class="success-icon" aria-hidden="true">
       <ion-icon src="assets/icon/success-check.svg"></ion-icon>
     </div>
 
-    <p class="success-eyebrow">¡Presupuesto creado!</p>
+    <p class="success-eyebrow">{{ eyebrow }}</p>
     <h2>{{ budgetName }}</h2>
 
     <dl class="receipt-details">

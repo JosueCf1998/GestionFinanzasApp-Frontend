@@ -10,8 +10,10 @@
       size="md"
       variant="nav-glass"
       [interactive]="true"
+      [disabled]="availableActions?.canEdit === false"
       ariaLabel="Editar presupuesto"
-      title="Editar presupuesto">
+      title="Editar presupuesto"
+      (activated)="editBudget()">
     </app-item-icon>
   </app-page-layout>
 </ion-header>
