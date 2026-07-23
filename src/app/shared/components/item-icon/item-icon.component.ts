@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
    TYPES
    ========================================================== */
 
-export type ItemIconSize = 'sm' | 'md' | 'lg' | 'xl';
+export type ItemIconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type ItemIconShape = 'rounded' | 'circle';
 export type ItemIconVariant = 'solid' | 'soft' | 'glass';
 

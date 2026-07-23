@@ -1,0 +1,83 @@
+:host {
+  display: block;
+  justify-self: end;
+}
+
+.circular-progress {
+  --progress: 0%;
+  display: grid;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #fff 0%,
+    #a5b4fc var(--progress),
+    rgba(255, 255, 255, .16) var(--progress)
+  );
+  box-shadow: 0 8px 18px rgba(24, 10, 83, .18);
+  place-items: center;
+}
+
+.circular-progress::before {
+  grid-area: 1 / 1;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #3b218f;
+  content: '';
+}
+
+.circular-progress__content {
+  z-index: 1;
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.circular-progress strong,
+.circular-progress span {
+  display: block;
+}
+
+.circular-progress strong {
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: -.025em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.circular-progress span {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .7);
+  font-size: var(--fv-type-caption-2);
+}
+
+.circular-progress--sm {
+  width: 64px;
+  height: 64px;
+}
+
+.circular-progress--sm::before {
+  width: 52px;
+  height: 52px;
+}
+
+.circular-progress--sm strong {
+  font-size: 14px;
+}
+
+.circular-progress--sm span {
+  margin-top: 2px;
+}
+
+@media (max-width: 360px) {
+  .circular-progress:not(.circular-progress--sm) {
+    width: 68px;
+    height: 68px;
+  }
+
+  .circular-progress:not(.circular-progress--sm)::before {
+    width: 56px;
+    height: 56px;
+  }
+}

@@ -152,6 +152,15 @@
   }
 }
 
+.selection-summary__trailing {
+  flex: 0 0 auto;
+  color: var(--fv-text-primary, #172033);
+  font-size: var(--fv-type-footnote, 13px);
+  font-weight: var(--fv-fw-bold, 700);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 @media (hover: hover) {
   .selection-summary__action:hover {
     border-color: color-mix(in srgb, var(--fv-primary, #4318b8) 28%, transparent);

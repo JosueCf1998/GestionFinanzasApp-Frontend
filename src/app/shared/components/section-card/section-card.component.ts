@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 
+export type SectionCardAppearance = 'card' | 'plain';
+
 @Component({
   selector: 'app-section-card',
   templateUrl: './section-card.component.html',
@@ -11,4 +13,5 @@ import { NgIf } from '@angular/common';
 })
 export class SectionCardComponent {
   @Input() title = '';
+  @Input() appearance: SectionCardAppearance = 'card';
 }

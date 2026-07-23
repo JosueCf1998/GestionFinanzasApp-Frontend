@@ -39,13 +39,21 @@
   box-shadow: 0 7px 22px rgba(34, 39, 76, 0.055);
 }
 
+.section-card--plain {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .section-card__content {
   display: grid;
   gap: 14px;
 }
 
 @media (max-width: 420px) {
-  .section-card {
+  .section-card:not(.section-card--plain) {
     padding: 15px;
   }
 }

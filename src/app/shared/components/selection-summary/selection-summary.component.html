@@ -42,6 +42,10 @@
     </ion-icon>
   </button>
 
+  <span *ngIf="trailingText" class="selection-summary__trailing">
+    {{ trailingText }}
+  </span>
+
   <button
     *ngIf="actionText"
     type="button"

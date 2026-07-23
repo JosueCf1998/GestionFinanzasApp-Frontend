@@ -1,9 +1,13 @@
-<section class="section-card-section">
+<section
+  class="section-card-section"
+  [class.section-card-section--plain]="appearance === 'plain'">
   <header *ngIf="title" class="section-card__header">
     <h3>{{ title }}</h3>
   </header>
 
-  <div class="section-card">
+  <div
+    class="section-card"
+    [class.section-card--plain]="appearance === 'plain'">
     <div class="section-card__content">
       <ng-content></ng-content>
     </div>

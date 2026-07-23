@@ -1,0 +1,14 @@
+<div
+  class="circular-progress"
+  [class.circular-progress--sm]="size === 'sm'"
+  role="progressbar"
+  [attr.aria-label]="ariaLabel"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.aria-valuenow]="progress"
+  [style.--progress]="normalizedProgress + '%'">
+  <div class="circular-progress__content">
+    <strong>{{ progressLabel }}</strong>
+    <span>{{ label }}</span>
+  </div>
+</div>

@@ -30,6 +30,7 @@ export class SelectionSummaryComponent {
   @Input() showArrow = true;
   @Input() actionText = '';
   @Input() actionOnly = false;
+  @Input() trailingText = '';
 
   @Output() readonly activated = new EventEmitter<void>();
 

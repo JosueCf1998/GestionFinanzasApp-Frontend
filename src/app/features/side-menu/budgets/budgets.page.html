@@ -28,62 +28,64 @@
       </button>
     </section>
 
-    <div *ngIf="budgets.length > 0" class="summary-section-heading">
-      <span>Resumen del periodo</span>
-    </div>
-
-    <app-budget-summary-card
-      *ngIf="budgets.length > 0"
-      class="period-summary"
-      mode="period"
-      [title]="summaryBalanceLabel"
-      [headline]="currency.symbol + ' ' + (summaryBalance | number:'1.2-2')"
-      icon="wallet"
-      [progress]="summary.percentage"
-      [budgeted]="summary.budgeted"
-      [used]="summary.used"
-      [currencySymbol]="currency.symbol">
-    </app-budget-summary-card>
-
-    <section class="budget-list-section">
-      <header class="list-heading">
-        <h2>Mis presupuestos</h2>
-      </header>
-
-      <div class="budget-list">
-        <app-budget-list-item
-          *ngFor="let budget of budgets; trackBy: trackByBudget"
-          [budget]="budget"
-          [currencySymbol]="currency.symbol"
-          (selected)="openBudget($event)">
-        </app-budget-list-item>
-      </div>
-
-      <div
-        *ngIf="(loadingService.loading$ | async) === false && budgets.length === 0"
-        class="budget-empty-state">
-        <app-item-icon
+    <div class="budget-sections">
+      <app-section-card
+        *ngIf="budgets.length > 0"
+        title="Resumen del periodo"
+        appearance="plain">
+        <app-budget-summary-card
+          mode="period"
+          appearance="classic"
+          [title]="summaryBalanceLabel"
+          [headline]="currency.symbol + ' ' + (summaryBalance | number:'1.2-2')"
+          [dateRange]="selectedDateRange"
           icon="wallet"
-          color="var(--fv-primary)"
-          size="lg"
-          shape="rounded"
-          variant="soft">
-        </app-item-icon>
+          [progress]="summary.percentage"
+          [budgeted]="summary.budgeted"
+          [used]="summary.used"
+          [currencySymbol]="currency.symbol">
+        </app-budget-summary-card>
+      </app-section-card>
 
-        <h3>No hay presupuestos en este periodo</h3>
-        <p>Selecciona otro periodo para consultar tus presupuestos.</p>
+      <app-section-card
+        title="Mis presupuestos"
+        appearance="plain">
+        <div class="budget-list">
+          <app-progress-list-item
+            *ngFor="let budget of budgets; trackBy: trackByBudget"
+            [item]="budget"
+            [currencySymbol]="currency.symbol"
+            (selected)="openBudget($event)">
+          </app-progress-list-item>
+        </div>
 
-        <app-button
-          class="budget-empty-state__action"
-          text="Cambiar periodo"
-          icon="calendar"
-          variant="secondary"
-          size="compact"
-          expand="auto"
-          (clicked)="openPeriodSelector()">
-        </app-button>
-      </div>
-    </section>
+        <div
+          *ngIf="(loadingService.loading$ | async) === false && budgets.length === 0"
+          class="budget-empty-state">
+          <app-item-icon
+            icon="wallet"
+            color="var(--fv-primary)"
+            size="lg"
+            shape="rounded"
+            variant="soft">
+          </app-item-icon>
+
+          <h3>No hay presupuestos en este periodo</h3>
+          <p>Selecciona otro periodo para consultar tus presupuestos.</p>
+
+          <div class="budget-empty-state__action">
+            <app-button
+              text="Cambiar periodo"
+              icon="calendar"
+              variant="secondary"
+              size="compact"
+              expand="auto"
+              (clicked)="openPeriodSelector()">
+            </app-button>
+          </div>
+        </div>
+      </app-section-card>
+    </div>
 
   </main>
 

@@ -30,53 +30,34 @@
       [message]="'Has superado el monto planificado por ' + (exceededAmount | currency:currency:'symbol-narrow':'1.2-2') + '.'">
     </app-warning-message>
 
-    <app-section-card title="Cuentas vinculadas">
+    <app-section-card title="Cuentas">
       <app-selection-summary
-        [primaryText]="linkedAccountsTitle"
-        [secondaryText]="linkedAccountsLabel"
+        [primaryText]="budgetAccounts.length === 1 ? budgetAccounts[0].name : linkedAccountsTitle"
+        [secondaryText]="budgetAccounts.length === 1 ? 'Saldo de la cuenta' : linkedAccountsLabel"
         ariaLabel="Cuentas vinculadas al presupuesto"
         fallbackIcon="assets/icon/bank.svg"
         [items]="budgetAccounts"
-        [interactive]="budgetAccounts.length > 0"
+        [interactive]="budgetAccounts.length > 1"
         [showArrow]="false"
-        [actionText]="budgetAccounts.length ? 'Ver detalles' : ''"
+        [actionText]="budgetAccounts.length > 1 ? 'Ver detalles' : ''"
         [actionOnly]="true"
+        [trailingText]="budgetAccounts.length === 1 ? currency + (budgetAccounts[0].amount | number:'1.2-2') : ''"
         (activated)="openAccountDetails()">
       </app-selection-summary>
     </app-section-card>
 
-    <app-section-card title="Categorías">
+    <app-section-card
+      title="Categorías"
+      appearance="plain">
       <div class="categories-list">
-        <article
+        <app-progress-list-item
           *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
-          class="category-row">
-          <app-item-icon [icon]="category.icon" [color]="category.color" size="md" variant="soft"></app-item-icon>
-
-          <div class="category-row__content">
-            <header>
-              <div>
-                <strong>{{ category.name }}</strong>
-                <span>{{ category.used | currency:currency:'symbol-narrow':'1.2-2' }} de {{ category.budgeted | currency:currency:'symbol-narrow':'1.2-2' }}</span>
-              </div>
-              <b [attr.data-status]="category.status">{{ category.percentage | number:'1.0-1' }}%</b>
-            </header>
-
-            <div class="category-progress">
-              <span [attr.data-status]="category.status" [style.width.%]="category.percentage > 100 ? 100 : category.percentage"></span>
-            </div>
-
-            <small [attr.data-status]="category.status">{{ categoryStatusLabel(category.status) }}</small>
-          </div>
-        </article>
+          [item]="category"
+          [currencySymbol]="currency === 'PEN' ? 'S/' : currency">
+        </app-progress-list-item>
       </div>
     </app-section-card>
 
-    <app-info-banner
-      *ngIf="alert && suggestion"
-      title="Consejo FinVia"
-      [message]="adviceMessage"
-      symbol="✨">
-    </app-info-banner>
   </main>
 </ion-content>
 

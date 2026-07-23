@@ -76,6 +76,17 @@
    SIZE
    ========================================================== */
 
+.fv-item-icon--xs {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+}
+
+.fv-item-icon--xs .fv-item-icon__glyph {
+  width: 12px;
+  height: 12px;
+}
+
 .fv-item-icon--sm {
   width: 32px;
   height: 32px;
@@ -123,6 +134,10 @@
 
 .fv-item-icon--rounded {
   border-radius: 12px;
+}
+
+.fv-item-icon--xs.fv-item-icon--rounded {
+  border-radius: 7px;
 }
 
 .fv-item-icon--circle {

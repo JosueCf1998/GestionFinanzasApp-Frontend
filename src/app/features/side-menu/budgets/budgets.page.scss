@@ -155,63 +155,10 @@ app-custom-segment {
   }
 }
 
-.summary-section-heading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 9px;
-  padding: 0 2px;
-
-  span {
-    flex: 0 0 auto;
-    color: var(--fv-text-secondary);
-    font-size: var(--fv-type-caption-1);
-    font-weight: var(--fv-fw-bold);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  &::after {
-    height: 1px;
-    flex: 1;
-    background: linear-gradient(90deg, rgba(67, 97, 238, 0.18), transparent);
-    content: '';
-  }
-}
-
-.period-summary {
-  display: block;
-  margin-bottom: 22px;
-}
-
-.budget-list-section {
+.budget-sections {
+  display: grid;
+  gap: 22px;
   margin-bottom: 14px;
-}
-
-.list-heading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 9px;
-  padding: 0 2px;
-
-  h2 {
-    flex: 0 0 auto;
-    margin: 0;
-    color: var(--fv-text-secondary);
-    font-size: var(--fv-type-caption-1);
-    font-weight: var(--fv-fw-bold);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-  }
-
-  &::after {
-    height: 1px;
-    flex: 1;
-    background: linear-gradient(90deg, rgba(67, 97, 238, 0.18), transparent);
-    content: '';
-  }
-
 }
 
 .budget-list {

@@ -16,7 +16,6 @@ import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { DetailBudgetUseCase } from 'src/app/core/use-cases/budgets/detail-budget.usecase';
 import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
-import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import {
   SelectionSummaryComponent,
   SelectionSummaryItem
@@ -28,6 +27,7 @@ import {
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { WarningMessageComponent } from 'src/app/shared/components/warning-message/warning-message.component';
 import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-summary-card/budget-summary-card.component';
+import { ProgressListItemComponent } from 'src/app/shared/components/progress-list-item/progress-list-item.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import 'src/app/core/utils/observable-extensions';
 
@@ -38,6 +38,7 @@ interface CategoryBudget {
   color: string;
   budgeted: number;
   used: number;
+  remaining: number;
   percentage: number;
   status: BudgetStatus;
 }
@@ -60,12 +61,12 @@ interface DetailBudgetNavigationState {
     IonContent,
     IonHeader,
     InfoBannerComponent,
-    ItemIconComponent,
     SelectionSummaryComponent,
     AccountDetailsModalComponent,
     PageLayoutComponent,
     WarningMessageComponent,
     BudgetSummaryCardComponent,
+    ProgressListItemComponent,
     SectionCardComponent
   ]
 })
@@ -162,6 +163,7 @@ export class DetailBudgetPage implements OnInit {
       color: category.color,
       budgeted: category.budgetAmount,
       used: category.spentAmount,
+      remaining: category.remainingAmount,
       percentage: category.percentage,
       status: category.status
     }));
@@ -207,10 +209,6 @@ export class DetailBudgetPage implements OnInit {
 
   get adviceMessage(): string {
     return this.suggestion || 'No hay sugerencias disponibles para este presupuesto.';
-  }
-
-  categoryStatusLabel(status: BudgetStatus): string {
-    return BUDGET_STATUS_LABELS[status];
   }
 
   openAccountDetails(): void {
