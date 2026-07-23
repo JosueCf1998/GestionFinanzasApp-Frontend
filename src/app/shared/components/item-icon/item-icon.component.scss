@@ -61,15 +61,15 @@
 }
 
 .fv-item-icon--glass {
-  border: 1px solid rgba(255, 255, 255, .22);
-  background: rgba(255, 255, 255, .16);
+  border: 1px solid color-mix(in srgb, var(--fv-item-icon-color) 18%, white);
+  background: color-mix(in srgb, var(--fv-item-icon-color) 11%, white);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .18),
-    0 8px 18px rgba(24, 10, 83, .16);
+    0 8px 18px color-mix(in srgb, var(--fv-item-icon-color) 16%, transparent);
 }
 
 .fv-item-icon--glass .fv-item-icon__glyph {
-  background: #fff;
+  background: var(--fv-item-icon-color);
 }
 
 /* ==========================================================

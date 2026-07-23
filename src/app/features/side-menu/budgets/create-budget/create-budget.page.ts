@@ -147,7 +147,6 @@ export class CreateBudgetPage implements OnInit {
       notes: this.notes.trim()
     };
 
-    console.log('Datos enviados para crear presupuesto:', request);
     this.isSaving = true;
     this.loadingService.show();
     this.createBudgetUseCase.execute(request).service({
@@ -156,10 +155,9 @@ export class CreateBudgetPage implements OnInit {
         this.isSaving = false;
         this.isSuccessModalOpen = true;
       },
-      failure: error => {
+      failure: () => {
         this.loadingService.hide();
         this.isSaving = false;
-        console.error('Error al crear presupuesto:', error);
         this.showErrorAlert = true;
       }
     });

@@ -6,7 +6,7 @@
     <div class="summary-card__identity">
       <app-item-icon
         [icon]="icon"
-        color="#ffffff"
+        [color]="mode === 'budget' ? color : 'var(--fv-primary-light)'"
         [size]="mode === 'budget' ? 'lg' : 'md'"
         variant="glass">
       </app-item-icon>

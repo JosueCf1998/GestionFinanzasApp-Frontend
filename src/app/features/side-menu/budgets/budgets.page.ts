@@ -90,14 +90,12 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
     this.budgetRequest?.unsubscribe();
     this.loadingService.show();
-    console.log('Datos enviados al servicio de presupuestos:', request);
 
     this.budgetRequest = this.listBudgetsUseCase
       .execute(request)
       .service({
         success: data => {
           this.loadingService.hide();
-          console.log('Datos recibidos del servicio de presupuestos:', data);
 
           if (data) {
             this.setBudgetResponse(data);
@@ -106,9 +104,8 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
           this.clearBudgetData();
         },
-        failure: error => {
+        failure: () => {
           this.loadingService.hide();
-          console.error('Error del servicio de presupuestos:', error);
           this.clearBudgetData();
         }
       });
@@ -149,7 +146,6 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
   applyFilters(selection: FilterSelection): void {
     if (!this.isValidSelection(selection)) {
-      console.warn('Filtro de presupuestos inválido:', selection);
       return;
     }
 

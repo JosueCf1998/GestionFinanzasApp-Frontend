@@ -31,15 +31,18 @@
     </app-warning-message>
 
     <app-section-card title="Cuentas vinculadas">
-      <div class="accounts-list">
-        <article *ngFor="let account of budgetAccounts; trackBy: trackByAccount" class="account-row">
-          <app-item-icon [icon]="account.icon" [color]="account.color" size="md" variant="soft"></app-item-icon>
-          <div>
-            <strong>{{ account.name }}</strong>
-            <span>{{ account.typeLabel }}</span>
-          </div>
-        </article>
-      </div>
+      <app-selection-summary
+        [primaryText]="linkedAccountsTitle"
+        [secondaryText]="linkedAccountsLabel"
+        ariaLabel="Cuentas vinculadas al presupuesto"
+        fallbackIcon="assets/icon/bank.svg"
+        [items]="budgetAccounts"
+        [interactive]="budgetAccounts.length > 0"
+        [showArrow]="false"
+        [actionText]="budgetAccounts.length ? 'Ver detalles' : ''"
+        [actionOnly]="true"
+        (activated)="openAccountDetails()">
+      </app-selection-summary>
     </app-section-card>
 
     <app-section-card title="Categorías">
@@ -69,9 +72,17 @@
     </app-section-card>
 
     <app-info-banner
+      *ngIf="alert && suggestion"
       title="Consejo FinVia"
       [message]="adviceMessage"
       symbol="✨">
     </app-info-banner>
   </main>
 </ion-content>
+
+<app-account-details-modal
+  [isOpen]="isAccountDetailsModalOpen"
+  [accounts]="budgetAccounts"
+  [currency]="currency"
+  (closed)="closeAccountDetails()">
+</app-account-details-modal>

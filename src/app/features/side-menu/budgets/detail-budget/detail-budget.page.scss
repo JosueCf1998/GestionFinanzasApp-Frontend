@@ -16,13 +16,11 @@
   gap: 18px;
 }
 
-.accounts-list,
 .categories-list {
   display: grid;
   gap: 10px;
 }
 
-.account-row,
 .category-row {
   display: flex;
   min-width: 0;
@@ -34,13 +32,11 @@
   background: color-mix(in srgb, var(--fv-background) 42%, var(--fv-surface));
 }
 
-.account-row > div,
 .category-row__content {
   min-width: 0;
   flex: 1;
 }
 
-.account-row strong,
 .category-row strong {
   display: block;
   overflow: hidden;
@@ -51,7 +47,6 @@
   white-space: nowrap;
 }
 
-.account-row span,
 .category-row span {
   display: block;
   margin-top: 3px;

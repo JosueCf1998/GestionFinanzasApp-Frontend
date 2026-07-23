@@ -26,6 +26,10 @@ export class SelectionSummaryComponent {
   @Input({ required: true }) ariaLabel = '';
   @Input() fallbackIcon = '';
   @Input() items: SelectionSummaryItem[] = [];
+  @Input() interactive = true;
+  @Input() showArrow = true;
+  @Input() actionText = '';
+  @Input() actionOnly = false;
 
   @Output() readonly activated = new EventEmitter<void>();
 

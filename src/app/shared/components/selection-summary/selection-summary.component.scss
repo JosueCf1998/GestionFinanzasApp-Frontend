@@ -2,10 +2,18 @@
   display: block;
 }
 
-button {
+.selection-summary {
   display: flex;
   width: 100%;
   min-height: 36px;
+  align-items: center;
+  gap: 11px;
+}
+
+.selection-summary__body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
   align-items: center;
   gap: 11px;
   padding: 0;
@@ -14,14 +22,18 @@ button {
   font: inherit;
   text-align: left;
 
-  &:active {
+  &:not(:disabled):active {
     transform: scale(.99);
   }
 
-  &:focus-visible {
+  &:not(:disabled):focus-visible {
     border-radius: 12px;
     outline: 2px solid rgba(67, 24, 184, 0.15);
     outline-offset: 4px;
+  }
+
+  &:disabled {
+    opacity: 1;
   }
 
   .selection-summary__preview {
@@ -102,5 +114,47 @@ button {
     height: 17px;
     flex: 0 0 17px;
     color: var(--fv-primary, #4318b8);
+  }
+
+}
+
+.selection-summary__action {
+  display: inline-flex;
+  min-height: 32px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 9px 6px 11px;
+  border: 1px solid color-mix(in srgb, var(--fv-primary, #4318b8) 16%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fv-primary, #4318b8) 7%, transparent);
+  color: var(--fv-primary, #4318b8);
+  font: inherit;
+  font-size: var(--fv-type-caption-1, 12px);
+  font-weight: var(--fv-fw-semibold, 600);
+  white-space: nowrap;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+
+  &:active {
+    transform: scale(.97);
+    background: color-mix(in srgb, var(--fv-primary, #4318b8) 13%, transparent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(67, 24, 184, 0.15);
+    outline-offset: 2px;
+  }
+
+  ion-icon {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+  }
+}
+
+@media (hover: hover) {
+  .selection-summary__action:hover {
+    border-color: color-mix(in srgb, var(--fv-primary, #4318b8) 28%, transparent);
+    background: color-mix(in srgb, var(--fv-primary, #4318b8) 11%, transparent);
   }
 }

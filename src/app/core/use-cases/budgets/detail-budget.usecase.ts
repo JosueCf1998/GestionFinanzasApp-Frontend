@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   DetailBudgetApiResponse,
   DetailBudgetRequest
@@ -12,8 +12,6 @@ export class DetailBudgetUseCase {
   constructor(private readonly repository: BudgetsRepository) {}
 
   execute(request: DetailBudgetRequest): Observable<Result<DetailBudgetApiResponse>> {
-    return this.repository.getBudgetDetail(request).pipe(
-      tap(response => console.log('Respuesta completa del detalle del presupuesto:', response))
-    );
+    return this.repository.getBudgetDetail(request);
   }
 }
