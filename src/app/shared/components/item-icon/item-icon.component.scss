@@ -26,6 +26,19 @@
     opacity .18s ease;
 }
 
+.fv-item-icon--button {
+  padding: 0;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fv-item-icon--button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 .fv-item-icon--solid {
   background: var(--fv-item-icon-color);
 }
@@ -70,6 +83,70 @@
 
 .fv-item-icon--glass .fv-item-icon__glyph {
   background: var(--fv-item-icon-color);
+}
+
+.fv-item-icon--plain {
+  background: transparent;
+  box-shadow: none;
+}
+
+.fv-item-icon--plain::before {
+  display: none;
+}
+
+.fv-item-icon--plain .fv-item-icon__glyph {
+  background: var(--fv-item-icon-color);
+}
+
+.fv-item-icon--nav-glass {
+  --fv-nav-action-size: 40px;
+  width: var(--fv-nav-action-size);
+  height: var(--fv-nav-action-size);
+  min-width: var(--fv-nav-action-size);
+  min-height: var(--fv-nav-action-size);
+  max-width: var(--fv-nav-action-size);
+  max-height: var(--fv-nav-action-size);
+  aspect-ratio: 1;
+  flex: 0 0 var(--fv-nav-action-size);
+  border: 1px solid rgba(174, 162, 255, .4);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .13), rgba(39, 17, 132, .2)),
+    rgba(31, 12, 116, .36);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .18),
+    inset 0 -1px 0 rgba(8, 2, 64, .3),
+    0 5px 12px rgba(10, 3, 66, .3),
+    0 0 14px rgba(115, 94, 255, .16);
+  backdrop-filter: blur(8px) saturate(125%);
+  -webkit-backdrop-filter: blur(8px) saturate(125%);
+}
+
+.fv-item-icon--nav-glass::before {
+  display: none;
+}
+
+.fv-item-icon--nav-glass .fv-item-icon__glyph {
+  width: 20px;
+  height: 20px;
+  background: var(--fv-item-icon-color);
+}
+
+.fv-item-icon--nav-glass:hover:not(.fv-item-icon--disabled) {
+  border-color: rgba(181, 170, 255, .48);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .17), rgba(46, 21, 145, .22)),
+    rgba(38, 16, 132, .42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .22),
+    inset 0 -1px 0 rgba(8, 2, 64, .26),
+    0 6px 14px rgba(10, 3, 66, .34),
+    0 0 16px rgba(115, 94, 255, .2);
+}
+
+.fv-item-icon--plain:hover,
+.fv-item-icon--plain:active {
+  transform: none;
 }
 
 /* ==========================================================

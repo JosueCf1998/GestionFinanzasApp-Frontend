@@ -118,6 +118,7 @@
 
 .summary-card--budget .summary-card__top {
   grid-template-columns: minmax(0, 1fr) 64px;
+  gap: 11px;
 }
 
 .summary-card__content p {

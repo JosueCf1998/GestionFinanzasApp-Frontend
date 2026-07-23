@@ -6,14 +6,14 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { ItemIconComponent } from '../item-icon/item-icon.component';
 
 @Component({
   selector: 'app-page-layout',
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule
+    ItemIconComponent
   ],
   templateUrl: './page-layout.component.html',
   styleUrls: ['./page-layout.component.scss']

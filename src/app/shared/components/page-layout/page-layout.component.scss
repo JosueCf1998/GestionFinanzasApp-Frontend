@@ -14,7 +14,7 @@
 
   display: grid;
 
-  grid-template-columns: 44px 1fr 44px;
+  grid-template-columns: 48px 1fr 48px;
 
   align-items: center;
 
@@ -90,7 +90,7 @@
 .header-left,
 .header-right {
 
-  width: 44px;
+  width: 48px;
   height: 44px;
 
   display: flex;
@@ -135,77 +135,12 @@
 }
 
 /* ==========================================================
-   BUTTON
-   ========================================================== */
-
-.header-button {
-
-  width: 40px;
-  height: 40px;
-
-  border: none;
-
-  border-radius: 14px;
-
-  background:
-    rgba(255,255,255,.12);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition:
-    background .2s ease,
-    transform .18s ease;
-
-}
-
-.header-button:active {
-
-  transform: scale(.95);
-
-}
-
-.header-button:disabled {
-
-  opacity: .5;
-
-}
-
-.header-button ion-icon {
-
-  width: 20px;
-  height: 20px;
-
-  color: #fff;
-
-}
-
-/* ==========================================================
    ACTIONS
    ========================================================== */
 
 .header-right:empty {
 
   visibility: hidden;
-
-}
-
-.header-right ::ng-deep > * {
-
-  width: 40px;
-  height: 40px;
-
-  border-radius: 14px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    rgba(255,255,255,.12);
-
-  color: #fff;
 
 }
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 /* ==========================================================
    TYPES
@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 
 export type ItemIconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type ItemIconShape = 'rounded' | 'circle';
-export type ItemIconVariant = 'solid' | 'soft' | 'glass';
+export type ItemIconVariant = 'solid' | 'soft' | 'glass' | 'plain' | 'nav-glass';
 
 /* ==========================================================
    COMPONENT
@@ -40,8 +40,18 @@ export class ItemIconComponent {
   @Input() variant: ItemIconVariant = 'solid';
   @Input() selected = false;
   @Input() disabled = false;
+  @Input() interactive = false;
+  @Input() ariaLabel = '';
+
+  @Output() activated = new EventEmitter<void>();
 
   private normalizedColor = 'var(--fv-primary)';
+
+  onActivate(): void {
+    if (!this.disabled) {
+      this.activated.emit();
+    }
+  }
 
   private normalizeColor(value: string | null | undefined): string {
     if (!value) return 'var(--fv-primary)';

@@ -29,6 +29,7 @@ import { WarningMessageComponent } from 'src/app/shared/components/warning-messa
 import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-summary-card/budget-summary-card.component';
 import { ProgressListItemComponent } from 'src/app/shared/components/progress-list-item/progress-list-item.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import 'src/app/core/utils/observable-extensions';
 
 interface CategoryBudget {
@@ -67,7 +68,8 @@ interface DetailBudgetNavigationState {
     WarningMessageComponent,
     BudgetSummaryCardComponent,
     ProgressListItemComponent,
-    SectionCardComponent
+    SectionCardComponent,
+    ItemIconComponent
   ]
 })
 export class DetailBudgetPage implements OnInit {
