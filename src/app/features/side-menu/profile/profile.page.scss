@@ -17,6 +17,237 @@
   line-height: 1.5;
 }
 
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-heading-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 113, 255, 0.12);
+  color: var(--fv-primary);
+}
+
+.section-heading-icon ion-icon {
+  font-size: 22px;
+}
+
+.section-title-inline {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fv-text-primary);
+}
+
+.section-subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--fv-text-secondary);
+}
+
+.personal-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.personal-field-row {
+  width: 100%;
+  min-height: 68px;
+  border: 1px solid rgba(120, 130, 150, 0.18);
+  border-radius: 16px;
+  background: var(--fv-surface);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(58, 12, 163, 0.06);
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.personal-field-row:active {
+  background: #f5f3ff;
+  transform: scale(0.995);
+}
+
+.field-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.field-icon-wrap {
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(58, 12, 163, 0.1);
+}
+
+.field-icon {
+  color: var(--fv-primary);
+  font-size: 18px;
+}
+
+.field-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  min-width: 0;
+}
+
+.field-label {
+  font-size: 12px;
+  color: var(--fv-text-secondary);
+  font-weight: 700;
+}
+
+.field-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fv-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.field-value--empty {
+  color: var(--fv-primary);
+}
+
+.field-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f766e;
+  background: #e8f7f4;
+}
+
+.status-badge--pending {
+  color: #b45309;
+  background: #fff7ed;
+}
+
+.field-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.field-arrow {
+  color: var(--fv-text-secondary);
+  font-size: 18px;
+}
+
+.visibility-button {
+  --padding-start: 0;
+  --padding-end: 0;
+  --background: transparent;
+  min-width: 36px;
+  height: 36px;
+}
+
+.visibility-button ion-icon {
+  color: var(--fv-text-secondary);
+  font-size: 18px;
+}
+
+.sheet-content {
+  --background: var(--fv-background);
+}
+
+.sheet-header {
+  padding: 16px 16px 8px;
+}
+
+.sheet-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fv-text-primary);
+}
+
+.sheet-subtitle {
+  margin: 4px 0 0;
+  color: var(--fv-text-secondary);
+  font-size: 13px;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px 20px;
+}
+
+.sheet-input {
+  --background: var(--fv-surface);
+  --border-radius: 14px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  border: 1px solid rgba(120, 130, 150, 0.18);
+  border-radius: 14px;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.otp-step {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.otp-code-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #f5f3ff;
+}
+
+.otp-code-label {
+  font-size: 12px;
+  color: var(--fv-text-secondary);
+  font-weight: 700;
+}
+
+.otp-code-value {
+  font-size: 20px;
+  color: var(--fv-primary);
+}
+
 app-button {
   display: block;
   margin-top: 4px;
@@ -27,7 +258,20 @@ app-button {
     gap: 16px;
     padding: 14px;
   }
+
+  .section-heading {
+    gap: 10px;
+  }
+
   .section-description {
+    font-size: 12px;
+  }
+
+  .personal-field-row {
+    padding: 10px;
+  }
+
+  .field-value {
     font-size: 12px;
   }
 }
