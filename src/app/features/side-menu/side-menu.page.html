@@ -1,21 +1,17 @@
 <ion-split-pane contentId="main-content" when="false">
-
   <!-- ================= MENU ================= -->
 
   <ion-menu
     menuId="main-menu"
     contentId="main-content"
     type="overlay"
-    [swipeGesture]="true">
-
+    [swipeGesture]="true"
+  >
     <ion-content [scrollY]="true">
-
       <div class="menu-content">
-
         <!-- ================= HEADER ================= -->
 
         <div class="menu-header">
-
           <div class="avatar-container">
             <div class="avatar">
               {{ name ? name.charAt(0).toUpperCase() : 'U' }}
@@ -23,97 +19,70 @@
           </div>
 
           <div class="user-info">
-
             <ion-label class="user-name">
-              {{ name ? (name.charAt(0).toUpperCase() + name.slice(1)) : 'Usuario' }}
+              {{ name ? (name.charAt(0).toUpperCase() + name.slice(1)) :
+              'Usuario' }}
             </ion-label>
 
             <ion-label class="user-email">
               {{ email || 'usuario@ejemplo.com' }}
             </ion-label>
-
           </div>
-
         </div>
 
         <!-- ================= ITEMS ================= -->
 
         <ion-list id="inbox-list">
-
           @for (p of appPages; track p) {
 
-            <ion-menu-toggle auto-hide="true">
+          <ion-menu-toggle auto-hide="true">
+            <ion-item
+              routerDirection="root"
+              [routerLink]="[p.url]"
+              routerLinkActive="selected"
+              lines="none"
+              detail="false"
+            >
+              <ion-icon slot="start" [src]="'assets/icon/' + p.icon + '.svg'">
+              </ion-icon>
 
-              <ion-item
-                routerDirection="root"
-                [routerLink]="[p.url]"
-                routerLinkActive="selected"
-                lines="none"
-                detail="false">
-
-                <ion-icon
-                  slot="start"
-                  [src]="'assets/icon/' + p.icon + '.svg'">
-                </ion-icon>
-
-                <ion-label>
-                  {{ p.title }}
-                </ion-label>
-
-              </ion-item>
-
-            </ion-menu-toggle>
+              <ion-label> {{ p.title }} </ion-label>
+            </ion-item>
+          </ion-menu-toggle>
 
           }
-
         </ion-list>
 
         <!-- ================= FOOTER ================= -->
 
         <div class="menu-footer">
-
           <ion-item
             class="logout-item"
             lines="none"
             detail="false"
             button
-            (click)="logOut()">
-
+            (click)="logOut()"
+          >
             <ion-icon slot="start" src="assets/icon/exit.svg"></ion-icon>
 
             <ion-label>Cerrar sesión</ion-label>
-
           </ion-item>
-
         </div>
-
       </div>
-
     </ion-content>
-
   </ion-menu>
 
   <!-- ================= MAIN ================= -->
 
   <div class="ion-page" id="main-content">
-
     <ion-header>
-
       <app-page-layout [showBack]="false">
-
-        <ion-menu-button
-          header-left
-          menuId="main-menu">
-        </ion-menu-button>
-
+        <ion-menu-button header-left menuId="main-menu"> </ion-menu-button>
       </app-page-layout>
-
     </ion-header>
 
     <div class="router-container">
       <router-outlet></router-outlet>
     </div>
-
   </div>
-
 </ion-split-pane>

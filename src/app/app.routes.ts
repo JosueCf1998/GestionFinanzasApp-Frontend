@@ -65,6 +65,10 @@ export const routes: Routes = [
       {
         path: 'budgets',
         loadComponent: () => import('./features/side-menu/budgets/budgets.page').then(m => m.BudgetsPage)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/side-menu/profile/profile.page').then(m => m.ProfilePage)
       }
     ],
   },

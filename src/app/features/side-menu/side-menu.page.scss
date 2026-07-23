@@ -230,6 +230,23 @@ ion-menu ion-item.selected ion-label {
 }
 
 /* ==========================================================
+   ACCOUNT SECTION
+   ========================================================== */
+
+.menu-section-divider {
+  height: 1px;
+  margin: 0 14px;
+  background: linear-gradient(90deg, transparent, rgba(67,97,238,.15), transparent);
+}
+
+.account-list {
+  padding: 10px 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ==========================================================
    FOOTER (SIEMPRE ABAJO - LOGOUT)
    ========================================================== */
 

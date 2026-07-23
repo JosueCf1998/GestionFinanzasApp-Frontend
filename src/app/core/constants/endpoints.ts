@@ -1,5 +1,13 @@
 export const ENDPOINTS = {
 
+  USERS: {
+
+    DEACTIVATE: 'users/deactivate',
+
+    DELETE: 'users/delete'
+
+  },
+
   TRANSACTIONS: {
 
     LIST: 'transactions/list',

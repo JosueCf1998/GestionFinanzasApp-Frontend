@@ -14,6 +14,7 @@ export interface LoginUserRequest {
 }
 export interface LoginUserResponse {
   token: string;
+  user_id: number;
   isFirstTime: boolean;
   nombre: string;
 }
@@ -45,6 +46,7 @@ export class LoginUserUseCase {
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
     this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.nombre);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.ID, String(userData.user_id));
     this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, userData.isFirstTime);
   }
 

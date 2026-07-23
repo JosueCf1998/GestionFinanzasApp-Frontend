@@ -1,0 +1,91 @@
+<ion-content [fullscreen]="false" class="profile-page">
+  <div class="profile-content">
+    <app-feature-header
+      title="Mi Perfil"
+      description="Gestiona tu perfil, tus datos de usuario y la seguridad de tu cuenta."
+      imageSrc="assets/image/budget-chart.png"
+    >
+    </app-feature-header>
+
+    <app-section-card title="Desactivar cuenta">
+      <p class="section-description">
+        Desactiva tu cuenta temporalmente. Podrás reactivarla en cualquier
+        momento iniciando sesión nuevamente con tus credenciales.
+      </p>
+      <app-warning-message
+        title="Temporal"
+        message="Al desactivar tu cuenta, no podrás acceder a tus datos hasta que la reactives. Tu información se conservará de forma segura."
+      >
+      </app-warning-message>
+      <app-button
+        text="Desactivar cuentas"
+        icon="user-block"
+        variant="outline"
+        (clicked)="deactivateAccount()"
+      >
+      </app-button>
+    </app-section-card>
+
+    <app-section-card title="Eliminar cuenta">
+      <p class="section-description">
+        Elimina tu cuenta de forma permanente. Esta acción no se puede deshacer
+        y todos tus datos serán borrados definitivamente.
+      </p>
+      <app-warning-message
+        title="Acción permanente"
+        icon="assets/icon/alert-triangle.svg"
+        message="Esta acción es irreversible. Se eliminarán todas tus cuentas, transacciones, presupuestos y datos asociados."
+      >
+      </app-warning-message>
+      <app-button
+        text="Eliminar cuenta"
+        icon="trash"
+        variant="danger"
+        (clicked)="deleteAccount()"
+      >
+      </app-button>
+    </app-section-card>
+  </div>
+</ion-content>
+
+<app-custom-alert
+  *ngIf="showDeactivateAlert"
+  header="Desactivar cuenta"
+  message="¿Estás seguro de que deseas desactivar tu cuenta temporalmente? Podrás reactivarla iniciando sesión nuevamente."
+  cancelText="Cancelar"
+  confirmText="Sí, desactivar"
+  (onCancel)="showDeactivateAlert = false"
+  (onConfirm)="confirmDeactivate()"
+>
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar cuenta permanentemente"
+  message="Esta acción es irreversible. Se eliminarán todos tus datos incluyendo cuentas, transacciones y presupuestos. ¿Estás completamente seguro?"
+  cancelText="Cancelar"
+  confirmText="Sí, eliminar"
+  (onCancel)="showDeleteAlert = false"
+  (onConfirm)="confirmDelete()"
+>
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showSuccessAlert"
+  header="Operación exitosa"
+  [message]="successMessage"
+  [showCancel]="false"
+  confirmText="Entendido"
+  (onConfirm)="handleSuccessConfirm()"
+>
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showErrorAlert"
+  header="Error"
+  [message]="errorMessage"
+  [showCancel]="false"
+  confirmText="Entendido"
+  (onConfirm)="showErrorAlert = false"
+>
+</app-custom-alert>

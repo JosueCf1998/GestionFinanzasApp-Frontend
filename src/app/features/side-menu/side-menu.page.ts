@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
 import {
   IonIcon,
@@ -14,24 +14,24 @@ import {
   IonList,
   IonMenuToggle,
   IonItem,
-  IonLabel
-} from '@ionic/angular/standalone';
+  IonLabel,
+} from "@ionic/angular/standalone";
 
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from "@angular/common";
+import { RouterModule } from "@angular/router";
 
-import { MenuController } from '@ionic/angular';
+import { MenuController } from "@ionic/angular";
 
-import { NavigationService } from '../../core/services/navigation.service';
-import { LocalManagementService } from '../../core/services/localManagementService.service';
+import { NavigationService } from "../../core/services/navigation.service";
+import { LocalManagementService } from "../../core/services/localManagementService.service";
 
-import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
+import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
 
 @Component({
-  selector: 'app-side-menu',
-  templateUrl: './side-menu.page.html',
-  styleUrls: ['./side-menu.page.scss'],
+  selector: "app-side-menu",
+  templateUrl: "./side-menu.page.html",
+  styleUrls: ["./side-menu.page.scss"],
   standalone: true,
   imports: [
     IonIcon,
@@ -49,18 +49,17 @@ import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-
     IonItem,
     IonLabel,
     CommonModule,
-    PageLayoutComponent
+    PageLayoutComponent,
   ],
 })
 export class SideMenuPage implements OnInit {
-
   // =========================
   // ROUTE
   // =========================
 
   private activatedRoute = inject(ActivatedRoute);
 
-  folder = '';
+  folder = "";
 
   // =========================
   // MENU DATA
@@ -72,19 +71,24 @@ export class SideMenuPage implements OnInit {
     { title: "Gráficos", url: "/main/graphics", icon: "chart" },
     { title: "Categorías", url: "/main/categories", icon: "category" },
     { title: "Presupuesto", url: "/main/budgets", icon: "wallet" },
+    { title: "Mi Perfil", url: "/main/profile", icon: "user" },
   ];
+
+  /*accountPages = [
+    { title: "Gestionar Cuenta", url: "/account-management", icon: "shield-security" },
+  ];*/
 
   // =========================
   // USER DATA
   // =========================
 
-  email = '';
-  name = '';
+  email = "";
+  name = "";
 
   constructor(
     private navigationService: NavigationService,
     private localManagementService: LocalManagementService,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
   ) {}
 
   // =========================
@@ -92,16 +96,16 @@ export class SideMenuPage implements OnInit {
   // =========================
 
   ngOnInit() {
-    this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;
+    this.folder = this.activatedRoute.snapshot.paramMap.get("id") as string;
     this.loadUserData();
   }
 
   private loadUserData(): void {
     this.email =
-      this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) || '';
+      this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) || "";
 
     this.name =
-      this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || '';
+      this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
   }
 
   // =========================
@@ -109,10 +113,10 @@ export class SideMenuPage implements OnInit {
   // =========================
 
   async closeMenuIfOpen() {
-    const isOpen = await this.menuCtrl.isOpen('main-menu');
+    const isOpen = await this.menuCtrl.isOpen("main-menu");
 
     if (isOpen) {
-      await this.menuCtrl.close('main-menu');
+      await this.menuCtrl.close("main-menu");
     }
   }
 
@@ -121,6 +125,6 @@ export class SideMenuPage implements OnInit {
   // =========================
 
   logOut() {
-    this.navigationService.replace('/splash');
+    this.navigationService.replace("/splash");
   }
 }
