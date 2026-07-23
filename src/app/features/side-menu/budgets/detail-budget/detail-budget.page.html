@@ -65,7 +65,8 @@
         <app-progress-list-item
           *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
           [item]="category"
-          [currencySymbol]="currency === 'PEN' ? 'S/' : currency">
+          [currencySymbol]="currency === 'PEN' ? 'S/' : currency"
+          (selected)="openCategoryDetail(category)">
         </app-progress-list-item>
       </div>
     </app-section-card>

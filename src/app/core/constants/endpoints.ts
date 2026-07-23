@@ -4,6 +4,8 @@ export const ENDPOINTS = {
 
     LIST: 'transactions/list',
 
+    FILTER: 'transactions/filter',
+
     CREATE: 'transactions/create',
 
     UPDATE: 'transactions/update',

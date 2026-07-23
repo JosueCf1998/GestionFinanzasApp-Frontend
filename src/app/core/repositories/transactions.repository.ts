@@ -4,7 +4,11 @@ import { delay } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { ApiService } from "../services/api.service";
 import { Result } from "../models/result.model";
-import { ListTransactionsResponse } from "../models/transactions/list-transactions.model";
+import {
+  FilterTransactionsRequest,
+  FilterTransactionsResponse,
+  ListTransactionsResponse
+} from "../models/transactions/list-transactions.model";
 import { TRANSACTIONS_MOCK } from "../mocks/transactions.mock";
 import { ENDPOINTS } from "../constants/endpoints";
 import { EncryptionService } from "../services/encryption.service";
@@ -33,6 +37,16 @@ export class TransactionRepository {
       } as Result<ListTransactionsResponse>).pipe(delay(500));
     }
     return this.apiService.get<ListTransactionsResponse>(endpoint);
+  }
+
+  filterTransactions(
+    request: FilterTransactionsRequest
+  ): Observable<Result<FilterTransactionsResponse>> {
+    const encryptedBody = encryptBody(request, this.encryptionService);
+    return this.apiService.post<FilterTransactionsResponse>(
+      ENDPOINTS.TRANSACTIONS.FILTER,
+      encryptedBody
+    );
   }
 
   createTransactions(body: CreateTransactionsRequest): Observable<Result<CreateTransactionsResponse>> {

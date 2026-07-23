@@ -32,7 +32,7 @@ import { SectionCardComponent } from 'src/app/shared/components/section-card/sec
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import 'src/app/core/utils/observable-extensions';
 
-interface CategoryBudget {
+export interface CategoryBudget {
   id: number;
   name: string;
   icon: string;
@@ -86,6 +86,8 @@ export class DetailBudgetPage implements OnInit {
 
   currency = 'PEN';
   dateRangeLabel = 'Periodo seleccionado';
+  startDate = '';
+  endDate = '';
   budgetAccounts: BudgetAccount[] = [];
   isAccountDetailsModalOpen = false;
   categoryBudgets: CategoryBudget[] = [];
@@ -147,6 +149,8 @@ export class DetailBudgetPage implements OnInit {
       status: detail.status
     };
     this.dateRangeLabel = `${this.formatDate(detail.startDate)} - ${this.formatDate(detail.endDate)}`;
+    this.startDate = detail.startDate;
+    this.endDate = detail.endDate;
     this.alert = data.alert;
     this.suggestion = data.suggestion;
     this.notes = detail.notes;
@@ -219,6 +223,17 @@ export class DetailBudgetPage implements OnInit {
 
   closeAccountDetails(): void {
     this.isAccountDetailsModalOpen = false;
+  }
+
+  openCategoryDetail(category: CategoryBudget): void {
+    void this.navService.forward('/budgets/category/detail', {
+      category,
+      budgetName: this.budget.name,
+      currency: this.currency,
+      dateRangeLabel: this.dateRangeLabel,
+      startDate: this.startDate,
+      endDate: this.endDate
+    });
   }
 
   // MARK: - NAVEGACIÓN
