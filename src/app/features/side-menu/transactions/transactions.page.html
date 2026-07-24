@@ -1,4 +1,4 @@
-<ion-content class="transactions-page" [fullscreen]="true">
+<ion-content class="transactions-page" [fullscreen]="false" [forceOverscroll]="false">
   <main class="transactions">
     <app-feature-header
       title="Transacciones"
@@ -6,11 +6,50 @@
       imageSrc="assets/image/budget-chart.png">
     </app-feature-header>
 
+    <section class="transaction-filters" aria-label="Filtros de transacciones">
+      <button
+        type="button"
+        class="filter-trigger filter-trigger--period"
+        (click)="openPeriodSelector()">
+        <span class="filter-trigger__content">
+          <small>Período</small>
+          <strong>{{ selectedPeriodLabel }}</strong>
+          <span>{{ compactDateRange }}</span>
+        </span>
+
+        <span class="filter-trigger__action">
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="filter-trigger filter-trigger--account"
+        [disabled]="accounts.length === 0"
+        (click)="openAccountSelector()">
+        <span class="filter-trigger__content">
+          <small>Cuenta</small>
+          <strong>{{ selectedAccountLabel }}</strong>
+          <span>Filtrar movimientos</span>
+        </span>
+
+        <span class="filter-trigger__action">
+          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+        </span>
+      </button>
+    </section>
+
+    <app-custom-segment
+      [options]="transactionTypes"
+      [model]="selectedType"
+      (modelChange)="changeType($event)">
+    </app-custom-segment>
+
     <app-period-summary-card
+      *ngIf="!isLoading && !hasError && transactions.length > 0"
       title="Resumen del período"
       [totalLabel]="totalLabel"
       [totalAmount]="totalAmount"
-      [amountPrefix]="amountPrefix"
       [metaValue]="accountCount"
       [metaLabel]="accountLabel"
       [chartSegments]="chartSegments"
@@ -19,12 +58,6 @@
       [periodLabel]="periodLabel"
       [currencySymbol]="currencySymbol">
     </app-period-summary-card>
-
-    <app-custom-segment
-      [options]="transactionTypes"
-      [model]="selectedType"
-      (modelChange)="changeType($event)">
-    </app-custom-segment>
 
     <app-section-card title="Movimientos" appearance="plain">
       <div *ngIf="isLoading" class="transactions-loading" aria-label="Cargando transacciones">
@@ -37,12 +70,11 @@
       <div *ngIf="!isLoading && !hasError && transactions.length" class="transactions-list">
         <app-amount-list-item
           *ngFor="let transaction of transactions; trackBy: trackByTransaction"
-          [title]="transaction.description?.trim() || transaction.category.name"
-          [subtitle]="transaction.category.name + ' · ' + transaction.account.name"
+          [title]="transaction.category.name"
+          [subtitle]="transaction.account.name"
           [icon]="transaction.category.icon"
           [color]="transaction.category.color"
           [amount]="transaction.amount"
-          [amountPrefix]="transaction.type === 'gasto' ? '−' : '+'"
           [amountTone]="transaction.type === 'ingreso' ? 'success' : 'default'"
           [currencySymbol]="currencySymbol">
         </app-amount-list-item>
@@ -76,6 +108,28 @@
   </main>
 
 </ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodSelectorOpen"
+  title="Filtrar transacciones"
+  description="Selecciona el período que deseas consultar."
+  applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod"
+  [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate"
+  [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()"
+  (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountSelectorOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)"
+  (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>
 
 <app-floating-action-button
   icon="add"
