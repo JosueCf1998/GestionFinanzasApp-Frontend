@@ -443,7 +443,7 @@ export class HomePage {
   navigateToCreateTransac(): void {
 
     this.navService.push(
-      '/home/create'
+      '/transactions/create'
     );
 
   }

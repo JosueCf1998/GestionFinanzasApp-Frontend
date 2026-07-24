@@ -14,6 +14,8 @@ import { ENDPOINTS } from "../constants/endpoints";
 import { EncryptionService } from "../services/encryption.service";
 import { encryptBody } from "../utils/encryption.util";
 import { CreateTransactionsRequest, CreateTransactionsResponse } from "../models/transactions/create-transaction.mode";
+import { CREATE_TRANSACTION_REQUEST_MAP } from "../constants/transactions/create-transaction.constants";
+import { mapObjectKeys } from "../utils/mapping.util";
 
 @Injectable({
   providedIn: "root",
@@ -60,7 +62,8 @@ export class TransactionRepository {
         timestamp: new Date().toISOString(),
       } as Result<CreateTransactionsResponse>).pipe(delay(500));
     }
-    const encryptedBody = encryptBody(body, this.encryptionService);
+    const mappedBody = mapObjectKeys(body, CREATE_TRANSACTION_REQUEST_MAP);
+    const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateTransactionsResponse>(endpoint, encryptedBody);
   }
 

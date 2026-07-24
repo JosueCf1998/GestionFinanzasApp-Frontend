@@ -1,4 +1,3 @@
-import { CreateTransacPage } from './features/side-menu/home/create-transac/create-transac.page';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -91,12 +90,8 @@ export const routes: Routes = [
   },
   // TRANSACTION ROUTES
   {
-    path: 'home/create',
-    loadComponent: () => import('./features/side-menu/home/create-transac/create-transac.page').then(m => m.CreateTransacPage)
-  },
-  {
-    path: 'home/edit',
-    loadComponent: () => import('./features/side-menu/home/create-transac/create-transac.page').then(m => m.CreateTransacPage)
+    path: 'transactions/create',
+    loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
   },
   // CATEGORIES ROUTES
   {

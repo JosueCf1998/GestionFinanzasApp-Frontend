@@ -4,7 +4,7 @@ export interface CreateTransactionsRequest {
   amount: number;
   date: string;
   type: string;
-  description?: string;
+  description: string;
 }
 
 export interface CreateTransactionsResponse {

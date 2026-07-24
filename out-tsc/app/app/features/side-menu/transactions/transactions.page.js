@@ -155,7 +155,7 @@ export class TransactionsPage {
         });
     }
     createTransaction() {
-        void this.navService.forward('/home/create');
+        void this.navService.forward('/transactions/create');
     }
     trackByTransaction(_, transaction) {
         return transaction.id;

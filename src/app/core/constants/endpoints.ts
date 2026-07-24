@@ -6,7 +6,7 @@ export const ENDPOINTS = {
 
     FILTER: 'transactions/filter',
 
-    CREATE: 'transactions/create',
+    CREATE: 'transactions/register',
 
     UPDATE: 'transactions/update',
 

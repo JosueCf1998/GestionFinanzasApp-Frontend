@@ -137,7 +137,7 @@ export class TransactionsPage implements OnInit {
   }
 
   createTransaction(): void {
-    void this.navService.forward('/home/create');
+    void this.navService.forward('/transactions/create');
   }
 
   trackByTransaction(_: number, transaction: FilteredTransaction): number {

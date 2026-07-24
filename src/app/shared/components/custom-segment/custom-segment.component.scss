@@ -4,26 +4,26 @@
   display: flex;
   align-items: center;
 
-  gap: 4px;
+  gap: var(--custom-segment-gap, 4px);
 
-  padding: 4px;
+  padding: var(--custom-segment-padding, 4px);
 
-  min-height: 48px;
+  min-height: var(--custom-segment-min-height, 48px);
 
-  border-radius: 18px;
+  border-radius: var(--custom-segment-radius, 18px);
 
   background:
-    rgba(255,255,255,.85);
+    var(--custom-segment-background, rgba(255,255,255,.85));
 
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 
   border:
     1px solid
-    rgba(255,255,255,.40);
+    var(--custom-segment-border, rgba(255,255,255,.40));
 
   box-shadow:
-    0 6px 20px rgba(15,23,42,.05);
+    var(--custom-segment-shadow, 0 6px 20px rgba(15,23,42,.05));
 
   overflow: hidden;
 }
@@ -33,11 +33,11 @@
 
   position: relative;
 
-  height: 40px;
+  height: var(--custom-segment-button-height, 40px);
 
   border: none;
 
-  border-radius: 14px;
+  border-radius: var(--custom-segment-button-radius, 14px);
 
   background: transparent;
 

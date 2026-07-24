@@ -22,6 +22,11 @@
 .period-picker__week-cards button:active { transform: scale(.98); }
 .period-picker__week-cards button.selected small { color: #4361ee; }
 .period-picker__custom { display: grid; gap: 12px; }
+.period-picker__single-summary { display: flex; min-height: 56px; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; border: 1px solid rgba(67,97,238,.25); border-radius: 14px; background: linear-gradient(135deg, #f3efff, #edf2ff); box-shadow: 0 5px 12px rgba(58,12,163,.08); }
+.period-picker__single-summary > span { display: grid; min-width: 0; gap: 4px; }
+.period-picker__single-summary small { color: #667085; font-size: var(--fv-type-caption-2); font-weight: 700; text-transform: uppercase; }
+.period-picker__single-summary strong { overflow: hidden; color: #3a0ca3; font-size: var(--fv-type-body-2); text-overflow: ellipsis; text-transform: capitalize; white-space: nowrap; }
+.period-picker__single-summary > ion-icon { width: 16px; height: 16px; flex: 0 0 16px; color: #4361ee; }
 .period-picker__range-summary { display: grid; grid-template-columns: 1fr 20px 1fr; align-items: center; gap: 6px; }
 .period-picker__range-summary > div { display: flex; min-width: 0; min-height: 49px; align-items: center; justify-content: space-between; gap: 5px; padding: 8px 10px; border: 1px solid #e4e8f1; border-radius: 12px; background: #fff; }
 .period-picker__range-summary > div > span { display: grid; min-width: 0; gap: 3px; }
