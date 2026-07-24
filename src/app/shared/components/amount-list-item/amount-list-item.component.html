@@ -1,0 +1,32 @@
+<button
+  type="button"
+  class="amount-list-item"
+  [class.amount-list-item--success]="amountTone === 'success'"
+  [class.amount-list-item--interactive]="interactive"
+  [style.--item-color]="color"
+  [disabled]="!interactive"
+  [attr.aria-label]="ariaLabel || null"
+  (click)="activate()">
+  <app-item-icon
+    [icon]="icon"
+    [color]="color"
+    size="sm"
+    variant="soft"
+    aria-hidden="true">
+  </app-item-icon>
+
+  <span class="amount-list-item__content">
+    <strong>{{ title }}</strong>
+    <small>{{ subtitle }}</small>
+  </span>
+
+  <strong class="amount-list-item__amount">
+    {{ amountPrefix }} {{ currencySymbol }} {{ amount | number:'1.2-2' }}
+  </strong>
+
+  <img
+    class="amount-list-item__chevron"
+    src="assets/icon/right-inline.svg"
+    alt=""
+    aria-hidden="true">
+</button>

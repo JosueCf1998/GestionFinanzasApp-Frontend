@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+.donut-chart {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.donut-chart::before {
+  position: absolute;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: rgba(49, 40, 99, .055);
+  filter: blur(14px);
+  content: '';
+}
+
+.donut-chart--success::before {
+  background: rgba(22, 163, 106, .055);
+}
+
+.donut-chart__ring {
+  position: relative;
+  display: grid;
+  width: 112px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(#e8e5f5 0deg 360deg);
+  box-shadow:
+    0 10px 22px rgba(49, 40, 99, .09),
+    0 2px 5px rgba(49, 40, 99, .045),
+    0 0 0 1px rgba(35, 38, 53, .08),
+    inset 0 1px 0 rgba(255, 255, 255, .32);
+  place-items: center;
+}
+
+.donut-chart__ring::before {
+  position: absolute;
+  width: 61%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(224, 226, 232, .9);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 28%, #fff 0%, #fefeff 58%, #fafafe 100%);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, .8),
+    0 2px 7px rgba(49, 40, 99, .055),
+    inset 0 1px 3px rgba(49, 40, 99, .025);
+  content: '';
+}
+
+.donut-chart__ring::after {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 205deg,
+    transparent 0deg 92deg,
+    rgba(255, 255, 255, .2) 135deg,
+    transparent 182deg 360deg
+  );
+  content: '';
+  pointer-events: none;
+  -webkit-mask: radial-gradient(circle, transparent 0 61%, #000 62% 100%);
+  mask: radial-gradient(circle, transparent 0 61%, #000 62% 100%);
+}
+
+@media (max-width: 390px) {
+  .donut-chart__ring {
+    width: 98px;
+  }
+}

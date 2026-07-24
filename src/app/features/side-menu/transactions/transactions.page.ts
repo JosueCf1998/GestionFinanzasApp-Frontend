@@ -9,15 +9,12 @@ import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { AmountListItemComponent } from 'src/app/shared/components/amount-list-item/amount-list-item.component';
+import { DonutChartSegment } from 'src/app/shared/components/donut-chart/donut-chart.component';
+import { PeriodSummaryCardComponent } from 'src/app/shared/components/period-summary-card/period-summary-card.component';
 import 'src/app/core/utils/observable-extensions';
 
 type TransactionType = 'gasto' | 'ingreso';
-
-interface TransactionDateGroup {
-  date: string;
-  label: string;
-  transactions: FilteredTransaction[];
-}
 
 @Component({
   selector: 'app-transactions',
@@ -31,7 +28,9 @@ interface TransactionDateGroup {
     FeatureHeaderComponent,
     FloatingActionButtonComponent,
     ItemIconComponent,
-    SectionCardComponent
+    SectionCardComponent,
+    AmountListItemComponent,
+    PeriodSummaryCardComponent
   ]
 })
 export class TransactionsPage implements OnInit {
@@ -43,7 +42,6 @@ export class TransactionsPage implements OnInit {
 
   selectedType: TransactionType = 'gasto';
   transactions: FilteredTransaction[] = [];
-  transactionGroups: TransactionDateGroup[] = [];
   isLoading = false;
   hasError = false;
 
@@ -61,12 +59,52 @@ export class TransactionsPage implements OnInit {
   }
 
   get totalLabel(): string {
-    return this.selectedType === 'gasto' ? 'Total gastado' : 'Total recibido';
+    return this.selectedType === 'gasto' ? 'Total de gastos' : 'Total de ingresos';
   }
 
-  get movementLabel(): string {
-    const count = this.transactions.length;
-    return `${count} ${count === 1 ? 'movimiento' : 'movimientos'}`;
+  get amountPrefix(): string {
+    return this.selectedType === 'gasto' ? '−' : '+';
+  }
+
+  get accountCount(): number {
+    return new Set(this.transactions.map(transaction => transaction.account.id)).size;
+  }
+
+  get accountLabel(): string {
+    return this.accountCount === 1 ? 'cuenta vinculada' : 'cuentas vinculadas';
+  }
+
+  get chartSegments(): DonutChartSegment[] {
+    const categories = new Map<number, DonutChartSegment>();
+
+    this.transactions.forEach(transaction => {
+      const amount = Number(transaction.amount);
+      if (amount <= 0) return;
+
+      const current = categories.get(transaction.category.id);
+      categories.set(transaction.category.id, {
+        value: (current?.value ?? 0) + amount,
+        color: transaction.category.color
+      });
+    });
+
+    return Array.from(categories.values());
+  }
+
+  get chartAriaLabel(): string {
+    return `Distribución de ${this.selectedType === 'gasto' ? 'gastos' : 'ingresos'} por categoría`;
+  }
+
+  get periodLabel(): string {
+    if (!this.transactions.length) return 'Sin movimientos registrados';
+
+    const dates = this.transactions
+      .map(transaction => transaction.date.slice(0, 10))
+      .sort();
+
+    const firstDate = this.formatShortDate(dates[0]);
+    const lastDate = this.formatShortDate(dates[dates.length - 1]);
+    return firstDate === lastDate ? firstDate : `${firstDate} – ${lastDate}`;
   }
 
   changeType(value: string): void {
@@ -84,13 +122,14 @@ export class TransactionsPage implements OnInit {
       type: this.selectedType
     }).service({
       success: data => {
-        this.transactions = data?.items ?? [];
-        this.transactionGroups = this.groupTransactionsByDate(this.transactions);
+        this.transactions = [...(data?.items ?? [])].sort(
+          (first, second) =>
+            second.date.localeCompare(first.date) || second.id - first.id
+        );
         this.isLoading = false;
       },
       failure: () => {
         this.transactions = [];
-        this.transactionGroups = [];
         this.isLoading = false;
         this.hasError = true;
       }
@@ -101,52 +140,18 @@ export class TransactionsPage implements OnInit {
     void this.navService.forward('/home/create');
   }
 
-  transactionTitle(transaction: FilteredTransaction): string {
-    return transaction.description?.trim() || transaction.category.name;
-  }
-
-  transactionSign(): string {
-    return this.selectedType === 'gasto' ? '−' : '+';
-  }
-
   trackByTransaction(_: number, transaction: FilteredTransaction): number {
     return transaction.id;
   }
 
-  trackByTransactionGroup(_: number, group: TransactionDateGroup): string {
-    return group.date;
-  }
-
-  private groupTransactionsByDate(
-    transactions: FilteredTransaction[]
-  ): TransactionDateGroup[] {
-    const groups = new Map<string, FilteredTransaction[]>();
-
-    transactions.forEach(transaction => {
-      const date = transaction.date.slice(0, 10);
-      groups.set(date, [...(groups.get(date) ?? []), transaction]);
-    });
-
-    return Array.from(groups.entries())
-      .sort(([firstDate], [secondDate]) => secondDate.localeCompare(firstDate))
-      .map(([date, items]) => ({
-        date,
-        label: this.formatDate(date),
-        transactions: items
-      }));
-  }
-
-  private formatDate(value: string): string {
-    const [year, month, day] = value.split('-');
-    if (!year || !month || !day) return value.toUpperCase();
-
+  private formatShortDate(value: string): string {
     return new Intl.DateTimeFormat('es-PE', {
-      day: 'numeric',
-      month: 'long',
+      day: '2-digit',
+      month: 'short',
       year: 'numeric',
       timeZone: 'UTC'
     })
       .format(new Date(`${value}T00:00:00Z`))
-      .toUpperCase();
+      .replace(/\./g, '');
   }
 }

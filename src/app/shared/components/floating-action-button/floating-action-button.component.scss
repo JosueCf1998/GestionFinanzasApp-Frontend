@@ -1,25 +1,52 @@
 :host {
-  position: absolute;
-  z-index: 10;
-  inset: 0;
+  position: fixed;
+  right: 18px;
+  bottom: 36px;
+  z-index: 9999;
+  display: block;
+  width: 56px;
+  height: 56px;
   pointer-events: none;
 }
 
-ion-fab {
-  right: 16px;
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+.floating-action-button {
+  display: grid;
+  width: 56px;
+  height: 56px;
   margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 50%;
+  background: var(--fv-gradient-primary);
+  box-shadow:
+    0 14px 30px rgba(57, 48, 184, .3),
+    0 4px 10px rgba(57, 48, 184, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .18);
+  color: #fff;
+  cursor: pointer;
   pointer-events: auto;
+  place-items: center;
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
 }
 
-ion-fab-button {
-  --background: var(--fv-gradient-primary);
-  --background-activated: var(--fv-primary);
-  --background-hover: var(--fv-primary);
-  --box-shadow: 0 12px 28px rgba(67, 97, 238, 0.28);
+.floating-action-button:active:not(:disabled) {
+  box-shadow:
+    0 8px 20px rgba(57, 48, 184, .26),
+    inset 0 1px 0 rgba(255, 255, 255, .15);
+  transform: scale(.94);
+}
 
-  ion-icon {
-    width: 24px;
-    height: 24px;
-  }
+.floating-action-button:focus-visible {
+  outline: 3px solid rgba(91, 70, 220, .22);
+  outline-offset: 3px;
+}
+
+.floating-action-button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+ion-icon {
+  width: 24px;
+  height: 24px;
 }
