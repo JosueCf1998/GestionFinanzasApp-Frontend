@@ -45,6 +45,7 @@ export class SideMenuPage {
             { title: "Gráficos", url: "/main/graphics", icon: "chart" },
             { title: "Categorías", url: "/main/categories", icon: "category" },
             { title: "Presupuesto", url: "/main/budgets", icon: "wallet" },
+            { title: "Transacciones", url: "/main/transactions", icon: "bills" },
         ];
         // =========================
         // USER DATA

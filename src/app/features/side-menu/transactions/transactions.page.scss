@@ -1,0 +1,317 @@
+:host {
+  display: block;
+}
+
+.transactions-page {
+  --background: linear-gradient(180deg, #fbfbff 0%, var(--fv-background) 100%);
+}
+
+.transactions {
+  display: grid;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 14px calc(92px + env(safe-area-inset-bottom));
+  gap: 18px;
+}
+
+.transactions-summary {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 122px;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 20px;
+  background: var(--fv-gradient-primary);
+  box-shadow: var(--fv-shadow-primary);
+  color: #fff;
+}
+
+.transactions-summary::before,
+.transactions-summary::after {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .055);
+  content: '';
+}
+
+.transactions-summary::before {
+  top: -68px;
+  right: -35px;
+  width: 150px;
+  height: 150px;
+}
+
+.transactions-summary::after {
+  right: 92px;
+  bottom: -92px;
+  width: 160px;
+  height: 160px;
+}
+
+.transactions-summary__icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .11);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+  place-items: center;
+}
+
+.transactions-summary__content span,
+.transactions-summary__content strong,
+.transactions-summary__content p {
+  display: block;
+}
+
+.transactions-summary__content span {
+  color: rgba(255, 255, 255, .68);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.transactions-summary__content strong {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 820;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.035em;
+}
+
+.transactions-summary__content p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, .7);
+  font-size: 10px;
+}
+
+.transactions-summary__type {
+  align-self: start;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .1);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.transactions-list {
+  display: grid;
+  gap: 18px;
+}
+
+.transactions-date-group h3 {
+  margin: 0 0 8px;
+  padding-left: 4px;
+  color: #9399ad;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: .15em;
+}
+
+.transactions-date-group__items {
+  display: grid;
+  gap: 8px;
+}
+
+.transaction-row {
+  --transaction-color: var(--fv-primary);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 68px;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--transaction-color) 9%, var(--fv-border));
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 7px 20px rgba(31, 37, 76, .055);
+}
+
+.transaction-row::before {
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+  background: var(--transaction-color);
+  opacity: .72;
+  content: '';
+}
+
+.transaction-row__content,
+.transaction-row__amount {
+  min-width: 0;
+}
+
+.transaction-row__content strong,
+.transaction-row__content span,
+.transaction-row__amount strong,
+.transaction-row__amount span {
+  display: block;
+}
+
+.transaction-row__content strong {
+  overflow: hidden;
+  color: var(--fv-text-primary);
+  font-size: 12.5px;
+  font-weight: 740;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-row__content span {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #858b9d;
+  font-size: 9.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-row__amount {
+  text-align: right;
+}
+
+.transaction-row__amount strong {
+  color: #29246f;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.transaction-row__amount span {
+  width: fit-content;
+  margin: 5px 0 0 auto;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fv-danger) 7%, white);
+  color: var(--fv-danger);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.transaction-row--income .transaction-row__amount strong {
+  color: var(--fv-success);
+}
+
+.transaction-row--income .transaction-row__amount span {
+  background: color-mix(in srgb, var(--fv-success) 8%, white);
+  color: var(--fv-success);
+}
+
+.transactions-loading,
+.transactions-empty {
+  border: 1px solid rgba(226, 229, 238, .92);
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 9px 26px rgba(31, 37, 76, .05);
+}
+
+.transactions-loading {
+  padding: 6px 13px;
+}
+
+.transactions-loading > div {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  gap: 12px;
+}
+
+.transactions-loading > div + div {
+  border-top: 1px solid var(--fv-border);
+}
+
+.transactions-loading i,
+.transactions-loading span {
+  display: block;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #eef0f6 25%, #f7f8fb 50%, #eef0f6 75%);
+  background-size: 200% 100%;
+  animation: transactions-loading 1.25s ease-in-out infinite;
+}
+
+.transactions-loading i {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+}
+
+.transactions-loading span {
+  width: 68%;
+  height: 28px;
+}
+
+.transactions-empty {
+  display: grid;
+  justify-items: center;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.transactions-empty h3 {
+  margin: 12px 0 5px;
+  color: var(--fv-text-primary);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.transactions-empty p {
+  margin: 0;
+  color: var(--fv-text-secondary);
+  font-size: 11px;
+}
+
+.transactions-empty button {
+  margin-top: 14px;
+  padding: 9px 15px;
+  border: 0;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--fv-primary) 9%, white);
+  color: var(--fv-primary);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+@keyframes transactions-loading {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (max-width: 380px) {
+  .transactions {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .transactions-summary {
+    padding: 16px;
+  }
+
+  .transactions-summary__content strong {
+    font-size: 20px;
+  }
+
+  .transaction-row {
+    gap: 9px;
+    padding-right: 10px;
+    padding-left: 11px;
+  }
+
+  .transaction-row__amount strong {
+    font-size: 10.5px;
+  }
+}

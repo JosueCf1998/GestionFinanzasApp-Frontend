@@ -62,6 +62,10 @@ export const routes = [
             {
                 path: 'budgets',
                 loadComponent: () => import('./features/side-menu/budgets/budgets.page').then(m => m.BudgetsPage)
+            },
+            {
+                path: 'transactions',
+                loadComponent: () => import('./features/side-menu/transactions/transactions.page').then(m => m.TransactionsPage)
             }
         ],
     },

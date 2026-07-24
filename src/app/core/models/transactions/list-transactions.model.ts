@@ -31,7 +31,7 @@ export interface FilteredTransaction {
 }
 
 export interface FilterTransactionsRequest {
-  category_ids: number[];
+  category_ids?: number[];
   type?: 'gasto' | 'ingreso';
 }
 
