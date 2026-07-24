@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CreateTransactionsRequest } from 'src/app/core/models/transactions/create-transaction.mode';
-import { AlertService } from 'src/app/core/services/alert.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import {
@@ -38,6 +37,10 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { SelectionSummaryComponent } from 'src/app/shared/components/selection-summary/selection-summary.component';
 import { TextFieldComponent } from 'src/app/shared/components/text-field/text-field.component';
+import {
+  SuccessReceiptDetail,
+  SuccessReceiptModalComponent
+} from 'src/app/shared/components/success-receipt-modal/success-receipt-modal.component';
 
 type TransactionType = 'gastos' | 'ingresos';
 
@@ -62,6 +65,7 @@ type TransactionType = 'gastos' | 'ingresos';
     PageLayoutComponent,
     SectionCardComponent,
     SelectionSummaryComponent,
+    SuccessReceiptModalComponent,
     TextFieldComponent
   ]
 })
@@ -87,10 +91,12 @@ export class CreateTransactionPage implements OnInit {
   isAccountModalOpen = false;
   isCategoryModalOpen = false;
   isPeriodModalOpen = false;
+  isSuccessReceiptOpen = false;
   isSaving = false;
   showUnsavedAlert = false;
   showLoadError = false;
   showSaveError = false;
+  transactionId: number | null = null;
 
   private hasPendingChanges = false;
   private pendingInitialLoads = 2;
@@ -100,8 +106,7 @@ export class CreateTransactionPage implements OnInit {
     private readonly createTransactionsUseCase: CreateTransactionsUseCase,
     private readonly listCategoriesUseCase: ListCategoriesUseCase,
     private readonly listAccountsUseCase: ListAccountsUseCase,
-    private readonly loadingService: SpinnerService,
-    private readonly alertService: AlertService
+    private readonly loadingService: SpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -184,6 +189,29 @@ export class CreateTransactionPage implements OnInit {
       : 'Clasifica tus ingresos para entender mejor de dónde viene tu dinero.';
   }
 
+  get successReceiptDetails(): SuccessReceiptDetail[] {
+    return [
+      {
+        label: 'Monto',
+        value: `S/ ${this.formatAmount(this.amount ?? 0)}`,
+        emphasis: true
+      },
+      {
+        label: 'Tipo',
+        value: this.selectedType === 'gastos' ? 'Gasto' : 'Ingreso'
+      },
+      { label: 'Fecha', value: this.formattedDate, wrap: true },
+      { label: 'Cuenta', value: this.selectedAccount?.name ?? '', wrap: true },
+      { label: 'Categoría', value: this.selectedCategory?.nombre ?? '', wrap: true },
+      ...(this.description.trim()
+        ? [{ label: 'Nota', value: this.description.trim(), wrap: true }]
+        : []),
+      ...(this.transactionId !== null
+        ? [{ label: 'N.º de operación', value: this.transactionId.toString() }]
+        : [])
+    ];
+  }
+
   changeType(value: string): void {
     if (value !== 'gastos' && value !== 'ingresos') return;
     this.selectedType = value;
@@ -249,13 +277,11 @@ export class CreateTransactionPage implements OnInit {
 
     this.isSaving = true;
     this.createTransactionsUseCase.execute(request).service({
-      success: () => {
+      success: data => {
         this.isSaving = false;
         this.hasPendingChanges = false;
-        void this.alertService.showAlert(
-          'Movimiento registrado',
-          `Tu ${this.selectedType === 'gastos' ? 'gasto' : 'ingreso'} se guardó correctamente.`
-        ).then(() => this.navService.back());
+        this.transactionId = data?.info?.id ?? null;
+        this.isSuccessReceiptOpen = true;
       },
       failure: () => {
         this.isSaving = false;
@@ -276,6 +302,11 @@ export class CreateTransactionPage implements OnInit {
     this.showUnsavedAlert = false;
     this.hasPendingChanges = false;
     void this.navService.back();
+  }
+
+  viewTransactions(): void {
+    this.isSuccessReceiptOpen = false;
+    void this.navService.replace('/main/transactions', undefined, false);
   }
 
   private loadCategories(): void {

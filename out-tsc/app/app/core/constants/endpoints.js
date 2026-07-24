@@ -2,7 +2,7 @@ export const ENDPOINTS = {
     TRANSACTIONS: {
         LIST: 'transactions/list',
         FILTER: 'transactions/filter',
-        CREATE: 'transactions/create',
+        CREATE: 'transactions/register',
         UPDATE: 'transactions/update',
         DELETE: 'transactions/delete'
     },

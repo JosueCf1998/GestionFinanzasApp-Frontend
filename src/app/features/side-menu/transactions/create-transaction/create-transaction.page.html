@@ -178,6 +178,16 @@
   (modalClosed)="closeCategoryModal()">
 </app-category-selector-modal>
 
+<app-success-receipt-modal
+  [isOpen]="isSuccessReceiptOpen"
+  title="Transacción registrada"
+  eyebrow="¡Movimiento registrado!"
+  [heading]="selectedType === 'gastos' ? 'Gasto registrado correctamente' : 'Ingreso registrado correctamente'"
+  actionText="Ver mis transacciones"
+  [details]="successReceiptDetails"
+  (completed)="viewTransactions()">
+</app-success-receipt-modal>
+
 <app-custom-alert
   *ngIf="showUnsavedAlert"
   header="Cambios sin guardar"

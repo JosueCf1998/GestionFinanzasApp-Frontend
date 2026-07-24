@@ -8,4 +8,8 @@ export interface CreateTransactionsRequest {
 }
 
 export interface CreateTransactionsResponse {
+  mensaje?: string;
+  info?: {
+    id: number;
+  };
 }

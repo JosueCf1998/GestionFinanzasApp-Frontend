@@ -154,17 +154,15 @@
   (applied)="applyPersonalization($event)">
 </app-personalization-modal>
 
-<app-budget-success-modal
+<app-success-receipt-modal
   [isOpen]="isSuccessModalOpen"
-  [budgetName]="name"
-  [budgetTotal]="categoryAllocationTotal"
-  [dateRange]="formattedDateRange"
-  [accountsLabel]="selectedAccountsLabel"
-  [categoriesLabel]="selectedCategoriesLabel"
-  [note]="notes.trim()"
-  [mode]="isEditMode ? 'edit' : 'create'"
-  (viewBudgets)="viewBudgets()">
-</app-budget-success-modal>
+  [title]="isEditMode ? 'Presupuesto actualizado' : 'Presupuesto creado'"
+  [eyebrow]="isEditMode ? '¡Cambios guardados!' : '¡Presupuesto creado!'"
+  [heading]="name"
+  actionText="Ir a mis presupuestos"
+  [details]="successReceiptDetails"
+  (completed)="viewBudgets()">
+</app-success-receipt-modal>
 
 <app-custom-alert
   *ngIf="showUnsavedAlert"

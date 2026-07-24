@@ -5,6 +5,8 @@ import { environment } from "src/environments/environment";
 import { TRANSACTIONS_MOCK } from "../mocks/transactions.mock";
 import { ENDPOINTS } from "../constants/endpoints";
 import { encryptBody } from "../utils/encryption.util";
+import { CREATE_TRANSACTION_REQUEST_MAP } from "../constants/transactions/create-transaction.constants";
+import { mapObjectKeys } from "../utils/mapping.util";
 import * as i0 from "@angular/core";
 import * as i1 from "../services/api.service";
 import * as i2 from "../services/encryption.service";
@@ -41,7 +43,8 @@ export class TransactionRepository {
                 timestamp: new Date().toISOString(),
             }).pipe(delay(500));
         }
-        const encryptedBody = encryptBody(body, this.encryptionService);
+        const mappedBody = mapObjectKeys(body, CREATE_TRANSACTION_REQUEST_MAP);
+        const encryptedBody = encryptBody(mappedBody, this.encryptionService);
         return this.apiService.post(endpoint, encryptedBody);
     }
     static { this.ɵfac = function TransactionRepository_Factory(__ngFactoryType__) { return new (__ngFactoryType__ || TransactionRepository)(i0.ɵɵinject(i1.ApiService), i0.ɵɵinject(i2.EncryptionService)); }; }

@@ -45,7 +45,10 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
 import { WarningMessageComponent } from 'src/app/shared/components/warning-message/warning-message.component';
-import { BudgetSuccessModalComponent } from 'src/app/shared/components/budget-success-modal/budget-success-modal.component';
+import {
+  SuccessReceiptDetail,
+  SuccessReceiptModalComponent
+} from 'src/app/shared/components/success-receipt-modal/success-receipt-modal.component';
 import {
   FilterModalComponent,
   FilterSelection
@@ -92,7 +95,7 @@ interface BudgetFormSnapshot {
     SectionCardComponent,
     InfoBannerComponent,
     WarningMessageComponent,
-    BudgetSuccessModalComponent
+    SuccessReceiptModalComponent
   ]
 })
 export class CreateBudgetPage implements OnInit {
@@ -344,6 +347,22 @@ export class CreateBudgetPage implements OnInit {
     const start = new Date(`${this.periodSelection.startDate}T00:00:00Z`);
     const end = new Date(`${this.periodSelection.endDate}T00:00:00Z`);
     return `${formatter.format(start)} — ${formatter.format(end)}`;
+  }
+
+  get successReceiptDetails(): SuccessReceiptDetail[] {
+    return [
+      {
+        label: 'Presupuesto total',
+        value: `S/ ${this.categoryAllocationTotal.toFixed(2)}`,
+        emphasis: true
+      },
+      { label: 'Programación', value: this.formattedDateRange, wrap: true },
+      { label: 'Cuentas', value: this.selectedAccountsLabel, wrap: true },
+      { label: 'Categorías', value: this.selectedCategoriesLabel, wrap: true },
+      ...(this.notes.trim()
+        ? [{ label: 'Nota', value: this.notes.trim(), wrap: true }]
+        : [])
+    ];
   }
 
 
