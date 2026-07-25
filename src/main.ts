@@ -23,9 +23,12 @@ import {
   closeOutline,
   eyeOffOutline,
   eyeOutline,
+  lockClosedOutline,
   mailOutline,
   personCircleOutline,
   personOutline,
+  shieldCheckmarkOutline,
+  shieldOutline,
 } from "ionicons/icons";
 
 addIcons({
@@ -36,9 +39,12 @@ addIcons({
   closeOutline,
   eyeOffOutline,
   eyeOutline,
+  lockClosedOutline,
   mailOutline,
   personCircleOutline,
   personOutline,
+  shieldCheckmarkOutline,
+  shieldOutline,
 });
 
 bootstrapApplication(AppComponent, {
@@ -48,4 +54,5 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
   ],
 });
+
 

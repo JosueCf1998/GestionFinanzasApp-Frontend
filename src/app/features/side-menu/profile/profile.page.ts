@@ -49,6 +49,7 @@ export class ProfilePage implements OnDestroy {
   // Badges state
   isEmailVerified = true;
   isPhoneVerified = false;
+  isTwoFactorEnabled = false;
 
   // Phone masking & auto-hide
   showPhone = false;
@@ -213,6 +214,18 @@ export class ProfilePage implements OnDestroy {
     }
 
     return "Verificado";
+  }
+
+  getTwoFactorStatus(): "Activada" | "Desactivada" {
+    return this.isTwoFactorEnabled ? "Activada" : "Desactivada";
+  }
+
+  openChangePassword(): void {
+    this.showError("La pantalla de cambio de contraseña estará disponible en una próxima actualización.");
+  }
+
+  openTwoFactorConfig(): void {
+    this.showError("La configuración de verificación en dos pasos estará disponible en una próxima actualización.");
   }
 
   // =========================

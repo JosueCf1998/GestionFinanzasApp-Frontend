@@ -145,6 +145,75 @@
       </div>
     </app-section-card>
 
+    <app-section-card>
+      <div class="section-heading">
+        <div class="section-heading-icon section-heading-icon--security">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </div>
+        <div>
+          <p class="section-title-inline">Seguridad y acceso</p>
+          <p class="section-subtitle">Protege tu cuenta y gestiona tu acceso.</p>
+        </div>
+      </div>
+
+      <div class="personal-fields">
+        <!-- Fila 1: Cambiar contraseña -->
+        <button
+          class="personal-field-row"
+          type="button"
+          (click)="openChangePassword()"
+        >
+          <div class="field-main">
+            <div class="field-icon-wrap field-icon-wrap--password">
+              <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
+            </div>
+            <div class="field-copy">
+              <span class="field-label">Cambiar contraseña</span>
+              <span class="field-value">Actualiza tu contraseña de acceso.</span>
+            </div>
+          </div>
+          <div class="field-side">
+            <ion-icon
+              name="chevron-forward-outline"
+              class="field-arrow"
+            ></ion-icon>
+          </div>
+        </button>
+
+        <div class="field-divider"></div>
+
+        <!-- Fila 2: Verificación y seguridad -->
+        <button
+          class="personal-field-row"
+          type="button"
+          (click)="openTwoFactorConfig()"
+        >
+          <div class="field-main">
+            <div class="field-icon-wrap field-icon-wrap--security">
+              <ion-icon name="shield-outline" class="field-icon"></ion-icon>
+            </div>
+            <div class="field-copy">
+              <span class="field-label">Verificación y seguridad</span>
+              <span class="field-value">Configura la verificación en dos pasos y más.</span>
+            </div>
+          </div>
+          <div class="field-side">
+            <span
+              class="status-badge"
+              [class.status-badge--verified]="isTwoFactorEnabled"
+              [class.status-badge--disabled]="!isTwoFactorEnabled"
+            >
+              {{ getTwoFactorStatus() }}
+            </span>
+            <ion-icon
+              name="chevron-forward-outline"
+              class="field-arrow"
+            ></ion-icon>
+          </div>
+        </button>
+      </div>
+    </app-section-card>
+
     <app-section-card title="Desactivar cuenta">
       <p class="section-description">
         Desactiva tu cuenta temporalmente. Podrás reactivarla en cualquier
