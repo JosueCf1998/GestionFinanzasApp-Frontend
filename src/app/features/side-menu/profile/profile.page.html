@@ -7,25 +7,26 @@
     >
     </app-feature-header>
 
-    <app-section-card title="Información personal">
+    <app-section-card>
       <div class="section-heading">
         <div class="section-heading-icon">
           <ion-icon name="person-circle-outline"></ion-icon>
         </div>
         <div>
           <p class="section-title-inline">Información personal</p>
-          <p class="section-subtitle">Actualiza tus datos personales.</p>
+          <p class="section-subtitle">Estos datos se usan para verificar tu identidad.</p>
         </div>
       </div>
 
       <div class="personal-fields">
+        <!-- Row 1: Nombre completo -->
         <button
           class="personal-field-row"
           type="button"
-          (click)="openFieldEditor('Nombre completo')"
+          (click)="openFieldEditor('name')"
         >
           <div class="field-main">
-            <div class="field-icon-wrap">
+            <div class="field-icon-wrap field-icon-wrap--name">
               <ion-icon name="person-outline" class="field-icon"></ion-icon>
             </div>
             <div class="field-copy">
@@ -33,17 +34,12 @@
               <span
                 class="field-value"
                 [class.field-value--empty]="!userName || userName === 'Nombre y Apellido de Usuario'"
-                >{{ userName || 'Nombre y Apellido de Usuario' }}</span
               >
+                {{ userName || 'Nombre y Apellido de Usuario' }}
+              </span>
             </div>
           </div>
           <div class="field-side">
-            <span
-              class="status-badge"
-              [class.status-badge--pending]="getFieldStatus('Nombre completo') === 'Pendiente'"
-            >
-              {{ getFieldStatus('Nombre completo') }}
-            </span>
             <ion-icon
               name="chevron-forward-outline"
               class="field-arrow"
@@ -51,28 +47,32 @@
           </div>
         </button>
 
+        <div class="field-divider"></div>
+
+        <!-- Row 2: Correo electrónico -->
         <button
           class="personal-field-row"
           type="button"
-          (click)="openFieldEditor('Correo electrónico')"
+          (click)="openFieldEditor('email')"
         >
           <div class="field-main">
-            <div class="field-icon-wrap">
+            <div class="field-icon-wrap field-icon-wrap--email">
               <ion-icon name="mail-outline" class="field-icon"></ion-icon>
             </div>
             <div class="field-copy">
               <span class="field-label">Correo electrónico</span>
-              <span class="field-value" [class.field-value--empty]="!userEmail"
-                >{{ userEmail || 'correo electronico' }}</span
-              >
+              <span class="field-value" [class.field-value--empty]="!userEmail">
+                {{ userEmail || 'correo@ejemplo.com' }}
+              </span>
             </div>
           </div>
           <div class="field-side">
             <span
               class="status-badge"
-              [class.status-badge--pending]="getFieldStatus('Correo electrónico') === 'Pendiente'"
+              [class.status-badge--verified]="getFieldStatus('email') === 'Verificado'"
+              [class.status-badge--pending]="getFieldStatus('email') === 'Pendiente'"
             >
-              {{ getFieldStatus('Correo electrónico') }}
+              {{ getFieldStatus('email') }}
             </span>
             <ion-icon
               name="chevron-forward-outline"
@@ -81,47 +81,67 @@
           </div>
         </button>
 
-        <button
-          class="personal-field-row"
-          type="button"
-          (click)="openFieldEditor('Teléfono')"
-        >
-          <div class="field-main">
-            <div class="field-icon-wrap">
-              <ion-icon name="call-outline" class="field-icon"></ion-icon>
+        <div class="field-divider"></div>
+
+        <!-- Row 3: Teléfono (Registered state vs Empty state) -->
+        <ng-container *ngIf="userPhone; else emptyPhoneRow">
+          <button
+            class="personal-field-row"
+            type="button"
+            (click)="openFieldEditor('phone')"
+          >
+            <div class="field-main">
+              <div class="field-icon-wrap field-icon-wrap--phone">
+                <ion-icon name="call-outline" class="field-icon"></ion-icon>
+              </div>
+              <div class="field-copy">
+                <span class="field-label">Teléfono</span>
+                <span class="field-value">
+                  {{ getPhoneDisplay() }}
+                </span>
+              </div>
             </div>
-            <div class="field-copy">
-              <span class="field-label">Teléfono</span>
-              <span class="field-value" [class.field-value--empty]="!userPhone"
-                >{{ getPhoneDisplay() }}</span
-              >
-            </div>
-          </div>
-          <div class="field-side">
-            <span
-              class="status-badge"
-              [class.status-badge--pending]="getFieldStatus('Teléfono') === 'Pendiente'"
-            >
-              {{ getFieldStatus('Teléfono') }}
-            </span>
-            <div class="field-actions">
-              <ion-button
-                fill="clear"
+            <div class="field-side">
+              <button
                 class="visibility-button"
                 type="button"
+                aria-label="Mostrar u ocultar teléfono"
                 (click)="togglePhoneVisibility(); $event.stopPropagation()"
               >
                 <ion-icon
                   [name]="showPhone ? 'eye-off-outline' : 'eye-outline'"
                 ></ion-icon>
-              </ion-button>
+              </button>
+              <span
+                class="status-badge"
+                [class.status-badge--verified]="getFieldStatus('phone') === 'Verificado'"
+                [class.status-badge--pending]="getFieldStatus('phone') === 'Pendiente'"
+              >
+                {{ getFieldStatus('phone') }}
+              </span>
               <ion-icon
                 name="chevron-forward-outline"
                 class="field-arrow"
               ></ion-icon>
             </div>
-          </div>
-        </button>
+          </button>
+        </ng-container>
+
+        <!-- Empty Phone State Template -->
+        <ng-template #emptyPhoneRow>
+          <button
+            class="personal-field-row personal-field-row--empty"
+            type="button"
+            (click)="openFieldEditor('phone')"
+          >
+            <div class="field-main">
+              <div class="field-icon-wrap field-icon-wrap--empty">
+                <ion-icon name="add-outline" class="field-icon"></ion-icon>
+              </div>
+              <span class="field-empty-cta">+ Agregar teléfono alternativo</span>
+            </div>
+          </button>
+        </ng-template>
       </div>
     </app-section-card>
 
@@ -166,132 +186,67 @@
   </div>
 </ion-content>
 
+<!-- Unified Bottom Sheet Modal for Editing (1-Step Flow) -->
 <ion-modal
-  [isOpen]="showNameModal"
-  (didDismiss)="showNameModal = false"
-  [initialBreakpoint]="0.45"
-  [breakpoints]="[0, 0.45]"
+  [isOpen]="showEditModal"
+  (didDismiss)="showEditModal = false"
+  [initialBreakpoint]="0.42"
+  [breakpoints]="[0, 0.42, 0.75]"
 >
   <ng-template>
     <ion-content class="sheet-content">
       <div class="sheet-header">
-        <div>
-          <p class="sheet-title">Nombre completo</p>
-          <p class="sheet-subtitle">
-            Actualiza tu nombre para que se vea correctamente en tu perfil.
-          </p>
+        <div class="sheet-heading">
+          <p class="sheet-title">{{ modalTitle }}</p>
+          <p class="sheet-subtitle">{{ modalHelpText }}</p>
         </div>
+        <button
+          type="button"
+          class="sheet-close-btn"
+          (click)="showEditModal = false"
+          aria-label="Cerrar"
+        >
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
       </div>
 
       <div class="sheet-body">
-        <ion-input
-          class="sheet-input"
-          label="Nombre completo"
-          labelPlacement="stacked"
-          [(ngModel)]="editingName"
-          placeholder="Escribe tu nombre"
-        ></ion-input>
+        <div class="input-field-container">
+          <ion-input
+            class="sheet-input"
+            [class.sheet-input--error]="fieldError"
+            [label]="modalInputLabel"
+            labelPlacement="stacked"
+            [(ngModel)]="editingValue"
+            (ngModelChange)="clearFieldError()"
+            [placeholder]="modalInputPlaceholder"
+            [type]="editField === 'email' ? 'email' : (editField === 'phone' ? 'tel' : 'text')"
+          ></ion-input>
+          <div *ngIf="fieldError" class="input-error-msg">
+            <ion-icon name="alert-circle-outline"></ion-icon>
+            <span>{{ fieldError }}</span>
+          </div>
+        </div>
 
         <div class="sheet-actions">
           <ion-button
-            fill="outline"
-            color="medium"
-            (click)="showNameModal = false"
-            >Cancelar</ion-button
+            class="modal-btn-primary"
+            (click)="saveField()"
           >
-          <ion-button (click)="saveName()">Guardar</ion-button>
+            Guardar
+          </ion-button>
+          <button
+            type="button"
+            class="modal-btn-cancel-link"
+            (click)="showEditModal = false"
+          >
+            Cancelar
+          </button>
         </div>
       </div>
     </ion-content>
   </ng-template>
 </ion-modal>
-
-<ion-modal
-  [isOpen]="showOtpModal"
-  (didDismiss)="showOtpModal = false"
-  [initialBreakpoint]="0.58"
-  [breakpoints]="[0, 0.58]"
->
-  <ng-template>
-    <ion-content class="sheet-content">
-      <div class="sheet-header">
-        <div>
-          <p class="sheet-title">
-            Verificación {{ verificationField === 'email' ? 'de correo' : 'de
-            teléfono' }}
-          </p>
-          <p class="sheet-subtitle">
-            Paso {{ otpStep }} de 2 · Revisa el código OTP para confirmar tu
-            información.
-          </p>
-        </div>
-      </div>
-
-      <div class="sheet-body">
-        <div *ngIf="otpStep === 1" class="otp-step">
-          <ion-input
-            *ngIf="verificationField === 'email'"
-            class="sheet-input"
-            label="Correo electrónico"
-            labelPlacement="stacked"
-            [(ngModel)]="editingEmail"
-            placeholder="correo@ejemplo.com"
-          ></ion-input>
-
-          <ion-input
-            *ngIf="verificationField === 'phone'"
-            class="sheet-input"
-            label="Teléfono"
-            labelPlacement="stacked"
-            [(ngModel)]="editingPhone"
-            placeholder="+51 999 123 456"
-          ></ion-input>
-          <div class="sheet-actions">
-            <ion-button
-              fill="outline"
-              color="medium"
-              (click)="showOtpModal = false"
-              >Cancelar</ion-button
-            >
-            <ion-button (click)="requestOtp()">Enviar código</ion-button>
-          </div>
-        </div>
-
-        <div *ngIf="otpStep === 2" class="otp-step">
-          <div class="otp-code-box">
-            <span class="otp-code-label">Código OTP</span>
-            <strong class="otp-code-value">123456</strong>
-          </div>
-
-          <ion-input
-            class="sheet-input"
-            label="Ingresa el código"
-            labelPlacement="stacked"
-            [(ngModel)]="otpCode"
-            placeholder="123456"
-          ></ion-input>
-
-          <div class="sheet-actions">
-            <ion-button fill="outline" color="medium" (click)="otpStep = 1"
-              >Atrás</ion-button
-            >
-            <ion-button (click)="verifyOtp()">Confirmar</ion-button>
-          </div>
-        </div>
-      </div>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<app-custom-alert
-  *ngIf="showInfoAlert"
-  header="Información"
-  [message]="infoMessage"
-  [showCancel]="false"
-  confirmText="Entendido"
-  (onConfirm)="showInfoAlert = false"
->
-</app-custom-alert>
 
 <app-custom-alert
   *ngIf="showDeactivateAlert"
@@ -334,3 +289,4 @@
   (onConfirm)="showErrorAlert = false"
 >
 </app-custom-alert>
+

@@ -16,8 +16,11 @@ import { routes } from "./app/app.routes";
 import { AppComponent } from "./app/app.component";
 import { addIcons } from "ionicons";
 import {
+  addOutline,
+  alertCircleOutline,
   callOutline,
   chevronForwardOutline,
+  closeOutline,
   eyeOffOutline,
   eyeOutline,
   mailOutline,
@@ -26,8 +29,11 @@ import {
 } from "ionicons/icons";
 
 addIcons({
+  addOutline,
+  alertCircleOutline,
   callOutline,
   chevronForwardOutline,
+  closeOutline,
   eyeOffOutline,
   eyeOutline,
   mailOutline,
@@ -42,3 +48,4 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(),
   ],
 });
+
