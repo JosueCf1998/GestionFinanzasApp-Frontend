@@ -277,7 +277,9 @@
   color: var(--fv-text-secondary, #64748b);
   border: none;
   cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
   outline: none;
 }
 
@@ -291,152 +293,13 @@
 }
 
 /* ==========================================================================
-   BOTTOM SHEET MODAL STYLING
-   ========================================================================== */
-
-.sheet-content {
-  --background: var(--fv-surface, #ffffff);
-}
-
-.sheet-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 20px 20px 10px;
-  gap: 12px;
-}
-
-.sheet-heading {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sheet-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--fv-text-primary, #0f172a);
-}
-
-.sheet-subtitle {
-  margin: 0;
-  color: var(--fv-text-secondary, #64748b);
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.sheet-close-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(148, 163, 184, 0.12);
-  color: var(--fv-text-secondary, #64748b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  flex-shrink: 0;
-}
-
-.sheet-close-btn:active {
-  background: rgba(148, 163, 184, 0.25);
-}
-
-.sheet-close-btn ion-icon {
-  font-size: 20px;
-}
-
-.sheet-body {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 10px 20px calc(env(safe-area-inset-bottom) + 24px);
-}
-
-.input-field-container {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sheet-input {
-  --background: var(--fv-background, #f8fafc);
-  --border-radius: 14px;
-  --padding-start: 14px;
-  --padding-end: 14px;
-  border: 1px solid var(--list-border, #e9edf5);
-  border-radius: 14px;
-  transition: border-color 0.2s ease;
-}
-
-.sheet-input--error {
-  border-color: var(--fv-danger, #ef4444);
-}
-
-.input-error-msg {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--fv-danger, #ef4444);
-  font-size: 12px;
-  font-weight: 500;
-  padding-left: 4px;
-}
-
-.input-error-msg ion-icon {
-  font-size: 14px;
-}
-
-.sheet-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  margin-top: 4px;
-}
-
-.modal-btn-primary {
-  --background: var(--fv-gradient-primary);
-  --border-radius: 14px;
-  --box-shadow: var(--fv-shadow-primary);
-  width: 100%;
-  height: 48px;
-  font-weight: 700;
-  font-size: 15px;
-  margin: 0;
-  color: #ffffff;
-}
-
-.modal-btn-cancel-link {
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: var(--fv-text-secondary, #64748b);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 0;
-  cursor: pointer;
-  text-align: center;
-  transition: color 0.15s ease;
-  outline: none;
-
-  &:active {
-    color: var(--fv-text-primary, #0f172a);
-    opacity: 0.8;
-  }
-}
-
-/* ==========================================================================
    MOBILE BREAKPOINTS (iPhone 14 Pro, iPhone SE & SMALL SCREENS)
    ========================================================================== */
 
 @media (max-width: 440px) {
   .profile-content {
     gap: 16px;
-    padding: 12px 12px calc(env(safe-area-inset-bottom) + 24px);
+    padding: 16px;
   }
 
   .section-heading {
@@ -500,28 +363,4 @@
       font-size: 14px;
     }
   }
-
-  .sheet-header {
-    padding: 16px 16px 8px;
-  }
-
-  .sheet-title {
-    font-size: 16px;
-  }
-
-  .sheet-subtitle {
-    font-size: 12px;
-  }
-
-  .sheet-body {
-    padding: 8px 16px calc(env(safe-area-inset-bottom) + 20px);
-    gap: 16px;
-  }
-
-  .modal-btn-primary {
-    height: 46px;
-    font-size: 14px;
-  }
 }
-
-

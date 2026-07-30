@@ -14,7 +14,9 @@
         </div>
         <div>
           <p class="section-title-inline">Información personal</p>
-          <p class="section-subtitle">Estos datos se usan para verificar tu identidad.</p>
+          <p class="section-subtitle">
+            Estos datos se usan para verificar tu identidad.
+          </p>
         </div>
       </div>
 
@@ -23,7 +25,7 @@
         <button
           class="personal-field-row"
           type="button"
-          (click)="openFieldEditor('name')"
+          (click)="openNameEditor()"
         >
           <div class="field-main">
             <div class="field-icon-wrap field-icon-wrap--name">
@@ -53,7 +55,7 @@
         <button
           class="personal-field-row"
           type="button"
-          (click)="openFieldEditor('email')"
+          (click)="openEmailEditor()"
         >
           <div class="field-main">
             <div class="field-icon-wrap field-icon-wrap--email">
@@ -62,11 +64,22 @@
             <div class="field-copy">
               <span class="field-label">Correo electrónico</span>
               <span class="field-value" [class.field-value--empty]="!userEmail">
-                {{ userEmail || 'correo@ejemplo.com' }}
+                {{ (userEmail ? getEmailDisplay() : 'correo@ejemplo.com') }}
               </span>
             </div>
           </div>
           <div class="field-side">
+            <button
+              *ngIf="userEmail"
+              class="visibility-button"
+              type="button"
+              aria-label="Mostrar u ocultar correo"
+              (click)="toggleEmailVisibility(); $event.stopPropagation()"
+            >
+              <ion-icon
+                [name]="showEmail ? 'eye-off-outline' : 'eye-outline'"
+              ></ion-icon>
+            </button>
             <span
               class="status-badge"
               [class.status-badge--verified]="getFieldStatus('email') === 'Verificado'"
@@ -88,7 +101,7 @@
           <button
             class="personal-field-row"
             type="button"
-            (click)="openFieldEditor('phone')"
+            (click)="openPhoneEditor()"
           >
             <div class="field-main">
               <div class="field-icon-wrap field-icon-wrap--phone">
@@ -96,9 +109,7 @@
               </div>
               <div class="field-copy">
                 <span class="field-label">Teléfono</span>
-                <span class="field-value">
-                  {{ getPhoneDisplay() }}
-                </span>
+                <span class="field-value"> {{ getPhoneDisplay() }} </span>
               </div>
             </div>
             <div class="field-side">
@@ -132,13 +143,13 @@
           <button
             class="personal-field-row personal-field-row--empty"
             type="button"
-            (click)="openFieldEditor('phone')"
+            (click)="openPhoneEditor()"
           >
             <div class="field-main">
               <div class="field-icon-wrap field-icon-wrap--empty">
                 <ion-icon name="add-outline" class="field-icon"></ion-icon>
               </div>
-              <span class="field-empty-cta">+ Agregar teléfono alternativo</span>
+              <span class="field-empty-cta">+ Agregar Teléfono </span>
             </div>
           </button>
         </ng-template>
@@ -152,7 +163,9 @@
         </div>
         <div>
           <p class="section-title-inline">Seguridad y acceso</p>
-          <p class="section-subtitle">Protege tu cuenta y gestiona tu acceso.</p>
+          <p class="section-subtitle">
+            Protege tu cuenta y gestiona tu acceso.
+          </p>
         </div>
       </div>
 
@@ -165,11 +178,16 @@
         >
           <div class="field-main">
             <div class="field-icon-wrap field-icon-wrap--password">
-              <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
+              <ion-icon
+                name="lock-closed-outline"
+                class="field-icon"
+              ></ion-icon>
             </div>
             <div class="field-copy">
               <span class="field-label">Cambiar contraseña</span>
-              <span class="field-value">Actualiza tu contraseña de acceso.</span>
+              <span class="field-value"
+                >Actualiza tu contraseña de acceso.</span
+              >
             </div>
           </div>
           <div class="field-side">
@@ -194,7 +212,9 @@
             </div>
             <div class="field-copy">
               <span class="field-label">Verificación y seguridad</span>
-              <span class="field-value">Configura la verificación en dos pasos y más.</span>
+              <span class="field-value"
+                >Configura la verificación en dos pasos y más.</span
+              >
             </div>
           </div>
           <div class="field-side">
@@ -255,67 +275,29 @@
   </div>
 </ion-content>
 
-<!-- Unified Bottom Sheet Modal for Editing (1-Step Flow) -->
-<ion-modal
-  [isOpen]="showEditModal"
-  (didDismiss)="showEditModal = false"
-  [initialBreakpoint]="0.42"
-  [breakpoints]="[0, 0.42, 0.75]"
->
-  <ng-template>
-    <ion-content class="sheet-content">
-      <div class="sheet-header">
-        <div class="sheet-heading">
-          <p class="sheet-title">{{ modalTitle }}</p>
-          <p class="sheet-subtitle">{{ modalHelpText }}</p>
-        </div>
-        <button
-          type="button"
-          class="sheet-close-btn"
-          (click)="showEditModal = false"
-          aria-label="Cerrar"
-        >
-          <ion-icon name="close-outline"></ion-icon>
-        </button>
-      </div>
+<app-profile-field-edit-modal
+  [isOpen]="showNameModal"
+  fieldType="name"
+  [currentValue]="savedName"
+  (saved)="onNameSaved($event)"
+  (closed)="showNameModal = false"
+></app-profile-field-edit-modal>
 
-      <div class="sheet-body">
-        <div class="input-field-container">
-          <ion-input
-            class="sheet-input"
-            [class.sheet-input--error]="fieldError"
-            [label]="modalInputLabel"
-            labelPlacement="stacked"
-            [(ngModel)]="editingValue"
-            (ngModelChange)="clearFieldError()"
-            [placeholder]="modalInputPlaceholder"
-            [type]="editField === 'email' ? 'email' : (editField === 'phone' ? 'tel' : 'text')"
-          ></ion-input>
-          <div *ngIf="fieldError" class="input-error-msg">
-            <ion-icon name="alert-circle-outline"></ion-icon>
-            <span>{{ fieldError }}</span>
-          </div>
-        </div>
+<app-profile-field-edit-modal
+  [isOpen]="showEmailModal"
+  fieldType="email"
+  [currentValue]="userEmail"
+  (saved)="onEmailSaved($event)"
+  (closed)="showEmailModal = false"
+></app-profile-field-edit-modal>
 
-        <div class="sheet-actions">
-          <ion-button
-            class="modal-btn-primary"
-            (click)="saveField()"
-          >
-            Guardar
-          </ion-button>
-          <button
-            type="button"
-            class="modal-btn-cancel-link"
-            (click)="showEditModal = false"
-          >
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </ion-content>
-  </ng-template>
-</ion-modal>
+<app-profile-field-edit-modal
+  [isOpen]="showPhoneModal"
+  fieldType="phone"
+  [currentValue]="userPhone"
+  (saved)="onPhoneSaved($event)"
+  (closed)="showPhoneModal = false"
+></app-profile-field-edit-modal>
 
 <app-custom-alert
   *ngIf="showDeactivateAlert"
@@ -358,4 +340,3 @@
   (onConfirm)="showErrorAlert = false"
 >
 </app-custom-alert>
-

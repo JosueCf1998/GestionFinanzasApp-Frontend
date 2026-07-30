@@ -1,0 +1,58 @@
+<app-base-modal
+  [isOpen]="isOpen"
+  [title]="config.title"
+  [description]="config.description"
+  primaryText="Guardar"
+  secondaryText="Cancelar"
+  [primaryDisabled]="!hasChanges"
+  (primary)="onSave()"
+  (secondary)="onCancel()"
+  (closed)="onCancel()"
+>
+  <div class="field-edit-form">
+    <div class="input-field-container">
+      <div
+        class="field-edit-input-wrap"
+        [class.field-edit-input-wrap--focused]="inputFocused"
+        [class.field-edit-input-wrap--error]="!!error"
+      >
+        <ion-input
+          class="field-edit-input"
+          [label]="config.inputLabel"
+          labelPlacement="stacked"
+          [(ngModel)]="editValue"
+          (ngModelChange)="onValueChange()"
+          (ionFocus)="inputFocused = true"
+          (ionBlur)="inputFocused = false"
+          [placeholder]="config.placeholder"
+          [type]="config.inputType"
+          [maxlength]="config.maxLength"
+        ></ion-input>
+      </div>
+
+      <div class="field-edit-footer">
+        <div *ngIf="error" class="input-error-msg">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>{{ error }}</span>
+        </div>
+        <div *ngIf="fieldType === 'name'" class="char-counter">
+          {{ editValue.length }}/{{ config.maxLength }}
+        </div>
+      </div>
+
+      <div *ngIf="showDomainSuggestions && fieldType === 'email'" class="domain-suggestions">
+        <span class="domain-suggestions-label">Dominios comunes:</span>
+        <div class="domain-suggestions-list">
+          <button
+            *ngFor="let domain of knownDomains"
+            type="button"
+            class="domain-chip"
+            (click)="selectDomain(domain)"
+          >
+            {{ domain }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-base-modal>

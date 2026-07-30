@@ -14,6 +14,7 @@ import { SectionCardComponent } from "src/app/shared/components/section-card/sec
 import { WarningMessageComponent } from "src/app/shared/components/warning-message/warning-message.component";
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
+import { ProfileFieldEditModalComponent } from "./profile-field-edit-modal/profile-field-edit-modal.component";
 
 import { DeactivateAccountUseCase } from "src/app/core/use-cases/users/deactivate-account.usecase";
 import { DeleteUserAccountUseCase } from "src/app/core/use-cases/users/delete-user-account.usecase";
@@ -39,6 +40,7 @@ export type ProfileFieldType = "name" | "email" | "phone";
     WarningMessageComponent,
     ButtonComponent,
     CustomAlertComponent,
+    ProfileFieldEditModalComponent,
   ],
 })
 export class ProfilePage implements OnDestroy {
@@ -53,6 +55,7 @@ export class ProfilePage implements OnDestroy {
 
   // Phone masking & auto-hide
   showPhone = false;
+  showEmail = false;
   private phoneTimer: any = null;
 
   // Alerts state
@@ -61,11 +64,10 @@ export class ProfilePage implements OnDestroy {
   showSuccessAlert = false;
   showErrorAlert = false;
 
-  // Unified Edit Modal state
-  showEditModal = false;
-  editField: ProfileFieldType = "name";
-  editingValue = "";
-  fieldError = "";
+  // Separate Modal states
+  showNameModal = false;
+  showEmailModal = false;
+  showPhoneModal = false;
 
   successMessage = "";
   errorMessage = "";
@@ -200,6 +202,34 @@ export class ProfilePage implements OnDestroy {
     return phone;
   }
 
+  getEmailDisplay(): string {
+    if (!this.userEmail) {
+      return '';
+    }
+
+    if (this.showEmail) {
+      return this.userEmail;
+    }
+
+    const atIndex = this.userEmail.indexOf('@');
+    if (atIndex <= 0) {
+      return this.userEmail;
+    }
+
+    const localPart = this.userEmail.slice(0, atIndex);
+    const domain = this.userEmail.slice(atIndex);
+
+    if (localPart.length <= 2) {
+      return `${localPart[0]}***${domain}`;
+    }
+
+    return `${localPart.slice(0, 2)}***${domain}`;
+  }
+
+  toggleEmailVisibility(): void {
+    this.showEmail = !this.showEmail;
+  }
+
   // =========================
   // BADGES STATUS
   // =========================
@@ -229,141 +259,106 @@ export class ProfilePage implements OnDestroy {
   }
 
   // =========================
-  // UNIFIED EDIT MODAL (1 STEP)
+  // FIELD EDIT MODALS
   // =========================
 
-  openFieldEditor(field: ProfileFieldType | string): void {
-    if (field === "Nombre completo" || field === "name") {
-      this.editField = "name";
-      this.editingValue = this.getSavedName() || (this.userName !== "Nombre y Apellido de Usuario" ? this.userName : "");
-    } else if (field === "Correo electrónico" || field === "email") {
-      this.editField = "email";
-      this.editingValue = this.userEmail;
-    } else if (field === "Teléfono" || field === "phone") {
-      this.editField = "phone";
-      this.editingValue = this.userPhone;
-    }
-
-    this.fieldError = "";
-    this.showEditModal = true;
+  get savedName(): string {
+    return this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
   }
 
-  get modalTitle(): string {
-    switch (this.editField) {
-      case "name":
-        return "Editar nombre completo";
-      case "email":
-        return "Editar correo electrónico";
-      case "phone":
-        return "Editar teléfono";
-    }
+  openNameEditor(): void {
+    this.showNameModal = true;
   }
 
-  get modalInputLabel(): string {
-    switch (this.editField) {
-      case "name":
-        return "Nombre completo";
-      case "email":
-        return "Correo electrónico";
-      case "phone":
-        return "Teléfono";
-    }
+  openEmailEditor(): void {
+    this.showEmailModal = true;
   }
 
-  get modalInputPlaceholder(): string {
-    switch (this.editField) {
-      case "name":
-        return "Ej. María García";
-      case "email":
-        return "correo@ejemplo.com";
-      case "phone":
-        return "999 123 456";
-    }
+  openPhoneEditor(): void {
+    this.showPhoneModal = true;
   }
 
-  get modalHelpText(): string {
-    switch (this.editField) {
-      case "name":
-        return "Tal como aparece en tu documento de identidad.";
-      case "email":
-        return "Usaremos este correo para notificarte movimientos importantes de tu cuenta.";
-      case "phone":
-        return "Ingresa un número celular de Perú (9 dígitos).";
-    }
-  }
-
-  clearFieldError(): void {
-    this.fieldError = "";
-  }
-
-  saveField(): void {
-    const value = this.editingValue.trim();
-
-    // Validations
-    if (this.editField === "name") {
-      if (!value || value.length < 2) {
-        this.fieldError = "Ingresa un nombre completo válido.";
-        return;
-      }
-    } else if (this.editField === "email") {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!value || !emailRegex.test(value)) {
-        this.fieldError = "Ingresa un correo electrónico válido.";
-        return;
-      }
-    } else if (this.editField === "phone") {
-      const digits = value.replace(/\D/g, "");
-      const isPeruStandard = (digits.length === 9 && digits.startsWith("9")) ||
-                            (digits.length === 11 && digits.startsWith("519"));
-      if (!value || !isPeruStandard) {
-        this.fieldError = "El número debe tener 9 dígitos y empezar con 9 (ej. 987654321).";
-        return;
-      }
-    }
-
+  onNameSaved(value: string): void {
+    this.showNameModal = false;
     this.loadingService.show();
-    this.fieldError = "";
 
     const payload: ProfileUserRequest = {
       id: this.getUserId(),
-      nombre: this.editField === "name" ? value : (this.getSavedName() || this.userName),
-      correo: this.editField === "email" ? value : this.userEmail,
+      nombre: value,
+      correo: this.userEmail,
       imagen: "",
-      telefono: this.editField === "phone" ? value : this.userPhone,
+      telefono: this.userPhone,
     };
 
     this.profileUserUseCase.updateProfile(payload).service({
       success: () => {
         this.loadingService.hide();
-        this.showEditModal = false;
-
-        if (this.editField === "name") {
-          this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, value);
-          this.userName = this.normalizeDisplayName(value, this.userEmail);
-          this.successMessage = "Tu nombre completo se actualizó correctamente.";
-        } else if (this.editField === "email") {
-          this.userEmail = value;
-          this.isEmailVerified = true;
-          this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, value);
-          this.successMessage = "Tu correo electrónico se actualizó correctamente.";
-        } else if (this.editField === "phone") {
-          this.userPhone = value;
-          this.isPhoneVerified = true;
-          this.localManagementService.setVariable(KEY_MANAGEMENT.PHONE, value);
-          this.successMessage = "Tu teléfono se actualizó correctamente.";
-        }
-
+        this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, value);
+        this.userName = this.normalizeDisplayName(value, this.userEmail);
+        this.successMessage = "Tu nombre completo se actualizó correctamente.";
         this.showSuccessAlert = true;
       },
       failure: (error) => {
         this.loadingService.hide();
-        this.fieldError = error?.message || "No se pudieron guardar los cambios.";
+        this.showError(error?.message || "No se pudieron guardar los cambios.");
       },
     });
   }
 
-  private getSavedName(): string {
-    return this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
+  onEmailSaved(value: string): void {
+    this.showEmailModal = false;
+    this.loadingService.show();
+
+    const payload: ProfileUserRequest = {
+      id: this.getUserId(),
+      nombre: this.savedName || this.userName,
+      correo: value,
+      imagen: "",
+      telefono: this.userPhone,
+    };
+
+    this.profileUserUseCase.updateProfile(payload).service({
+      success: () => {
+        this.loadingService.hide();
+        this.userEmail = value;
+        this.isEmailVerified = true;
+        this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, value);
+        this.successMessage = "Tu correo electrónico se actualizó correctamente.";
+        this.showSuccessAlert = true;
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        this.showError(error?.message || "No se pudieron guardar los cambios.");
+      },
+    });
+  }
+
+  onPhoneSaved(value: string): void {
+    this.showPhoneModal = false;
+    this.loadingService.show();
+
+    const payload: ProfileUserRequest = {
+      id: this.getUserId(),
+      nombre: this.savedName || this.userName,
+      correo: this.userEmail,
+      imagen: "",
+      telefono: value,
+    };
+
+    this.profileUserUseCase.updateProfile(payload).service({
+      success: () => {
+        this.loadingService.hide();
+        this.userPhone = value;
+        this.isPhoneVerified = true;
+        this.localManagementService.setVariable(KEY_MANAGEMENT.PHONE, value);
+        this.successMessage = "Tu teléfono se actualizó correctamente.";
+        this.showSuccessAlert = true;
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        this.showError(error?.message || "No se pudieron guardar los cambios.");
+      },
+    });
   }
 
   // =========================
