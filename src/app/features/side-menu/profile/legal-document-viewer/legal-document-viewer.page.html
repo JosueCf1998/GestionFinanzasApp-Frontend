@@ -1,0 +1,21 @@
+<ion-header class="legal-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/main/profile" text="" icon="arrow-back-outline" (click)="goBack()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ document.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="legal-content">
+  <div class="legal-container">
+    <p class="legal-last-updated">Última actualización: {{ document.lastUpdated }}</p>
+
+    <div class="legal-body">
+      <div *ngFor="let section of document.sections" class="legal-section">
+        <h2 class="legal-section-heading">{{ section.heading }}</h2>
+        <p class="legal-section-text">{{ section.content }}</p>
+      </div>
+    </div>
+  </div>
+</ion-content>

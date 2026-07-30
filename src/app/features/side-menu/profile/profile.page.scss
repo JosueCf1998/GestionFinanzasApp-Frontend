@@ -162,6 +162,11 @@
   color: #10b981;
 }
 
+.section-heading-icon--legal {
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+}
+
 .field-icon-wrap--password {
   background: rgba(67, 97, 238, 0.1);
   color: var(--fv-primary-light, #4361ee);
@@ -170,6 +175,16 @@
 .field-icon-wrap--security {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
+}
+
+.field-icon-wrap--privacy {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.field-icon-wrap--terms {
+  background: rgba(249, 115, 22, 0.1);
+  color: #f97316;
 }
 
 .field-icon {
@@ -207,6 +222,13 @@
 .field-value--empty {
   color: var(--fv-text-muted, #94a3b8);
   font-style: italic;
+}
+
+.field-updated {
+  font-size: var(--fv-type-caption-2, 11px);
+  color: var(--fv-text-muted, #94a3b8);
+  line-height: 1.3;
+  margin-top: 1px;
 }
 
 .field-empty-cta {

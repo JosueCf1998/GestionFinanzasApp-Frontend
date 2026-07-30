@@ -149,7 +149,7 @@
               <div class="field-icon-wrap field-icon-wrap--empty">
                 <ion-icon name="add-outline" class="field-icon"></ion-icon>
               </div>
-              <span class="field-empty-cta">+ Agregar Teléfono </span>
+              <span class="field-empty-cta">+ Agregar teléfono </span>
             </div>
           </button>
         </ng-template>
@@ -200,26 +200,86 @@
       </div>
     </app-section-card>
 
-    <app-section-card title="Desactivar cuenta">
-      <p class="section-description">
-        Desactiva tu cuenta temporalmente. Podrás reactivarla en cualquier
-        momento iniciando sesión nuevamente con tus credenciales.
-      </p>
-      <app-warning-message
-        title="Temporal"
-        message="Al desactivar tu cuenta, no podrás acceder a tus datos hasta que la reactives. Tu información se conservará de forma segura."
-      >
-      </app-warning-message>
-      <app-button
-        text="Desactivar cuentas"
-        icon="user-block"
-        variant="outline"
-        (clicked)="deactivateAccount()"
-      >
-      </app-button>
+    <app-section-card>
+      <div class="section-heading">
+        <div class="section-heading-icon section-heading-icon--legal">
+          <ion-icon name="document-text-outline"></ion-icon>
+        </div>
+        <div>
+          <p class="section-title-inline">Términos y Políticas Legales</p>
+          <p class="section-subtitle">
+            Consulta y conoce nuestras políticas de privacidad y términos de uso
+            actualizados.
+          </p>
+        </div>
+      </div>
+
+      <div class="personal-fields">
+        <button
+          class="personal-field-row"
+          type="button"
+          (click)="openPrivacyPolicy()"
+        >
+          <div class="field-main">
+            <div class="field-icon-wrap field-icon-wrap--privacy">
+              <ion-icon
+                name="lock-closed-outline"
+                class="field-icon"
+              ></ion-icon>
+            </div>
+            <div class="field-copy">
+              <span class="field-label">Política de Privacidad</span>
+              <span class="field-value"
+                >Cómo recopilamos y protegemos tus datos.</span
+              >
+              <span class="field-updated"
+                >Actualizado: 01 de julio de 2026</span
+              >
+            </div>
+          </div>
+          <div class="field-side">
+            <ion-icon
+              name="chevron-forward-outline"
+              class="field-arrow"
+            ></ion-icon>
+          </div>
+        </button>
+
+        <div class="field-divider"></div>
+
+        <button
+          class="personal-field-row"
+          type="button"
+          (click)="openTermsOfUse()"
+        >
+          <div class="field-main">
+            <div class="field-icon-wrap field-icon-wrap--terms">
+              <ion-icon
+                name="document-text-outline"
+                class="field-icon"
+              ></ion-icon>
+            </div>
+            <div class="field-copy">
+              <span class="field-label">Términos de Uso</span>
+              <span class="field-value"
+                >Condiciones de uso de la aplicación.</span
+              >
+              <span class="field-updated"
+                >Actualizado: 01 de julio de 2026</span
+              >
+            </div>
+          </div>
+          <div class="field-side">
+            <ion-icon
+              name="chevron-forward-outline"
+              class="field-arrow"
+            ></ion-icon>
+          </div>
+        </button>
+      </div>
     </app-section-card>
 
-    <app-section-card title="Eliminar cuenta">
+    <app-section-card title="Eliminar cuenta" icon="trash-outline">
       <p class="section-description">
         Elimina tu cuenta de forma permanente. Esta acción no se puede deshacer
         y todos tus datos serán borrados definitivamente.
@@ -264,17 +324,6 @@
   (saved)="onPhoneSaved($event)"
   (closed)="showPhoneModal = false"
 ></app-profile-field-edit-modal>
-
-<app-custom-alert
-  *ngIf="showDeactivateAlert"
-  header="Desactivar cuenta"
-  message="¿Estás seguro de que deseas desactivar tu cuenta temporalmente? Podrás reactivarla iniciando sesión nuevamente."
-  cancelText="Cancelar"
-  confirmText="Sí, desactivar"
-  (onCancel)="showDeactivateAlert = false"
-  (onConfirm)="confirmDeactivate()"
->
-</app-custom-alert>
 
 <app-custom-alert
   *ngIf="showDeleteAlert"

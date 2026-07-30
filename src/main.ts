@@ -18,9 +18,11 @@ import { addIcons } from "ionicons";
 import {
   addOutline,
   alertCircleOutline,
+  arrowBackOutline,
   callOutline,
   chevronForwardOutline,
   closeOutline,
+  documentTextOutline,
   eyeOffOutline,
   eyeOutline,
   lockClosedOutline,
@@ -29,14 +31,17 @@ import {
   personOutline,
   shieldCheckmarkOutline,
   shieldOutline,
+  trashOutline,
 } from "ionicons/icons";
 
 addIcons({
   addOutline,
   alertCircleOutline,
+  arrowBackOutline,
   callOutline,
   chevronForwardOutline,
   closeOutline,
+  documentTextOutline,
   eyeOffOutline,
   eyeOutline,
   lockClosedOutline,
@@ -45,6 +50,7 @@ addIcons({
   personOutline,
   shieldCheckmarkOutline,
   shieldOutline,
+  trashOutline,
 });
 
 bootstrapApplication(AppComponent, {

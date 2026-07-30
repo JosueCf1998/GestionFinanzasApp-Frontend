@@ -31,6 +31,12 @@
   }
 }
 
+.section-card__icon {
+  font-size: 15px;
+  color: var(--fv-text-muted, #94a3b8);
+  flex-shrink: 0;
+}
+
 .section-card {
   padding: 17px;
   border: 1px solid #edf0f5;

@@ -17,7 +17,6 @@ import { CustomAlertComponent } from "src/app/shared/components/custom-alert/cus
 import { ProfileFieldEditModalComponent } from "./profile-field-edit-modal/profile-field-edit-modal.component";
 import { ChangePasswordModalComponent, PasswordData } from "./change-password-modal/change-password-modal.component";
 
-import { DeactivateAccountUseCase } from "src/app/core/use-cases/users/deactivate-account.usecase";
 import { DeleteUserAccountUseCase } from "src/app/core/use-cases/users/delete-user-account.usecase";
 import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usecase";
 import {
@@ -61,7 +60,6 @@ export class ProfilePage implements OnDestroy {
   private phoneTimer: any = null;
 
   // Alerts state
-  showDeactivateAlert = false;
   showDeleteAlert = false;
   showSuccessAlert = false;
   showErrorAlert = false;
@@ -76,7 +74,6 @@ export class ProfilePage implements OnDestroy {
   errorMessage = "";
 
   constructor(
-    private deactivateAccountUseCase: DeactivateAccountUseCase,
     private deleteUserAccountUseCase: DeleteUserAccountUseCase,
     private logoutUserUseCase: LogoutUserUseCase,
     private navService: NavigationService,
@@ -388,40 +385,12 @@ export class ProfilePage implements OnDestroy {
     this.navService.back();
   }
 
-  // =========================
-  // DEACTIVATE ACCOUNT
-  // =========================
-
-  deactivateAccount(): void {
-    this.showDeactivateAlert = true;
+  openPrivacyPolicy(): void {
+    this.navService.push('/legal/privacy');
   }
 
-  confirmDeactivate(): void {
-    this.showDeactivateAlert = false;
-    const userId = this.getUserId();
-
-    if (!userId) {
-      this.showError("No se pudo identificar al usuario.");
-      return;
-    }
-
-    this.loadingService.show();
-    this.deactivateAccountUseCase.execute({ userId }).service({
-      success: () => {
-        this.loadingService.hide();
-        this.logoutUserUseCase.logout();
-        this.successMessage =
-          "Tu cuenta ha sido desactivada temporalmente. Puedes reactivarla iniciando sesión nuevamente.";
-        this.showSuccessAlert = true;
-      },
-      failure: (error) => {
-        this.loadingService.hide();
-        this.showError(
-          error?.message ||
-            "No se pudo desactivar la cuenta. Intenta nuevamente.",
-        );
-      },
-    });
+  openTermsOfUse(): void {
+    this.navService.push('/legal/terms');
   }
 
   // =========================

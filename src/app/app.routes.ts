@@ -117,6 +117,11 @@ export const routes: Routes = [
     path: 'accounts/detail-transfer',
     loadComponent: () => import('./features/side-menu/accounts/detail-transfer/detail-transfer.page').then(m => m.DetailTransferPage)
   },
+  // LEGAL DOCUMENT ROUTES
+  {
+    path: 'legal/:type',
+    loadComponent: () => import('./features/side-menu/profile/legal-document-viewer/legal-document-viewer.page').then(m => m.LegalDocumentViewerPage)
+  },
   // PRUEBA ROUTES - Testing navigation
   {
     path: 'prueba/screen-one',

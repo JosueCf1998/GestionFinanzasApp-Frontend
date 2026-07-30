@@ -1,5 +1,6 @@
 <section class="section-card-section">
   <header *ngIf="title" class="section-card__header">
+    <ion-icon *ngIf="icon" [name]="icon" class="section-card__icon"></ion-icon>
     <h3>{{ title }}</h3>
   </header>
 
