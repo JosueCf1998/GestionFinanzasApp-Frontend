@@ -15,6 +15,7 @@ import { WarningMessageComponent } from "src/app/shared/components/warning-messa
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { ProfileFieldEditModalComponent } from "./profile-field-edit-modal/profile-field-edit-modal.component";
+import { ChangePasswordModalComponent, PasswordData } from "./change-password-modal/change-password-modal.component";
 
 import { DeactivateAccountUseCase } from "src/app/core/use-cases/users/deactivate-account.usecase";
 import { DeleteUserAccountUseCase } from "src/app/core/use-cases/users/delete-user-account.usecase";
@@ -23,6 +24,7 @@ import {
   ProfileUserRequest,
   ProfileUserUseCase,
 } from "src/app/core/use-cases/users/profile-user.usecase";
+import { ChangePasswordUserUseCase } from "src/app/core/use-cases/users/change-password-user.usecase";
 
 export type ProfileFieldType = "name" | "email" | "phone";
 
@@ -41,6 +43,7 @@ export type ProfileFieldType = "name" | "email" | "phone";
     ButtonComponent,
     CustomAlertComponent,
     ProfileFieldEditModalComponent,
+    ChangePasswordModalComponent,
   ],
 })
 export class ProfilePage implements OnDestroy {
@@ -51,7 +54,6 @@ export class ProfilePage implements OnDestroy {
   // Badges state
   isEmailVerified = true;
   isPhoneVerified = false;
-  isTwoFactorEnabled = false;
 
   // Phone masking & auto-hide
   showPhone = false;
@@ -68,6 +70,7 @@ export class ProfilePage implements OnDestroy {
   showNameModal = false;
   showEmailModal = false;
   showPhoneModal = false;
+  showPasswordModal = false;
 
   successMessage = "";
   errorMessage = "";
@@ -80,6 +83,7 @@ export class ProfilePage implements OnDestroy {
     private loadingService: SpinnerService,
     private localManagementService: LocalManagementService,
     private profileUserUseCase: ProfileUserUseCase,
+    private changePasswordUserUseCase: ChangePasswordUserUseCase,
   ) {
     this.loadUserData();
   }
@@ -246,16 +250,31 @@ export class ProfilePage implements OnDestroy {
     return "Verificado";
   }
 
-  getTwoFactorStatus(): "Activada" | "Desactivada" {
-    return this.isTwoFactorEnabled ? "Activada" : "Desactivada";
+  openPasswordModal(): void {
+    this.showPasswordModal = true;
   }
 
-  openChangePassword(): void {
-    this.showError("La pantalla de cambio de contraseña estará disponible en una próxima actualización.");
-  }
+  onPasswordSaved(data: PasswordData): void {
+    this.showPasswordModal = false;
+    this.loadingService.show();
 
-  openTwoFactorConfig(): void {
-    this.showError("La configuración de verificación en dos pasos estará disponible en una próxima actualización.");
+    const payload = {
+      id: this.getUserId(),
+      current_password: data.currentPassword,
+      new_password: data.newPassword,
+    };
+
+    this.changePasswordUserUseCase.execute(payload).service({
+      success: () => {
+        this.loadingService.hide();
+        this.logoutUserUseCase.logout();
+        this.navService.replaceToLogin();
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        this.showError(error?.message || "No se pudo cambiar la contraseña. Verifica tu contraseña actual e intenta nuevamente.");
+      },
+    });
   }
 
   // =========================

@@ -170,11 +170,11 @@
       </div>
 
       <div class="personal-fields">
-        <!-- Fila 1: Cambiar contraseña -->
+        <!-- Fila única: Cambiar contraseña -->
         <button
           class="personal-field-row"
           type="button"
-          (click)="openChangePassword()"
+          (click)="openPasswordModal()"
         >
           <div class="field-main">
             <div class="field-icon-wrap field-icon-wrap--password">
@@ -191,40 +191,6 @@
             </div>
           </div>
           <div class="field-side">
-            <ion-icon
-              name="chevron-forward-outline"
-              class="field-arrow"
-            ></ion-icon>
-          </div>
-        </button>
-
-        <div class="field-divider"></div>
-
-        <!-- Fila 2: Verificación y seguridad -->
-        <button
-          class="personal-field-row"
-          type="button"
-          (click)="openTwoFactorConfig()"
-        >
-          <div class="field-main">
-            <div class="field-icon-wrap field-icon-wrap--security">
-              <ion-icon name="shield-outline" class="field-icon"></ion-icon>
-            </div>
-            <div class="field-copy">
-              <span class="field-label">Verificación y seguridad</span>
-              <span class="field-value"
-                >Configura la verificación en dos pasos y más.</span
-              >
-            </div>
-          </div>
-          <div class="field-side">
-            <span
-              class="status-badge"
-              [class.status-badge--verified]="isTwoFactorEnabled"
-              [class.status-badge--disabled]="!isTwoFactorEnabled"
-            >
-              {{ getTwoFactorStatus() }}
-            </span>
             <ion-icon
               name="chevron-forward-outline"
               class="field-arrow"
@@ -320,6 +286,12 @@
   (onConfirm)="confirmDelete()"
 >
 </app-custom-alert>
+
+<app-change-password-modal
+  [isOpen]="showPasswordModal"
+  (saved)="onPasswordSaved($event)"
+  (closed)="showPasswordModal = false"
+></app-change-password-modal>
 
 <app-custom-alert
   *ngIf="showSuccessAlert"
