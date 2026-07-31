@@ -61,6 +61,11 @@
   scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
+.base-modal__body--static {
+  display: flex;
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
 .base-modal__footer { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 10px; flex: 0 0 auto; padding: 10px 18px 16px; border-top: 1px solid #edf0f7; background: #fff; }
 .base-modal__footer--reverse { direction: rtl; }
 .base-modal__footer--reverse > * { direction: ltr; }

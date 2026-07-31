@@ -7,6 +7,7 @@ import { formatTransactionDate, formatTransactionRegistrationDate } from 'src/ap
 import { DetailSummaryCardComponent, DetailSummaryCardData } from 'src/app/shared/components/detail-summary-card/detail-summary-card.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
 import { InformationCardComponent, InformationCardItem } from 'src/app/shared/components/information-card/information-card.component';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 
 interface TransactionDetailState {
@@ -24,6 +25,7 @@ interface TransactionDetailState {
     IonContent,
     IonHeader,
     EmptyStateComponent,
+    ItemIconComponent,
     PageLayoutComponent,
     DetailSummaryCardComponent,
     InformationCardComponent
@@ -60,5 +62,10 @@ export class DetailTransactionPage {
 
   back(): void {
     void this.navService.back();
+  }
+
+  editTransaction(): void {
+    if (!this.transaction) return;
+    void this.navService.push(`/transactions/${this.transaction.id}/edit`, { transaction: this.transaction });
   }
 }

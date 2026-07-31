@@ -13,8 +13,8 @@ import { TRANSACTIONS_MOCK } from "../mocks/transactions.mock";
 import { ENDPOINTS } from "../constants/endpoints";
 import { EncryptionService } from "../services/encryption.service";
 import { encryptBody } from "../utils/encryption.util";
-import { CreateTransactionsRequest, CreateTransactionsResponse } from "../models/transactions/create-transaction.mode";
-import { CREATE_TRANSACTION_REQUEST_MAP } from "../constants/transactions/create-transaction.constants";
+import { CreateTransactionsRequest, CreateTransactionsResponse, UpdateTransactionRequest } from "../models/transactions/create-transaction.mode";
+import { CREATE_TRANSACTION_REQUEST_MAP, UPDATE_TRANSACTION_REQUEST_MAP } from "../constants/transactions/create-transaction.constants";
 import { mapObjectKeys } from "../utils/mapping.util";
 
 @Injectable({
@@ -65,6 +65,20 @@ export class TransactionRepository {
     const mappedBody = mapObjectKeys(body, CREATE_TRANSACTION_REQUEST_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateTransactionsResponse>(endpoint, encryptedBody);
+  }
+
+  updateTransaction(body: UpdateTransactionRequest): Observable<Result<CreateTransactionsResponse>> {
+    const mappedBody = mapObjectKeys(body, UPDATE_TRANSACTION_REQUEST_MAP);
+    const encryptedBody = encryptBody(mappedBody, this.encryptionService);
+    return this.apiService.post<CreateTransactionsResponse>(ENDPOINTS.TRANSACTIONS.UPDATE, encryptedBody);
+  }
+
+  deleteTransaction(id: number): Observable<Result<{ mensaje?: string; info?: { id: number } }>> {
+    const encryptedBody = encryptBody({ transac_id: id }, this.encryptionService);
+    return this.apiService.post<{ mensaje?: string; info?: { id: number } }>(
+      ENDPOINTS.TRANSACTIONS.DELETE,
+      encryptedBody
+    );
   }
 
 }

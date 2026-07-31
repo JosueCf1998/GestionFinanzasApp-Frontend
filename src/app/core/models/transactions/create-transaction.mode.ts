@@ -7,6 +7,10 @@ export interface CreateTransactionsRequest {
   description: string;
 }
 
+export interface UpdateTransactionRequest extends CreateTransactionsRequest {
+  transactionId: number;
+}
+
 export interface CreateTransactionsResponse {
   mensaje?: string;
   info?: {

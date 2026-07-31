@@ -38,7 +38,7 @@
       [metaLabel]="accountLabel"
       [chartSegments]="chartSegments"
       [chartAriaLabel]="chartAriaLabel"
-      [chartTone]="selectedType === 'ingreso' ? 'success' : 'primary'"
+      chartTone="primary"
       [periodLabel]="periodLabel"
       [currencySymbol]="currencySymbol">
     </app-period-summary-card>
@@ -54,7 +54,7 @@
           [color]="category.color"
           [amount]="category.amount"
           [percentage]="totalAmount > 0 ? (category.amount / totalAmount) * 100 : 0"
-          [amountTone]="selectedType === 'ingreso' ? 'success' : 'default'"
+          amountTone="default"
           [currencySymbol]="currencySymbol"
           [interactive]="true"
           [ariaLabel]="'Ver movimientos de ' + category.name"

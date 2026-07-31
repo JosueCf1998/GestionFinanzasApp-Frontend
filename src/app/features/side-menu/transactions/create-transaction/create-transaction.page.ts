@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CreateTransactionsRequest } from 'src/app/core/models/transactions/create-transaction.mode';
+import { FilteredTransaction } from 'src/app/core/models/transactions/list-transactions.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import {
@@ -14,6 +15,8 @@ import {
   ListCategoriesUseCase
 } from 'src/app/core/use-cases/categories/list-categories.usecase';
 import { CreateTransactionsUseCase } from 'src/app/core/use-cases/transactions/create-transactions';
+import { DeleteTransactionUseCase } from 'src/app/core/use-cases/transactions/delete-transaction.usecase';
+import { UpdateTransactionUseCase } from 'src/app/core/use-cases/transactions/update-transaction.usecase';
 import 'src/app/core/utils/observable-extensions';
 import {
   AccountSelectionMode,
@@ -43,6 +46,17 @@ import {
 } from 'src/app/shared/components/success-receipt-modal/success-receipt-modal.component';
 
 type TransactionType = 'gasto' | 'ingreso';
+
+interface TransactionFormState {
+  transaction?: FilteredTransaction;
+  category?: {
+    id: number;
+    name: string;
+    icon: string;
+    color: string;
+  };
+  transactionType?: TransactionType;
+}
 
 @Component({
   selector: 'app-create-transaction',
@@ -93,10 +107,16 @@ export class CreateTransactionPage implements OnInit {
   isPeriodModalOpen = false;
   isSuccessReceiptOpen = false;
   isSaving = false;
+  isDeleting = false;
   showUnsavedAlert = false;
   showLoadError = false;
   showSaveError = false;
+  showDeleteAlert = false;
+  showDeleteError = false;
   transactionId: number | null = null;
+  readonly isEditMode: boolean;
+  private readonly editingTransaction?: FilteredTransaction;
+  private readonly initialCategoryId?: number;
 
   private hasPendingChanges = false;
   private pendingInitialLoads = 2;
@@ -104,10 +124,47 @@ export class CreateTransactionPage implements OnInit {
   constructor(
     private readonly navService: NavigationService,
     private readonly createTransactionsUseCase: CreateTransactionsUseCase,
+    private readonly updateTransactionUseCase: UpdateTransactionUseCase,
+    private readonly deleteTransactionUseCase: DeleteTransactionUseCase,
     private readonly listCategoriesUseCase: ListCategoriesUseCase,
     private readonly listAccountsUseCase: ListAccountsUseCase,
     private readonly loadingService: SpinnerService
-  ) {}
+  ) {
+    const state = window.history.state as TransactionFormState;
+    this.editingTransaction = state.transaction;
+    this.isEditMode = Boolean(this.editingTransaction);
+    this.initialCategoryId = this.editingTransaction?.category.id ?? state.category?.id;
+
+    if (this.editingTransaction) {
+      this.transactionId = this.editingTransaction.id;
+      this.selectedType = this.editingTransaction.type === 'income' ? 'ingreso' : 'gasto';
+      this.amount = this.editingTransaction.amount;
+      this.date = this.editingTransaction.date.slice(0, 10);
+      this.description = this.editingTransaction.description ?? '';
+      this.selectedAccount = {
+        ...this.editingTransaction.account,
+        amount: 0
+      };
+      this.selectedCategory = {
+        id: this.editingTransaction.category.id,
+        nombre: this.editingTransaction.category.name,
+        icono: this.editingTransaction.category.icon,
+        color: this.editingTransaction.category.color,
+        tipo: this.selectedType,
+        usuario_id: null
+      };
+    } else if (state.category) {
+      this.selectedType = state.transactionType ?? 'gasto';
+      this.selectedCategory = {
+        id: state.category.id,
+        nombre: state.category.name,
+        icono: state.category.icon,
+        color: state.category.color,
+        tipo: this.selectedType,
+        usuario_id: null
+      };
+    }
+  }
 
   ngOnInit(): void {
     this.loadingService.show();
@@ -122,7 +179,8 @@ export class CreateTransactionPage implements OnInit {
   }
 
   get canSave(): boolean {
-    return !this.isSaving &&
+    return !this.isSaving && !this.isDeleting &&
+      (!this.isEditMode || this.hasPendingChanges) &&
       (this.amount ?? 0) > 0 &&
       this.selectedAccount !== null &&
       this.selectedCategory?.id !== undefined &&
@@ -213,6 +271,7 @@ export class CreateTransactionPage implements OnInit {
   }
 
   changeType(value: string): void {
+    if (this.isEditMode) return;
     if (value !== 'gasto' && value !== 'ingreso') return;
     this.selectedType = value;
     this.selectedCategory = null;
@@ -275,12 +334,16 @@ export class CreateTransactionPage implements OnInit {
       description: this.description.trim()
     };
 
+    const operation = this.isEditMode && this.transactionId !== null
+      ? this.updateTransactionUseCase.execute({ ...request, transactionId: this.transactionId })
+      : this.createTransactionsUseCase.execute(request);
+
     this.isSaving = true;
-    this.createTransactionsUseCase.execute(request).service({
+    operation.service({
       success: data => {
         this.isSaving = false;
         this.hasPendingChanges = false;
-        this.transactionId = data?.info?.id ?? null;
+        this.transactionId = data?.info?.id ?? this.transactionId;
         this.isSuccessReceiptOpen = true;
       },
       failure: () => {
@@ -309,6 +372,32 @@ export class CreateTransactionPage implements OnInit {
     void this.navService.replace('/main/transactions', undefined, false);
   }
 
+  requestDeleteTransaction(): void {
+    if (!this.isEditMode || this.transactionId === null || this.isDeleting) return;
+    this.showDeleteAlert = true;
+  }
+
+  confirmDeleteTransaction(): void {
+    if (!this.isEditMode || this.transactionId === null || this.isDeleting) return;
+
+    this.showDeleteAlert = false;
+    this.isDeleting = true;
+    this.loadingService.show();
+    this.deleteTransactionUseCase.execute(this.transactionId).service({
+      success: () => {
+        this.loadingService.hide();
+        this.isDeleting = false;
+        this.hasPendingChanges = false;
+        void this.navService.replace('/main/transactions', undefined, false);
+      },
+      failure: () => {
+        this.loadingService.hide();
+        this.isDeleting = false;
+        this.showDeleteError = true;
+      }
+    });
+  }
+
   private loadCategories(): void {
     this.listCategoriesUseCase.execute().service({
       success: data => {
@@ -320,6 +409,7 @@ export class CreateTransactionPage implements OnInit {
         this.expenseCategories = categories.filter(category =>
           category.tipo === 'gastos' || category.tipo === 'gasto'
         );
+        this.reconcileSelectedCategory();
       },
       failure: () => {
         this.finishInitialLoad();
@@ -333,6 +423,7 @@ export class CreateTransactionPage implements OnInit {
       success: data => {
         this.finishInitialLoad();
         this.accounts = data?.items ?? [];
+        this.reconcileSelectedAccount();
       },
       failure: () => {
         this.finishInitialLoad();
@@ -343,6 +434,18 @@ export class CreateTransactionPage implements OnInit {
 
   private markAsChanged(): void {
     this.hasPendingChanges = true;
+  }
+
+  private reconcileSelectedAccount(): void {
+    if (!this.editingTransaction) return;
+    this.selectedAccount = this.accounts.find(account => account.id === this.editingTransaction?.account.id)
+      ?? this.selectedAccount;
+  }
+
+  private reconcileSelectedCategory(): void {
+    if (this.initialCategoryId === undefined) return;
+    this.selectedCategory = this.categories.find(category => category.id === this.initialCategoryId)
+      ?? this.selectedCategory;
   }
 
   private finishInitialLoad(): void {

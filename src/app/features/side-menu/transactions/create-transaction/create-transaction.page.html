@@ -1,8 +1,8 @@
 <ion-header>
   <app-page-layout
-    title="Nueva transacción"
+    [title]="isEditMode ? 'Editar transacción' : 'Nueva transacción'"
     [showBack]="true"
-    [loading]="isSaving"
+    [loading]="isSaving || isDeleting"
     (back)="backToTransactions()">
   </app-page-layout>
 </ion-header>
@@ -11,6 +11,7 @@
   <form class="transaction-form" (ngSubmit)="saveTransaction()">
 
     <app-custom-segment
+      *ngIf="!isEditMode"
       [options]="transactionTypes"
       [model]="selectedType"
       (modelChange)="changeType($event)">
@@ -137,10 +138,18 @@
 
     <div class="action-container">
       <app-button
-        [text]="isSaving ? 'Guardando...' : 'Registrar transacción'"
+        [text]="isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Registrar transacción')"
         type="submit"
         [loading]="isSaving"
         [disabled]="!canSave">
+      </app-button>
+      <app-button
+        *ngIf="isEditMode"
+        text="Eliminar transacción"
+        icon="trash"
+        variant="danger"
+        [disabled]="isSaving || isDeleting"
+        (clicked)="requestDeleteTransaction()">
       </app-button>
     </div>
   </form>
@@ -180,9 +189,9 @@
 
 <app-success-receipt-modal
   [isOpen]="isSuccessReceiptOpen"
-  title="Transacción registrada"
-  eyebrow="¡Movimiento registrado!"
-  [heading]="selectedType === 'gasto' ? 'Gasto registrado correctamente' : 'Ingreso registrado correctamente'"
+  [title]="isEditMode ? 'Transacción actualizada' : 'Transacción registrada'"
+  [eyebrow]="isEditMode ? '¡Cambios guardados!' : '¡Movimiento registrado!'"
+  [heading]="isEditMode ? 'Transacción actualizada correctamente' : (selectedType === 'gasto' ? 'Gasto registrado correctamente' : 'Ingreso registrado correctamente')"
   actionText="Ver mis transacciones"
   [details]="successReceiptDetails"
   (completed)="viewTransactions()">
@@ -199,6 +208,25 @@
 </app-custom-alert>
 
 <app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar transacción"
+  message="Esta acción eliminará definitivamente la transacción y no se puede deshacer. ¿Deseas continuar?"
+  cancelText="Cancelar"
+  confirmText="Eliminar"
+  (onCancel)="showDeleteAlert = false"
+  (onConfirm)="confirmDeleteTransaction()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteError"
+  header="No se pudo eliminar"
+  message="Ocurrió un problema al eliminar la transacción. Inténtalo nuevamente."
+  confirmText="Entendido"
+  [showCancel]="false"
+  (onConfirm)="showDeleteError = false">
+</app-custom-alert>
+
+<app-custom-alert
   *ngIf="showLoadError"
   header="No se pudieron cargar los datos"
   message="No fue posible obtener tus cuentas o categorías. Inténtalo nuevamente."
@@ -208,8 +236,8 @@
 
 <app-custom-alert
   *ngIf="showSaveError"
-  header="No se pudo registrar"
-  message="Ocurrió un error al guardar la transacción. Revisa los datos e inténtalo nuevamente."
+  [header]="isEditMode ? 'No se pudo actualizar' : 'No se pudo registrar'"
+  [message]="isEditMode ? 'Ocurrió un error al actualizar la transacción. Inténtalo nuevamente.' : 'Ocurrió un error al guardar la transacción. Revisa los datos e inténtalo nuevamente.'"
   confirmText="Aceptar"
   (onConfirm)="showSaveError = false">
 </app-custom-alert>

@@ -94,6 +94,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
   },
   {
+    path: 'transactions/:id/edit',
+    loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
+  },
+  {
     path: 'transactions/category/:id',
     loadComponent: () => import('./features/side-menu/transactions/list-transaction/list-transaction.page').then(m => m.ListTransactionPage)
   },

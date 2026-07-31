@@ -16,6 +16,7 @@ import {
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
 import { FilterModalComponent, FilterSelection } from 'src/app/shared/components/filter-modal/filter-modal.component';
 import { FilterTriggerComponent } from 'src/app/shared/components/filter-trigger/filter-trigger.component';
+import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { ListSkeletonComponent } from 'src/app/shared/components/list-skeleton/list-skeleton.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
@@ -67,6 +68,7 @@ interface TransactionListEntry {
     EmptyStateComponent,
     FilterModalComponent,
     FilterTriggerComponent,
+    FloatingActionButtonComponent,
     ListSkeletonComponent,
     PageLayoutComponent,
     SectionCardComponent
@@ -144,6 +146,14 @@ export class ListTransactionPage implements OnInit, OnDestroy {
 
   back(): void {
     void this.navService.back();
+  }
+
+  createTransaction(): void {
+    if (!this.category) return;
+    void this.navService.forward('/transactions/create', {
+      category: this.category,
+      transactionType: this.transactionType
+    });
   }
 
   openPeriodSelector(): void {
@@ -282,9 +292,8 @@ export class ListTransactionPage implements OnInit, OnDestroy {
         icon: transaction.category.icon || this.category?.icon || 'bills',
         color: transaction.category.color || this.category?.color || 'var(--fv-primary)',
         amount: transaction.amount,
-        amountPrefix: transaction.type === 'income' ? '+' : '',
         currencySymbol: this.currencySymbol,
-        amountTone: transaction.type === 'income' ? 'success' : 'default'
+        amountTone: 'default'
       }
     };
   }

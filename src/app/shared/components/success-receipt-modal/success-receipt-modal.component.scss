@@ -4,6 +4,9 @@
 
 .success-content {
   display: grid;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
   justify-items: center;
   padding: 2px 0 4px;
   text-align: center;
@@ -50,7 +53,12 @@ h2 {
 .receipt-details {
   display: block;
   width: 100%;
+  max-height: min(292px, 40dvh);
   margin: 18px 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
 }
 
 h2 + .receipt-details {

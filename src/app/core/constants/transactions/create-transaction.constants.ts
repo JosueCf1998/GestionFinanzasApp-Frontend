@@ -13,3 +13,8 @@ export const CREATE_TRANSACTION_REQUEST_MAP = {
   description: 'descripcion'
 
 } as const;
+
+export const UPDATE_TRANSACTION_REQUEST_MAP = {
+  ...CREATE_TRANSACTION_REQUEST_MAP,
+  transactionId: 'transac_id'
+} as const;

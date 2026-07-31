@@ -92,3 +92,10 @@
   (accountsSelected)="applyAccountFilter($event)"
   (modalClosed)="closeAccountSelector()">
 </app-account-selector-modal>
+
+<app-floating-action-button
+  *ngIf="category"
+  icon="add"
+  ariaLabel="Registrar transacción en esta categoría"
+  (clicked)="createTransaction()">
+</app-floating-action-button>

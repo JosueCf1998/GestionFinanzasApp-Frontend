@@ -1,5 +1,16 @@
 <ion-header>
   <app-page-layout title="Detalle de transacción" [showBack]="true" (back)="back()">
+    <app-item-icon
+      *ngIf="transaction"
+      header-actions
+      icon="edit"
+      color="#ffffff"
+      size="md"
+      variant="nav-glass"
+      [interactive]="true"
+      ariaLabel="Editar transacción"
+      (activated)="editTransaction()">
+    </app-item-icon>
   </app-page-layout>
 </ion-header>
 
@@ -11,6 +22,7 @@
 
       <app-information-card [items]="informationItems">
       </app-information-card>
+
     </ng-container>
 
     <ng-template #unavailable>
