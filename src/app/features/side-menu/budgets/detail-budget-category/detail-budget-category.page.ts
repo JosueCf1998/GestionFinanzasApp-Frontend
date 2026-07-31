@@ -5,6 +5,7 @@ import { BUDGET_STATUS_LABELS } from 'src/app/core/models/budgets/list-budgets.m
 import { FilteredTransaction } from 'src/app/core/models/transactions/list-transactions.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { FilterTransactionsUseCase } from 'src/app/core/use-cases/transactions/filter-transactions.usecase';
+import { normalizeFilteredTransaction } from 'src/app/core/utils/transaction.util';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
@@ -111,9 +112,11 @@ export class DetailBudgetCategoryPage implements OnInit {
       type: 'gasto'
     }).service({
       success: data => {
-        this.transactions = (data?.items ?? []).filter(transaction =>
-          this.isTransactionInBudgetPeriod(transaction.date)
-        );
+        this.transactions = (data?.transactionList?.expensesList ?? [])
+          .map(normalizeFilteredTransaction)
+          .filter(transaction =>
+            this.isTransactionInBudgetPeriod(transaction.date)
+          );
         this.transactionGroups = this.groupTransactionsByDate(this.transactions);
         this.isLoadingTransactions = false;
       },

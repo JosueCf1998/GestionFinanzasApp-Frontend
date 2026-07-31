@@ -7,36 +7,20 @@
     </app-feature-header>
 
     <section class="transaction-filters" aria-label="Filtros de transacciones">
-      <button
-        type="button"
-        class="filter-trigger filter-trigger--period"
-        (click)="openPeriodSelector()">
-        <span class="filter-trigger__content">
-          <small>Período</small>
-          <strong>{{ selectedPeriodLabel }}</strong>
-          <span>{{ compactDateRange }}</span>
-        </span>
+      <app-filter-trigger
+        label="Período"
+        [value]="selectedPeriodLabel"
+        [caption]="compactDateRange"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
 
-        <span class="filter-trigger__action">
-          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
-        </span>
-      </button>
-
-      <button
-        type="button"
-        class="filter-trigger filter-trigger--account"
+      <app-filter-trigger
+        label="Cuenta"
+        [value]="selectedAccountLabel"
+        caption="Filtrar movimientos"
         [disabled]="accounts.length === 0"
-        (click)="openAccountSelector()">
-        <span class="filter-trigger__content">
-          <small>Cuenta</small>
-          <strong>{{ selectedAccountLabel }}</strong>
-          <span>Filtrar movimientos</span>
-        </span>
-
-        <span class="filter-trigger__action">
-          <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
-        </span>
-      </button>
+        (activated)="openAccountSelector()">
+      </app-filter-trigger>
     </section>
 
     <app-custom-segment
@@ -59,24 +43,22 @@
       [currencySymbol]="currencySymbol">
     </app-period-summary-card>
 
-    <app-section-card title="Movimientos" appearance="plain">
-      <div *ngIf="isLoading" class="transactions-loading" aria-label="Cargando transacciones">
-        <div *ngFor="let item of [1, 2, 3, 4]">
-          <i></i>
-          <span></span>
-        </div>
-      </div>
+    <app-section-card title="Categorías" appearance="plain">
+      <app-list-skeleton *ngIf="isLoading"></app-list-skeleton>
 
-      <div *ngIf="!isLoading && !hasError && transactions.length" class="transactions-list">
+      <div *ngIf="!isLoading && !hasError && categorySummaries.length" class="transactions-list">
         <app-amount-list-item
-          *ngFor="let transaction of transactions; trackBy: trackByTransaction"
-          [title]="transaction.category.name"
-          [subtitle]="transaction.account.name"
-          [icon]="transaction.category.icon"
-          [color]="transaction.category.color"
-          [amount]="transaction.amount"
-          [amountTone]="transaction.type === 'ingreso' ? 'success' : 'default'"
-          [currencySymbol]="currencySymbol">
+          *ngFor="let category of categorySummaries; trackBy: trackByCategory"
+          [title]="category.name"
+          [icon]="category.icon"
+          [color]="category.color"
+          [amount]="category.amount"
+          [percentage]="totalAmount > 0 ? (category.amount / totalAmount) * 100 : 0"
+          [amountTone]="selectedType === 'ingreso' ? 'success' : 'default'"
+          [currencySymbol]="currencySymbol"
+          [interactive]="true"
+          [ariaLabel]="'Ver movimientos de ' + category.name"
+          (activated)="openCategoryDetail(category)">
         </app-amount-list-item>
       </div>
 

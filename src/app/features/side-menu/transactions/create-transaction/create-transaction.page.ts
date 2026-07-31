@@ -42,7 +42,7 @@ import {
   SuccessReceiptModalComponent
 } from 'src/app/shared/components/success-receipt-modal/success-receipt-modal.component';
 
-type TransactionType = 'gastos' | 'ingresos';
+type TransactionType = 'gasto' | 'ingreso';
 
 @Component({
   selector: 'app-create-transaction',
@@ -73,11 +73,11 @@ export class CreateTransactionPage implements OnInit {
   readonly AccountSelectionMode = AccountSelectionMode;
   readonly CategorySelectionMode = CategorySelectionMode;
   readonly transactionTypes = [
-    { value: 'gastos', label: 'Gasto' },
-    { value: 'ingresos', label: 'Ingreso' }
+    { value: 'gasto', label: 'Gastos' },
+    { value: 'ingreso', label: 'Ingresos' }
   ];
 
-  selectedType: TransactionType = 'gastos';
+  selectedType: TransactionType = 'gasto';
   amount: number | null = null;
   selectedAccount: Accounts | null = null;
   selectedCategory: CategoryResponse | null = null;
@@ -116,7 +116,7 @@ export class CreateTransactionPage implements OnInit {
   }
 
   get categories(): CategoryResponse[] {
-    return this.selectedType === 'ingresos'
+    return this.selectedType === 'ingreso'
       ? this.incomeCategories
       : this.expenseCategories;
   }
@@ -154,7 +154,7 @@ export class CreateTransactionPage implements OnInit {
 
   get categoryDescription(): string {
     return this.selectedCategory
-      ? `Categoría de ${this.selectedType === 'gastos' ? 'gasto' : 'ingreso'}`
+      ? `Categoría de ${this.selectedType === 'gasto' ? 'gasto' : 'ingreso'}`
       : 'Clasifica el movimiento para organizar tus finanzas';
   }
 
@@ -184,7 +184,7 @@ export class CreateTransactionPage implements OnInit {
   }
 
   get transactionAdvice(): string {
-    return this.selectedType === 'gastos'
+    return this.selectedType === 'gasto'
       ? 'Registrar tus gastos al momento te ayuda a mantener tus presupuestos siempre actualizados.'
       : 'Clasifica tus ingresos para entender mejor de dónde viene tu dinero.';
   }
@@ -198,7 +198,7 @@ export class CreateTransactionPage implements OnInit {
       },
       {
         label: 'Tipo',
-        value: this.selectedType === 'gastos' ? 'Gasto' : 'Ingreso'
+        value: this.selectedType === 'gasto' ? 'Gasto' : 'Ingreso'
       },
       { label: 'Fecha', value: this.formattedDate, wrap: true },
       { label: 'Cuenta', value: this.selectedAccount?.name ?? '', wrap: true },
@@ -213,7 +213,7 @@ export class CreateTransactionPage implements OnInit {
   }
 
   changeType(value: string): void {
-    if (value !== 'gastos' && value !== 'ingresos') return;
+    if (value !== 'gasto' && value !== 'ingreso') return;
     this.selectedType = value;
     this.selectedCategory = null;
     this.markAsChanged();

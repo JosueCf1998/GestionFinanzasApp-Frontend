@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonContent, IonIcon } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { Subscription } from 'rxjs';
 import { FilteredTransaction } from 'src/app/core/models/transactions/list-transactions.model';
@@ -18,6 +18,8 @@ import { SectionCardComponent } from 'src/app/shared/components/section-card/sec
 import { AmountListItemComponent } from 'src/app/shared/components/amount-list-item/amount-list-item.component';
 import { DonutChartSegment } from 'src/app/shared/components/donut-chart/donut-chart.component';
 import { PeriodSummaryCardComponent } from 'src/app/shared/components/period-summary-card/period-summary-card.component';
+import { ListSkeletonComponent } from 'src/app/shared/components/list-skeleton/list-skeleton.component';
+import { FilterTriggerComponent } from 'src/app/shared/components/filter-trigger/filter-trigger.component';
 import {
   FilterModalComponent,
   FilterSelection
@@ -27,8 +29,17 @@ import {
   AccountSelectorModalComponent
 } from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
 import 'src/app/core/utils/observable-extensions';
+import { normalizeFilteredTransaction } from 'src/app/core/utils/transaction.util';
 
 type TransactionType = 'gasto' | 'ingreso';
+
+interface TransactionCategorySummary {
+  id: number;
+  name: string;
+  icon: string;
+  color: string;
+  amount: number;
+}
 
 @Component({
   selector: 'app-transactions',
@@ -38,7 +49,6 @@ type TransactionType = 'gasto' | 'ingreso';
   imports: [
     CommonModule,
     IonContent,
-    IonIcon,
     AccountSelectorModalComponent,
     CustomSegmentComponent,
     FeatureHeaderComponent,
@@ -46,6 +56,8 @@ type TransactionType = 'gasto' | 'ingreso';
     ItemIconComponent,
     SectionCardComponent,
     AmountListItemComponent,
+    ListSkeletonComponent,
+    FilterTriggerComponent,
     PeriodSummaryCardComponent,
     FilterModalComponent
   ]
@@ -69,8 +81,11 @@ export class TransactionsPage implements OnInit, OnDestroy {
   selectedEndDate = this.getLastDayOfCurrentMonth();
   accounts: Accounts[] = [];
   selectedAccounts: Accounts[] = [];
-  private allTransactions: FilteredTransaction[] = [];
+  private expenseTransactions: FilteredTransaction[] = [];
+  private incomeTransactions: FilteredTransaction[] = [];
   transactions: FilteredTransaction[] = [];
+  categorySummaries: TransactionCategorySummary[] = [];
+  totalAmount = 0;
   isLoading = false;
   hasError = false;
   isPeriodSelectorOpen = false;
@@ -83,8 +98,8 @@ export class TransactionsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loadAccounts();
-    this.loadTransactions();
   }
 
   ngOnDestroy(): void {
@@ -94,10 +109,6 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   ionViewWillEnter(): void {
     void this.content?.scrollToTop(0);
-  }
-
-  get totalAmount(): number {
-    return this.transactions.reduce((total, transaction) => total + transaction.amount, 0);
   }
 
   get totalLabel(): string {
@@ -152,6 +163,9 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   get selectedAccountLabel(): string {
     if (!this.accounts.length) return 'Sin cuentas';
+    if (this.selectedAccounts.length === this.accounts.length) {
+      return 'Todas las cuentas';
+    }
     if (this.selectedAccounts.length === 1) {
       return this.selectedAccounts[0].name;
     }
@@ -162,7 +176,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
     if (value !== 'gasto' && value !== 'ingreso') return;
 
     this.selectedType = value;
-    this.loadTransactions();
+    this.applyLocalFilters();
   }
 
   openPeriodSelector(): void {
@@ -179,7 +193,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
     this.selectedStartDate = selection.startDate;
     this.selectedEndDate = selection.endDate;
     this.closePeriodSelector();
-    this.applyLocalFilters();
+    this.loadTransactions();
   }
 
   openAccountSelector(): void {
@@ -193,7 +207,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
   applyAccountFilter(accounts: Accounts[]): void {
     this.selectedAccounts = [...accounts];
     this.closeAccountSelector();
-    this.applyLocalFilters();
+    this.loadTransactions();
   }
 
   loadTransactions(): void {
@@ -202,16 +216,25 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
     this.transactionRequest?.unsubscribe();
     this.transactionRequest = this.filterTransactionsUseCase.execute({
-      type: this.selectedType
+      account_ids: this.selectedAccounts.map(account => account.id),
+      start_date: this.selectedStartDate,
+      end_date: this.selectedEndDate
     }).service({
       success: data => {
-        this.allTransactions = [...(data?.items ?? [])];
+        const transactionList = data?.transactionList;
+        this.expenseTransactions = (transactionList?.expensesList ?? [])
+          .map(normalizeFilteredTransaction);
+        this.incomeTransactions = (transactionList?.incomeList ?? [])
+          .map(normalizeFilteredTransaction);
         this.applyLocalFilters();
         this.isLoading = false;
       },
       failure: () => {
-        this.allTransactions = [];
+        this.expenseTransactions = [];
+        this.incomeTransactions = [];
         this.transactions = [];
+        this.categorySummaries = [];
+        this.totalAmount = 0;
         this.isLoading = false;
         this.hasError = true;
       }
@@ -222,8 +245,21 @@ export class TransactionsPage implements OnInit, OnDestroy {
     void this.navService.forward('/transactions/create');
   }
 
-  trackByTransaction(_: number, transaction: FilteredTransaction): number {
-    return transaction.id;
+  openCategoryDetail(category: TransactionCategorySummary): void {
+    void this.navService.forward(`/transactions/category/${category.id}`, {
+      category,
+      transactionType: this.selectedType,
+      selectedPeriod: this.selectedPeriod,
+      selectedPeriodValue: this.selectedPeriodValue,
+      startDate: this.selectedStartDate,
+      endDate: this.selectedEndDate,
+      selectedAccountIds: this.selectedAccounts.map(account => account.id),
+      currencySymbol: this.currencySymbol
+    });
+  }
+
+  trackByCategory(_: number, category: TransactionCategorySummary): number {
+    return category.id;
   }
 
   private loadAccounts(): void {
@@ -232,11 +268,12 @@ export class TransactionsPage implements OnInit, OnDestroy {
       success: data => {
         this.accounts = data?.items ?? [];
         this.selectedAccounts = [...this.accounts];
-        this.applyLocalFilters();
+        this.loadTransactions();
       },
       failure: () => {
         this.accounts = [];
         this.selectedAccounts = [];
+        this.loadTransactions();
       }
     });
   }
@@ -248,7 +285,11 @@ export class TransactionsPage implements OnInit, OnDestroy {
     const filterByAccount = this.accounts.length > 0 &&
       this.selectedAccounts.length < this.accounts.length;
 
-    this.transactions = this.allTransactions
+    const selectedTransactions = this.selectedType === 'gasto'
+      ? this.expenseTransactions
+      : this.incomeTransactions;
+
+    this.transactions = selectedTransactions
       .filter(transaction => {
         const date = transaction.date.slice(0, 10);
         const matchesDate = date >= this.selectedStartDate &&
@@ -262,9 +303,35 @@ export class TransactionsPage implements OnInit, OnDestroy {
           second.date.localeCompare(first.date) || second.id - first.id
       );
 
+    this.totalAmount = this.transactions.reduce(
+      (total, transaction) => total + transaction.amount,
+      0
+    );
+    this.categorySummaries = this.buildCategorySummaries(this.transactions);
+
     requestAnimationFrame(() => {
       void this.content?.scrollToTop(0);
     });
+  }
+
+  private buildCategorySummaries(
+    transactions: FilteredTransaction[]
+  ): TransactionCategorySummary[] {
+    const summaries = new Map<number, TransactionCategorySummary>();
+
+    transactions.forEach(transaction => {
+      const current = summaries.get(transaction.category.id);
+      summaries.set(transaction.category.id, {
+        id: transaction.category.id,
+        name: transaction.category.name,
+        icon: transaction.category.icon,
+        color: transaction.category.color,
+        amount: (current?.amount ?? 0) + transaction.amount
+      });
+    });
+
+    return Array.from(summaries.values())
+      .sort((first, second) => second.amount - first.amount);
   }
 
   private formatShortDate(value: string): string {

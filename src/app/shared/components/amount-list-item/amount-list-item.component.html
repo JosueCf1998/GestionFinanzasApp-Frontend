@@ -17,7 +17,17 @@
 
   <span class="amount-list-item__content">
     <strong>{{ title }}</strong>
-    <small>{{ subtitle }}</small>
+    <span *ngIf="percentage !== null; else subtitleOnly" class="amount-list-item__meta">
+      <small class="amount-list-item__percentage">
+        {{ percentage | number:'1.0-1' }}%
+      </small>
+      <span class="amount-list-item__track" aria-hidden="true">
+        <i [style.width.%]="percentage"></i>
+      </span>
+    </span>
+    <ng-template #subtitleOnly>
+      <small class="amount-list-item__subtitle">{{ subtitle }}</small>
+    </ng-template>
   </span>
 
   <strong class="amount-list-item__amount">

@@ -10,6 +10,8 @@ import { ItemIconComponent } from '../item-icon/item-icon.component';
   imports: [CommonModule, ItemIconComponent]
 })
 export class AmountListItemComponent {
+  private percentageValue: number | null = null;
+
   @Input() title = '';
   @Input() subtitle = '';
   @Input() icon = '';
@@ -17,6 +19,16 @@ export class AmountListItemComponent {
   @Input() amount = 0;
   @Input() amountPrefix = '';
   @Input() currencySymbol = 'S/';
+  @Input()
+  set percentage(value: number | null) {
+    this.percentageValue = value === null || !Number.isFinite(value)
+      ? null
+      : Math.min(Math.max(value, 0), 100);
+  }
+
+  get percentage(): number | null {
+    return this.percentageValue;
+  }
   @Input() amountTone: 'default' | 'success' = 'default';
   @Input() interactive = false;
   @Input() ariaLabel = '';

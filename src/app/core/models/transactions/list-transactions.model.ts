@@ -24,7 +24,7 @@ export interface FilteredTransaction {
   account: TransactionFilterEntity;
   category: TransactionFilterEntity;
   amount: number;
-  type: 'gasto' | 'ingreso';
+  type: 'expense' | 'income';
   date: string;
   createdAt: string;
   description: string | null;
@@ -32,12 +32,21 @@ export interface FilteredTransaction {
 
 export interface FilterTransactionsRequest {
   category_ids?: number[];
+  account_ids?: number[];
+  start_date?: string;
+  end_date?: string;
   type?: 'gasto' | 'ingreso';
 }
 
+export interface FilteredTransactionResponse extends Omit<FilteredTransaction, 'amount'> {
+  amount: string;
+}
+
 export interface FilterTransactionsResponse {
-  items: FilteredTransaction[];
-  total: number;
-  totalAmount: number;
+  transactionList: {
+    expensesList: FilteredTransactionResponse[];
+    incomeList: FilteredTransactionResponse[];
+  };
+  totalAmount: string;
   message: string;
 }

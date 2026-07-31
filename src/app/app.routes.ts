@@ -93,6 +93,10 @@ export const routes: Routes = [
     path: 'transactions/create',
     loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
   },
+  {
+    path: 'transactions/category/:id',
+    loadComponent: () => import('./features/side-menu/transactions/detail-transaction/detail-transaction.page').then(m => m.DetailTransactionPage)
+  },
   // CATEGORIES ROUTES
   {
     path: 'categories/edit',

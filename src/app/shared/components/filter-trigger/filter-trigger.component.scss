@@ -1,0 +1,68 @@
+:host { display: block; min-width: 0; }
+
+.filter-trigger {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 8px;
+  padding: 11px;
+  border: 1px solid rgba(67, 97, 238, .15);
+  border-radius: 16px;
+  background: linear-gradient(125deg, #fbfaff, #f1f3ff);
+  box-shadow: 0 6px 16px rgba(44, 48, 92, .04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.filter-trigger:active:not(:disabled) {
+  border-color: rgba(67, 97, 238, .25);
+  box-shadow: 0 3px 10px rgba(44, 48, 92, .05);
+  transform: scale(.99);
+}
+
+.filter-trigger:disabled { opacity: .55; }
+
+.filter-trigger__content {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.filter-trigger__content small {
+  color: var(--fv-text-secondary);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.filter-trigger__content strong,
+.filter-trigger__content > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-trigger__content strong {
+  color: var(--fv-text-primary);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.15;
+}
+
+.filter-trigger__content > span {
+  color: var(--fv-text-muted);
+  font-size: 9px;
+  font-weight: 550;
+  line-height: 1.15;
+}
+
+.filter-trigger ion-icon {
+  width: 17px;
+  height: 17px;
+  color: var(--fv-primary);
+}
