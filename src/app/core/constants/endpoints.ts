@@ -38,7 +38,13 @@ export const ENDPOINTS = {
 
   TRANSFERS: {
 
-    LIST: 'transfers/list'
+    LIST: 'transfers/list',
+
+    CREATE: 'transfers/register',
+
+    UPDATE: 'transfers/update',
+
+    DELETE: 'transfers/delete'
 
   }
 

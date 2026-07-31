@@ -5,6 +5,7 @@ import { Result } from '../../models/result.model';
 import { EncryptionService } from '../../services/encryption.service';
 import { encryptBody } from '../../utils/encryption.util';
 import { mapObjectKeys } from '../../utils/mapping.util';
+import { ENDPOINTS } from '../../constants/endpoints';
 
 export interface UpdateTransferRequest {
   id: number;
@@ -26,6 +27,8 @@ const REQUEST_KEY_MAP = {
 } as const;
 
 export interface UpdateTransferResponse {
+  mensaje?: string;
+  info?: { id: number };
 }
 
 @Injectable({
@@ -39,7 +42,7 @@ export class UpdateTransferUseCase {
   ) {}
 
   updateTransfer(body: UpdateTransferRequest): Observable<Result<UpdateTransferResponse>> {
-    const endpoint = 'transfers/update';
+    const endpoint = ENDPOINTS.TRANSFERS.UPDATE;
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<UpdateTransferResponse>(endpoint, encryptedBody);

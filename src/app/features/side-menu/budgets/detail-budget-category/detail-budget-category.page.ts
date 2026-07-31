@@ -7,6 +7,9 @@ import { NavigationService } from 'src/app/core/services/navigation.service';
 import { FilterTransactionsUseCase } from 'src/app/core/use-cases/transactions/filter-transactions.usecase';
 import { normalizeFilteredTransaction } from 'src/app/core/utils/transaction.util';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { CompactListItem, CompactListItemComponent } from 'src/app/shared/components/compact-list-item/compact-list-item.component';
+import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
+import { ListSkeletonComponent } from 'src/app/shared/components/list-skeleton/list-skeleton.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { CategoryBudget } from '../detail-budget/detail-budget.page';
@@ -24,7 +27,7 @@ interface CategoryDetailNavigationState {
 interface TransactionDateGroup {
   date: string;
   label: string;
-  transactions: FilteredTransaction[];
+  items: Array<{ id: number; view: CompactListItem }>;
 }
 
 @Component({
@@ -36,7 +39,10 @@ interface TransactionDateGroup {
     CommonModule,
     IonContent,
     IonHeader,
+    CompactListItemComponent,
+    EmptyStateComponent,
     ItemIconComponent,
+    ListSkeletonComponent,
     PageLayoutComponent,
     SectionCardComponent
   ]
@@ -129,12 +135,8 @@ export class DetailBudgetCategoryPage implements OnInit {
     });
   }
 
-  transactionTitle(transaction: FilteredTransaction): string {
-    return transaction.description?.trim() || `Gasto en ${transaction.category.name}`;
-  }
-
-  trackByTransaction(_: number, transaction: FilteredTransaction): number {
-    return transaction.id;
+  trackByTransaction(_: number, item: { id: number }): number {
+    return item.id;
   }
 
   trackByTransactionGroup(_: number, group: TransactionDateGroup): string {
@@ -169,7 +171,18 @@ export class DetailBudgetCategoryPage implements OnInit {
       .map(([date, items]) => ({
         date,
         label: this.formatDateGroupLabel(date),
-        transactions: items
+        items: items.map(transaction => ({
+          id: transaction.id,
+          view: {
+            title: transaction.category.name,
+            subtitle: transaction.account.name,
+            icon: transaction.account.icon || 'bank',
+            color: transaction.account.color || 'var(--fv-primary)',
+            amount: transaction.amount,
+            currencySymbol: this.currencySymbol,
+            amountTone: 'default'
+          }
+        }))
       }));
   }
 

@@ -3,6 +3,7 @@ import { Observable, map } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { Result } from '../../models/result.model';
 import { mapObjectKeysReverse } from '../../utils/mapping.util';
+import { ENDPOINTS } from '../../constants/endpoints';
 
 export enum TransferType {
   initial = 'Inicial',
@@ -24,6 +25,8 @@ export interface Transfer {
 
 export interface ListTransferResponse {
   items: Transfer[];
+  Total?: number;
+  mensaje?: string;
 }
 
 const TRANSFER_KEY_MAP = {
@@ -44,7 +47,7 @@ export class ListTransferUseCase {
   constructor(private apiService: ApiService) {}
 
   listTransfer(): Observable<Result<ListTransferResponse>> {
-    const endpoint = 'transfers/list';
+    const endpoint = ENDPOINTS.TRANSFERS.LIST;
     return this.apiService.get<ListTransferResponse>(endpoint).pipe(
       map(result => ({
         ...result,
@@ -53,7 +56,9 @@ export class ListTransferUseCase {
             ...mapObjectKeysReverse(t, TRANSFER_KEY_MAP),
             amount: parseFloat(t.monto || '0'),
             type: Object.values(TransferType).includes(t.tipo_transferencia) ? t.tipo_transferencia : TransferType.completed
-          } as Transfer))
+          } as Transfer)),
+          Total: result.data?.Total,
+          mensaje: result.data?.mensaje
         }
       } as Result<ListTransferResponse>))
     );
