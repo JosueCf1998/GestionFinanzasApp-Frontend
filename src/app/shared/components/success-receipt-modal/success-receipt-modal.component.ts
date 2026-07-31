@@ -10,20 +10,16 @@ import {
 } from '@angular/core';
 import { IonIcon } from '@ionic/angular/standalone';
 import { BaseModalComponent } from '../base-modal/base-modal.component';
+import { KeyValueItem, KeyValueListComponent } from '../key-value-list/key-value-list.component';
 
-export interface SuccessReceiptDetail {
-  label: string;
-  value: string;
-  emphasis?: boolean;
-  wrap?: boolean;
-}
+export type SuccessReceiptDetail = KeyValueItem;
 
 @Component({
   selector: 'app-success-receipt-modal',
   templateUrl: './success-receipt-modal.component.html',
   styleUrls: ['./success-receipt-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonIcon, BaseModalComponent],
+  imports: [CommonModule, IonIcon, BaseModalComponent, KeyValueListComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SuccessReceiptModalComponent implements OnChanges {

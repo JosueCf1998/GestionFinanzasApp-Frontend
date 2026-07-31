@@ -17,15 +17,7 @@
     <p class="success-eyebrow">{{ eyebrow }}</p>
     <h2 *ngIf="heading">{{ heading }}</h2>
 
-    <dl class="receipt-details">
-      <div *ngFor="let detail of details">
-        <dt>{{ detail.label }}</dt>
-        <dd
-          [class.receipt-value--emphasis]="detail.emphasis"
-          [class.receipt-value--wrap]="detail.wrap">
-          {{ detail.value }}
-        </dd>
-      </div>
-    </dl>
+    <app-key-value-list class="receipt-details" [items]="details" appearance="outlined">
+    </app-key-value-list>
   </section>
 </app-base-modal>

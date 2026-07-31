@@ -95,6 +95,10 @@ export const routes: Routes = [
   },
   {
     path: 'transactions/category/:id',
+    loadComponent: () => import('./features/side-menu/transactions/list-transaction/list-transaction.page').then(m => m.ListTransactionPage)
+  },
+  {
+    path: 'transactions/detail/:id',
     loadComponent: () => import('./features/side-menu/transactions/detail-transaction/detail-transaction.page').then(m => m.DetailTransactionPage)
   },
   // CATEGORIES ROUTES
