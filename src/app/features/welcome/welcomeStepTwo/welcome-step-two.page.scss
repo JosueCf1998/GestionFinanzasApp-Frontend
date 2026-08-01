@@ -47,59 +47,6 @@ ion-content {
 }
 
 /* ==========================================================================
-   ICON
-   ========================================================================== */
-
-.finvia-icon {
-  position: relative;
-
-  margin-bottom: 42px;
-
-  animation:
-    fadeInDown .8s ease,
-    logoFloat 4s ease-in-out infinite;
-
-  img,
-  ion-img {
-    position: relative;
-
-    z-index: 2;
-
-    width: 150px;
-    height: auto;
-
-    filter:
-      drop-shadow(0 16px 36px rgba(0,0,0,.22))
-      drop-shadow(0 0 30px rgba(95,124,255,.20));
-  }
-
-  &::before {
-    content: '';
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    width: 190px;
-    height: 190px;
-
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background:
-      radial-gradient(
-        circle,
-        rgba(255,255,255,.12),
-        transparent 72%
-      );
-
-    animation: pulse 4s ease-in-out infinite;
-  }
-}
-
-/* ==========================================================================
    TEXT
    ========================================================================== */
 

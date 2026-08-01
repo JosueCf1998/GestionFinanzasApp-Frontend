@@ -1,0 +1,129 @@
+<ion-header>
+  <app-page-layout
+    title="Detalle de categoría"
+    [showBack]="true"
+    (back)="backToBudget()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="category-detail-page">
+  <main class="category-detail">
+    <article class="category-detail__card" [style.--category-color]="category.color">
+      <section class="category-detail__hero">
+        <header class="category-detail__identity">
+          <app-item-icon
+            [icon]="category.icon"
+            [color]="category.color"
+            size="lg"
+            variant="glass">
+          </app-item-icon>
+
+          <div class="category-detail__heading">
+            <span>Categoría</span>
+            <h1>{{ category.name }}</h1>
+            <p>{{ budgetName }}</p>
+          </div>
+
+          <span class="category-detail__status" [attr.data-status]="category.status">
+            <i></i>
+            {{ statusLabel }}
+          </span>
+        </header>
+
+        <div class="category-detail__usage">
+          <div class="category-detail__usage-heading">
+            <div>
+              <span>Consumo del presupuesto</span>
+              <p>
+                {{ currencySymbol }} {{ category.used | number:'1.2-2' }}
+                de
+                {{ currencySymbol }} {{ category.budgeted | number:'1.2-2' }}
+              </p>
+            </div>
+            <strong>{{ category.percentage | number:'1.0-1' }}%</strong>
+          </div>
+
+          <div
+            class="category-detail__progress"
+            role="progressbar"
+            aria-label="Porcentaje utilizado"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-valuenow]="progressWidth">
+            <span [style.width.%]="progressWidth"></span>
+          </div>
+        </div>
+      </section>
+
+      <dl class="category-detail__metrics">
+        <div>
+          <dt>Presupuestado</dt>
+          <dd>{{ currencySymbol }} {{ category.budgeted | number:'1.2-2' }}</dd>
+        </div>
+        <div>
+          <dt>Utilizado</dt>
+          <dd>{{ currencySymbol }} {{ category.used | number:'1.2-2' }}</dd>
+        </div>
+        <div>
+          <dt>{{ remainingLabel }}</dt>
+          <dd [class.category-detail__danger]="category.status === 'EXCEEDED'">
+            {{ currencySymbol }} {{ remainingAmount | number:'1.2-2' }}
+          </dd>
+        </div>
+      </dl>
+
+      <footer class="category-detail__period">
+        <app-item-icon
+          icon="calendar"
+          color="var(--fv-primary)"
+          size="xs"
+          variant="soft"
+          aria-hidden="true">
+        </app-item-icon>
+        <div>
+          <span>Periodo del presupuesto</span>
+          <strong>{{ dateRangeLabel }}</strong>
+        </div>
+      </footer>
+    </article>
+
+    <section class="category-transactions" aria-label="Transacciones">
+      <app-section-card title="Transacciones" appearance="plain">
+        <app-list-skeleton *ngIf="isLoadingTransactions"></app-list-skeleton>
+
+        <div
+          *ngIf="!isLoadingTransactions && !hasTransactionError && transactions.length"
+          class="category-transactions__list">
+          <section
+            *ngFor="let group of transactionGroups; trackBy: trackByTransactionGroup"
+            class="transaction-date-group"
+            [attr.aria-label]="group.label">
+            <h3>{{ group.label }}</h3>
+
+            <div class="transaction-date-group__items">
+              <app-compact-list-item
+                *ngFor="let item of group.items; trackBy: trackByTransaction"
+                [item]="item.view">
+              </app-compact-list-item>
+            </div>
+          </section>
+        </div>
+
+        <app-empty-state
+          *ngIf="!isLoadingTransactions && !hasTransactionError && transactions.length === 0"
+          title="Sin transacciones"
+          description="No hay movimientos de esta categoría dentro del período del presupuesto.">
+        </app-empty-state>
+
+        <div *ngIf="!isLoadingTransactions && hasTransactionError" class="category-transactions__error">
+          <app-empty-state
+            icon="alert-triangle"
+            title="No se pudieron cargar"
+            description="Revisa tu conexión e inténtalo nuevamente.">
+          </app-empty-state>
+          <button type="button" (click)="loadTransactions()">Reintentar</button>
+        </div>
+      </app-section-card>
+    </section>
+  </main>
+</ion-content>

@@ -295,11 +295,13 @@ ion-menu-button {
 #main-content {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .router-container {
+  position: relative;
   flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 

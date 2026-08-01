@@ -1,0 +1,18 @@
+<article class="detail-summary">
+  <app-item-icon
+    [icon]="data.icon"
+    [color]="data.iconColor || 'var(--fv-primary)'"
+    size="lg"
+    variant="glass"
+    aria-hidden="true">
+  </app-item-icon>
+  <div class="detail-summary__identity">
+    <span>{{ data.eyebrow }}</span>
+    <h1>{{ data.title }}</h1>
+    <p *ngIf="data.subtitle">{{ data.subtitle }}</p>
+  </div>
+  <div class="detail-summary__value">
+    <small>Importe</small>
+    <strong>{{ data.currencySymbol || 'S/' }} {{ data.amount | number:'1.2-2' }}</strong>
+  </div>
+</article>

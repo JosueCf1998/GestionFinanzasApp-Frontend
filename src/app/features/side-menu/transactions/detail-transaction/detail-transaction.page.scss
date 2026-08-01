@@ -1,0 +1,14 @@
+:host { display: block; }
+
+.transaction-detail-page {
+  --background: linear-gradient(180deg, #fafbff 0%, var(--fv-background) 100%);
+}
+
+.transaction-detail {
+  display: grid;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 18px 14px calc(28px + env(safe-area-inset-bottom));
+  gap: 20px;
+}

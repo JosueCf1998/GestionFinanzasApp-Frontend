@@ -10,18 +10,17 @@
 
   <div class="header-left">
 
-    <button
+    <app-item-icon
       *ngIf="showBack; else menuSlot"
-      type="button"
-      class="header-button"
+      icon="left"
+      color="#ffffff"
+      size="md"
+      variant="nav-glass"
+      [interactive]="true"
+      ariaLabel="Volver"
       [disabled]="loading"
-      (click)="onBack()">
-
-      <ion-icon
-        src="assets/icon/left.svg">
-      </ion-icon>
-
-    </button>
+      (activated)="onBack()">
+    </app-item-icon>
 
     <ng-template #menuSlot>
 

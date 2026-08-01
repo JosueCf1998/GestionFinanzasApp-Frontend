@@ -1,0 +1,64 @@
+:host { display: block; }
+
+.list-skeleton {
+  display: grid;
+  gap: 8px;
+}
+
+.list-skeleton__row {
+  display: grid;
+  height: 56px;
+  grid-template-columns: 32px minmax(0, 1fr) 64px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 7px 10px;
+  border: 1px solid rgba(225, 228, 238, .82);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .82);
+  box-shadow: 0 5px 15px rgba(35, 39, 78, .025);
+}
+
+.list-skeleton__row i {
+  display: block;
+  overflow: hidden;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #eceff5 20%, #f7f8fb 50%, #eceff5 80%);
+  background-size: 220% 100%;
+  animation: list-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+.list-skeleton__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px !important;
+}
+
+.list-skeleton__content {
+  display: grid;
+  gap: 6px;
+}
+
+.list-skeleton__content i:first-child {
+  width: min(118px, 72%);
+  height: 10px;
+}
+
+.list-skeleton__content i:last-child {
+  width: min(82px, 50%);
+  height: 7px;
+}
+
+.list-skeleton__amount {
+  width: 64px;
+  height: 10px;
+  justify-self: end;
+}
+
+@keyframes list-skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -120% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list-skeleton__row i { animation: none; }
+}

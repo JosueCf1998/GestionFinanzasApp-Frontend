@@ -18,11 +18,12 @@ import {
   FilterModalComponent,
   FilterSelection
 } from 'src/app/shared/components/filter-modal/filter-modal.component';
-import { BudgetListItemComponent } from 'src/app/shared/components/budget-list-item/budget-list-item.component';
+import { ProgressListItemComponent } from 'src/app/shared/components/progress-list-item/progress-list-item.component';
 import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header/feature-header.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-summary-card/budget-summary-card.component';
+import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 @Component({
@@ -35,12 +36,13 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
     IonContent,
     IonIcon,
     ButtonComponent,
-    BudgetListItemComponent,
+    ProgressListItemComponent,
     FeatureHeaderComponent,
     ItemIconComponent,
     FilterModalComponent,
     FloatingActionButtonComponent,
-    BudgetSummaryCardComponent
+    BudgetSummaryCardComponent,
+    SectionCardComponent
   ]
 })
 export class BudgetsPage implements OnInit, OnDestroy {
@@ -90,14 +92,12 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
     this.budgetRequest?.unsubscribe();
     this.loadingService.show();
-    console.log('Datos enviados al servicio de presupuestos:', request);
 
     this.budgetRequest = this.listBudgetsUseCase
       .execute(request)
       .service({
         success: data => {
           this.loadingService.hide();
-          console.log('Datos recibidos del servicio de presupuestos:', data);
 
           if (data) {
             this.setBudgetResponse(data);
@@ -106,9 +106,8 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
           this.clearBudgetData();
         },
-        failure: error => {
+        failure: () => {
           this.loadingService.hide();
-          console.error('Error del servicio de presupuestos:', error);
           this.clearBudgetData();
         }
       });
@@ -139,6 +138,10 @@ export class BudgetsPage implements OnInit, OnDestroy {
     return Math.min(Math.max(this.summary.percentage, 0), 100);
   }
 
+  get selectedDateRange(): string {
+    return `${this.formatNumericDate(this.selectedStartDate)} - ${this.formatNumericDate(this.selectedEndDate)}`;
+  }
+
   openPeriodSelector(): void {
     this.isPeriodSelectorOpen = true;
   }
@@ -149,7 +152,6 @@ export class BudgetsPage implements OnInit, OnDestroy {
 
   applyFilters(selection: FilterSelection): void {
     if (!this.isValidSelection(selection)) {
-      console.warn('Filtro de presupuestos inválido:', selection);
       return;
     }
 
@@ -233,5 +235,10 @@ export class BudgetsPage implements OnInit, OnDestroy {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private formatNumericDate(value: string): string {
+    const [year, month, day] = value.split('-');
+    return year && month && day ? `${day}/${month}/${year}` : value;
   }
 }

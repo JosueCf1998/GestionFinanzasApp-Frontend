@@ -1,6 +1,7 @@
 <ion-modal
   [cssClass]="modalClass"
   [isOpen]="isOpen"
+  [animated]="animated"
   [backdropDismiss]="backdropDismiss"
   (didDismiss)="handleDidDismiss()">
   <ng-template>
@@ -21,7 +22,10 @@
         </button>
       </header>
 
-      <div *ngIf="!bodyless" class="base-modal__body">
+      <div
+        *ngIf="!bodyless"
+        class="base-modal__body"
+        [class.base-modal__body--static]="!bodyScrollable">
         <ng-content></ng-content>
       </div>
 

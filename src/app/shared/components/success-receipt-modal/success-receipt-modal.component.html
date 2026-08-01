@@ -1,0 +1,24 @@
+<app-base-modal
+  [isOpen]="modalOpen"
+  [title]="title"
+  [primaryText]="actionText"
+  [showHeader]="false"
+  [showClose]="false"
+  [bodyScrollable]="false"
+  [backdropDismiss]="false"
+  [animated]="modalAnimated"
+  size="sm"
+  (closed)="handleClosed()"
+  (primary)="requestCompletion()">
+  <section class="success-content" [attr.aria-label]="title">
+    <div class="success-icon" aria-hidden="true">
+      <ion-icon src="assets/icon/success-check.svg"></ion-icon>
+    </div>
+
+    <p class="success-eyebrow">{{ eyebrow }}</p>
+    <h2 *ngIf="heading">{{ heading }}</h2>
+
+    <app-key-value-list class="receipt-details" [items]="details" appearance="outlined">
+    </app-key-value-list>
+  </section>
+</app-base-modal>

@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+.summary-card {
+  display: grid;
+  min-height: 158px;
+  grid-template-columns: minmax(0, 1fr) 128px;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(220, 222, 235, .88);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(91, 62, 218, .055), transparent 35%),
+    linear-gradient(145deg, #fff 0%, #fff 64%, #fbfaff 100%),
+    #fff;
+  box-shadow:
+    0 14px 30px rgba(40, 39, 82, .065),
+    0 2px 6px rgba(40, 39, 82, .025),
+    inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.summary-card__information {
+  display: flex;
+  min-height: 116px;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.summary-card__header strong,
+.summary-card__header span,
+.summary-card__total span,
+.summary-card__total strong {
+  display: block;
+}
+
+.summary-card__header strong {
+  color: var(--fv-text-primary);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: -.015em;
+}
+
+.summary-card__header span {
+  margin-top: 6px;
+  color: #8790a7;
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.summary-card__total {
+  margin-top: 18px;
+}
+
+.summary-card__total span {
+  color: #7e879f;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.summary-card__total strong {
+  margin-top: 5px;
+  color: #4930df;
+  font-size: clamp(20px, 6vw, 25px);
+  font-weight: 820;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.045em;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.summary-card__total small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  color: #8991a5;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.summary-card__total small b {
+  display: inline-grid;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: #f0edfb;
+  color: #5d3fc4;
+  font-size: 9px;
+  font-weight: 800;
+  place-items: center;
+}
+
+.summary-card > app-donut-chart {
+  justify-self: end;
+}
+
+@media (max-width: 390px) {
+  .summary-card {
+    min-height: 152px;
+    grid-template-columns: minmax(0, 1fr) 106px;
+    gap: 8px;
+    padding: 16px 14px;
+  }
+
+  .summary-card__information {
+    min-height: 112px;
+  }
+
+  .summary-card__total {
+    margin-top: 18px;
+  }
+
+}

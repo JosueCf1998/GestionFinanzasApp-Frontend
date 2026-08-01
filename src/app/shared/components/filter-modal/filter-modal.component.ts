@@ -31,6 +31,7 @@ export class FilterModalComponent implements OnChanges {
   @Input() selectedPeriodValue = '';
   @Input() selectedStartDate = '';
   @Input() selectedEndDate = '';
+  @Input() singleDate = false;
 
   @Output() readonly modalClosed = new EventEmitter<void>();
   @Output() readonly filtersApplied = new EventEmitter<FilterSelection>();
@@ -43,6 +44,7 @@ export class FilterModalComponent implements OnChanges {
   }
 
   get isDateRangeValid(): boolean {
+    if (this.singleDate) return Boolean(this.draftSelection?.startDate || this.selectedStartDate);
     if (!this.draftSelection) return true;
     if (this.draftSelection.period !== 'custom') return true;
     return Boolean(this.draftSelection.startDate && this.draftSelection.endDate &&
@@ -60,6 +62,17 @@ export class FilterModalComponent implements OnChanges {
 
   apply(): void {
     if (!this.isDateRangeValid) return;
+
+    if (this.singleDate) {
+      const selectedDate = this.draftSelection?.startDate || this.selectedStartDate;
+      this.filtersApplied.emit({
+        period: 'custom',
+        periodValue: selectedDate,
+        startDate: selectedDate,
+        endDate: selectedDate
+      });
+      return;
+    }
 
     this.filtersApplied.emit(this.draftSelection ?? {
       period: this.selectedPeriod,

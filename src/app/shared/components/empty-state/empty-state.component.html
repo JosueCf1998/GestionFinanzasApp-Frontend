@@ -1,0 +1,17 @@
+<section
+  class="empty-state"
+  role="status"
+  [attr.aria-label]="title">
+  <span class="empty-state__visual" aria-hidden="true">
+    <app-item-icon
+      [icon]="icon"
+      color="#64748b"
+      size="xl"
+      shape="rounded"
+      variant="soft">
+    </app-item-icon>
+  </span>
+
+  <h3>{{ title }}</h3>
+  <p *ngIf="description">{{ description }}</p>
+</section>

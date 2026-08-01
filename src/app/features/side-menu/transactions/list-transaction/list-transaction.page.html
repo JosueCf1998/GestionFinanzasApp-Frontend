@@ -1,0 +1,101 @@
+<ion-header>
+  <app-page-layout title="Transacciones" [showBack]="true" (back)="back()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="category-movements-page">
+  <main class="category-movements">
+    <ng-container *ngIf="category; else unavailable">
+      <section class="detail-filters" aria-label="Filtros de movimientos">
+        <app-filter-trigger
+          label="Período"
+          [value]="selectedPeriodLabel"
+          [caption]="compactDateRange"
+          (activated)="openPeriodSelector()">
+        </app-filter-trigger>
+
+        <app-filter-trigger
+          label="Cuenta"
+          [value]="selectedAccountLabel"
+          caption="Filtrar movimientos"
+          [disabled]="accounts.length === 0"
+          (activated)="openAccountSelector()">
+        </app-filter-trigger>
+      </section>
+
+      <app-section-card
+        title="Listado de Movimientos"
+        appearance="plain">
+        <div class="movements" aria-label="Listado de movimientos">
+
+        <app-list-skeleton *ngIf="isLoading"></app-list-skeleton>
+
+        <div *ngIf="!isLoading && hasError" class="movements-state movements-state--error">
+          <p>No se pudieron cargar los movimientos.</p>
+          <button type="button" (click)="retry()">Reintentar</button>
+        </div>
+
+        <app-empty-state
+          *ngIf="!isLoading && !hasError && !transactionGroups.length"
+          title="Sin movimientos en este período"
+          description="Prueba cambiando el período o seleccionando otras cuentas para encontrar movimientos.">
+        </app-empty-state>
+
+        <section
+          *ngFor="let group of transactionGroups; trackBy: trackByGroup"
+          class="movement-group">
+          <header class="movement-group__header">
+            <h3>{{ group.label }}</h3>
+          </header>
+
+          <div class="movement-group__items">
+            <app-compact-list-item
+              *ngFor="let item of group.items; trackBy: trackByTransaction"
+              [item]="item.view"
+              [interactive]="true"
+              (activated)="openTransactionDetail(item.transaction)">
+            </app-compact-list-item>
+          </div>
+        </section>
+        </div>
+      </app-section-card>
+    </ng-container>
+
+    <ng-template #unavailable>
+      <section class="movements-state movements-state--empty">
+        <h1>Categoría no disponible</h1>
+        <p>Regresa al listado y selecciona nuevamente una categoría.</p>
+        <button type="button" (click)="back()">Volver</button>
+      </section>
+    </ng-template>
+  </main>
+</ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodSelectorOpen"
+  [selectedPeriod]="selectedPeriod"
+  [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate"
+  [selectedEndDate]="selectedEndDate"
+  title="Filtrar movimientos"
+  description="Selecciona el período que deseas consultar."
+  applyText="Aplicar filtro"
+  (filtersApplied)="applyPeriodFilter($event)"
+  (modalClosed)="closePeriodSelector()">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountSelectorOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)"
+  (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>
+
+<app-floating-action-button
+  *ngIf="category"
+  icon="add"
+  ariaLabel="Registrar transacción en esta categoría"
+  (clicked)="createTransaction()">
+</app-floating-action-button>

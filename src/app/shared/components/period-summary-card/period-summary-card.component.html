@@ -1,0 +1,26 @@
+<section
+  class="summary-card"
+  [attr.aria-label]="ariaLabel">
+  <div class="summary-card__information">
+    <header class="summary-card__header">
+      <strong>{{ title }}</strong>
+      <span>{{ periodLabel }}</span>
+    </header>
+
+    <div class="summary-card__total">
+      <span>{{ totalLabel }}</span>
+      <strong>{{ amountPrefix }} {{ currencySymbol }} {{ totalAmount | number:'1.2-2' }}</strong>
+      <small *ngIf="metaLabel">
+        <b>{{ metaValue }}</b>
+        {{ metaLabel }}
+      </small>
+    </div>
+
+  </div>
+
+  <app-donut-chart
+    [segments]="chartSegments"
+    [ariaLabel]="chartAriaLabel"
+    [tone]="chartTone">
+  </app-donut-chart>
+</section>

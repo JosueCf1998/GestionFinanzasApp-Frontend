@@ -1,5 +1,6 @@
 <section class="period-picker" aria-label="Selector de fechas">
   <app-custom-segment
+    *ngIf="!singleDate"
     [options]="periodOptions"
     [model]="selectedPeriod"
     segmentClass="period-picker__segment"
@@ -75,7 +76,16 @@
   </div>
 
   <div *ngIf="selectedPeriod === 'custom'" class="period-picker__custom">
-    <div class="period-picker__range-summary">
+    <div *ngIf="singleDate; else rangeSummary" class="period-picker__single-summary">
+      <span>
+        <small>Fecha seleccionada</small>
+        <strong>{{ formatSelectedDate(customStartDate) }}</strong>
+      </span>
+      <ion-icon *ngIf="customStartDate" src="assets/icon/check.svg"></ion-icon>
+    </div>
+
+    <ng-template #rangeSummary>
+      <div class="period-picker__range-summary">
       <div
         [class.selected]="customStartDate"
         [class.active]="customStartDate && !customEndDate">
@@ -93,7 +103,8 @@
         </span>
         <ion-icon *ngIf="customEndDate" src="assets/icon/check.svg"></ion-icon>
       </div>
-    </div>
+      </div>
+    </ng-template>
 
     <div class="period-picker__calendar">
       <header>
@@ -128,6 +139,6 @@
   </div>
 
   <p *ngIf="selectedPeriod === 'custom' && !isValid" class="period-picker__error">
-    Selecciona un rango de fechas válido.
+    {{ singleDate ? 'Selecciona una fecha.' : 'Selecciona un rango de fechas válido.' }}
   </p>
 </section>

@@ -13,6 +13,11 @@ export interface CategoryBudgetAllocation {
   amount: number;
 }
 
+export enum CategorySelectionMode {
+  SINGLE = 'single',
+  ALLOCATION = 'allocation'
+}
+
 @Component({
   selector: 'app-category-selector-modal',
   templateUrl: './category-selector-modal.component.html',
@@ -31,13 +36,17 @@ export interface CategoryBudgetAllocation {
 export class CategorySelectorModalComponent implements OnChanges {
   @Input() isOpen = false;
   @Input() categories: CategoryResponse[] = [];
+  @Input() selectionMode = CategorySelectionMode.ALLOCATION;
+  @Input() selectedCategory: CategoryResponse | null = null;
   @Input() selectedAllocations: CategoryBudgetAllocation[] = [];
   @Input() availableBalance: number | null = null;
 
+  @Output() readonly categorySelected = new EventEmitter<CategoryResponse>();
   @Output() readonly allocationsSelected = new EventEmitter<CategoryBudgetAllocation[]>();
   @Output() readonly modalClosed = new EventEmitter<void>();
 
   workingSelection: CategoryBudgetAllocation[] = [];
+  readonly CategorySelectionMode = CategorySelectionMode;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedAllocations'] || (changes['isOpen'] && this.isOpen)) {
@@ -80,7 +89,15 @@ export class CategorySelectorModalComponent implements OnChanges {
   }
 
   isSelected(category: CategoryResponse): boolean {
+    if (this.selectionMode === CategorySelectionMode.SINGLE) {
+      return this.selectedCategory?.id === category.id;
+    }
     return this.workingSelection.some(item => item.category.id === category.id);
+  }
+
+  selectCategory(category: CategoryResponse): void {
+    this.categorySelected.emit(category);
+    this.close();
   }
 
   toggle(category: CategoryResponse): void {

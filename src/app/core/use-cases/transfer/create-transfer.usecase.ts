@@ -5,13 +5,14 @@ import { Result } from '../../models/result.model';
 import { EncryptionService } from '../../services/encryption.service';
 import { encryptBody } from '../../utils/encryption.util';
 import { mapObjectKeys } from '../../utils/mapping.util';
+import { ENDPOINTS } from '../../constants/endpoints';
 
 export interface CreateTransferRequest {
   originAccountId: string;
   destinationAccountId: string;
   amount: number;
   date: string;
-  comment?: string;
+  comment: string;
 }
 
 // Mapeo de propiedades
@@ -24,6 +25,8 @@ const REQUEST_KEY_MAP = {
 } as const;
 
 export interface CreateTransferResponse {
+  mensaje?: string;
+  info?: { id: number };
 }
 
 @Injectable({
@@ -37,7 +40,7 @@ export class CreateTransferUseCase {
   ) {}
 
   createTransfer(body: CreateTransferRequest): Observable<Result<CreateTransferResponse>> {
-    const endpoint = 'transfers/create';
+    const endpoint = ENDPOINTS.TRANSFERS.CREATE;
     const mappedBody = mapObjectKeys(body, REQUEST_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<CreateTransferResponse>(endpoint, encryptedBody);

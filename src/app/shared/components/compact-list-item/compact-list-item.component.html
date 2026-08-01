@@ -1,0 +1,33 @@
+<button
+  type="button"
+  class="compact-list-item"
+  [class.compact-list-item--interactive]="interactive"
+  [class.compact-list-item--success]="item.amountTone === 'success'"
+  [style.--item-color]="item.color"
+  [disabled]="!interactive"
+  [attr.aria-label]="item.title"
+  (click)="activate()">
+  <app-item-icon
+    [icon]="item.icon"
+    [color]="item.color"
+    size="sm"
+    variant="soft"
+    aria-hidden="true">
+  </app-item-icon>
+
+  <span class="compact-list-item__content">
+    <strong>{{ item.title }}</strong>
+    <small>{{ item.subtitle }}</small>
+  </span>
+
+  <strong class="compact-list-item__amount">
+    {{ item.amountPrefix || '' }} {{ item.currencySymbol || 'S/' }}
+    {{ item.amount | number:'1.2-2' }}
+  </strong>
+
+  <img
+    class="compact-list-item__chevron"
+    src="assets/icon/right-inline.svg"
+    alt=""
+    aria-hidden="true">
+</button>

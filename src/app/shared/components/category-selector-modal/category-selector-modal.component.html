@@ -1,50 +1,22 @@
 <app-base-modal
   [isOpen]="isOpen"
-  title="Seleccionar categorías"
-  description="Asigna un monto a cada categoría. La suma será tu presupuesto total."
-  primaryText="Guardar distribución"
+  [title]="selectionMode === CategorySelectionMode.SINGLE ? 'Seleccionar categoría' : 'Seleccionar categorías'"
+  [description]="selectionMode === CategorySelectionMode.SINGLE
+    ? 'Elige la categoría que mejor describe este movimiento.'
+    : 'Asigna un monto a cada categoría. La suma será tu presupuesto total.'"
+  [primaryText]="selectionMode === CategorySelectionMode.SINGLE ? '' : 'Guardar distribución'"
   [primaryDisabled]="!canConfirm"
   size="lg"
   (closed)="close()"
   (primary)="confirm()">
-  <div class="allocation-summary" [class.warning]="exceedsAvailableBalance">
-    <span>
-      <small>Presupuesto total</small>
-      <strong>S/ {{ totalAllocated | number:'1.2-2' }}</strong>
-    </span>
-    <span class="allocation-summary__count">
-      {{ workingSelection.length }}
-      {{ workingSelection.length === 1 ? 'categoría' : 'categorías' }}
-    </span>
-  </div>
-
-  <app-warning-message
-    *ngIf="exceedsAvailableBalance"
-    title="Saldo insuficiente"
-    [message]="balanceWarningMessage">
-  </app-warning-message>
-
-  <div class="category-list">
-    <button
-      type="button"
-      class="category-item category-item--all"
-      [class.selected]="selectAll"
-      (click)="toggleAll()">
-      <app-item-icon icon="category" color="var(--fv-primary)" variant="soft" [selected]="selectAll"></app-item-icon>
-      <span class="category-item__content">
-        <strong>Todas las categorías</strong>
-        <small>Asignar un monto a cada categoría</small>
-      </span>
-      <span class="category-item__status" [class.selected]="selectAll">
-        <ion-icon *ngIf="selectAll" name="checkmark"></ion-icon>
-      </span>
-    </button>
-
-    <article
-      *ngFor="let category of categories"
-      class="category-item"
-      [class.selected]="isSelected(category)">
-      <button type="button" class="category-item__toggle" (click)="toggle(category)">
+  <ng-container *ngIf="selectionMode === CategorySelectionMode.SINGLE; else allocationMode">
+    <div class="category-list">
+      <button
+        *ngFor="let category of categories"
+        type="button"
+        class="category-item category-item--all"
+        [class.selected]="isSelected(category)"
+        (click)="selectCategory(category)">
         <app-item-icon
           [icon]="category.icono"
           [color]="category.color"
@@ -53,24 +25,81 @@
         </app-item-icon>
         <span class="category-item__content">
           <strong>{{ category.nombre }}</strong>
-          <small>Categoría de gasto</small>
+          <small>{{ category.tipo === 'ingresos' || category.tipo === 'ingreso' ? 'Categoría de ingreso' : 'Categoría de gasto' }}</small>
         </span>
         <span class="category-item__status" [class.selected]="isSelected(category)">
           <ion-icon *ngIf="isSelected(category)" name="checkmark"></ion-icon>
         </span>
       </button>
+    </div>
+  </ng-container>
 
-      <label *ngIf="isSelected(category)" class="category-item__amount">
-        <span>Monto asignado</span>
-        <app-amount-input
-          variant="compact"
-          currencyCode="PEN"
-          [ariaLabel]="'Monto para ' + category.nombre"
-          [ngModel]="amountFor(category)"
-          [ngModelOptions]="{ standalone: true }"
-          (ngModelChange)="updateAmount(category, $event)">
-        </app-amount-input>
-      </label>
-    </article>
-  </div>
+  <ng-template #allocationMode>
+    <div class="allocation-summary" [class.warning]="exceedsAvailableBalance">
+    <span>
+      <small>Presupuesto total</small>
+      <strong>S/ {{ totalAllocated | number:'1.2-2' }}</strong>
+    </span>
+    <span class="allocation-summary__count">
+      {{ workingSelection.length }}
+      {{ workingSelection.length === 1 ? 'categoría' : 'categorías' }}
+    </span>
+    </div>
+
+    <app-warning-message
+      *ngIf="exceedsAvailableBalance"
+      title="Saldo insuficiente"
+      [message]="balanceWarningMessage">
+    </app-warning-message>
+
+    <div class="category-list">
+      <button
+        type="button"
+        class="category-item category-item--all"
+        [class.selected]="selectAll"
+        (click)="toggleAll()">
+        <app-item-icon icon="category" color="var(--fv-primary)" variant="soft" [selected]="selectAll"></app-item-icon>
+        <span class="category-item__content">
+          <strong>Todas las categorías</strong>
+          <small>Asignar un monto a cada categoría</small>
+        </span>
+        <span class="category-item__status" [class.selected]="selectAll">
+          <ion-icon *ngIf="selectAll" name="checkmark"></ion-icon>
+        </span>
+      </button>
+
+      <article
+        *ngFor="let category of categories"
+        class="category-item"
+        [class.selected]="isSelected(category)">
+        <button type="button" class="category-item__toggle" (click)="toggle(category)">
+          <app-item-icon
+            [icon]="category.icono"
+            [color]="category.color"
+            variant="soft"
+            [selected]="isSelected(category)">
+          </app-item-icon>
+          <span class="category-item__content">
+            <strong>{{ category.nombre }}</strong>
+            <small>Categoría de gasto</small>
+          </span>
+          <span class="category-item__status" [class.selected]="isSelected(category)">
+            <ion-icon *ngIf="isSelected(category)" name="checkmark"></ion-icon>
+          </span>
+        </button>
+
+        <label *ngIf="isSelected(category)" class="category-item__amount">
+          <span>Monto asignado</span>
+          <app-amount-input
+            variant="compact"
+            currencyCode="PEN"
+            [ariaLabel]="'Monto para ' + category.nombre"
+            [ngModel]="amountFor(category)"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="updateAmount(category, $event)">
+          </app-amount-input>
+        </label>
+      </article>
+    </div>
+  </ng-template>
 </app-base-modal>

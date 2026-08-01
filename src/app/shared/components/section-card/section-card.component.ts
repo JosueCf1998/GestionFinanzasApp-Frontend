@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { IonIcon } from '@ionic/angular/standalone';
 
+export type SectionCardAppearance = 'card' | 'plain';
+
 @Component({
   selector: 'app-section-card',
   templateUrl: './section-card.component.html',
@@ -13,4 +15,5 @@ import { IonIcon } from '@ionic/angular/standalone';
 export class SectionCardComponent {
   @Input() title = '';
   @Input() icon = '';
+  @Input() appearance: SectionCardAppearance = 'card';
 }

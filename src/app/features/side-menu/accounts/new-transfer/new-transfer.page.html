@@ -1,175 +1,183 @@
-<!-- HEADER -->
 <ion-header>
   <app-page-layout
-    [title]="title"
+    [title]="isEditMode ? 'Editar transferencia' : 'Nueva transferencia'"
     [showBack]="true"
-    (back)="backToCategories()">
+    (back)="backToAccounts()">
   </app-page-layout>
 </ion-header>
 
-<!-- CONTENT -->
-<ion-content [fullscreen]="true" scroll-y="false">
-
+<ion-content [fullscreen]="false" [scrollY]="true" class="transfer-page">
   <form class="transfer-form" (ngSubmit)="crearTransferencia()">
-
-    <!-- ORIGEN -->
-    <div class="transfer-section">
-
-      <label class="transfer-label">
-        Transfiere desde
-      </label>
-
-      <button
-        type="button"
-        class="account-btn"
-        (click)="seleccionarCuentaOrigen()">
-
-        <div class="account-btn-content">
-
-          <span class="account-name">
-            {{ cuentaOrigen || 'Selecciona una cuenta' }}
-          </span>
-
-          <span class="account-amount" *ngIf="cuentaOrigenAmount !== null">
-            S/. {{ cuentaOrigenAmount | number:'1.2-2' }}
-          </span>
-
-        </div>
-
-      </button>
-
-    </div>
-
-    <!-- DESTINO -->
-    <div class="transfer-section">
-
-      <label class="transfer-label">
-        Transfiere hacia
-      </label>
-
-      <button
-        type="button"
-        class="account-btn"
-        (click)="seleccionarCuentaDestino()">
-
-        <div class="account-btn-content">
-
-          <span class="account-name">
-            {{ cuentaDestino || 'Selecciona una cuenta' }}
-          </span>
-
-          <span class="account-amount" *ngIf="cuentaDestinoAmount !== null">
-            S/. {{ cuentaDestinoAmount | number:'1.2-2' }}
-          </span>
-
-        </div>
-
-      </button>
-
-    </div>
-
-    <!-- MONTO -->
-    <div class="transfer-section">
-
-      <label class="transfer-label">
-        Monto
-      </label>
-
-      <div class="amount-row">
-        <app-amount-input
-          class="amount-input-component"
-          [(ngModel)]="monto"
-          name="monto"
-          placeholder="0.00"
-          [required]="true"
-          currencyCode="PEN"
-          variant="enhanced"
-          locale="es-PE"
-          [maxDigits]="11"
-          (ngModelChange)="onInputChange()">
-        </app-amount-input>
+    <section class="transfer-preview" aria-label="Resumen de la transferencia">
+      <div class="transfer-preview__amount">
+        <span>Monto a transferir</span>
+        <strong>S/ {{ (monto || 0) | number:'1.2-2' }}</strong>
+        <small>{{ formattedDate }}</small>
       </div>
 
-    </div>
+      <div class="transfer-preview__route">
+        <div class="transfer-preview__account">
+          <app-item-icon
+            [icon]="originAccount?.icon || 'wallet'"
+            [color]="originAccount?.color || 'var(--fv-primary-light)'"
+            size="sm"
+            variant="soft"
+            aria-hidden="true">
+          </app-item-icon>
+          <span>
+            <small>Desde</small>
+            <strong>{{ cuentaOrigen || 'Seleccionar origen' }}</strong>
+          </span>
+        </div>
 
-    <!-- FECHA -->
-    <div class="transfer-section">
+        <i class="transfer-preview__arrow" aria-hidden="true">→</i>
 
-      <label class="transfer-label">
-        Fecha
-      </label>
+        <div class="transfer-preview__account transfer-preview__account--right">
+          <app-item-icon
+            [icon]="destinationAccount?.icon || 'wallet'"
+            [color]="destinationAccount?.color || 'var(--fv-primary-light)'"
+            size="sm"
+            variant="soft"
+            aria-hidden="true">
+          </app-item-icon>
+          <span>
+            <small>Hacia</small>
+            <strong>{{ cuentaDestino || 'Seleccionar destino' }}</strong>
+          </span>
+        </div>
+      </div>
+    </section>
 
-      <ion-datetime-button datetime="fecha-transferencia"></ion-datetime-button>
+    <app-section-card title="Cuenta de origen">
+      <app-selection-summary
+        [primaryText]="cuentaOrigen || 'Selecciona una cuenta'"
+        [secondaryText]="cuentaOrigenAmount !== null ? 'Disponible: S/ ' + (effectiveOriginBalance | number:'1.2-2') : 'Cuenta desde donde saldrá el dinero'"
+        ariaLabel="Seleccionar cuenta de origen"
+        fallbackIcon="assets/icon/wallet.svg"
+        [items]="originAccountItems"
+        (activated)="seleccionarCuentaOrigen()">
+      </app-selection-summary>
+    </app-section-card>
 
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime
-            id="fecha-transferencia"
-            presentation="date"
-            [(ngModel)]="fecha"
-            name="fecha"
-            [max]="maxDate"
-            (ionChange)="onInputChange()">
-          </ion-datetime>
-        </ng-template>
-      </ion-modal>
+    <app-section-card title="Cuenta de destino">
+      <app-selection-summary
+        [primaryText]="cuentaDestino || 'Selecciona una cuenta'"
+        [secondaryText]="cuentaDestinoAmount !== null ? 'Saldo actual: S/ ' + (cuentaDestinoAmount | number:'1.2-2') : 'Cuenta que recibirá el dinero'"
+        ariaLabel="Seleccionar cuenta de destino"
+        fallbackIcon="assets/icon/wallet.svg"
+        [items]="destinationAccountItems"
+        (activated)="seleccionarCuentaDestino()">
+      </app-selection-summary>
+    </app-section-card>
 
-    </div>
+    <app-section-card title="Monto" appearance="plain">
+      <app-amount-input
+        [(ngModel)]="monto"
+        name="monto"
+        ariaLabel="Monto de la transferencia"
+        placeholder="0.00"
+        [required]="true"
+        currencyCode="PEN"
+        variant="enhanced"
+        locale="es-PE"
+        [maxDigits]="11"
+        (ngModelChange)="onInputChange()">
+      </app-amount-input>
+    </app-section-card>
 
-    <!-- COMENTARIO -->
-    <div class="transfer-section">
+    <app-warning-message
+      *ngIf="exceedsOriginBalance"
+      title="Saldo insuficiente"
+      [message]="insufficientBalanceMessage">
+    </app-warning-message>
 
-      <label class="transfer-label">
-        Comentario
-      </label>
+    <app-section-card title="Fecha">
+      <app-selection-summary
+        [primaryText]="formattedDate"
+        secondaryText="Fecha de la transferencia"
+        ariaLabel="Cambiar fecha de la transferencia"
+        fallbackIcon="assets/icon/calendar.svg"
+        (activated)="openDateModal()">
+      </app-selection-summary>
+    </app-section-card>
 
-      <ion-textarea
-        [(ngModel)]="comentario"
+    <app-section-card title="Comentario (opcional)">
+      <app-text-field
         name="comentario"
-        maxlength="4096"
-        placeholder="Agrega un comentario (opcional)"
-        class="comment-input"
-        (ionChange)="onInputChange()">
-      </ion-textarea>
+        [embedded]="true"
+        [multiline]="true"
+        [rows]="3"
+        [maxLength]="4096"
+        ariaLabel="Comentario de la transferencia"
+        placeholder="Agrega un comentario"
+        [(ngModel)]="comentario"
+        (ngModelChange)="onInputChange()">
+      </app-text-field>
+    </app-section-card>
 
-      <div class="comment-count">
-        {{ comentario?.length || 0 }}/4096
-      </div>
+    <app-info-banner
+      title="Antes de transferir"
+      message="Verifica que las cuentas y el monto sean correctos. La cuenta de origen debe tener saldo suficiente."
+      symbol="↗">
+    </app-info-banner>
 
-    </div>
-
-    <!-- BOTÓN -->
-    <ion-button
-      expand="block"
-      class="btn-transferir"
+    <app-button
+      [text]="isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Guardar transferencia')"
       type="submit"
+      [loading]="isSaving"
       [disabled]="!canSubmit">
-
-      Guardar transferencia
-
-    </ion-button>
-
+    </app-button>
   </form>
-
 </ion-content>
 
-<!-- ALERT -->
+<app-filter-modal
+  [isOpen]="isDateModalOpen"
+  title="Fecha de transferencia"
+  description="Selecciona cuándo se realizó la transferencia."
+  applyText="Aplicar fecha"
+  [singleDate]="true"
+  selectedPeriod="custom"
+  [selectedPeriodValue]="dateValue"
+  [selectedStartDate]="dateValue"
+  [selectedEndDate]="dateValue"
+  (modalClosed)="closeDateModal()"
+  (filtersApplied)="applyDate($event)">
+</app-filter-modal>
+
 <app-custom-alert
   *ngIf="showCustomAlert"
   header="Cambios sin guardar"
   message="Has realizado cambios en la transferencia. ¿Deseas salir sin guardar?"
-  cancelText="No"
-  confirmText="Sí"
+  cancelText="Seguir editando"
+  confirmText="Salir"
   (onCancel)="showCustomAlert = false"
   (onConfirm)="salirSinGuardar()">
 </app-custom-alert>
 
-<!-- MODAL (SINGLE MODE CORRECTO) -->
+<app-custom-alert
+  *ngIf="showGenericAlert"
+  header="No se pudo completar"
+  message="Revisa las cuentas, el monto disponible y vuelve a intentarlo."
+  confirmText="Entendido"
+  [showCancel]="false"
+  (onConfirm)="showGenericAlert = false">
+</app-custom-alert>
+
 <app-account-selector-modal
   [isOpen]="isModalOpen"
-  [accounts]="accounts"
+  [accounts]="availableAccounts"
   [selectionMode]="AccountSelectionMode.SINGLE"
   [selectedAccount]="selectedAccount"
   (modalClosed)="closeModal()"
   (accountSelected)="seleccionarYConfirmar($event)">
 </app-account-selector-modal>
+
+<app-success-receipt-modal
+  [isOpen]="isSuccessReceiptOpen"
+  [title]="isEditMode ? 'Transferencia actualizada' : 'Transferencia realizada'"
+  [eyebrow]="isEditMode ? '¡Cambios guardados!' : '¡Transferencia exitosa!'"
+  [heading]="isEditMode ? 'Transferencia actualizada correctamente' : 'Transferencia realizada correctamente'"
+  actionText="Ver mis transferencias"
+  [details]="successReceiptDetails"
+  (completed)="viewTransferHistory()">
+</app-success-receipt-modal>

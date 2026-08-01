@@ -1,0 +1,243 @@
+<ion-header>
+  <app-page-layout
+    [title]="isEditMode ? 'Editar transacción' : 'Nueva transacción'"
+    [showBack]="true"
+    [loading]="isSaving || isDeleting"
+    (back)="backToTransactions()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="create-transaction-page">
+  <form class="transaction-form" (ngSubmit)="saveTransaction()">
+
+    <app-custom-segment
+      *ngIf="!isEditMode"
+      [options]="transactionTypes"
+      [model]="selectedType"
+      (modelChange)="changeType($event)">
+    </app-custom-segment>
+
+    <section
+      class="transaction-preview"
+      [class.income]="selectedType === 'ingreso'"
+      aria-live="polite">
+      <header class="preview-header">
+        <span class="preview-type">
+          <i aria-hidden="true"></i>
+          {{ selectedType === 'gasto' ? 'Gasto' : 'Ingreso' }}
+        </span>
+        <span class="preview-date">{{ formattedDate }}</span>
+      </header>
+
+      <div class="preview-value">
+        <span>Monto del movimiento</span>
+        <div class="preview-amount">
+          <strong>S/ {{ (amount || 0) | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <div class="preview-meta">
+        <div class="preview-detail">
+          <app-item-icon
+            [icon]="selectedAccount?.icon || 'wallet'"
+            [color]="selectedAccount?.color || 'var(--fv-interactive-icon)'"
+            size="sm"
+            variant="soft"
+            aria-hidden="true">
+          </app-item-icon>
+          <span>
+            <small>Cuenta</small>
+            <strong>{{ selectedAccount?.name || 'Sin seleccionar' }}</strong>
+          </span>
+        </div>
+
+        <div class="preview-detail">
+          <app-item-icon
+            [icon]="selectedCategory?.icono || 'category'"
+            [color]="selectedCategory?.color || 'var(--fv-interactive-icon)'"
+            size="sm"
+            variant="soft"
+            aria-hidden="true">
+          </app-item-icon>
+          <span>
+            <small>Categoría</small>
+            <strong>{{ selectedCategory?.nombre || 'Sin seleccionar' }}</strong>
+          </span>
+        </div>
+      </div>
+
+    </section>
+
+    <app-section-card title="Monto" appearance="plain">
+      <app-amount-input
+        [(ngModel)]="amount"
+        name="amount"
+        ariaLabel="Monto de la transacción"
+        placeholder="0.00"
+        currencyCode="PEN"
+        variant="enhanced"
+        locale="es-PE"
+        [maxDigits]="11"
+        [required]="true"
+        (ngModelChange)="onFormChange()">
+      </app-amount-input>
+    </app-section-card>
+
+    <app-section-card title="Programación">
+      <app-selection-summary
+        [primaryText]="formattedDate"
+        secondaryText="Fecha del movimiento"
+        ariaLabel="Cambiar la fecha de la transacción"
+        fallbackIcon="assets/icon/calendar.svg"
+        (activated)="openPeriodModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-section-card title="Cuenta">
+      <app-selection-summary
+        [primaryText]="accountSummary"
+        [secondaryText]="accountBalanceLabel"
+        ariaLabel="Seleccionar cuenta"
+        fallbackIcon="assets/icon/wallet.svg"
+        [items]="selectedAccountItems"
+        (activated)="openAccountModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-section-card title="Categoría">
+      <app-selection-summary
+        [primaryText]="categorySummary"
+        [secondaryText]="categoryDescription"
+        ariaLabel="Seleccionar categoría"
+        fallbackIcon="assets/icon/category.svg"
+        [items]="selectedCategoryItems"
+        [interactive]="categories.length > 0"
+        (activated)="openCategoryModal()">
+      </app-selection-summary>
+    </app-section-card>
+
+    <app-section-card title="Nota (opcional)">
+      <app-text-field
+        name="description"
+        [embedded]="true"
+        [multiline]="true"
+        [rows]="3"
+        [maxLength]="200"
+        ariaLabel="Nota de la transacción"
+        placeholder="Ej. Almuerzo con el equipo"
+        [(ngModel)]="description"
+        (ngModelChange)="onFormChange()">
+      </app-text-field>
+    </app-section-card>
+
+    <app-info-banner
+      title="Consejo FinVia"
+      [message]="transactionAdvice"
+      symbol="✨">
+    </app-info-banner>
+
+    <div class="action-container">
+      <app-button
+        [text]="isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Registrar transacción')"
+        type="submit"
+        [loading]="isSaving"
+        [disabled]="!canSave">
+      </app-button>
+      <app-button
+        *ngIf="isEditMode"
+        text="Eliminar transacción"
+        icon="trash"
+        variant="danger"
+        [disabled]="isSaving || isDeleting"
+        (clicked)="requestDeleteTransaction()">
+      </app-button>
+    </div>
+  </form>
+</ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodModalOpen"
+  title="Elige la fecha"
+  description="Selecciona cuándo ocurrió este movimiento."
+  applyText="Aplicar fecha"
+  [singleDate]="true"
+  selectedPeriod="custom"
+  [selectedPeriodValue]="datePeriodValue"
+  [selectedStartDate]="date"
+  [selectedEndDate]="date"
+  (modalClosed)="closePeriodModal()"
+  (filtersApplied)="applyPeriod($event)">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountModalOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.SINGLE"
+  [selectedAccount]="selectedAccount"
+  (accountSelected)="selectAccount($event)"
+  (modalClosed)="closeAccountModal()">
+</app-account-selector-modal>
+
+<app-category-selector-modal
+  [isOpen]="isCategoryModalOpen"
+  [categories]="categories"
+  [selectionMode]="CategorySelectionMode.SINGLE"
+  [selectedCategory]="selectedCategory"
+  (categorySelected)="selectCategory($event)"
+  (modalClosed)="closeCategoryModal()">
+</app-category-selector-modal>
+
+<app-success-receipt-modal
+  [isOpen]="isSuccessReceiptOpen"
+  [title]="isEditMode ? 'Transacción actualizada' : 'Transacción registrada'"
+  [eyebrow]="isEditMode ? '¡Cambios guardados!' : '¡Movimiento registrado!'"
+  [heading]="isEditMode ? 'Transacción actualizada correctamente' : (selectedType === 'gasto' ? 'Gasto registrado correctamente' : 'Ingreso registrado correctamente')"
+  actionText="Ver mis transacciones"
+  [details]="successReceiptDetails"
+  (completed)="viewTransactions()">
+</app-success-receipt-modal>
+
+<app-custom-alert
+  *ngIf="showUnsavedAlert"
+  header="Cambios sin guardar"
+  message="Has realizado cambios en la transacción. ¿Deseas salir sin guardar?"
+  cancelText="Seguir editando"
+  confirmText="Salir"
+  (onCancel)="showUnsavedAlert = false"
+  (onConfirm)="leaveWithoutSaving()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteAlert"
+  header="Eliminar transacción"
+  message="Esta acción eliminará definitivamente la transacción y no se puede deshacer. ¿Deseas continuar?"
+  cancelText="Cancelar"
+  confirmText="Eliminar"
+  (onCancel)="showDeleteAlert = false"
+  (onConfirm)="confirmDeleteTransaction()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showDeleteError"
+  header="No se pudo eliminar"
+  message="Ocurrió un problema al eliminar la transacción. Inténtalo nuevamente."
+  confirmText="Entendido"
+  [showCancel]="false"
+  (onConfirm)="showDeleteError = false">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showLoadError"
+  header="No se pudieron cargar los datos"
+  message="No fue posible obtener tus cuentas o categorías. Inténtalo nuevamente."
+  confirmText="Aceptar"
+  (onConfirm)="showLoadError = false">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showSaveError"
+  [header]="isEditMode ? 'No se pudo actualizar' : 'No se pudo registrar'"
+  [message]="isEditMode ? 'Ocurrió un error al actualizar la transacción. Inténtalo nuevamente.' : 'Ocurrió un error al guardar la transacción. Revisa los datos e inténtalo nuevamente.'"
+  confirmText="Aceptar"
+  (onConfirm)="showSaveError = false">
+</app-custom-alert>

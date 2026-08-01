@@ -1,0 +1,31 @@
+<app-base-modal
+  [isOpen]="isOpen"
+  title="Cuentas vinculadas"
+  description="Detalle de las cuentas asociadas a este presupuesto."
+  size="lg"
+  [backdropDismiss]="true"
+  (closed)="closed.emit()">
+  <div class="account-details">
+    <article
+      *ngFor="let account of accounts; trackBy: trackByAccount"
+      class="account-details__item">
+      <app-item-icon
+        [icon]="account.icon"
+        [color]="account.color"
+        size="md"
+        variant="soft">
+      </app-item-icon>
+
+      <div class="account-details__content">
+        <strong>{{ account.name }}</strong>
+        <small>Saldo de la cuenta</small>
+      </div>
+
+      <span>{{ account.amount | currency:currency:'symbol-narrow':'1.2-2' }}</span>
+    </article>
+
+    <p *ngIf="!accounts.length" class="account-details__empty">
+      No hay cuentas vinculadas.
+    </p>
+  </div>
+</app-base-modal>

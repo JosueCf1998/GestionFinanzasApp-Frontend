@@ -36,6 +36,7 @@ export class PeriodPickerComponent implements OnChanges {
   @Input() periodValue = '';
   @Input() startDate = '';
   @Input() endDate = '';
+  @Input() singleDate = false;
 
   @Output() readonly valueChange = new EventEmitter<PeriodPickerValue>();
 
@@ -74,6 +75,7 @@ export class PeriodPickerComponent implements OnChanges {
   }
 
   get isValid(): boolean {
+    if (this.singleDate) return Boolean(this.customStartDate);
     return this.selectedPeriod !== 'custom' || Boolean(
       this.customStartDate && this.customEndDate && this.customStartDate <= this.customEndDate
     );
@@ -197,6 +199,20 @@ export class PeriodPickerComponent implements OnChanges {
   }
 
   selectCalendarDay(day: CalendarDay): void {
+    if (this.singleDate) {
+      this.customStartDate = day.value;
+      this.customEndDate = day.value;
+
+      if (day.outside) {
+        const selected = this.parseLocalDate(day.value);
+        this.calendarMonth = new Date(selected.getFullYear(), selected.getMonth(), 1);
+        this.refreshCalendar();
+      }
+
+      this.emitValue();
+      return;
+    }
+
     if (!this.customStartDate || this.customEndDate || day.value < this.customStartDate) {
       this.customStartDate = day.value;
       this.customEndDate = '';
@@ -266,9 +282,10 @@ export class PeriodPickerComponent implements OnChanges {
 
   private resolveValue(): PeriodPickerValue | null {
     if (this.selectedPeriod === 'custom') {
+      const endDate = this.singleDate ? this.customStartDate : this.customEndDate;
       return {
         period: 'custom', periodValue: '',
-        startDate: this.customStartDate, endDate: this.customEndDate
+        startDate: this.customStartDate, endDate
       };
     }
 

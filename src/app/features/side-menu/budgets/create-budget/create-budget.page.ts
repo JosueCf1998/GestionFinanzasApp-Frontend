@@ -2,10 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 import {
   CreateBudgetRequest,
   CreateBudgetUseCase
 } from 'src/app/core/use-cases/budgets/create-budget.usecase';
+import {
+  UpdateBudgetRequest,
+  UpdateBudgetUseCase
+} from 'src/app/core/use-cases/budgets/update-budget.usecase';
+import { DetailBudgetUseCase } from 'src/app/core/use-cases/budgets/detail-budget.usecase';
+import { DeleteBudgetUseCase } from 'src/app/core/use-cases/budgets/delete-budget.usecase';
+import { DetailBudgetApiResponse } from 'src/app/core/models/budgets/detail-budget.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { TextFieldComponent } from 'src/app/shared/components/text-field/text-field.component';
@@ -37,7 +45,10 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
 import { WarningMessageComponent } from 'src/app/shared/components/warning-message/warning-message.component';
-import { BudgetSuccessModalComponent } from 'src/app/shared/components/budget-success-modal/budget-success-modal.component';
+import {
+  SuccessReceiptDetail,
+  SuccessReceiptModalComponent
+} from 'src/app/shared/components/success-receipt-modal/success-receipt-modal.component';
 import {
   FilterModalComponent,
   FilterSelection
@@ -45,6 +56,22 @@ import {
 import { CATEGORY_ICONS } from 'src/app/shared/constants/category-options';
 import { PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 import 'src/app/core/utils/observable-extensions';
+
+interface BudgetFormSnapshot {
+  name: string;
+  notes: string;
+  icon: string;
+  color: string;
+  period: {
+    startDate: string;
+    endDate: string;
+  };
+  accountIds: number[];
+  categories: Array<{
+    categoryId: number;
+    amount: number;
+  }>;
+}
 
 @Component({
   selector: 'app-create-budget',
@@ -68,7 +95,7 @@ import 'src/app/core/utils/observable-extensions';
     SectionCardComponent,
     InfoBannerComponent,
     WarningMessageComponent,
-    BudgetSuccessModalComponent
+    SuccessReceiptModalComponent
   ]
 })
 export class CreateBudgetPage implements OnInit {
@@ -81,6 +108,9 @@ export class CreateBudgetPage implements OnInit {
   private readonly initialIcon = 'wallet';
   private readonly initialColor = '#283593';
   private initialPeriod = this.currentMonthSelection();
+  readonly isEditMode: boolean;
+  readonly budgetId: number;
+  private initialFormSnapshot: BudgetFormSnapshot | null = null;
 
   // MARK: - FORMULARIO Y DATOS
 
@@ -106,25 +136,41 @@ export class CreateBudgetPage implements OnInit {
   isSuccessModalOpen = false;
   showDataError = false;
   showAccountBalanceRequiredAlert = false;
+  showDeleteAlert = false;
+  showDeleteError = false;
+  isDeleting = false;
+  canDeleteBudget = false;
 
   private pendingOptionRequests = 0;
 
   constructor(
+    private readonly route: ActivatedRoute,
     private readonly createBudgetUseCase: CreateBudgetUseCase,
+    private readonly updateBudgetUseCase: UpdateBudgetUseCase,
+    private readonly detailBudgetUseCase: DetailBudgetUseCase,
+    private readonly deleteBudgetUseCase: DeleteBudgetUseCase,
     private readonly navService: NavigationService,
     private readonly loadingService: SpinnerService,
     private readonly listAccountsUseCase: ListAccountsUseCase,
     private readonly listCategoriesUseCase: ListCategoriesUseCase
-  ) {}
+  ) {
+    this.budgetId = Number(this.route.snapshot.paramMap.get('id')) || 0;
+    this.isEditMode = this.budgetId > 0;
+  }
 
   // MARK: - CICLO DE VIDA
 
   ngOnInit(): void {
     this.loadSelectableData();
+    if (this.isEditMode) {
+      this.loadBudgetDetail();
+    }
   }
 
   ionViewWillEnter(): void {
-    this.resetForm();
+    if (!this.isEditMode) {
+      this.resetForm();
+    }
   }
 
   // MARK: - SERVICIOS
@@ -132,46 +178,73 @@ export class CreateBudgetPage implements OnInit {
   saveBudget(): void {
     if (!this.canSave) return;
 
-    const request: CreateBudgetRequest = {
-      name: this.name.trim(),
-      budgetAmount: Number(this.categoryAllocationTotal.toFixed(2)),
-      startDate: this.periodSelection.startDate,
-      endDate: this.periodSelection.endDate,
-      icon: this.selectedIcon,
-      color: this.selectedColor,
-      account_ids: this.selectedAccounts.map(account => account.id),
-      categories: this.selectedCategoryAllocations.map(item => ({
-        category_id: item.category.id,
-        amount: Number(item.amount.toFixed(2))
-      })),
-      notes: this.notes.trim()
-    };
+    const request = this.buildRequest();
 
-    console.log('Datos enviados para crear presupuesto:', request);
     this.isSaving = true;
     this.loadingService.show();
-    this.createBudgetUseCase.execute(request).service({
+
+    const operation = this.isEditMode
+      ? this.updateBudgetUseCase.execute({
+          ...request,
+          id: this.budgetId
+        } satisfies UpdateBudgetRequest)
+      : this.createBudgetUseCase.execute(request);
+
+    operation.service({
       success: () => {
         this.loadingService.hide();
         this.isSaving = false;
+        this.initialFormSnapshot = this.buildSnapshot();
         this.isSuccessModalOpen = true;
       },
-      failure: error => {
+      failure: () => {
         this.loadingService.hide();
         this.isSaving = false;
-        console.error('Error al crear presupuesto:', error);
         this.showErrorAlert = true;
       }
     });
   }
 
+  requestDeleteBudget(): void {
+    if (!this.isEditMode || !this.canDeleteBudget || this.isSaving || this.isDeleting) return;
+
+    this.showDeleteAlert = true;
+  }
+
+  cancelDeleteBudget(): void {
+    this.showDeleteAlert = false;
+  }
+
+  confirmDeleteBudget(): void {
+    if (!this.isEditMode || !this.canDeleteBudget || this.isDeleting) return;
+
+    this.showDeleteAlert = false;
+    this.isDeleting = true;
+    this.loadingService.show();
+
+    this.deleteBudgetUseCase.execute({ id: this.budgetId }).service({
+      success: () => {
+        this.loadingService.hide();
+        this.isDeleting = false;
+        this.initialFormSnapshot = this.buildSnapshot();
+        void this.navService.replace('/main/budgets', undefined, false);
+      },
+      failure: () => {
+        this.loadingService.hide();
+        this.isDeleting = false;
+        this.showDeleteError = true;
+      }
+    });
+  }
+
   private loadSelectableData(): void {
-    this.pendingOptionRequests = 2;
+    this.pendingOptionRequests = this.isEditMode ? 3 : 2;
     this.loadingService.show();
 
     this.listAccountsUseCase.listAccounts().service({
       success: data => {
         this.accounts = data?.items ?? [];
+        this.reconcileSelectedAccounts();
         this.finishOptionRequest();
       },
       failure: () => {
@@ -183,6 +256,24 @@ export class CreateBudgetPage implements OnInit {
     this.listCategoriesUseCase.execute().service({
       success: data => {
         this.categories = (data?.items ?? []).filter(category => category.tipo === 'gasto');
+        this.reconcileSelectedCategories();
+        this.finishOptionRequest();
+      },
+      failure: () => {
+        this.showDataError = true;
+        this.finishOptionRequest();
+      }
+    });
+  }
+
+  private loadBudgetDetail(): void {
+    this.detailBudgetUseCase.execute({ id: String(this.budgetId) }).service({
+      success: data => {
+        if (data) {
+          this.applyBudgetDetail(data);
+        } else {
+          this.showDataError = true;
+        }
         this.finishOptionRequest();
       },
       failure: () => {
@@ -195,7 +286,7 @@ export class CreateBudgetPage implements OnInit {
   // MARK: - VALIDACIÓN
 
   get canSave(): boolean {
-    return !this.isSaving && Boolean(
+    return !this.isSaving && !this.isDeleting && Boolean(
       this.name.trim() &&
       this.selectedIcon &&
       this.selectedColor &&
@@ -206,11 +297,17 @@ export class CreateBudgetPage implements OnInit {
       this.categoryAllocationTotal > 0 &&
       this.periodSelection.startDate &&
       this.periodSelection.endDate &&
-      this.periodSelection.startDate <= this.periodSelection.endDate
+      this.periodSelection.startDate <= this.periodSelection.endDate &&
+      (!this.isEditMode || this.hasChanges)
     );
   }
 
   get hasChanges(): boolean {
+    if (this.isEditMode) {
+      return this.initialFormSnapshot !== null &&
+        JSON.stringify(this.buildSnapshot()) !== JSON.stringify(this.initialFormSnapshot);
+    }
+
     return Boolean(
       this.name.trim() ||
       this.notes.trim() ||
@@ -250,6 +347,22 @@ export class CreateBudgetPage implements OnInit {
     const start = new Date(`${this.periodSelection.startDate}T00:00:00Z`);
     const end = new Date(`${this.periodSelection.endDate}T00:00:00Z`);
     return `${formatter.format(start)} — ${formatter.format(end)}`;
+  }
+
+  get successReceiptDetails(): SuccessReceiptDetail[] {
+    return [
+      {
+        label: 'Presupuesto total',
+        value: `S/ ${this.categoryAllocationTotal.toFixed(2)}`,
+        emphasis: true
+      },
+      { label: 'Programación', value: this.formattedDateRange, wrap: true },
+      { label: 'Cuentas', value: this.selectedAccountsLabel, wrap: true },
+      { label: 'Categorías', value: this.selectedCategoriesLabel, wrap: true },
+      ...(this.notes.trim()
+        ? [{ label: 'Nota', value: this.notes.trim(), wrap: true }]
+        : [])
+    ];
   }
 
 
@@ -394,24 +507,24 @@ export class CreateBudgetPage implements OnInit {
   // MARK: - NAVEGACIÓN
 
   backToBudgets(): void {
-    if (this.isSaving) return;
+    if (this.isSaving || this.isDeleting) return;
 
     if (this.hasChanges) {
       this.showUnsavedAlert = true;
       return;
     }
 
-    this.navService.back();
+    void this.navService.back();
   }
 
   leaveWithoutSaving(): void {
     this.showUnsavedAlert = false;
-    this.navService.back();
+    void this.navService.back();
   }
 
   viewBudgets(): void {
     this.isSuccessModalOpen = false;
-    void this.navService.replace('/main/budgets');
+    void this.navService.replace('/main/budgets', undefined, false);
   }
 
   // MARK: - FUNCIONES PRIVADAS
@@ -437,6 +550,101 @@ export class CreateBudgetPage implements OnInit {
     }
   }
 
+  private buildRequest(): CreateBudgetRequest {
+    return {
+      name: this.name.trim(),
+      budgetAmount: Number(this.categoryAllocationTotal.toFixed(2)),
+      startDate: this.periodSelection.startDate,
+      endDate: this.periodSelection.endDate,
+      icon: this.selectedIcon,
+      color: this.selectedColor,
+      account_ids: this.selectedAccounts.map(account => account.id),
+      categories: this.selectedCategoryAllocations.map(item => ({
+        category_id: item.category.id,
+        amount: Number(item.amount.toFixed(2))
+      })),
+      notes: this.notes.trim()
+    };
+  }
+
+  private buildSnapshot(): BudgetFormSnapshot {
+    return {
+      name: this.name.trim(),
+      notes: this.notes.trim(),
+      icon: this.selectedIcon,
+      color: this.selectedColor,
+      period: {
+        startDate: this.periodSelection.startDate,
+        endDate: this.periodSelection.endDate
+      },
+      accountIds: this.selectedAccounts
+        .map(account => account.id)
+        .sort((a, b) => a - b),
+      categories: this.selectedCategoryAllocations
+        .map(item => ({
+          categoryId: item.category.id,
+          amount: Number(item.amount.toFixed(2))
+        }))
+        .sort((a, b) => a.categoryId - b.categoryId)
+    };
+  }
+
+  private applyBudgetDetail(data: DetailBudgetApiResponse): void {
+    this.name = data.name;
+    this.notes = data.generalDetail.notes ?? '';
+    this.selectedIcon = data.icon;
+    this.selectedColor = data.color;
+    this.canDeleteBudget = data.availableActions?.canDelete ?? false;
+    this.periodSelection = {
+      period: 'custom',
+      periodValue: '',
+      startDate: data.generalDetail.startDate,
+      endDate: data.generalDetail.endDate
+    };
+    this.selectedAccounts = data.linkedAccounts.map(account => ({
+      id: account.id,
+      name: account.name,
+      amount: account.amount,
+      icon: account.icon,
+      color: account.color
+    }));
+    this.selectedCategoryAllocations = data.linkedCategories.map(category => ({
+      category: {
+        id: category.id,
+        nombre: category.name,
+        icono: category.icon,
+        color: category.color,
+        tipo: 'gasto',
+        usuario_id: null
+      },
+      amount: category.budgetAmount
+    }));
+    this.reconcileSelectedAccounts();
+    this.reconcileSelectedCategories();
+    this.initialFormSnapshot = this.buildSnapshot();
+  }
+
+  private reconcileSelectedAccounts(): void {
+    if (!this.accounts.length || !this.selectedAccounts.length) return;
+
+    const selectedIds = new Set(this.selectedAccounts.map(account => account.id));
+    this.selectedAccounts = this.accounts.filter(account => selectedIds.has(account.id));
+  }
+
+  private reconcileSelectedCategories(): void {
+    if (!this.categories.length || !this.selectedCategoryAllocations.length) return;
+
+    const amountsById = new Map(
+      this.selectedCategoryAllocations.map(item => [item.category.id, item.amount])
+    );
+    this.selectedCategoryAllocations = this.categories
+      .filter(category => amountsById.has(category.id))
+      .map(category => ({
+        category,
+        amount: amountsById.get(category.id) ?? 0
+      }));
+  }
+
   private selectionLabel(names: string[], emptyLabel: string): string {
     if (names.length === 0) return emptyLabel;
     if (names.length <= 2) return names.join(', ');
@@ -453,15 +661,19 @@ export class CreateBudgetPage implements OnInit {
     this.periodSelection = { ...this.initialPeriod };
     this.selectedAccounts = [];
     this.selectedCategoryAllocations = [];
+    this.initialFormSnapshot = null;
 
     this.showUnsavedAlert = false;
     this.showErrorAlert = false;
     this.showAccountBalanceRequiredAlert = false;
+    this.showDeleteAlert = false;
+    this.showDeleteError = false;
     this.isPeriodModalOpen = false;
     this.isAccountModalOpen = false;
     this.isCategoryModalOpen = false;
     this.isPersonalizationModalOpen = false;
     this.isSaving = false;
+    this.isDeleting = false;
     this.isSuccessModalOpen = false;
   }
 

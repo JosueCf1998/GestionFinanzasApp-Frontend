@@ -1,0 +1,14 @@
+<button
+  type="button"
+  class="filter-trigger"
+  [disabled]="disabled"
+  [attr.aria-label]="label + ': ' + value"
+  (click)="activated.emit()">
+  <span class="filter-trigger__content">
+    <small>{{ label }}</small>
+    <strong>{{ value }}</strong>
+    <span>{{ caption }}</span>
+  </span>
+
+  <ion-icon src="assets/icon/right-inline.svg" aria-hidden="true"></ion-icon>
+</button>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   BudgetApiItem,
   BudgetListItem,
@@ -17,7 +17,6 @@ export class ListBudgetsUseCase {
 
   execute(request: ListBudgetsRequest): Observable<Result<ListBudgetsResponse>> {
     return this.repository.listBudgets(request).pipe(
-      tap(result => console.log('Respuesta original del API de presupuestos:', result)),
       map(result => ({
         ...result,
         data: result.data

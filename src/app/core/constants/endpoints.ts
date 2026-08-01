@@ -12,7 +12,9 @@ export const ENDPOINTS = {
 
     LIST: 'transactions/list',
 
-    CREATE: 'transactions/create',
+    FILTER: 'transactions/filter',
+
+    CREATE: 'transactions/register',
 
     UPDATE: 'transactions/update',
 
@@ -34,13 +36,23 @@ export const ENDPOINTS = {
 
     CREATE: 'budgets/register',
 
-    DETAIL: 'budgets/detail'
+    DETAIL: 'budgets/detail',
+
+    UPDATE: 'budgets/update',
+
+    DELETE: 'budgets/delete'
 
   },
 
   TRANSFERS: {
 
-    LIST: 'transfers/list'
+    LIST: 'transfers/list',
+
+    CREATE: 'transfers/register',
+
+    UPDATE: 'transfers/update',
+
+    DELETE: 'transfers/delete'
 
   }
 

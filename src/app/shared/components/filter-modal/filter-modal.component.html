@@ -7,10 +7,11 @@
   (closed)="close()"
   (primary)="apply()">
   <app-period-picker
-    [period]="selectedPeriod"
+    [period]="singleDate ? 'custom' : selectedPeriod"
     [periodValue]="selectedPeriodValue"
     [startDate]="selectedStartDate"
     [endDate]="selectedEndDate"
+    [singleDate]="singleDate"
     (valueChange)="updatePeriod($event)">
   </app-period-picker>
 </app-base-modal>

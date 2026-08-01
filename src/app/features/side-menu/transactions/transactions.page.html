@@ -1,0 +1,120 @@
+<ion-content class="transactions-page" [fullscreen]="false" [forceOverscroll]="false">
+  <main class="transactions">
+    <app-feature-header
+      title="Transacciones"
+      description="Consulta y controla todos tus movimientos."
+      imageSrc="assets/image/budget-chart.png">
+    </app-feature-header>
+
+    <section class="transaction-filters" aria-label="Filtros de transacciones">
+      <app-filter-trigger
+        label="Período"
+        [value]="selectedPeriodLabel"
+        [caption]="compactDateRange"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+
+      <app-filter-trigger
+        label="Cuenta"
+        [value]="selectedAccountLabel"
+        caption="Filtrar movimientos"
+        [disabled]="accounts.length === 0"
+        (activated)="openAccountSelector()">
+      </app-filter-trigger>
+    </section>
+
+    <app-custom-segment
+      [options]="transactionTypes"
+      [model]="selectedType"
+      (modelChange)="changeType($event)">
+    </app-custom-segment>
+
+    <app-period-summary-card
+      *ngIf="!isLoading && !hasError && transactions.length > 0"
+      title="Resumen del período"
+      [totalLabel]="totalLabel"
+      [totalAmount]="totalAmount"
+      [metaValue]="accountCount"
+      [metaLabel]="accountLabel"
+      [chartSegments]="chartSegments"
+      [chartAriaLabel]="chartAriaLabel"
+      chartTone="primary"
+      [periodLabel]="periodLabel"
+      [currencySymbol]="currencySymbol">
+    </app-period-summary-card>
+
+    <app-section-card title="Categorías" appearance="plain">
+      <app-list-skeleton *ngIf="isLoading"></app-list-skeleton>
+
+      <div *ngIf="!isLoading && !hasError && categorySummaries.length" class="transactions-list">
+        <app-amount-list-item
+          *ngFor="let category of categorySummaries; trackBy: trackByCategory"
+          [title]="category.name"
+          [icon]="category.icon"
+          [color]="category.color"
+          [amount]="category.amount"
+          [percentage]="totalAmount > 0 ? (category.amount / totalAmount) * 100 : 0"
+          amountTone="default"
+          [currencySymbol]="currencySymbol"
+          [interactive]="true"
+          [ariaLabel]="'Ver movimientos de ' + category.name"
+          (activated)="openCategoryDetail(category)">
+        </app-amount-list-item>
+      </div>
+
+      <div *ngIf="!isLoading && !hasError && transactions.length === 0" class="transactions-empty">
+        <app-item-icon
+          icon="bills"
+          color="var(--fv-primary)"
+          size="lg"
+          variant="soft"
+          aria-hidden="true">
+        </app-item-icon>
+        <h3>Sin movimientos</h3>
+        <p>Aún no tienes {{ selectedType === 'gasto' ? 'gastos' : 'ingresos' }} registrados.</p>
+      </div>
+
+      <div *ngIf="!isLoading && hasError" class="transactions-empty">
+        <app-item-icon
+          icon="alert-triangle"
+          color="var(--fv-danger)"
+          size="lg"
+          variant="soft"
+          aria-hidden="true">
+        </app-item-icon>
+        <h3>No se pudieron cargar</h3>
+        <p>Revisa tu conexión e inténtalo nuevamente.</p>
+        <button type="button" (click)="loadTransactions()">Reintentar</button>
+      </div>
+    </app-section-card>
+  </main>
+
+</ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodSelectorOpen"
+  title="Filtrar transacciones"
+  description="Selecciona el período que deseas consultar."
+  applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod"
+  [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate"
+  [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()"
+  (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountSelectorOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)"
+  (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>
+
+<app-floating-action-button
+  icon="add"
+  ariaLabel="Registrar transacción"
+  (clicked)="createTransaction()">
+</app-floating-action-button>

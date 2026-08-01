@@ -1,0 +1,6 @@
+<dl class="key-value-list" [class.key-value-list--outlined]="appearance === 'outlined'">
+  <div *ngFor="let item of items">
+    <dt>{{ item.label }}</dt>
+    <dd [class.key-value-list__value--emphasis]="item.emphasis" [class.key-value-list__value--wrap]="item.wrap">{{ item.value }}</dd>
+  </div>
+</dl>

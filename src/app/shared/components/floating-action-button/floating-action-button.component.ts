@@ -1,16 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { IonFab, IonFabButton, IonIcon } from '@ionic/angular/standalone';
+import { IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-floating-action-button',
   templateUrl: './floating-action-button.component.html',
   styleUrls: ['./floating-action-button.component.scss'],
   standalone: true,
-  imports: [IonFab, IonFabButton, IonIcon],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    slot: 'fixed'
-  }
+  imports: [IonIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FloatingActionButtonComponent {
   @Input() icon = 'add';

@@ -1,4 +1,3 @@
-import { CreateTransacPage } from './features/side-menu/home/create-transac/create-transac.page';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -69,6 +68,10 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () => import('./features/side-menu/profile/profile.page').then(m => m.ProfilePage)
+      },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./features/side-menu/transactions/transactions.page').then(m => m.TransactionsPage)
       }
     ],
   },
@@ -81,14 +84,30 @@ export const routes: Routes = [
     path: 'budgets/create',
     loadComponent: () => import('./features/side-menu/budgets/create-budget/create-budget.page').then(m => m.CreateBudgetPage)
   },
-  // TRANSACTION ROUTES
   {
-    path: 'home/create',
-    loadComponent: () => import('./features/side-menu/home/create-transac/create-transac.page').then(m => m.CreateTransacPage)
+    path: 'budgets/:id/edit',
+    loadComponent: () => import('./features/side-menu/budgets/create-budget/create-budget.page').then(m => m.CreateBudgetPage)
   },
   {
-    path: 'home/edit',
-    loadComponent: () => import('./features/side-menu/home/create-transac/create-transac.page').then(m => m.CreateTransacPage)
+    path: 'budgets/category/detail',
+    loadComponent: () => import('./features/side-menu/budgets/detail-budget-category/detail-budget-category.page').then(m => m.DetailBudgetCategoryPage)
+  },
+  // TRANSACTION ROUTES
+  {
+    path: 'transactions/create',
+    loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
+  },
+  {
+    path: 'transactions/:id/edit',
+    loadComponent: () => import('./features/side-menu/transactions/create-transaction/create-transaction.page').then(m => m.CreateTransactionPage)
+  },
+  {
+    path: 'transactions/category/:id',
+    loadComponent: () => import('./features/side-menu/transactions/list-transaction/list-transaction.page').then(m => m.ListTransactionPage)
+  },
+  {
+    path: 'transactions/detail/:id',
+    loadComponent: () => import('./features/side-menu/transactions/detail-transaction/detail-transaction.page').then(m => m.DetailTransactionPage)
   },
   // CATEGORIES ROUTES
   {

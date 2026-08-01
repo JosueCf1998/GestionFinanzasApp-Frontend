@@ -51,14 +51,15 @@
         class="form-section"
         [formGroup]="dataForm">
 
-        <app-amount-input
-          class="input-item"
-          formControlName="amount"
-          placeholder="0.00"
-          [required]="true"
-          currencyCode="PEN"
-          variant="basic">
-        </app-amount-input>
+        <div class="input-item">
+          <app-amount-input
+            formControlName="amount"
+            placeholder="0.00"
+            [required]="true"
+            currencyCode="PEN"
+            variant="basic">
+          </app-amount-input>
+        </div>
 
       </form>
 

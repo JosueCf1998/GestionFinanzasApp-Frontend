@@ -1,0 +1,47 @@
+:host { display: block; }
+.detail-summary {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  padding: 19px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 21px;
+  background: var(--fv-gradient-primary);
+  box-shadow: var(--fv-shadow-primary);
+  color: #fff;
+}
+
+.detail-summary::before,
+.detail-summary::after {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .06);
+  content: '';
+}
+.detail-summary::before { top: -78px; right: -34px; width: 160px; height: 160px; }
+.detail-summary::after { bottom: -92px; left: 62px; width: 150px; height: 150px; }
+.detail-summary__identity { min-width: 0; }
+.detail-summary__identity span { display: block; color: rgba(255, 255, 255, .68); font-size: 9px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; }
+.detail-summary__identity h1 { overflow: hidden; margin: 4px 0 0; color: #fff; font-size: 18px; font-weight: 800; letter-spacing: -.02em; text-overflow: ellipsis; white-space: nowrap; }
+.detail-summary__identity p { margin: 5px 0 0; color: rgba(255, 255, 255, .68); font-size: 10px; font-weight: 500; }
+.detail-summary__value {
+  min-width: 104px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 14px;
+  background: rgba(20, 8, 83, .22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+  text-align: right;
+  backdrop-filter: blur(8px);
+}
+.detail-summary__value small { display: block; margin-bottom: 3px; color: rgba(255, 255, 255, .58); font-size: 8px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; }
+.detail-summary__value strong { display: block; color: #fff; font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.035em; white-space: nowrap; }
+@media (max-width: 380px) {
+  .detail-summary { grid-template-columns: auto minmax(0, 1fr); gap: 13px; padding: 17px; }
+  .detail-summary__value { grid-column: 1 / -1; width: 100%; box-sizing: border-box; text-align: left; }
+}

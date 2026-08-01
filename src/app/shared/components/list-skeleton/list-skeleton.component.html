@@ -1,0 +1,12 @@
+<div class="list-skeleton" role="status" aria-label="Cargando contenido">
+  @for (item of items; track $index) {
+    <div class="list-skeleton__row" aria-hidden="true">
+      <i class="list-skeleton__icon"></i>
+      <span class="list-skeleton__content">
+        <i></i>
+        <i></i>
+      </span>
+      <i class="list-skeleton__amount"></i>
+    </div>
+  }
+</div>

@@ -1,19 +1,47 @@
-<div
-  class="fv-item-icon"
-  [class.fv-item-icon--selected]="selected"
-  [class.fv-item-icon--disabled]="disabled"
-  [class.fv-item-icon--sm]="size === 'sm'"
-  [class.fv-item-icon--md]="size === 'md'"
-  [class.fv-item-icon--lg]="size === 'lg'"
-  [class.fv-item-icon--xl]="size === 'xl'"
-  [class.fv-item-icon--circle]="shape === 'circle'"
-  [class.fv-item-icon--rounded]="shape === 'rounded'"
-  [class.fv-item-icon--soft]="variant === 'soft'"
-  [class.fv-item-icon--solid]="variant === 'solid'"
-  [class.fv-item-icon--glass]="variant === 'glass'"
-  [style.--fv-item-icon-color]="color"
-  [style.--fv-item-icon-mask]="'url(assets/icon/' + icon + '.svg)'">
-
-  <span class="fv-item-icon__glyph" aria-hidden="true"></span>
-
-</div>
+@if (interactive) {
+  <button
+    type="button"
+    class="fv-item-icon fv-item-icon--button"
+    [class.fv-item-icon--selected]="selected"
+    [class.fv-item-icon--disabled]="disabled"
+    [class.fv-item-icon--xs]="size === 'xs'"
+    [class.fv-item-icon--sm]="size === 'sm'"
+    [class.fv-item-icon--md]="size === 'md'"
+    [class.fv-item-icon--lg]="size === 'lg'"
+    [class.fv-item-icon--xl]="size === 'xl'"
+    [class.fv-item-icon--circle]="shape === 'circle'"
+    [class.fv-item-icon--rounded]="shape === 'rounded'"
+    [class.fv-item-icon--soft]="variant === 'soft'"
+    [class.fv-item-icon--solid]="variant === 'solid'"
+    [class.fv-item-icon--glass]="variant === 'glass'"
+    [class.fv-item-icon--plain]="variant === 'plain'"
+    [class.fv-item-icon--nav-glass]="variant === 'nav-glass'"
+    [style.--fv-item-icon-color]="color"
+    [style.--fv-item-icon-mask]="'url(assets/icon/' + icon + '.svg)'"
+    [disabled]="disabled"
+    [attr.aria-label]="ariaLabel || null"
+    (click)="onActivate()">
+    <span class="fv-item-icon__glyph" aria-hidden="true"></span>
+  </button>
+} @else {
+  <div
+    class="fv-item-icon"
+    [class.fv-item-icon--selected]="selected"
+    [class.fv-item-icon--disabled]="disabled"
+    [class.fv-item-icon--xs]="size === 'xs'"
+    [class.fv-item-icon--sm]="size === 'sm'"
+    [class.fv-item-icon--md]="size === 'md'"
+    [class.fv-item-icon--lg]="size === 'lg'"
+    [class.fv-item-icon--xl]="size === 'xl'"
+    [class.fv-item-icon--circle]="shape === 'circle'"
+    [class.fv-item-icon--rounded]="shape === 'rounded'"
+    [class.fv-item-icon--soft]="variant === 'soft'"
+    [class.fv-item-icon--solid]="variant === 'solid'"
+    [class.fv-item-icon--glass]="variant === 'glass'"
+    [class.fv-item-icon--plain]="variant === 'plain'"
+    [class.fv-item-icon--nav-glass]="variant === 'nav-glass'"
+    [style.--fv-item-icon-color]="color"
+    [style.--fv-item-icon-mask]="'url(assets/icon/' + icon + '.svg)'">
+    <span class="fv-item-icon__glyph" aria-hidden="true"></span>
+  </div>
+}

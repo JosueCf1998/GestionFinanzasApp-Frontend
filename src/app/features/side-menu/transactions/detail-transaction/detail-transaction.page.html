@@ -1,0 +1,36 @@
+<ion-header>
+  <app-page-layout title="Detalle de transacción" [showBack]="true" (back)="back()">
+    <app-item-icon
+      *ngIf="transaction"
+      header-actions
+      icon="edit"
+      color="#ffffff"
+      size="md"
+      variant="nav-glass"
+      [interactive]="true"
+      ariaLabel="Editar transacción"
+      (activated)="editTransaction()">
+    </app-item-icon>
+  </app-page-layout>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="transaction-detail-page">
+  <main class="transaction-detail">
+    <ng-container *ngIf="transaction; else unavailable">
+      <app-detail-summary-card *ngIf="summaryData as summary" [data]="summary">
+      </app-detail-summary-card>
+
+      <app-information-card [items]="informationItems">
+      </app-information-card>
+
+    </ng-container>
+
+    <ng-template #unavailable>
+      <app-empty-state
+        icon="alert-triangle"
+        title="Transacción no disponible"
+        description="Regresa al listado y selecciona nuevamente una transacción.">
+      </app-empty-state>
+    </ng-template>
+  </main>
+</ion-content>
