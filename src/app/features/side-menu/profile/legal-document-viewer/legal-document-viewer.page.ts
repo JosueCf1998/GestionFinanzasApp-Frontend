@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton } from '@ionic/angular/standalone';
+import { IonContent, IonHeader } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 
 export type LegalDocumentType = 'privacy' | 'terms';
 
@@ -111,7 +112,7 @@ const TERMS_OF_USE: DocumentContent = {
   templateUrl: './legal-document-viewer.page.html',
   styleUrls: ['./legal-document-viewer.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton],
+  imports: [CommonModule, IonContent, IonHeader, PageLayoutComponent],
 })
 export class LegalDocumentViewerPage implements OnInit {
   document!: DocumentContent;

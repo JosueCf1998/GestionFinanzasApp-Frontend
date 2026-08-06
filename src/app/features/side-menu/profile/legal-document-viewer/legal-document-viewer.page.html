@@ -1,10 +1,9 @@
-<ion-header class="legal-header">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/main/profile" text="" icon="arrow-back-outline" (click)="goBack()"></ion-back-button>
-    </ion-buttons>
-    <ion-title>{{ document.title }}</ion-title>
-  </ion-toolbar>
+<ion-header>
+  <app-page-layout
+    [title]="document.title"
+    [showBack]="true"
+    (back)="goBack()">
+  </app-page-layout>
 </ion-header>
 
 <ion-content class="legal-content">

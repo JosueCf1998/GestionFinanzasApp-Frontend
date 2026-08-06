@@ -2,23 +2,6 @@
   --legal-max-width: 680px;
 }
 
-.legal-header {
-  --background: var(--fv-surface, #ffffff);
-  --border-color: var(--list-border, #e9edf5);
-}
-
-.legal-header ion-toolbar {
-  --background: var(--fv-surface, #ffffff);
-  --border-color: var(--list-border, #e9edf5);
-  border-bottom: 1px solid var(--list-border, #e9edf5);
-}
-
-.legal-header ion-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--fv-text-primary, #0f172a);
-}
-
 .legal-content {
   --background: var(--fv-surface, #ffffff);
 }
