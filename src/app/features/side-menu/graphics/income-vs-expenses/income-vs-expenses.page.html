@@ -1,12 +1,59 @@
 <ion-header>
-  <app-page-layout title="Ingresos vs Gastos" (back)="back()"></app-page-layout>
+  <app-page-layout title="Ingresos vs Gastos" [loading]="(loadingService.loading$ | async) ?? false" (back)="back()">
+  </app-page-layout>
 </ion-header>
-<ion-content class="graphic-detail-page" [fullscreen]="false">
-  <main class="graphic-detail">
-    <section class="graphic-detail__card">
-      <app-empty-state icon="transfer" title="Ingresos vs Gastos"
-        description="Esta sección está preparada para consultar la comparación de ingresos y gastos.">
-      </app-empty-state>
+
+<ion-content class="comparison-page" [fullscreen]="false">
+  <main class="comparison">
+    <section class="detail-filters" aria-label="Filtros del gráfico">
+      <app-filter-trigger label="Periodo" [value]="selectedPeriodLabel" [caption]="periodLabel"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+      <app-filter-trigger label="Cuentas" [value]="accountCaption" caption="Seleccionar cuentas"
+        [disabled]="accounts.length === 0" (activated)="openAccountSelector()">
+      </app-filter-trigger>
     </section>
+
+    <app-section-card title="Comparación del periodo" appearance="plain">
+      <article *ngIf="periods.length; else emptyState" class="comparison-card">
+        <div class="analysis-context">
+          <span><small>Agrupado por</small><strong>Mes</strong></span>
+          <span><small>Periodo analizado</small><strong>{{ periodLabel }}</strong></span>
+        </div>
+
+        <app-income-expense-chart
+          [items]="periods"
+          ariaLabel="Comparación de ingresos, gastos y saldo por mes">
+        </app-income-expense-chart>
+
+        <section class="totals" aria-label="Totales del periodo">
+          <h2>Totales del periodo</h2>
+          <div><span>Ingresos</span><strong class="income">{{ currency.symbol }} {{ totalIncome | number:'1.2-2' }}</strong></div>
+          <div><span>Gastos</span><strong class="expense">{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</strong></div>
+          <div><span>Saldo</span><strong class="balance">{{ currency.symbol }} {{ totalBalance | number:'1.2-2' }}</strong></div>
+        </section>
+      </article>
+
+      <ng-template #emptyState>
+        <div class="empty-state-action">
+          <app-empty-state icon="transfer" title="Sin movimientos en este periodo"
+            description="Selecciona otro periodo para comparar tus ingresos y gastos.">
+          </app-empty-state>
+          <button type="button" (click)="openPeriodSelector()">Cambiar periodo</button>
+        </div>
+      </ng-template>
+    </app-section-card>
   </main>
 </ion-content>
+
+<app-filter-modal [isOpen]="isPeriodSelectorOpen" title="Filtrar comparación"
+  description="Selecciona el periodo que deseas analizar." applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod" [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()" (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal [isOpen]="isAccountSelectorOpen" [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE" [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)" (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>

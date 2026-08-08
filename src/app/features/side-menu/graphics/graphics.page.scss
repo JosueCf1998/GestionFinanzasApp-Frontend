@@ -101,31 +101,6 @@ button:active {
 .metric-card--period { color: var(--fv-primary); }
 .metric-card--balance { color: #7c3aed; }
 
-.period-graphics__intro {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-
-  p {
-    margin: 0;
-    color: var(--fv-text-secondary);
-    font-size: 12px;
-    line-height: 1.4;
-  }
-
-  > small {
-    flex: 0 0 auto;
-    padding: 5px 9px;
-    border: 1px solid rgba(67, 97, 238, .1);
-    border-radius: 999px;
-    background: rgba(67, 97, 238, .06);
-    color: var(--fv-primary);
-    font-size: 10px;
-    font-weight: 750;
-  }
-}
-
 .graphic-link {
   --graphic-accent: var(--fv-primary);
   --graphic-soft: rgba(67, 97, 238, .08);

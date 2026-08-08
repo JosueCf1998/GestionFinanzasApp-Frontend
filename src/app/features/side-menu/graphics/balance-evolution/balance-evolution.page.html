@@ -1,12 +1,34 @@
-<ion-header>
-  <app-page-layout title="Evolución del saldo" (back)="back()"></app-page-layout>
-</ion-header>
-<ion-content class="graphic-detail-page" [fullscreen]="false">
-  <main class="graphic-detail">
-    <section class="graphic-detail__card">
-      <app-empty-state icon="up-trend" title="Evolución del saldo"
-        description="Esta sección está preparada para consultar la evolución de tus saldos.">
-      </app-empty-state>
+<ion-header><app-page-layout title="Evolución del saldo" [loading]="(loadingService.loading$ | async) ?? false" (back)="back()"></app-page-layout></ion-header>
+<ion-content class="evolution-page" [fullscreen]="false">
+  <main class="evolution">
+    <section class="detail-filters" aria-label="Filtros del gráfico">
+      <app-filter-trigger label="Periodo" [value]="selectedPeriodLabel" [caption]="periodLabel" (activated)="openPeriodSelector()"></app-filter-trigger>
+      <app-filter-trigger label="Cuentas" [value]="accountCaption" caption="Seleccionar cuentas" [disabled]="accounts.length === 0" (activated)="openAccountSelector()"></app-filter-trigger>
     </section>
+    <app-section-card title="Evolución del periodo" appearance="plain">
+      <article *ngIf="periods.length; else emptyState" class="evolution-card">
+        <div class="analysis-context">
+          <span><small>Agrupado por</small><strong>Mes</strong></span>
+          <span><small>Periodo analizado</small><strong>{{ periodLabel }}</strong></span>
+        </div>
+        <app-balance-evolution-chart [items]="periods"></app-balance-evolution-chart>
+        <section class="metrics" aria-label="Resumen de evolución">
+          <article><span>Saldo inicial</span><strong>{{ currency.symbol }} {{ initialBalance | number:'1.2-2' }}</strong></article>
+          <article><span>Saldo final</span><strong>{{ currency.symbol }} {{ finalBalance | number:'1.2-2' }}</strong></article>
+          <article class="metrics__savings"><span>Ahorro del periodo</span><strong>{{ currency.symbol }} {{ periodSavings | number:'1.2-2' }}</strong></article>
+        </section>
+      </article>
+      <ng-template #emptyState>
+        <div class="empty-state-action">
+          <app-empty-state icon="up-trend" title="Sin movimientos en este periodo" description="Selecciona otro periodo para consultar la evolución de tu saldo."></app-empty-state>
+          <button type="button" (click)="openPeriodSelector()">Cambiar periodo</button>
+        </div>
+      </ng-template>
+    </app-section-card>
   </main>
 </ion-content>
+<app-filter-modal [isOpen]="isPeriodSelectorOpen" title="Filtrar evolución" description="Selecciona el periodo que deseas analizar." applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod" [selectedPeriodValue]="selectedPeriodValue" [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()" (filtersApplied)="applyFilters($event)"></app-filter-modal>
+<app-account-selector-modal [isOpen]="isAccountSelectorOpen" [accounts]="accounts" [selectionMode]="AccountSelectionMode.MULTIPLE" [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)" (modalClosed)="closeAccountSelector()"></app-account-selector-modal>

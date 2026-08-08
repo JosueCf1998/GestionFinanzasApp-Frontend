@@ -47,11 +47,6 @@
     </app-section-card>
 
     <app-section-card title="Gráficas del periodo" appearance="plain">
-      <div class="period-graphics__intro">
-        <p>Explora el detalle de tus resultados financieros.</p>
-        <small>{{ periodGraphicCards.length }} análisis</small>
-      </div>
-
       <div class="period-graphics__grid">
         <button
           *ngFor="let card of periodGraphicCards"
