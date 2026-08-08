@@ -102,7 +102,7 @@ export class GraphicsPage implements OnInit, OnDestroy {
       title: 'Gastos por categoría',
       description: 'Revisa en qué categorías gastas más.',
       icon: 'category',
-      route: '/main/transactions',
+      route: '/graphics/expenses-by-category',
       label: 'Gastos'
     },
     {
@@ -212,6 +212,8 @@ export class GraphicsPage implements OnInit, OnDestroy {
 
   openPeriodGraphic(card: PeriodGraphicCard): void {
     void this.navigationService.forward(card.route, {
+      selectedPeriod: this.selectedPeriod,
+      selectedPeriodValue: this.selectedPeriodValue,
       startDate: this.selectedStartDate,
       endDate: this.selectedEndDate,
       selectedAccountIds: this.selectedAccounts.map(account => account.id)

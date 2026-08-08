@@ -73,6 +73,10 @@ export const routes: Routes = [
   },
   // BUDGET ROUTES
   {
+    path: 'graphics/expenses-by-category',
+    loadComponent: () => import('./features/side-menu/graphics/expenses-by-category/expenses-by-category.page').then(m => m.ExpensesByCategoryPage)
+  },
+  {
     path: 'budgets/detail/:id',
     loadComponent: () => import('./features/side-menu/budgets/detail-budget/detail-budget.page').then(m => m.DetailBudgetPage)
   },

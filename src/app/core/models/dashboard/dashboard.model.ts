@@ -26,11 +26,28 @@ export interface DashboardSummaryApi {
 export interface DashboardCategoryApi {
   category_id?: number;
   category_name?: string;
+  categoria_id?: number;
+  categoria_nombre?: string;
+  nombre?: string;
   icon?: string;
+  icono?: string;
   color?: string;
+  category_color?: string;
+  color_categoria?: string;
   amount?: number;
+  monto?: number;
   percentage?: number;
+  porcentaje?: number;
   [key: string]: number | string | null | undefined;
+}
+
+export interface DashboardCategory {
+  id: number;
+  name: string;
+  icon: string;
+  color: string;
+  amount: number;
+  percentage: number;
 }
 
 export interface DashboardPeriodApi {

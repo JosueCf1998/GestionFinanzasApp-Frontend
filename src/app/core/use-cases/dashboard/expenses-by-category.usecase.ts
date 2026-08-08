@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { mapDashboardCategory } from 'src/app/core/models/dashboard/dashboard.mapper';
 import {
-  DashboardCategoryApi,
+  DashboardCategory,
   DashboardItemsResponse,
   DashboardRequest
 } from 'src/app/core/models/dashboard/dashboard.model';
@@ -14,7 +15,14 @@ export class ExpensesByCategoryUseCase {
 
   execute(
     request: DashboardRequest
-  ): Observable<Result<DashboardItemsResponse<DashboardCategoryApi>>> {
-    return this.repository.getExpensesByCategory(request);
+  ): Observable<Result<DashboardItemsResponse<DashboardCategory>>> {
+    return this.repository.getExpensesByCategory(request).pipe(
+      map(result => ({
+        ...result,
+        data: result.data
+          ? { items: (result.data.items ?? []).map(mapDashboardCategory) }
+          : null
+      }))
+    );
   }
 }
