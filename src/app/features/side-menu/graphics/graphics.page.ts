@@ -24,10 +24,6 @@ import {
   FilterSelection
 } from 'src/app/shared/components/filter-modal/filter-modal.component';
 import { FilterTriggerComponent } from 'src/app/shared/components/filter-trigger/filter-trigger.component';
-import {
-  InformationCardComponent,
-  InformationCardItem
-} from 'src/app/shared/components/information-card/information-card.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { DashboardSummaryUseCase } from 'src/app/core/use-cases/dashboard/dashboard-summary.usecase';
@@ -62,7 +58,6 @@ interface PeriodGraphicCard {
     FeatureHeaderComponent,
     FilterModalComponent,
     FilterTriggerComponent,
-    InformationCardComponent,
     ItemIconComponent,
     SectionCardComponent
   ]
@@ -90,13 +85,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
     { label: 'Saldo actual', amount: 0, tone: 'balance' }
   ];
 
-  summaryItems: InformationCardItem[] = [
-    { label: 'Presupuesto total', value: 'S/. 0.00' },
-    { label: 'Presupuesto gastado', value: 'S/. 0.00' },
-    { label: 'Presupuesto restante', value: 'S/. 0.00' },
-    { label: 'Ahorro del periodo', value: '0.00%', emphasis: true }
-  ];
-
   readonly periodGraphicCards: PeriodGraphicCard[] = [
     {
       title: 'Gastos por categoría',
@@ -109,35 +97,35 @@ export class GraphicsPage implements OnInit, OnDestroy {
       title: 'Ingresos vs Gastos',
       description: 'Compara tus movimientos del periodo.',
       icon: 'transfer',
-      route: '/main/transactions',
+      route: '/graphics/income-vs-expenses',
       label: 'Comparativa'
     },
     {
       title: 'Evolución del saldo',
       description: 'Consulta el estado actual de tus saldos.',
       icon: 'up-trend',
-      route: '/main/accounts',
+      route: '/graphics/balance-evolution',
       label: 'Tendencia'
     },
     {
       title: 'Progreso de presupuestos',
       description: 'Controla el avance de tus presupuestos.',
       icon: 'budget-wallet',
-      route: '/main/budgets',
+      route: '/graphics/budget-progress',
       label: 'Presupuestos'
     },
     {
       title: 'Top categorías de gastos',
       description: 'Identifica tus principales categorías.',
       icon: 'bills',
-      route: '/main/transactions',
+      route: '/graphics/top-expense-categories',
       label: 'Ranking'
     },
     {
       title: 'Análisis por cuentas',
       description: 'Consulta el balance de cada cuenta.',
       icon: 'account',
-      route: '/main/accounts',
+      route: '/graphics/accounts-analysis',
       label: 'Cuentas'
     }
   ];
@@ -273,16 +261,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       { label: 'Saldo del periodo', amount: summary.periodBalance, tone: 'period' },
       { label: 'Saldo actual', amount: summary.currentBalance, tone: 'balance' }
     ];
-    this.summaryItems = [
-      { label: 'Presupuesto total', value: this.formatAmount(summary.totalBudget) },
-      { label: 'Presupuesto gastado', value: this.formatAmount(summary.spentBudget) },
-      { label: 'Presupuesto restante', value: this.formatAmount(summary.remainingBudget) },
-      {
-        label: 'Ahorro del periodo',
-        value: `${summary.savingsPercentage.toFixed(2)}%`,
-        emphasis: true
-      }
-    ];
   }
 
   private clearDashboardData(): void {
@@ -296,13 +274,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       remainingBudget: 0,
       savingsPercentage: 0
     });
-  }
-
-  private formatAmount(value: number): string {
-    return `${this.currency.symbol} ${new Intl.NumberFormat(this.currency.locale, {
-      minimumFractionDigits: this.currency.decimalDigits,
-      maximumFractionDigits: this.currency.decimalDigits
-    }).format(value)}`;
   }
 
   private parseDate(value: string): Date | null {

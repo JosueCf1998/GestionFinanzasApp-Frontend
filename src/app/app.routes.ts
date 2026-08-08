@@ -71,11 +71,32 @@ export const routes: Routes = [
       }
     ],
   },
-  // BUDGET ROUTES
+  // GRAPHICS ROUTES
   {
     path: 'graphics/expenses-by-category',
     loadComponent: () => import('./features/side-menu/graphics/expenses-by-category/expenses-by-category.page').then(m => m.ExpensesByCategoryPage)
   },
+  {
+    path: 'graphics/income-vs-expenses',
+    loadComponent: () => import('./features/side-menu/graphics/income-vs-expenses/income-vs-expenses.page').then(m => m.IncomeVsExpensesPage)
+  },
+  {
+    path: 'graphics/balance-evolution',
+    loadComponent: () => import('./features/side-menu/graphics/balance-evolution/balance-evolution.page').then(m => m.BalanceEvolutionPage)
+  },
+  {
+    path: 'graphics/budget-progress',
+    loadComponent: () => import('./features/side-menu/graphics/budget-progress/budget-progress.page').then(m => m.BudgetProgressPage)
+  },
+  {
+    path: 'graphics/top-expense-categories',
+    loadComponent: () => import('./features/side-menu/graphics/top-expense-categories/top-expense-categories.page').then(m => m.TopExpenseCategoriesPage)
+  },
+  {
+    path: 'graphics/accounts-analysis',
+    loadComponent: () => import('./features/side-menu/graphics/accounts-analysis/accounts-analysis.page').then(m => m.AccountsAnalysisPage)
+  },
+  // BUDGET ROUTES
   {
     path: 'budgets/detail/:id',
     loadComponent: () => import('./features/side-menu/budgets/detail-budget/detail-budget.page').then(m => m.DetailBudgetPage)

@@ -6,7 +6,8 @@
     menuId="main-menu"
     contentId="main-content"
     type="overlay"
-    [swipeGesture]="true">
+    [swipeGesture]="true"
+    (ionWillOpen)="releaseMenuTriggerFocus()">
 
     <ion-content [scrollY]="true">
 
@@ -103,7 +104,8 @@
 
         <ion-menu-button
           header-left
-          menuId="main-menu">
+          menuId="main-menu"
+          (click)="releaseMenuTriggerFocus()">
         </ion-menu-button>
 
       </app-page-layout>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonHeader } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { DashboardCategory, DashboardRequest } from 'src/app/core/models/dashboard/dashboard.model';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
@@ -45,6 +45,7 @@ interface ExpensesByCategoryNavigationState {
   imports: [
     CommonModule,
     IonContent,
+    IonHeader,
     AccountSelectorModalComponent,
     DonutChartComponent,
     EmptyStateComponent,

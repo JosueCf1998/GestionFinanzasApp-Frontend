@@ -3,10 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import {
   IonIcon,
-  IonButton,
   IonHeader,
-  IonToolbar,
-  IonButtons,
   IonMenuButton,
   IonContent,
   IonSplitPane,
@@ -19,8 +16,6 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
-import { MenuController } from '@ionic/angular';
 
 import { NavigationService } from '../../core/services/navigation.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
@@ -35,11 +30,8 @@ import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-
   standalone: true,
   imports: [
     IonIcon,
-    IonButton,
     RouterModule,
     IonHeader,
-    IonToolbar,
-    IonButtons,
     IonMenuButton,
     IonContent,
     IonSplitPane,
@@ -84,8 +76,7 @@ export class SideMenuPage implements OnInit {
 
   constructor(
     private navigationService: NavigationService,
-    private localManagementService: LocalManagementService,
-    private menuCtrl: MenuController
+    private localManagementService: LocalManagementService
   ) {}
 
   // =========================
@@ -105,16 +96,8 @@ export class SideMenuPage implements OnInit {
       this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || '';
   }
 
-  // =========================
-  // MENU CONTROL (FIX CLAVE)
-  // =========================
-
-  async closeMenuIfOpen() {
-    const isOpen = await this.menuCtrl.isOpen('main-menu');
-
-    if (isOpen) {
-      await this.menuCtrl.close('main-menu');
-    }
+  releaseMenuTriggerFocus(): void {
+    this.getDeepActiveElement()?.blur();
   }
 
   // =========================
@@ -123,5 +106,15 @@ export class SideMenuPage implements OnInit {
 
   logOut() {
     this.navigationService.replace('/splash');
+  }
+
+  private getDeepActiveElement(): HTMLElement | null {
+    let activeElement = document.activeElement;
+
+    while (activeElement?.shadowRoot?.activeElement) {
+      activeElement = activeElement.shadowRoot.activeElement;
+    }
+
+    return activeElement instanceof HTMLElement ? activeElement : null;
   }
 }

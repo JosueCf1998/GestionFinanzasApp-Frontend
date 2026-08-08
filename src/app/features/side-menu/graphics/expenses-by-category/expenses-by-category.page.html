@@ -1,10 +1,12 @@
-<ion-content class="category-expenses-page" [fullscreen]="true">
+<ion-header>
   <app-page-layout
     title="Gastos por categoría"
     [loading]="(loadingService.loading$ | async) ?? false"
     (back)="back()">
   </app-page-layout>
+</ion-header>
 
+<ion-content class="category-expenses-page" [fullscreen]="false">
   <main class="category-expenses">
     <section class="detail-filters" aria-label="Filtros del gráfico">
       <app-filter-trigger
