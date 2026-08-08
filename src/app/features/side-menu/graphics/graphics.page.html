@@ -41,7 +41,7 @@
               aria-hidden="true">
             </app-item-icon>
           </div>
-          <strong>{{ currencySymbol }} {{ metric.amount | number:'1.2-2' }}</strong>
+          <strong>{{ currency.symbol }} {{ metric.amount | number:'1.2-2' }}</strong>
         </article>
       </section>
     </app-section-card>
@@ -62,7 +62,6 @@
           *ngFor="let card of periodGraphicCards"
           type="button"
           class="graphic-link"
-          [class]="'graphic-link graphic-link--' + card.tone"
           (click)="openPeriodGraphic(card)">
           <span class="graphic-link__topline">
             <app-item-icon

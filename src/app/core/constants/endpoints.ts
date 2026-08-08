@@ -46,6 +46,22 @@ export const ENDPOINTS = {
 
     DELETE: 'transfers/delete'
 
+  },
+
+  DASHBOARD: {
+
+    SUMMARY: 'dashboard/summary',
+
+    EXPENSES_BY_CATEGORY: 'dashboard/expenses-by-category',
+
+    INCOME_VS_EXPENSES: 'dashboard/income-vs-expenses',
+
+    BALANCE_EVOLUTION: 'dashboard/balance-evolution',
+
+    BUDGET_PROGRESS: 'dashboard/budget-progress',
+
+    TOP_EXPENSE_CATEGORIES: 'dashboard/top-expense-categories'
+
   }
 
 };

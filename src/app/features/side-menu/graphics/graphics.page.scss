@@ -156,15 +156,6 @@ button:active {
   }
 }
 
-.graphic-link--blue,
-.graphic-link--cyan,
-.graphic-link--amber,
-.graphic-link--rose,
-.graphic-link--indigo {
-  --graphic-accent: var(--fv-primary);
-  --graphic-soft: rgba(67, 97, 238, .08);
-}
-
 .graphic-link__topline {
   position: relative;
   z-index: 1;

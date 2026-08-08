@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
+import 'src/app/core/utils/observable-extensions';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
+import {
+  DashboardRequest,
+  DashboardSummary
+} from 'src/app/core/models/dashboard/dashboard.model';
 import {
   Accounts,
   ListAccountsUseCase
@@ -24,6 +30,8 @@ import {
 } from 'src/app/shared/components/information-card/information-card.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { DashboardSummaryUseCase } from 'src/app/core/use-cases/dashboard/dashboard-summary.usecase';
+import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 interface FinancialMetric {
   label: string;
@@ -38,7 +46,6 @@ interface PeriodGraphicCard {
   description: string;
   icon: string;
   route: string;
-  tone: 'violet' | 'blue' | 'cyan' | 'amber' | 'rose' | 'indigo';
   label: string;
 }
 
@@ -49,7 +56,8 @@ interface PeriodGraphicCard {
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
+    IonContent,
+    IonIcon,
     AccountSelectorModalComponent,
     FeatureHeaderComponent,
     FilterModalComponent,
@@ -61,31 +69,32 @@ interface PeriodGraphicCard {
 })
 export class GraphicsPage implements OnInit, OnDestroy {
   private accountRequest?: Subscription;
+  private dashboardRequest?: Subscription;
 
   readonly AccountSelectionMode = AccountSelectionMode;
-  readonly currencySymbol = 'S/.';
+  readonly currency: Currency = CURRENCIES.PEN;
 
-  selectedPeriod: PeriodPreset = 'custom';
-  selectedPeriodValue = '';
-  selectedStartDate = '2026-01-01';
-  selectedEndDate = '2026-08-31';
+  selectedPeriod: PeriodPreset = 'monthly';
+  selectedPeriodValue = this.getCurrentMonth();
+  selectedStartDate = this.getFirstDayOfCurrentMonth();
+  selectedEndDate = this.getLastDayOfCurrentMonth();
   accounts: Accounts[] = [];
   selectedAccounts: Accounts[] = [];
   isPeriodSelectorOpen = false;
   isAccountSelectorOpen = false;
 
-  readonly metrics: FinancialMetric[] = [
-    { label: 'Ingresos', amount: 18400, tone: 'income', icon: 'up-trend', iconColor: 'var(--fv-success)' },
-    { label: 'Gastos', amount: 13950, tone: 'expense', icon: 'down-trend', iconColor: 'var(--fv-danger)' },
-    { label: 'Saldo del periodo', amount: 4450, tone: 'period' },
-    { label: 'Saldo actual', amount: 5650, tone: 'balance' }
+  metrics: FinancialMetric[] = [
+    { label: 'Ingresos', amount: 0, tone: 'income', icon: 'up-trend', iconColor: 'var(--fv-success)' },
+    { label: 'Gastos', amount: 0, tone: 'expense', icon: 'down-trend', iconColor: 'var(--fv-danger)' },
+    { label: 'Saldo del periodo', amount: 0, tone: 'period' },
+    { label: 'Saldo actual', amount: 0, tone: 'balance' }
   ];
 
-  readonly summaryItems: InformationCardItem[] = [
-    { label: 'Presupuesto total', value: 'S/. 15,000.00' },
-    { label: 'Presupuesto gastado', value: 'S/. 13,950.00' },
-    { label: 'Presupuesto restante', value: 'S/. 1,050.00' },
-    { label: 'Ahorro del periodo', value: '24.18%', emphasis: true }
+  summaryItems: InformationCardItem[] = [
+    { label: 'Presupuesto total', value: 'S/. 0.00' },
+    { label: 'Presupuesto gastado', value: 'S/. 0.00' },
+    { label: 'Presupuesto restante', value: 'S/. 0.00' },
+    { label: 'Ahorro del periodo', value: '0.00%', emphasis: true }
   ];
 
   readonly periodGraphicCards: PeriodGraphicCard[] = [
@@ -94,7 +103,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Revisa en qué categorías gastas más.',
       icon: 'category',
       route: '/main/transactions',
-      tone: 'violet',
       label: 'Gastos'
     },
     {
@@ -102,7 +110,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Compara tus movimientos del periodo.',
       icon: 'transfer',
       route: '/main/transactions',
-      tone: 'blue',
       label: 'Comparativa'
     },
     {
@@ -110,7 +117,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Consulta el estado actual de tus saldos.',
       icon: 'up-trend',
       route: '/main/accounts',
-      tone: 'cyan',
       label: 'Tendencia'
     },
     {
@@ -118,7 +124,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Controla el avance de tus presupuestos.',
       icon: 'budget-wallet',
       route: '/main/budgets',
-      tone: 'amber',
       label: 'Presupuestos'
     },
     {
@@ -126,7 +131,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Identifica tus principales categorías.',
       icon: 'bills',
       route: '/main/transactions',
-      tone: 'rose',
       label: 'Ranking'
     },
     {
@@ -134,22 +138,26 @@ export class GraphicsPage implements OnInit, OnDestroy {
       description: 'Consulta el balance de cada cuenta.',
       icon: 'account',
       route: '/main/accounts',
-      tone: 'indigo',
       label: 'Cuentas'
     }
   ];
 
   constructor(
     private readonly listAccountsUseCase: ListAccountsUseCase,
-    private readonly navigationService: NavigationService
+    private readonly dashboardSummaryUseCase: DashboardSummaryUseCase,
+    private readonly navigationService: NavigationService,
+    public readonly loadingService: SpinnerService
   ) {}
 
   ngOnInit(): void {
     this.loadAccounts();
+    this.loadDashboard();
   }
 
   ngOnDestroy(): void {
     this.accountRequest?.unsubscribe();
+    this.dashboardRequest?.unsubscribe();
+    this.loadingService.hide();
   }
 
   get selectedPeriodLabel(): string {
@@ -186,6 +194,7 @@ export class GraphicsPage implements OnInit, OnDestroy {
     this.selectedStartDate = selection.startDate;
     this.selectedEndDate = selection.endDate;
     this.closePeriodSelector();
+    this.loadDashboard();
   }
 
   openAccountSelector(): void {
@@ -211,16 +220,93 @@ export class GraphicsPage implements OnInit, OnDestroy {
 
   private loadAccounts(): void {
     this.accountRequest?.unsubscribe();
-    this.accountRequest = this.listAccountsUseCase.listAccounts().subscribe({
-      next: result => {
-        this.accounts = result.success ? result.data?.items ?? [] : [];
+    this.accountRequest = this.listAccountsUseCase.listAccounts().service({
+      success: data => {
+        this.accounts = data?.items ?? [];
         this.selectedAccounts = [...this.accounts];
       },
-      error: () => {
+      failure: () => {
         this.accounts = [];
         this.selectedAccounts = [];
       }
     });
+  }
+
+  private loadDashboard(): void {
+    const request = this.buildDashboardRequest();
+    if (!request) {
+      this.clearDashboardData();
+      return;
+    }
+
+    this.dashboardRequest?.unsubscribe();
+    this.loadingService.show();
+    this.dashboardRequest = this.dashboardSummaryUseCase.execute(request).service({
+      success: data => {
+        this.loadingService.hide();
+        data ? this.applyDashboardSummary(data.summary) : this.clearDashboardData();
+      },
+      failure: () => {
+        this.loadingService.hide();
+        this.clearDashboardData();
+      }
+    });
+  }
+
+  private buildDashboardRequest(): DashboardRequest | null {
+    const referenceDate = this.parseDate(this.selectedStartDate);
+    if (!referenceDate) return null;
+
+    return {
+      year: referenceDate.getUTCFullYear(),
+      month: referenceDate.getUTCMonth() + 1,
+      limit: 5
+    };
+  }
+
+  private applyDashboardSummary(summary: DashboardSummary): void {
+    this.metrics = [
+      { label: 'Ingresos', amount: summary.totalIncome, tone: 'income', icon: 'up-trend', iconColor: 'var(--fv-success)' },
+      { label: 'Gastos', amount: summary.totalExpenses, tone: 'expense', icon: 'down-trend', iconColor: 'var(--fv-danger)' },
+      { label: 'Saldo del periodo', amount: summary.periodBalance, tone: 'period' },
+      { label: 'Saldo actual', amount: summary.currentBalance, tone: 'balance' }
+    ];
+    this.summaryItems = [
+      { label: 'Presupuesto total', value: this.formatAmount(summary.totalBudget) },
+      { label: 'Presupuesto gastado', value: this.formatAmount(summary.spentBudget) },
+      { label: 'Presupuesto restante', value: this.formatAmount(summary.remainingBudget) },
+      {
+        label: 'Ahorro del periodo',
+        value: `${summary.savingsPercentage.toFixed(2)}%`,
+        emphasis: true
+      }
+    ];
+  }
+
+  private clearDashboardData(): void {
+    this.applyDashboardSummary({
+      totalIncome: 0,
+      totalExpenses: 0,
+      periodBalance: 0,
+      currentBalance: 0,
+      totalBudget: 0,
+      spentBudget: 0,
+      remainingBudget: 0,
+      savingsPercentage: 0
+    });
+  }
+
+  private formatAmount(value: number): string {
+    return `${this.currency.symbol} ${new Intl.NumberFormat(this.currency.locale, {
+      minimumFractionDigits: this.currency.decimalDigits,
+      maximumFractionDigits: this.currency.decimalDigits
+    }).format(value)}`;
+  }
+
+  private parseDate(value: string): Date | null {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+    const date = new Date(`${value}T00:00:00Z`);
+    return Number.isNaN(date.getTime()) ? null : date;
   }
 
   private formatDate(value: string): string {
@@ -232,5 +318,26 @@ export class GraphicsPage implements OnInit, OnDestroy {
     })
       .format(new Date(`${value}T00:00:00Z`))
       .replace(/\./g, '');
+  }
+
+  private getCurrentMonth(): string {
+    return this.formatDateInput(new Date()).slice(0, 7);
+  }
+
+  private getFirstDayOfCurrentMonth(): string {
+    const today = new Date();
+    return this.formatDateInput(new Date(today.getFullYear(), today.getMonth(), 1));
+  }
+
+  private getLastDayOfCurrentMonth(): string {
+    const today = new Date();
+    return this.formatDateInput(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+  }
+
+  private formatDateInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }
