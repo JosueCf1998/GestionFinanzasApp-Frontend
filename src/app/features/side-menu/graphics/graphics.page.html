@@ -1,55 +1,111 @@
-<ion-content [fullscreen]="true" scroll-y="false">
-  <div class="content">
-
+<ion-content class="graphics-page" [fullscreen]="true">
+  <main class="graphics-container">
     <app-feature-header
       title="Gráficos"
-      description="Analiza la evolución y distribución de tus movimientos."
+      description="Consulta el resumen de tus finanzas por periodo y cuenta."
       imageSrc="assets/image/graphics-header.svg"
-      imageAlt="Gráfico financiero">
+      imageAlt="Resumen financiero">
     </app-feature-header>
 
-    <!-- Filtros -->
-    <div class="filter-container">
-      <app-custom-segment
-        [options]="mainTabs"
-        [(model)]="selectedTab"
-        segmentClass="main-tabs"
-        (modelChange)="updateChart()">
-      </app-custom-segment>
-      <app-custom-segment
-        [options]="periodTabs"
-        [(model)]="selectedPeriod"
-        segmentClass="period-tabs"
-        (modelChange)="updateChart()">
-      </app-custom-segment>
-    </div>
+    <section class="graphics-filters" aria-label="Filtros del resumen">
+      <app-filter-trigger
+        label="Periodo"
+        [value]="selectedPeriodLabel"
+        [caption]="compactDateRange"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
 
-    <!-- Gráfica -->
-    <div class="chart-card">
-      <div
-        *ngIf="selectedPeriod === 'semana' && selectedMonthForWeek && selectedYearForWeek"
-        class="year-label">
-        <ion-text color="medium">
-          <small>
-            Fecha: {{ selectedMonthForWeek | number:'2.0' }}/{{ selectedYearForWeek }}
-          </small>
-        </ion-text>
+      <app-filter-trigger
+        label="Cuentas"
+        [value]="selectedAccountLabel"
+        [caption]="selectedAccounts.length + ' seleccionadas'"
+        [disabled]="accounts.length === 0"
+        (activated)="openAccountSelector()">
+      </app-filter-trigger>
+    </section>
+
+    <app-section-card title="Indicadores del periodo" appearance="plain">
+      <section class="metrics-grid" aria-label="Indicadores financieros">
+        <article
+          *ngFor="let metric of metrics"
+          class="metric-card"
+          [class]="'metric-card metric-card--' + metric.tone">
+          <div class="metric-card__header">
+            <span>{{ metric.label }}</span>
+            <app-item-icon
+              *ngIf="metric.icon"
+              [icon]="metric.icon"
+              [color]="metric.iconColor || 'var(--fv-primary)'"
+              size="xs"
+              variant="soft"
+              aria-hidden="true">
+            </app-item-icon>
+          </div>
+          <strong>{{ currencySymbol }} {{ metric.amount | number:'1.2-2' }}</strong>
+        </article>
+      </section>
+    </app-section-card>
+
+    <app-information-card
+      title="Resumen general"
+      [items]="summaryItems">
+    </app-information-card>
+
+    <app-section-card title="Gráficas del periodo" appearance="plain">
+      <div class="period-graphics__intro">
+        <p>Explora el detalle de tus resultados financieros.</p>
+        <small>{{ periodGraphicCards.length }} análisis</small>
       </div>
 
-      <div *ngIf="chartData && chartData.length > 0; else noData" class="apex-wrapper">
-        <app-custom-chart
-          [series]="chartOptions.series"
-          [categories]="chartOptions.xaxis.categories"
-          [chartType]="'bar'"
-          [colors]="['#5e9c87', '#f7c948', '#6cb2eb', '#f86c6b']">
-        </app-custom-chart>
-      </div>
-      <ng-template #noData>
-        <ion-text color="medium" class="no-data-text">
-          <p>No hay datos para mostrar.</p>
-        </ion-text>
-      </ng-template>
-    </div>
+      <div class="period-graphics__grid">
+        <button
+          *ngFor="let card of periodGraphicCards"
+          type="button"
+          class="graphic-link"
+          [class]="'graphic-link graphic-link--' + card.tone"
+          (click)="openPeriodGraphic(card)">
+          <span class="graphic-link__topline">
+            <app-item-icon
+              [icon]="card.icon"
+              color="var(--fv-primary)"
+              size="md"
+              variant="soft"
+              aria-hidden="true">
+            </app-item-icon>
+            <span class="graphic-link__arrow">
+              <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+            </span>
+          </span>
 
-  </div>
+          <span class="graphic-link__content">
+            <small class="graphic-link__label">{{ card.label }}</small>
+            <strong>{{ card.title }}</strong>
+            <small class="graphic-link__description">{{ card.description }}</small>
+          </span>
+        </button>
+      </div>
+    </app-section-card>
+  </main>
 </ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodSelectorOpen"
+  title="Filtrar resumen"
+  description="Selecciona el periodo que deseas consultar."
+  applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod"
+  [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate"
+  [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()"
+  (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountSelectorOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)"
+  (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>

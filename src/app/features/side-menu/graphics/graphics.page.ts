@@ -1,17 +1,46 @@
-import { Component } from "@angular/core";
-import { IonicModule } from "@ionic/angular";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { NgApexchartsModule } from "ng-apexcharts";
-import { CustomChartComponent } from "../../../shared/components/custom-chart/custom-chart.component";
-import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
-import { ApexAxisChartSeries, ApexXAxis } from "ng-apexcharts";
-import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
+import { NavigationService } from 'src/app/core/services/navigation.service';
+import {
+  Accounts,
+  ListAccountsUseCase
+} from 'src/app/core/use-cases/accounts/list-accounts.usecase';
+import {
+  AccountSelectionMode,
+  AccountSelectorModalComponent
+} from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
+import { FeatureHeaderComponent } from 'src/app/shared/components/feature-header/feature-header.component';
+import {
+  FilterModalComponent,
+  FilterSelection
+} from 'src/app/shared/components/filter-modal/filter-modal.component';
+import { FilterTriggerComponent } from 'src/app/shared/components/filter-trigger/filter-trigger.component';
+import {
+  InformationCardComponent,
+  InformationCardItem
+} from 'src/app/shared/components/information-card/information-card.component';
+import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  xaxis: ApexXAxis;
-};
+interface FinancialMetric {
+  label: string;
+  amount: number;
+  tone: 'income' | 'expense' | 'period' | 'balance';
+  icon?: string;
+  iconColor?: string;
+}
+
+interface PeriodGraphicCard {
+  title: string;
+  description: string;
+  icon: string;
+  route: string;
+  tone: 'violet' | 'blue' | 'cyan' | 'amber' | 'rose' | 'indigo';
+  label: string;
+}
 
 @Component({
   selector: 'app-graphics',
@@ -19,109 +48,189 @@ export type ChartOptions = {
   styleUrls: ['./graphics.page.scss'],
   standalone: true,
   imports: [
-    IonicModule,
     CommonModule,
-    FormsModule,
-    NgApexchartsModule,
-    CustomChartComponent,
-    CustomSegmentComponent,
-    FeatureHeaderComponent
-  ],
+    IonicModule,
+    AccountSelectorModalComponent,
+    FeatureHeaderComponent,
+    FilterModalComponent,
+    FilterTriggerComponent,
+    InformationCardComponent,
+    ItemIconComponent,
+    SectionCardComponent
+  ]
 })
-export class GraphicsPage {
-  // Filtros seleccionados
-  selectedTab: string = 'general';
-  selectedPeriod: string = 'anio';
+export class GraphicsPage implements OnInit, OnDestroy {
+  private accountRequest?: Subscription;
 
-  // Etiquetas auxiliares para mostrar en la vista
-  selectedMonthForWeek: number | null = null;
-  selectedYearForWeek: number | null = null;
+  readonly AccountSelectionMode = AccountSelectionMode;
+  readonly currencySymbol = 'S/.';
 
-  // Opciones de tabs
-  mainTabs = [
-    { value: 'general', label: 'General' },
-    { value: 'gastos', label: 'Gastos' },
-    { value: 'ingresos', label: 'Ingresos' }
-  ];
-  periodTabs = [
-    { value: 'anio', label: 'Por año' },
-    { value: 'mes', label: 'Por mes' },
-    { value: 'semana', label: 'Por semana' },
-    { value: 'dia', label: 'Por día' }
-  ];
+  selectedPeriod: PeriodPreset = 'custom';
+  selectedPeriodValue = '';
+  selectedStartDate = '2026-01-01';
+  selectedEndDate = '2026-08-31';
+  accounts: Accounts[] = [];
+  selectedAccounts: Accounts[] = [];
+  isPeriodSelectorOpen = false;
+  isAccountSelectorOpen = false;
 
-  // Datos de ejemplo
-  chartData = [
-    { year: 2023, month: null, week: null, day: null, ingresos: 12000, gastos: 9000, beneficio: 3000, perdida: 0 },
-    { year: 2024, month: null, week: null, day: null, ingresos: 15000, gastos: 11000, beneficio: 4000, perdida: 0 },
-    { year: 2024, month: 4, week: null, day: null, ingresos: 4000, gastos: 3000, beneficio: 1000, perdida: 0 },
-    { year: 2024, month: 5, week: null, day: null, ingresos: 5000, gastos: 3500, beneficio: 1500, perdida: 0 },
-    { year: 2024, month: 4, week: 1, day: null, ingresos: 1000, gastos: 700, beneficio: 300, perdida: 0 },
-    { year: 2024, month: 4, week: 2, day: null, ingresos: 1200, gastos: 900, beneficio: 300, perdida: 0 },
-    { year: 2024, month: 5, week: 1, day: null, ingresos: 1300, gastos: 1000, beneficio: 300, perdida: 0 },
-    { year: 2024, month: 4, week: 2, day: 8, ingresos: 200, gastos: 150, beneficio: 50, perdida: 0 },
-    { year: 2024, month: 4, week: 2, day: 9, ingresos: 180, gastos: 120, beneficio: 60, perdida: 0 },
-    { year: 2024, month: 4, week: 2, day: 10, ingresos: 220, gastos: 180, beneficio: 40, perdida: 0 }
+  readonly metrics: FinancialMetric[] = [
+    { label: 'Ingresos', amount: 18400, tone: 'income', icon: 'up-trend', iconColor: 'var(--fv-success)' },
+    { label: 'Gastos', amount: 13950, tone: 'expense', icon: 'down-trend', iconColor: 'var(--fv-danger)' },
+    { label: 'Saldo del periodo', amount: 4450, tone: 'period' },
+    { label: 'Saldo actual', amount: 5650, tone: 'balance' }
   ];
 
-  chartOptions!: ChartOptions;
+  readonly summaryItems: InformationCardItem[] = [
+    { label: 'Presupuesto total', value: 'S/. 15,000.00' },
+    { label: 'Presupuesto gastado', value: 'S/. 13,950.00' },
+    { label: 'Presupuesto restante', value: 'S/. 1,050.00' },
+    { label: 'Ahorro del periodo', value: '24.18%', emphasis: true }
+  ];
 
-  constructor() {
-    this.updateChart();
+  readonly periodGraphicCards: PeriodGraphicCard[] = [
+    {
+      title: 'Gastos por categoría',
+      description: 'Revisa en qué categorías gastas más.',
+      icon: 'category',
+      route: '/main/transactions',
+      tone: 'violet',
+      label: 'Gastos'
+    },
+    {
+      title: 'Ingresos vs Gastos',
+      description: 'Compara tus movimientos del periodo.',
+      icon: 'transfer',
+      route: '/main/transactions',
+      tone: 'blue',
+      label: 'Comparativa'
+    },
+    {
+      title: 'Evolución del saldo',
+      description: 'Consulta el estado actual de tus saldos.',
+      icon: 'up-trend',
+      route: '/main/accounts',
+      tone: 'cyan',
+      label: 'Tendencia'
+    },
+    {
+      title: 'Progreso de presupuestos',
+      description: 'Controla el avance de tus presupuestos.',
+      icon: 'budget-wallet',
+      route: '/main/budgets',
+      tone: 'amber',
+      label: 'Presupuestos'
+    },
+    {
+      title: 'Top categorías de gastos',
+      description: 'Identifica tus principales categorías.',
+      icon: 'bills',
+      route: '/main/transactions',
+      tone: 'rose',
+      label: 'Ranking'
+    },
+    {
+      title: 'Análisis por cuentas',
+      description: 'Consulta el balance de cada cuenta.',
+      icon: 'account',
+      route: '/main/accounts',
+      tone: 'indigo',
+      label: 'Cuentas'
+    }
+  ];
+
+  constructor(
+    private readonly listAccountsUseCase: ListAccountsUseCase,
+    private readonly navigationService: NavigationService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadAccounts();
   }
 
-  // Actualiza los datos del gráfico según los filtros seleccionados
-  updateChart() {
-    let filteredData: any[] = [];
-    let categories: string[] = [];
+  ngOnDestroy(): void {
+    this.accountRequest?.unsubscribe();
+  }
 
-    // Filtrado de datos y categorías según el periodo
-    switch (this.selectedPeriod) {
-      case 'anio':
-        filteredData = this.chartData.filter(d => d.month === null && d.week === null && d.day === null);
-        categories = filteredData.map(d => d.year.toString());
-        break;
-      case 'mes':
-        filteredData = this.chartData.filter(d => d.month !== null && d.week === null && d.day === null);
-        categories = filteredData.map(d => `${('0' + d.month).slice(-2)}-${d.year}`);
-        break;
-      case 'semana':
-        filteredData = this.chartData.filter(d => d.week !== null && d.day === null);
-        categories = filteredData.map(d => `${d.week}s/${('0' + d.month).slice(-2)}`);
-        this.selectedMonthForWeek = filteredData.length > 0 ? filteredData[0].month : null;
-        this.selectedYearForWeek = filteredData.length > 0 ? filteredData[0].year : null;
-        break;
-      case 'dia':
-        filteredData = this.chartData.filter(d => d.day !== null);
-        categories = filteredData.map(d => `${('0' + d.day).slice(-2)}/${('0' + d.month).slice(-2)}`);
-        break;
-    }
+  get selectedPeriodLabel(): string {
+    return {
+      weekly: 'Semanal',
+      monthly: 'Mensual',
+      annual: 'Anual',
+      custom: 'Rango de fechas'
+    }[this.selectedPeriod];
+  }
 
-    // Series según el tab seleccionado
-    let series: { name: string; data: any[]; }[] = [];
-    if (this.selectedTab === 'general') {
-      series = [
-        { name: "Ingresos", data: filteredData.map(d => d.ingresos) },
-        { name: "Gastos", data: filteredData.map(d => d.gastos) },
-        { name: "Beneficio", data: filteredData.map(d => d.beneficio) },
-        { name: "Pérdida", data: filteredData.map(d => d.perdida) }
-      ];
-    } else if (this.selectedTab === 'gastos') {
-      series = [{ name: "Gastos", data: filteredData.map(d => d.gastos) }];
-    } else if (this.selectedTab === 'ingresos') {
-      series = [{ name: "Ingresos", data: filteredData.map(d => d.ingresos) }];
-    }
+  get compactDateRange(): string {
+    return `${this.formatDate(this.selectedStartDate)} – ${this.formatDate(this.selectedEndDate)}`;
+  }
 
-    this.chartOptions = {
-      series,
-      xaxis: {
-        categories,
-        labels: {
-          style: { fontSize: "13px", colors: "#666" }
-        },
-        axisBorder: { show: false },
-        axisTicks: { show: false }
+  get selectedAccountLabel(): string {
+    if (!this.accounts.length) return 'Sin cuentas';
+    if (this.selectedAccounts.length === this.accounts.length) return 'Todas las cuentas';
+    if (this.selectedAccounts.length === 1) return this.selectedAccounts[0].name;
+    return `${this.selectedAccounts.length} cuentas`;
+  }
+
+  openPeriodSelector(): void {
+    this.isPeriodSelectorOpen = true;
+  }
+
+  closePeriodSelector(): void {
+    this.isPeriodSelectorOpen = false;
+  }
+
+  applyFilters(selection: FilterSelection): void {
+    this.selectedPeriod = selection.period;
+    this.selectedPeriodValue = selection.periodValue;
+    this.selectedStartDate = selection.startDate;
+    this.selectedEndDate = selection.endDate;
+    this.closePeriodSelector();
+  }
+
+  openAccountSelector(): void {
+    this.isAccountSelectorOpen = true;
+  }
+
+  closeAccountSelector(): void {
+    this.isAccountSelectorOpen = false;
+  }
+
+  applyAccountFilter(accounts: Accounts[]): void {
+    this.selectedAccounts = [...accounts];
+    this.closeAccountSelector();
+  }
+
+  openPeriodGraphic(card: PeriodGraphicCard): void {
+    void this.navigationService.forward(card.route, {
+      startDate: this.selectedStartDate,
+      endDate: this.selectedEndDate,
+      selectedAccountIds: this.selectedAccounts.map(account => account.id)
+    });
+  }
+
+  private loadAccounts(): void {
+    this.accountRequest?.unsubscribe();
+    this.accountRequest = this.listAccountsUseCase.listAccounts().subscribe({
+      next: result => {
+        this.accounts = result.success ? result.data?.items ?? [] : [];
+        this.selectedAccounts = [...this.accounts];
+      },
+      error: () => {
+        this.accounts = [];
+        this.selectedAccounts = [];
       }
-    };
+    });
+  }
+
+  private formatDate(value: string): string {
+    return new Intl.DateTimeFormat('es-PE', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone: 'UTC'
+    })
+      .format(new Date(`${value}T00:00:00Z`))
+      .replace(/\./g, '');
   }
 }
