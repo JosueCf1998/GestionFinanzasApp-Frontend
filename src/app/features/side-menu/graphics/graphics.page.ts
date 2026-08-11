@@ -139,7 +139,6 @@ export class GraphicsPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAccounts();
-    this.loadDashboard();
   }
 
   ngOnDestroy(): void {
@@ -196,6 +195,7 @@ export class GraphicsPage implements OnInit, OnDestroy {
   applyAccountFilter(accounts: Accounts[]): void {
     this.selectedAccounts = [...accounts];
     this.closeAccountSelector();
+    this.loadDashboard();
   }
 
   openPeriodGraphic(card: PeriodGraphicCard): void {
@@ -214,10 +214,12 @@ export class GraphicsPage implements OnInit, OnDestroy {
       success: data => {
         this.accounts = data?.items ?? [];
         this.selectedAccounts = [...this.accounts];
+        this.loadDashboard();
       },
       failure: () => {
         this.accounts = [];
         this.selectedAccounts = [];
+        this.loadDashboard();
       }
     });
   }
@@ -244,13 +246,14 @@ export class GraphicsPage implements OnInit, OnDestroy {
   }
 
   private buildDashboardRequest(): DashboardRequest | null {
-    const referenceDate = this.parseDate(this.selectedStartDate);
-    if (!referenceDate) return null;
+    if (!this.parseDate(this.selectedStartDate) || !this.parseDate(this.selectedEndDate)) {
+      return null;
+    }
 
     return {
-      year: referenceDate.getUTCFullYear(),
-      month: referenceDate.getUTCMonth() + 1,
-      limit: 5
+      fecha_inicio: this.selectedStartDate,
+      fecha_fin: this.selectedEndDate,
+      cuentas: this.selectedAccounts.map(account => account.id)
     };
   }
 

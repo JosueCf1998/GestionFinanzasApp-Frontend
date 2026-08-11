@@ -40,7 +40,6 @@ interface BalancePeriod extends BalanceEvolutionChartItem { month: number; }
 export class BalanceEvolutionPage implements OnInit, OnDestroy {
   private dataRequest?: Subscription;
   private accountRequest?: Subscription;
-  private annualData: BalancePeriod[] = [];
   private readonly initialAccountIds: number[];
 
   readonly currency: Currency = CURRENCIES.PEN;
@@ -71,7 +70,7 @@ export class BalanceEvolutionPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void { this.loadAccounts(); this.loadEvolution(); }
+  ngOnInit(): void { this.loadAccounts(); }
   ngOnDestroy(): void { this.dataRequest?.unsubscribe(); this.accountRequest?.unsubscribe(); this.loadingService.hide(); }
 
   get initialBalance(): number { return this.periods.length ? this.periods[0].balance - this.periods[0].netMovement : 0; }
@@ -94,13 +93,12 @@ export class BalanceEvolutionPage implements OnInit, OnDestroy {
 
   applyFilters(selection: FilterSelection): void {
     if (!this.isIsoDate(selection.startDate) || !this.isIsoDate(selection.endDate)) return;
-    const yearChanged = selection.startDate.slice(0, 4) !== this.selectedStartDate.slice(0, 4);
     this.selectedPeriod = selection.period;
     this.selectedPeriodValue = selection.periodValue;
     this.selectedStartDate = selection.startDate;
     this.selectedEndDate = selection.endDate;
     this.closePeriodSelector();
-    yearChanged ? this.loadEvolution() : this.applyDateRange();
+    this.loadEvolution();
   }
 
   applyAccountFilter(accounts: Accounts[]): void {
@@ -110,17 +108,19 @@ export class BalanceEvolutionPage implements OnInit, OnDestroy {
   }
 
   private loadEvolution(): void {
-    const year = Number(this.selectedStartDate.slice(0, 4));
-    if (!Number.isInteger(year)) return;
+    if (!this.isIsoDate(this.selectedStartDate) || !this.isIsoDate(this.selectedEndDate)) return;
     this.dataRequest?.unsubscribe();
     this.loadingService.show();
-    this.dataRequest = this.balanceEvolutionUseCase.execute({ year }).service({
+    this.dataRequest = this.balanceEvolutionUseCase.execute({
+      fecha_inicio: this.selectedStartDate,
+      fecha_fin: this.selectedEndDate,
+      cuentas: this.selectedAccounts.map(account => account.id)
+    }).service({
       success: data => {
         this.loadingService.hide();
-        this.annualData = (data?.items ?? []).map((item, index) => this.mapPeriod(item, index));
-        this.applyDateRange();
+        this.periods = (data?.items ?? []).map((item, index) => this.mapPeriod(item, index));
       },
-      failure: () => { this.loadingService.hide(); this.annualData = []; this.periods = []; }
+      failure: () => { this.loadingService.hide(); this.periods = []; }
     });
   }
 
@@ -131,16 +131,14 @@ export class BalanceEvolutionPage implements OnInit, OnDestroy {
         this.accounts = data?.items ?? [];
         const ids = new Set(this.initialAccountIds);
         this.selectedAccounts = ids.size ? this.accounts.filter(account => ids.has(account.id)) : [...this.accounts];
+        this.loadEvolution();
       },
-      failure: () => { this.accounts = []; this.selectedAccounts = []; }
+      failure: () => {
+        this.accounts = [];
+        this.selectedAccounts = [];
+        this.loadEvolution();
+      }
     });
-  }
-
-  private applyDateRange(): void {
-    const start = this.parseDate(this.selectedStartDate);
-    const end = this.parseDate(this.selectedEndDate);
-    if (!start || !end) { this.periods = []; return; }
-    this.periods = this.annualData.filter(item => item.month >= start.getUTCMonth() + 1 && item.month <= end.getUTCMonth() + 1);
   }
 
   private mapPeriod(item: DashboardPeriodApi, index: number): BalancePeriod {

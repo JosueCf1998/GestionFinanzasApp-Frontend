@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  DashboardBudgetApi,
-  DashboardItemsResponse,
+  DashboardBudgetResponse,
   DashboardRequest
 } from 'src/app/core/models/dashboard/dashboard.model';
 import { Result } from 'src/app/core/models/result.model';
@@ -14,7 +13,7 @@ export class BudgetProgressUseCase {
 
   execute(
     request: DashboardRequest
-  ): Observable<Result<DashboardItemsResponse<DashboardBudgetApi>>> {
+  ): Observable<Result<DashboardBudgetResponse>> {
     return this.repository.getBudgetProgress(request);
   }
 }

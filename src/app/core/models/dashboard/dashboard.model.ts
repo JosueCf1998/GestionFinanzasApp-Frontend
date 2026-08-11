@@ -1,6 +1,7 @@
 export interface DashboardRequest {
-  year: number;
-  month?: number;
+  fecha_inicio: string;
+  fecha_fin: string;
+  cuentas: number[];
   limit?: number;
 }
 
@@ -51,12 +52,19 @@ export interface DashboardCategory {
 }
 
 export interface DashboardPeriodApi {
+  date?: string;
+  fecha?: string;
   period?: string;
   month?: number;
   income?: number;
   expenses?: number;
   balance?: number;
   [key: string]: number | string | null | undefined;
+}
+
+export interface DashboardBalanceResponse {
+  initial_balance: number;
+  items: DashboardPeriodApi[];
 }
 
 export interface DashboardBudgetApi {
@@ -89,4 +97,16 @@ export interface DashboardSummaryApiResponse {
 
 export interface DashboardItemsResponse<T> {
   items: T[];
+}
+
+export interface DashboardBudgetTotalsApi {
+  total_budget?: number;
+  spent_amount?: number;
+  remaining_amount?: number;
+  percentage?: number;
+  [key: string]: number | string | null | undefined;
+}
+
+export interface DashboardBudgetResponse extends DashboardItemsResponse<DashboardBudgetApi> {
+  totals: DashboardBudgetTotalsApi;
 }

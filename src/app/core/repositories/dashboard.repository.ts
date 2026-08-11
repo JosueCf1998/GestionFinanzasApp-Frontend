@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ENDPOINTS } from 'src/app/core/constants/endpoints';
 import {
-  DashboardBudgetApi,
+  DashboardBalanceResponse,
+  DashboardBudgetResponse,
   DashboardCategoryApi,
   DashboardItemsResponse,
   DashboardPeriodApi,
@@ -11,60 +12,54 @@ import {
 } from 'src/app/core/models/dashboard/dashboard.model';
 import { Result } from 'src/app/core/models/result.model';
 import { ApiService } from 'src/app/core/services/api.service';
+import { EncryptionService } from 'src/app/core/services/encryption.service';
+import { encryptBody } from 'src/app/core/utils/encryption.util';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardRepository {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly encryptionService: EncryptionService
+  ) {}
 
   getSummary(request: DashboardRequest): Observable<Result<DashboardSummaryApiResponse>> {
-    return this.get(ENDPOINTS.DASHBOARD.SUMMARY, request, true);
+    return this.post(ENDPOINTS.DASHBOARD.SUMMARY, request);
   }
 
   getExpensesByCategory(
     request: DashboardRequest
   ): Observable<Result<DashboardItemsResponse<DashboardCategoryApi>>> {
-    return this.get(ENDPOINTS.DASHBOARD.EXPENSES_BY_CATEGORY, request, true);
+    return this.post(ENDPOINTS.DASHBOARD.EXPENSES_BY_CATEGORY, request);
   }
 
   getIncomeVsExpenses(
     request: DashboardRequest
   ): Observable<Result<DashboardItemsResponse<DashboardPeriodApi>>> {
-    return this.get(ENDPOINTS.DASHBOARD.INCOME_VS_EXPENSES, request);
+    return this.post(ENDPOINTS.DASHBOARD.INCOME_VS_EXPENSES, request);
   }
 
   getBalanceEvolution(
     request: DashboardRequest
-  ): Observable<Result<DashboardItemsResponse<DashboardPeriodApi>>> {
-    return this.get(ENDPOINTS.DASHBOARD.BALANCE_EVOLUTION, request);
+  ): Observable<Result<DashboardBalanceResponse>> {
+    return this.post(ENDPOINTS.DASHBOARD.BALANCE_EVOLUTION, request);
   }
 
   getBudgetProgress(
     request: DashboardRequest
-  ): Observable<Result<DashboardItemsResponse<DashboardBudgetApi>>> {
-    return this.get(ENDPOINTS.DASHBOARD.BUDGET_PROGRESS, request, true);
+  ): Observable<Result<DashboardBudgetResponse>> {
+    return this.post(ENDPOINTS.DASHBOARD.BUDGET_PROGRESS, request);
   }
 
   getTopExpenseCategories(
     request: DashboardRequest
   ): Observable<Result<DashboardItemsResponse<DashboardCategoryApi>>> {
-    return this.get(ENDPOINTS.DASHBOARD.TOP_EXPENSE_CATEGORIES, request, true, true);
+    return this.post(ENDPOINTS.DASHBOARD.TOP_EXPENSE_CATEGORIES, request);
   }
 
-  private get<T>(
-    endpoint: string,
-    request: DashboardRequest,
-    withMonth = false,
-    withLimit = false
-  ): Observable<Result<T>> {
-    const query = new URLSearchParams({ year: String(request.year) });
-
-    if (withMonth && request.month !== undefined) {
-      query.set('month', String(request.month));
-    }
-    if (withLimit && request.limit !== undefined) {
-      query.set('limit', String(request.limit));
-    }
-
-    return this.apiService.get<T>(`${endpoint}?${query.toString()}`);
+  private post<T>(endpoint: string, request: DashboardRequest): Observable<Result<T>> {
+    return this.apiService.post<T>(
+      endpoint,
+      encryptBody(request, this.encryptionService)
+    );
   }
 }

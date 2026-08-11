@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  DashboardItemsResponse,
-  DashboardPeriodApi,
+  DashboardBalanceResponse,
   DashboardRequest
 } from 'src/app/core/models/dashboard/dashboard.model';
 import { Result } from 'src/app/core/models/result.model';
@@ -14,7 +13,7 @@ export class BalanceEvolutionUseCase {
 
   execute(
     request: DashboardRequest
-  ): Observable<Result<DashboardItemsResponse<DashboardPeriodApi>>> {
+  ): Observable<Result<DashboardBalanceResponse>> {
     return this.repository.getBalanceEvolution(request);
   }
 }

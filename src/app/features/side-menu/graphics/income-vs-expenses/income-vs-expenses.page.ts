@@ -62,7 +62,6 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
   private dataRequest?: Subscription;
   private accountRequest?: Subscription;
   private readonly initialAccountIds: number[];
-  private annualData: PeriodComparison[] = [];
 
   readonly currency: Currency = CURRENCIES.PEN;
   readonly AccountSelectionMode = AccountSelectionMode;
@@ -98,7 +97,6 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAccounts();
-    this.loadComparison();
   }
 
   ngOnDestroy(): void {
@@ -145,13 +143,12 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
 
   applyFilters(selection: FilterSelection): void {
     if (!this.isIsoDate(selection.startDate) || !this.isIsoDate(selection.endDate)) return;
-    const yearChanged = selection.startDate.slice(0, 4) !== this.selectedStartDate.slice(0, 4);
     this.selectedPeriod = selection.period;
     this.selectedPeriodValue = selection.periodValue;
     this.selectedStartDate = selection.startDate;
     this.selectedEndDate = selection.endDate;
     this.closePeriodSelector();
-    yearChanged ? this.loadComparison() : this.applyDateRange();
+    this.loadComparison();
   }
 
   applyAccountFilter(accounts: Accounts[]): void {
@@ -161,19 +158,20 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
   }
 
   private loadComparison(): void {
-    const year = Number(this.selectedStartDate.slice(0, 4));
-    if (!Number.isInteger(year)) return;
+    if (!this.isIsoDate(this.selectedStartDate) || !this.isIsoDate(this.selectedEndDate)) return;
     this.dataRequest?.unsubscribe();
     this.loadingService.show();
-    this.dataRequest = this.incomeVsExpensesUseCase.execute({ year }).service({
+    this.dataRequest = this.incomeVsExpensesUseCase.execute({
+      fecha_inicio: this.selectedStartDate,
+      fecha_fin: this.selectedEndDate,
+      cuentas: this.selectedAccounts.map(account => account.id)
+    }).service({
       success: data => {
         this.loadingService.hide();
-        this.annualData = (data?.items ?? []).map((item, index) => this.mapPeriod(item, index));
-        this.applyDateRange();
+        this.periods = (data?.items ?? []).map((item, index) => this.mapPeriod(item, index));
       },
       failure: () => {
         this.loadingService.hide();
-        this.annualData = [];
         this.periods = [];
       }
     });
@@ -188,16 +186,14 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
         this.selectedAccounts = selectedIds.size
           ? this.accounts.filter(account => selectedIds.has(account.id))
           : [...this.accounts];
+        this.loadComparison();
       },
-      failure: () => { this.accounts = []; this.selectedAccounts = []; }
+      failure: () => {
+        this.accounts = [];
+        this.selectedAccounts = [];
+        this.loadComparison();
+      }
     });
-  }
-
-  private applyDateRange(): void {
-    const start = this.parseDate(this.selectedStartDate);
-    const end = this.parseDate(this.selectedEndDate);
-    if (!start || !end) { this.periods = []; return; }
-    this.periods = this.annualData.filter(item => item.month >= start.getUTCMonth() + 1 && item.month <= end.getUTCMonth() + 1);
   }
 
   private mapPeriod(item: DashboardPeriodApi, index: number): PeriodComparison {

@@ -102,7 +102,6 @@ export class ExpensesByCategoryPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadAccounts();
     this.loadCategoryCatalog();
-    this.loadExpenses();
   }
 
   ngOnDestroy(): void {
@@ -266,20 +265,24 @@ export class ExpensesByCategoryPage implements OnInit, OnDestroy {
         this.selectedAccounts = selectedIds.size
           ? this.accounts.filter(account => selectedIds.has(account.id))
           : [...this.accounts];
+        this.loadExpenses();
       },
       failure: () => {
         this.accounts = [];
         this.selectedAccounts = [];
+        this.loadExpenses();
       }
     });
   }
 
   private buildRequest(): DashboardRequest | null {
-    const date = this.parseDate(this.selectedStartDate);
-    if (!date) return null;
+    if (!this.parseDate(this.selectedStartDate) || !this.parseDate(this.selectedEndDate)) {
+      return null;
+    }
     return {
-      year: date.getUTCFullYear(),
-      month: date.getUTCMonth() + 1
+      fecha_inicio: this.selectedStartDate,
+      fecha_fin: this.selectedEndDate,
+      cuentas: this.selectedAccounts.map(account => account.id)
     };
   }
 
