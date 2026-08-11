@@ -13,9 +13,12 @@
         </div>
         <app-balance-evolution-chart [items]="periods"></app-balance-evolution-chart>
         <section class="metrics" aria-label="Resumen de evolución">
-          <article><span>Saldo inicial</span><strong>{{ currency.symbol }} {{ initialBalance | number:'1.2-2' }}</strong></article>
-          <article><span>Saldo final</span><strong>{{ currency.symbol }} {{ finalBalance | number:'1.2-2' }}</strong></article>
-          <article class="metrics__savings"><span>Ahorro del periodo</span><strong>{{ currency.symbol }} {{ periodSavings | number:'1.2-2' }}</strong></article>
+          <article><span>Saldo inicial</span><strong>{{ initialBalance < 0 ? '-' : '' }}{{ currency.symbol }} {{ (initialBalance < 0 ? -initialBalance : initialBalance) | number:'1.2-2' }}</strong></article>
+          <article><span>Saldo final</span><strong>{{ finalBalance < 0 ? '-' : '' }}{{ currency.symbol }} {{ (finalBalance < 0 ? -finalBalance : finalBalance) | number:'1.2-2' }}</strong></article>
+          <article class="metrics__savings" [class.metrics__savings--negative]="periodSavings < 0">
+            <span>Ahorro del periodo</span>
+            <strong>{{ periodSavings < 0 ? '-' : '' }}{{ currency.symbol }} {{ (periodSavings < 0 ? -periodSavings : periodSavings) | number:'1.2-2' }}</strong>
+          </article>
         </section>
       </article>
       <ng-template #emptyState>

@@ -75,7 +75,7 @@
       <strong
         [class.summary-card__balance]="status !== 'EXCEEDED'"
         [class.summary-card__balance--danger]="status === 'EXCEEDED'">
-        {{ currencySymbol }} {{ balance | number:'1.2-2' }}
+        {{ balance < 0 ? '-' : '' }}{{ currencySymbol }} {{ (balance < 0 ? -balance : balance) | number:'1.2-2' }}
       </strong>
     </div>
   </div>

@@ -21,21 +21,21 @@
             <span>Cuenta</span><span>Ingresos</span><span>Gastos</span><span>Saldo</span>
           </div>
           <div *ngFor="let row of rows; trackBy: trackByAccount" class="table-row account-row" role="row">
-            <strong class="account-name"><i [style.background]="row.color"></i>{{ row.name }}</strong>
-            <span>{{ currency.symbol }} {{ row.income | number:'1.2-2' }}</span>
-            <span>{{ currency.symbol }} {{ row.expenses | number:'1.2-2' }}</span>
+            <strong class="account-name">{{ row.name }}</strong>
+            <span>{{ currency.symbol }}{{ row.income | number:'1.2-2' }}</span>
+            <span>{{ currency.symbol }}{{ row.expenses | number:'1.2-2' }}</span>
             <strong class="balance" [class.negative]="row.balance < 0">
-              {{ currency.symbol }} {{ row.balance | number:'1.2-2' }}
+              {{ row.balance < 0 ? '-' : '' }}{{ currency.symbol }} {{ absolute(row.balance) | number:'1.2-2' }}
             </strong>
           </div>
         </div>
 
         <footer class="totals" aria-label="Totales">
           <strong>Total</strong>
-          <span>{{ currency.symbol }} {{ totalIncome | number:'1.2-2' }}</span>
-          <span>{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</span>
+          <span>{{ currency.symbol }}{{ totalIncome | number:'1.2-2' }}</span>
+          <span>{{ currency.symbol }}{{ totalExpenses | number:'1.2-2' }}</span>
           <strong class="balance" [class.negative]="totalBalance < 0">
-            {{ currency.symbol }} {{ totalBalance | number:'1.2-2' }}
+            {{ totalBalance < 0 ? '-' : '' }}{{ currency.symbol }} {{ absolute(totalBalance) | number:'1.2-2' }}
           </strong>
         </footer>
       </article>

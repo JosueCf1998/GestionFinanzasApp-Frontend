@@ -22,7 +22,7 @@
       </span>
 
       <h1 class="summary-amount">
-        S/. {{ totalCuentas | number:'1.2-2' }}
+        {{ totalCuentas < 0 ? '-' : '' }}S/. {{ (totalCuentas < 0 ? -totalCuentas : totalCuentas) | number:'1.2-2' }}
       </h1>
 
       <div class="summary-footer">
@@ -139,7 +139,7 @@
         <div class="account-right">
 
           <div class="account-amount">
-            S/. {{ +account.amount | number:'1.2-2' }}
+            {{ +account.amount < 0 ? '-' : '' }}S/. {{ (+account.amount < 0 ? -(+account.amount) : +account.amount) | number:'1.2-2' }}
           </div>
 
           <ion-icon

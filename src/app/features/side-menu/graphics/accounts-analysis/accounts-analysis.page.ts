@@ -30,7 +30,6 @@ interface AccountsAnalysisNavigationState {
 interface AccountAnalysisRow {
   id: number;
   name: string;
-  color: string;
   income: number;
   expenses: number;
   balance: number;
@@ -143,6 +142,8 @@ export class AccountsAnalysisPage implements OnInit, OnDestroy {
 
   trackByAccount(_: number, row: AccountAnalysisRow): number { return row.id; }
 
+  absolute(value: number): number { return Math.abs(value); }
+
   private loadAccounts(): void {
     this.accountRequest?.unsubscribe();
     this.accountRequest = this.listAccountsUseCase.listAccounts().subscribe(result => {
@@ -190,16 +191,10 @@ export class AccountsAnalysisPage implements OnInit, OnDestroy {
     return {
       id: account.id,
       name: account.name,
-      color: this.normalizeColor(account.color),
       income: summary?.totalIncome ?? 0,
       expenses: summary?.totalExpenses ?? 0,
       balance: summary?.periodBalance ?? 0
     };
-  }
-
-  private normalizeColor(value: string): string {
-    if (/^[\da-f]{6}$/i.test(value)) return `#${value}`;
-    return value || 'var(--fv-primary)';
   }
 
   private isIsoDate(value: unknown): value is string {

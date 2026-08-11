@@ -30,7 +30,7 @@
           <h2>Totales del periodo</h2>
           <div><span>Ingresos</span><strong class="income">{{ currency.symbol }} {{ totalIncome | number:'1.2-2' }}</strong></div>
           <div><span>Gastos</span><strong class="expense">{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</strong></div>
-          <div><span>Saldo</span><strong class="balance">{{ currency.symbol }} {{ totalBalance | number:'1.2-2' }}</strong></div>
+          <div><span>Saldo</span><strong class="balance">{{ totalBalance < 0 ? '-' : '' }}{{ currency.symbol }} {{ (totalBalance < 0 ? -totalBalance : totalBalance) | number:'1.2-2' }}</strong></div>
         </section>
       </article>
 

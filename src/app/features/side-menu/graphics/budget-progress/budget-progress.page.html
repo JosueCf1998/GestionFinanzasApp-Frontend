@@ -19,7 +19,7 @@
         <section class="summary" aria-label="Resumen de presupuestos">
           <div><span>Presupuesto total</span><strong>{{ currency.symbol }} {{ totalBudget | number:'1.2-2' }}</strong></div>
           <div><span>Gastado</span><strong>{{ currency.symbol }} {{ totalSpent | number:'1.2-2' }}</strong></div>
-          <div><span>Restante</span><strong [class.negative]="totalRemaining < 0">{{ currency.symbol }} {{ totalRemaining | number:'1.2-2' }}</strong></div>
+          <div><span>Restante</span><strong [class.negative]="totalRemaining < 0">{{ totalRemaining < 0 ? '-' : '' }}{{ currency.symbol }} {{ (totalRemaining < 0 ? -totalRemaining : totalRemaining) | number:'1.2-2' }}</strong></div>
           <div class="usage"><strong>{{ usagePercentage | number:'1.1-2' }}%</strong><span>Utilización</span></div>
         </section>
 

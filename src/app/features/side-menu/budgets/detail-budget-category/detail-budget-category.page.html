@@ -67,7 +67,7 @@
         <div>
           <dt>{{ remainingLabel }}</dt>
           <dd [class.category-detail__danger]="category.status === 'EXCEEDED'">
-            {{ currencySymbol }} {{ remainingAmount | number:'1.2-2' }}
+            {{ remainingAmount < 0 ? '-' : '' }}{{ currencySymbol }} {{ (remainingAmount < 0 ? -remainingAmount : remainingAmount) | number:'1.2-2' }}
           </dd>
         </div>
       </dl>

@@ -41,7 +41,7 @@
               aria-hidden="true">
             </app-item-icon>
           </div>
-          <strong>{{ currency.symbol }} {{ metric.amount | number:'1.2-2' }}</strong>
+          <strong>{{ metric.amount < 0 ? '-' : '' }}{{ currency.symbol }} {{ (metric.amount < 0 ? -metric.amount : metric.amount) | number:'1.2-2' }}</strong>
         </article>
       </section>
     </app-section-card>
