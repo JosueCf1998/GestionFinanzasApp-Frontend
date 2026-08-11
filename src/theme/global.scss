@@ -19,13 +19,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/* ==========================
-   DARK MODE
-   ========================== */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* La interfaz de FinVia utiliza una única identidad visual clara. */
 
 /* ==========================
    DESIGN SYSTEM
@@ -57,6 +51,7 @@ body,
 ion-app {
   width: 100%;
   height: 100%;
+  color-scheme: light;
 }
 
 /* ==========================
