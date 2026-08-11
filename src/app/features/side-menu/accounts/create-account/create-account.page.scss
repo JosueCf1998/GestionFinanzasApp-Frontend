@@ -1,415 +1,140 @@
 .create-account-page {
-  --background: var(--fv-background);
+  --background: linear-gradient(180deg, #fbfbff 0%, var(--fv-background) 46%);
 }
-
-/* ==========================================================
-   FORM
-   ========================================================== */
 
 .create-account-form {
-
   display: flex;
   flex-direction: column;
-
-  gap: 20px;
-
-  padding: 16px;
-  padding-bottom: 24px;
-
+  gap: 18px;
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
 }
-
-/* ==========================================================
-   ACCOUNT PREVIEW
-   ========================================================== */
 
 .account-preview {
-
+  position: relative;
   display: flex;
-  flex-direction: column;
-
+  min-height: 106px;
   align-items: center;
-  justify-content: center;
-
-  gap: 12px;
-
-  padding:
-    8px
-    0
-    4px;
-
+  gap: 14px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--fv-primary) 12%, var(--fv-border));
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(67,97,238,.12), transparent 42%),
+    linear-gradient(135deg, #fff 0%, #f8f6ff 100%);
+  box-shadow: 0 12px 30px rgba(31,37,76,.07);
 }
 
-.preview-icon {
-
-  width: 72px;
-  height: 72px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 20px;
-
-  box-shadow: var(--fv-shadow-primary);
-
+.account-preview__content {
+  min-width: 0;
+  flex: 1;
 }
 
-.preview-icon ion-icon {
-
-  width: 30px;
-  height: 30px;
-
-  color: white;
-
-  filter: brightness(0) invert(1);
-
-}
-
-.preview-title {
-
-  margin: 0;
-
-  color: var(--fv-text-primary);
-
-  font-size: 22px;
-  font-weight: 700;
-
-  line-height: 1.2;
-
-  text-align: center;
-
-}
-
-.preview-balance {
-
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  padding:
-    6px
-    14px;
-
-  border-radius: 999px;
-
-  background: rgba(67,97,238,.08);
-
-  color: var(--fv-primary);
-
-  font-size: 14px;
-  font-weight: 700;
-
-  letter-spacing: .02em;
-
-}
-
-/* ==========================================================
-   FORM SECTION
-   ========================================================== */
-
-.form-section {
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 16px;
-
-  padding: 16px;
-
-  background: var(--fv-surface);
-
-  border-radius: 16px;
-
-  border: 1px solid rgba(67,97,238,.05);
-
-  box-shadow: var(--fv-shadow-sm);
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
-
-}
-
-.form-section:focus-within {
-
-  border-color: rgba(67,97,238,.15);
-
-  box-shadow:
-    0 0 0 3px rgba(67,97,238,.06);
-
-}
-
-/* ==========================================================
-   SECTION HEADER
-   ========================================================== */
-
-.section-header {
-
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 12px;
-
-}
-
-.section-label {
-
-  margin: 0;
-
-  color: var(--fv-text-secondary);
-
-  font-size: 11px;
-  font-weight: 700;
-
-  text-transform: uppercase;
-
-  letter-spacing: .08em;
-
-}
-
-/* ==========================================================
-   INPUT
-   ========================================================== */
-
-.fv-input {
-
-  --background: #f8faff;
-
-  --padding-start: 18px;
-  --padding-end: 18px;
-
-  --border-radius: 14px;
-
-  min-height: 52px;
-
-  border: 1px solid rgba(67,97,238,.08);
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
-
-}
-
-.fv-input.ion-focused {
-
-  border-color: var(--fv-primary);
-
-  box-shadow:
-    0 0 0 3px rgba(67,97,238,.08);
-
-}
-
-/* ==========================================================
-   AMOUNT INPUT
-   ========================================================== */
-
-app-amount-input {
-
+.account-preview__content > span {
   display: block;
-
-  width: 100%;
-
+  margin-bottom: 4px;
+  color: var(--fv-text-secondary);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
-/* ==========================================================
-   ICONS
-   ========================================================== */
-
-.icons-grid {
-
-  display: grid;
-
-  grid-template-columns: repeat(6, 1fr);
-
-  gap: 12px;
-
-}
-
-.icon-button {
-
-  width: 100%;
-
-  aspect-ratio: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid rgba(67,97,238,.06);
-
-  border-radius: 14px;
-
-  background: transparent;
-
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    transform .18s ease;
-
-}
-
-.icon-button:active {
-
-  transform: scale(.94);
-
-}
-
-.icon-button ion-icon {
-
-  width: 24px;
-  height: 24px;
-
+.account-preview h2 {
+  margin: 0 0 9px;
+  overflow: hidden;
   color: var(--fv-text-primary);
-
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.icon-button.selected {
-
-  background: rgba(67,97,238,.08);
-
-  border-color: var(--fv-primary);
-
+.account-preview p {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
 }
 
-.icon-button.selected ion-icon {
+.account-preview p small {
+  color: var(--fv-text-secondary);
+  font-size: 9.5px;
+  font-weight: 600;
+}
 
+.account-preview p strong {
   color: var(--fv-primary);
-
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ==========================================================
-   COLORS
-   ========================================================== */
-
-.colors-grid {
-
+.personalization-row {
   display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-}
-
-.color-button {
-
-  width: 40px;
-  height: 40px;
-
-  display: flex;
+  width: 100%;
+  min-height: 66px;
   align-items: center;
-  justify-content: center;
-
-  border: none;
-
-  border-radius: 50%;
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
-
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--fv-border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--fv-primary) 2%, white);
+  color: inherit;
+  text-align: left;
 }
 
-.color-button:active {
-
-  transform: scale(.92);
-
+.personalization-row > span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.color-button.selected {
-
-  transform: scale(1.10);
-
-  box-shadow:
-    0 0 0 3px var(--fv-surface),
-    0 0 0 5px rgba(67,97,238,.18);
-
+.personalization-row strong {
+  color: var(--fv-text-primary);
+  font-size: 13px;
+  font-weight: 750;
 }
 
-.color-button ion-icon {
-
-  width: 16px;
-  height: 16px;
-
-  color: white;
-
-  filter: brightness(0) invert(1);
-
+.personalization-row small {
+  overflow: hidden;
+  color: var(--fv-text-secondary);
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* ==========================================================
-   ACTION
-   ========================================================== */
+.personalization-row > ion-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  color: var(--fv-primary);
+}
+
+.personalization-row:active {
+  transform: scale(.98);
+}
 
 .action-container {
-
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 4px;
-
+  padding-top: 2px;
 }
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media (max-width:420px) {
-
+@media (max-width: 360px) {
   .create-account-form {
-
-    padding: 16px;
-
+    padding-inline: 14px;
   }
 
-  .preview-icon {
-
-    width: 64px;
-    height: 64px;
-
+  .account-preview {
+    padding: 16px 14px;
   }
 
-  .preview-icon ion-icon {
-
-    width: 28px;
-    height: 28px;
-
+  .account-preview h2 {
+    font-size: 17px;
   }
-
-  .preview-title {
-
-    font-size: 20px;
-
-  }
-
-  .preview-balance {
-
-    font-size: 13px;
-
-  }
-
-  .form-section {
-
-    padding: 14px;
-
-  }
-
-  .icons-grid {
-
-    grid-template-columns: repeat(5, 1fr);
-
-    gap: 10px;
-
-  }
-
-  .icon-button ion-icon {
-
-    width: 22px;
-    height: 22px;
-
-  }
-
 }

@@ -24,6 +24,9 @@ export class PersonalizationModalComponent implements OnChanges {
   @Input() selectedColor = '';
   @Input() icons: readonly IconPickerOption[] = [];
   @Input() colors: readonly ColorPickerOption[] = [];
+  @Input() title = 'Personalizar presupuesto';
+  @Input() description = 'Elige el icono y color que identificarán este presupuesto.';
+  @Input() previewText = 'Así se identificará tu presupuesto';
 
   @Output() readonly applied = new EventEmitter<PersonalizationValue>();
   @Output() readonly modalClosed = new EventEmitter<void>();

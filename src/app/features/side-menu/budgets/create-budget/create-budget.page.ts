@@ -55,6 +55,7 @@ import {
 } from 'src/app/shared/components/filter-modal/filter-modal.component';
 import { CATEGORY_ICONS } from 'src/app/shared/constants/category-options';
 import { PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
+import { convertISODateToSQL } from 'src/app/core/utils/date.util';
 import 'src/app/core/utils/observable-extensions';
 
 interface BudgetFormSnapshot {
@@ -524,7 +525,7 @@ export class CreateBudgetPage implements OnInit {
 
   viewBudgets(): void {
     this.isSuccessModalOpen = false;
-    void this.navService.replace('/main/budgets', undefined, false);
+    void this.navService.back();
   }
 
   // MARK: - FUNCIONES PRIVADAS
@@ -554,8 +555,8 @@ export class CreateBudgetPage implements OnInit {
     return {
       name: this.name.trim(),
       budgetAmount: Number(this.categoryAllocationTotal.toFixed(2)),
-      startDate: this.periodSelection.startDate,
-      endDate: this.periodSelection.endDate,
+      startDate: convertISODateToSQL(this.periodSelection.startDate),
+      endDate: convertISODateToSQL(this.periodSelection.endDate),
       icon: this.selectedIcon,
       color: this.selectedColor,
       account_ids: this.selectedAccounts.map(account => account.id),
@@ -598,8 +599,8 @@ export class CreateBudgetPage implements OnInit {
     this.periodSelection = {
       period: 'custom',
       periodValue: '',
-      startDate: data.generalDetail.startDate,
-      endDate: data.generalDetail.endDate
+      startDate: convertISODateToSQL(data.generalDetail.startDate),
+      endDate: convertISODateToSQL(data.generalDetail.endDate)
     };
     this.selectedAccounts = data.linkedAccounts.map(account => ({
       id: account.id,

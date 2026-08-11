@@ -16,7 +16,7 @@ ion-menu {
   --width: 290px;
   --max-width: 290px;
 
-  box-shadow: 12px 0 40px rgba(0,0,0,.08);
+  box-shadow: 10px 0 32px rgba(43,10,107,.08);
 }
 
 /* ==========================================================
@@ -26,7 +26,7 @@ ion-menu {
 ion-menu ion-content {
   --padding-top: 0;
   --padding-bottom: 0;
-  --background: var(--fv-surface);
+  --background: linear-gradient(180deg, var(--fv-surface) 0%, #fcfcff 100%);
 }
 
 /* ==========================================================
@@ -51,11 +51,12 @@ ion-menu ion-content {
   gap: 14px;
 
   padding:
-    calc(env(safe-area-inset-top) + 0px)
+    calc(env(safe-area-inset-top) + 10px)
     16px
-    18px;
+    16px;
 
   background: var(--fv-gradient-primary);
+  border-bottom: 1px solid rgba(255,255,255,.12);
 
   overflow: hidden;
 }
@@ -90,8 +91,8 @@ ion-menu ion-content {
    ========================================================== */
 
 .avatar-container {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
 
   display: flex;
   align-items: center;
@@ -99,8 +100,8 @@ ion-menu ion-content {
 
   border-radius: 50%;
 
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.28);
 
   flex-shrink: 0;
 }
@@ -155,12 +156,24 @@ ion-menu ion-content {
 #inbox-list {
   flex: 1;              /* 🔥 EMPUJA FOOTER ABAJO */
   overflow-y: auto;
+  scrollbar-width: none;
 
-  padding: 14px 10px;
+  padding: 16px 12px;
 
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+}
+
+#inbox-list::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+#inbox-list ion-menu-toggle {
+  display: block;
+  width: auto;
+  margin: 0;
 }
 
 /* ==========================================================
@@ -169,32 +182,54 @@ ion-menu ion-content {
 
 ion-menu ion-item {
   --background: transparent;
-  --padding-start: 14px;
-  --inner-padding-end: 14px;
+  --min-height: 48px;
+  --padding-start: 13px;
+  --inner-padding-end: 13px;
 
-  min-height: 52px;
-  border-radius: 14px;
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
 
   position: relative;
+  overflow: hidden;
+  transition: transform .16s ease;
+}
+
+ion-menu ion-item::part(native) {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: border-color .18s ease, background-color .18s ease;
 }
 
 /* hover */
 ion-menu ion-item:hover {
-  --background: rgba(99,102,241,.06);
+  --background: color-mix(in srgb, var(--fv-primary) 4%, transparent);
 }
 
 /* icon */
 ion-menu ion-item ion-icon {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--fv-text-secondary);
+  transition: color .18s ease, transform .18s ease;
+}
+
+ion-menu ion-item ion-icon[slot='start'] {
+  margin-inline: 0 14px;
 }
 
 /* label */
 ion-menu ion-item ion-label {
-  font-size: 15px;
-  font-weight: 500;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
   color: var(--fv-text-primary);
+  letter-spacing: -.008em;
+  transition: color .18s ease;
 }
 
 /* ==========================================================
@@ -202,31 +237,42 @@ ion-menu ion-item ion-label {
    ========================================================== */
 
 ion-menu ion-item.selected {
-  --background: rgba(99,102,241,.10);
+  --background: transparent;
+  box-shadow: none;
 }
 
-/* barra izquierda */
+ion-menu ion-item.selected::part(native) {
+  border-color: color-mix(in srgb, var(--fv-primary) 20%, var(--fv-border));
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--fv-primary) 9%, white),
+    color-mix(in srgb, var(--fv-primary-light) 5%, white)
+  );
+}
+
 ion-menu ion-item.selected::before {
-  content: '';
-  position: absolute;
-
-  left: 0;
-  top: 10px;
-  bottom: 10px;
-
-  width: 4px;
-  border-radius: 10px;
-
-  background: var(--fv-primary);
+  display: none;
 }
 
 ion-menu ion-item.selected ion-icon {
+  background: transparent;
   color: var(--fv-primary);
+  box-shadow: none;
+  transform: none;
 }
 
 ion-menu ion-item.selected ion-label {
   color: var(--fv-primary);
   font-weight: 700;
+}
+
+ion-menu ion-item:focus-visible {
+  outline: 3px solid rgba(67,97,238,.16);
+  outline-offset: 2px;
+}
+
+ion-menu ion-item:active {
+  transform: scale(.985);
 }
 
 /* ==========================================================
@@ -237,23 +283,29 @@ ion-menu ion-item.selected ion-label {
   margin-top: auto;     /* 🔥 clave */
   padding: 14px;
   border-top: 1px solid var(--fv-border);
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(10px);
 }
 
 /* logout button */
 .logout-item {
-  --background: rgba(239,68,68,.06);
+  --background: transparent;
 
   border-radius: 14px;
   min-height: 52px;
 }
 
-.logout-item ion-icon {
+.menu-footer .logout-item ion-icon {
   color: var(--fv-danger);
 }
 
-.logout-item ion-label {
+.menu-footer .logout-item ion-label {
   color: var(--fv-danger);
-  font-weight: 600;
+  font-weight: 650;
+}
+
+.menu-footer .logout-item:hover {
+  --background: rgba(239,68,68,.055);
 }
 
 /* ==========================================================
@@ -299,14 +351,14 @@ ion-menu-button {
 
   .menu-header {
     padding:
-      calc(env(safe-area-inset-top) + 0px)
+      calc(env(safe-area-inset-top) + 10px)
       14px
       16px;
   }
 
   .avatar-container {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
   }
 
   .avatar {

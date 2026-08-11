@@ -192,7 +192,7 @@
   [title]="isEditMode ? 'Transacción actualizada' : 'Transacción registrada'"
   [eyebrow]="isEditMode ? '¡Cambios guardados!' : '¡Movimiento registrado!'"
   [heading]="isEditMode ? 'Transacción actualizada correctamente' : (selectedType === 'gasto' ? 'Gasto registrado correctamente' : 'Ingreso registrado correctamente')"
-  actionText="Ver mis transacciones"
+  actionText="Continuar"
   [details]="successReceiptDetails"
   (completed)="viewTransactions()">
 </app-success-receipt-modal>

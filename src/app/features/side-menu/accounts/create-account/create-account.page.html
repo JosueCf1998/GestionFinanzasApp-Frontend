@@ -1,203 +1,87 @@
-<!-- ==========================================================
-     HEADER
-     ========================================================== -->
-
 <ion-header>
-
   <app-page-layout
     [title]="title"
     [showBack]="true"
     (back)="backToAccounts()">
-
   </app-page-layout>
-
 </ion-header>
 
-<!-- ==========================================================
-     CONTENT
-     ========================================================== -->
-
-<ion-content
-  [fullscreen]="false"
-  class="create-account-page">
-
-  <form
-    class="create-account-form"
-    (ngSubmit)="guardarCuenta()">
-
-    <!-- ==========================================================
-         ACCOUNT PREVIEW
-         ========================================================== -->
-
-    <section class="account-preview">
-
+<ion-content [fullscreen]="false" class="create-account-page">
+  <form class="create-account-form" (ngSubmit)="guardarCuenta()">
+    <section class="account-preview" aria-label="Vista previa de la cuenta">
       <app-item-icon
         [icon]="iconoSeleccionado"
         [color]="colorSeleccionado"
-        size="xl"
+        size="lg"
         variant="soft">
       </app-item-icon>
 
-      <h2 class="preview-title">
-
-        {{ nombreCuenta || 'Nueva cuenta' }}
-
-      </h2>
-
-      <div class="preview-balance">
-
-        S/. {{ montoInicial || '0.00' }}
-
+      <div class="account-preview__content">
+        <span>Vista previa</span>
+        <h2>{{ nombreCuenta.trim() || 'Nueva cuenta' }}</h2>
+        <p>
+          <small>Saldo inicial</small>
+          <strong>{{ formattedBalance }}</strong>
+        </p>
       </div>
-
     </section>
 
-    <!-- ==========================================================
-         INITIAL BALANCE
-         ========================================================== -->
+    <app-section-card title="Nombre de la cuenta">
+      <app-text-field
+        name="nombreCuenta"
+        placeholder="Ej. Cuenta principal"
+        ariaLabel="Nombre de la cuenta"
+        [embedded]="true"
+        [maxLength]="30"
+        [required]="true"
+        [(ngModel)]="nombreCuenta">
+      </app-text-field>
+    </app-section-card>
 
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <h3 class="section-label">
-
-          Monto inicial
-
-        </h3>
-
-      </div>
-
+    <app-section-card title="Monto inicial">
       <app-amount-input
         [(ngModel)]="montoInicial"
         name="montoInicial"
         placeholder="0.00"
         currencyCode="PEN"
         variant="enhanced"
+        [embedded]="true"
         [required]="true">
-
       </app-amount-input>
+    </app-section-card>
 
-    </section>
+    <app-section-card title="Apariencia" appearance="plain">
+      <button
+        type="button"
+        class="personalization-row"
+        (click)="openPersonalizationModal()">
+        <app-item-icon
+          [icon]="iconoSeleccionado"
+          [color]="colorSeleccionado"
+          size="md"
+          variant="soft">
+        </app-item-icon>
 
-    <!-- ==========================================================
-         ACCOUNT NAME
-         ========================================================== -->
+        <span>
+          <strong>Icono y color</strong>
+          <small>Personaliza cómo identificarás esta cuenta</small>
+        </span>
 
-    <section class="form-section">
+        <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+      </button>
+    </app-section-card>
 
-      <div class="section-header">
-
-        <h3 class="section-label">
-
-          Nombre de la cuenta
-
-        </h3>
-
-      </div>
-
-      <ion-input
-        class="fv-input"
-        type="text"
-        name="nombreCuenta"
-        placeholder="Ej. Cuenta principal"
-        maxlength="30"
-        autocomplete="off"
-        [(ngModel)]="nombreCuenta"
-        required>
-
-      </ion-input>
-
-    </section>
-
-    <!-- ==========================================================
-         ICON
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <h3 class="section-label">
-
-          Icono
-
-        </h3>
-
-      </div>
-
-      <div class="icons-grid">
-
-        <button
-          *ngFor="let icon of iconos"
-          type="button"
-          class="icon-button"
-          [class.selected]="icon.icon === iconoSeleccionado"
-          (click)="seleccionarIcono(icon)">
-
-          <app-item-icon
-            [icon]="icon.icon"
-            [color]="colorSeleccionado"
-            size="sm"
-            variant="soft"
-            [selected]="icon.icon === iconoSeleccionado">
-          </app-item-icon>
-
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- ==========================================================
-         COLOR
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <h3 class="section-label">
-
-          Color
-
-        </h3>
-
-      </div>
-
-      <div class="colors-grid">
-
-        <button
-          *ngFor="let color of colores"
-          type="button"
-          class="color-button"
-          [style.background]="color.value"
-          [class.selected]="color.value === colorSeleccionado"
-          (click)="seleccionarColor(color)">
-
-          <ion-icon
-            *ngIf="color.value === colorSeleccionado"
-            src="assets/icon/check.svg">
-
-          </ion-icon>
-
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- ==========================================================
-         ACTIONS
-         ========================================================== -->
+    <app-info-banner
+      title="Consejo FinVia"
+      message="Usa un nombre y una apariencia que te permitan reconocer rápidamente cada cuenta."
+      symbol="✨">
+    </app-info-banner>
 
     <div class="action-container">
-
       <app-button
-        text="Guardar cuenta"
+        [text]="isCreateAccountActive ? 'Crear cuenta' : 'Guardar cambios'"
         type="submit"
         [disabled]="isValidateForm()">
-
       </app-button>
 
       <app-button
@@ -207,16 +91,22 @@
         variant="danger"
         (clicked)="deleteAccount()">
       </app-button>
-
     </div>
-
   </form>
-
 </ion-content>
 
-<!-- ==========================================================
-     ALERT
-     ========================================================== -->
+<app-personalization-modal
+  [isOpen]="isPersonalizationModalOpen"
+  [selectedIcon]="iconoSeleccionado"
+  [selectedColor]="colorSeleccionado"
+  [icons]="iconos"
+  [colors]="colores"
+  title="Personalizar cuenta"
+  description="Elige el icono y color que identificarán esta cuenta."
+  previewText="Así se identificará tu cuenta"
+  (modalClosed)="closePersonalizationModal()"
+  (applied)="applyPersonalization($event)">
+</app-personalization-modal>
 
 <app-custom-alert
   *ngIf="showCustomAlert"
@@ -236,4 +126,12 @@
   confirmText="Sí"
   (onCancel)="cerrarAlert()"
   (onConfirm)="confirmarEliminacion()">
+</app-custom-alert>
+
+<app-custom-alert
+  *ngIf="showGenericAlert"
+  header="No se pudo guardar"
+  message="Ocurrió un error al procesar la cuenta. Inténtalo nuevamente."
+  confirmText="Aceptar"
+  (onConfirm)="showGenericAlert = false">
 </app-custom-alert>

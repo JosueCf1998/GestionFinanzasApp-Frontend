@@ -17,6 +17,7 @@ import {
 import { CreateTransactionsUseCase } from 'src/app/core/use-cases/transactions/create-transactions';
 import { DeleteTransactionUseCase } from 'src/app/core/use-cases/transactions/delete-transaction.usecase';
 import { UpdateTransactionUseCase } from 'src/app/core/use-cases/transactions/update-transaction.usecase';
+import { convertISODateToSQL } from 'src/app/core/utils/date.util';
 import 'src/app/core/utils/observable-extensions';
 import {
   AccountSelectionMode,
@@ -139,7 +140,7 @@ export class CreateTransactionPage implements OnInit {
       this.transactionId = this.editingTransaction.id;
       this.selectedType = this.editingTransaction.type === 'income' ? 'ingreso' : 'gasto';
       this.amount = this.editingTransaction.amount;
-      this.date = this.editingTransaction.date.slice(0, 10);
+      this.date = convertISODateToSQL(this.editingTransaction.date);
       this.description = this.editingTransaction.description ?? '';
       this.selectedAccount = {
         ...this.editingTransaction.account,
@@ -329,7 +330,7 @@ export class CreateTransactionPage implements OnInit {
       categoryId: this.selectedCategory.id.toString(),
       accountId: this.selectedAccount.id.toString(),
       amount: this.amount as number,
-      date: this.date,
+      date: convertISODateToSQL(this.date),
       type: this.selectedType,
       description: this.description.trim()
     };
@@ -369,7 +370,7 @@ export class CreateTransactionPage implements OnInit {
 
   viewTransactions(): void {
     this.isSuccessReceiptOpen = false;
-    void this.navService.replace('/main/transactions', undefined, false);
+    void this.navService.back();
   }
 
   requestDeleteTransaction(): void {
