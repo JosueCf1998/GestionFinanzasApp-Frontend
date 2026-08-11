@@ -1,12 +1,55 @@
 <ion-header>
-  <app-page-layout title="Progreso de presupuestos" (back)="back()"></app-page-layout>
+  <app-page-layout title="Progreso de presupuestos" [loading]="(loadingService.loading$ | async) ?? false" (back)="back()">
+  </app-page-layout>
 </ion-header>
-<ion-content class="graphic-detail-page" [fullscreen]="false">
-  <main class="graphic-detail">
-    <section class="graphic-detail__card">
-      <app-empty-state icon="budget-wallet" title="Progreso de presupuestos"
-        description="Esta sección está preparada para consultar el avance de tus presupuestos.">
-      </app-empty-state>
+
+<ion-content class="budget-progress-page" [fullscreen]="false">
+  <main class="budget-progress">
+    <section class="detail-filters" aria-label="Filtros del gráfico">
+      <app-filter-trigger label="Periodo" [value]="selectedPeriodLabel" [caption]="periodLabel"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+      <app-filter-trigger label="Cuentas" [value]="accountCaption" caption="Seleccionar cuentas"
+        [disabled]="accounts.length === 0" (activated)="openAccountSelector()">
+      </app-filter-trigger>
     </section>
+
+    <app-section-card title="Estado de presupuestos" appearance="plain">
+      <article *ngIf="budgets.length; else emptyState" class="progress-card">
+        <section class="summary" aria-label="Resumen de presupuestos">
+          <div><span>Presupuesto total</span><strong>{{ currency.symbol }} {{ totalBudget | number:'1.2-2' }}</strong></div>
+          <div><span>Gastado</span><strong>{{ currency.symbol }} {{ totalSpent | number:'1.2-2' }}</strong></div>
+          <div><span>Restante</span><strong [class.negative]="totalRemaining < 0">{{ currency.symbol }} {{ totalRemaining | number:'1.2-2' }}</strong></div>
+          <div class="usage"><strong>{{ usagePercentage | number:'1.1-2' }}%</strong><span>Utilización</span></div>
+        </section>
+
+        <div class="budget-list" role="list" aria-label="Avance por presupuesto">
+          <app-progress-list-item *ngFor="let budget of budgets; trackBy: trackByBudget"
+            [item]="budget" [currencySymbol]="currency.symbol" [interactive]="false">
+          </app-progress-list-item>
+        </div>
+      </article>
+
+      <ng-template #emptyState>
+        <div class="empty-state-action">
+          <app-empty-state icon="budget-wallet" title="Sin presupuestos en este periodo"
+            description="Selecciona otro periodo para consultar el avance de tus presupuestos.">
+          </app-empty-state>
+          <button type="button" (click)="openPeriodSelector()">Cambiar periodo</button>
+        </div>
+      </ng-template>
+    </app-section-card>
   </main>
 </ion-content>
+
+<app-filter-modal [isOpen]="isPeriodSelectorOpen" title="Filtrar presupuestos"
+  description="Selecciona el periodo que deseas analizar." applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod" [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()" (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal [isOpen]="isAccountSelectorOpen" [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE" [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)" (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>

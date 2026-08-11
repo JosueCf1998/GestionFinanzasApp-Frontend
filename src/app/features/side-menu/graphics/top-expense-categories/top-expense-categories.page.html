@@ -1,12 +1,63 @@
 <ion-header>
-  <app-page-layout title="Top categorías de gastos" (back)="back()"></app-page-layout>
+  <app-page-layout title="Top categorías de gastos" [loading]="(loadingService.loading$ | async) ?? false" (back)="back()">
+  </app-page-layout>
 </ion-header>
-<ion-content class="graphic-detail-page" [fullscreen]="false">
-  <main class="graphic-detail">
-    <section class="graphic-detail__card">
-      <app-empty-state icon="bills" title="Top categorías de gastos"
-        description="Esta sección está preparada para consultar tus categorías con mayores gastos.">
-      </app-empty-state>
+
+<ion-content class="ranking-page" [fullscreen]="false">
+  <main class="ranking">
+    <section class="detail-filters" aria-label="Filtros del gráfico">
+      <app-filter-trigger label="Periodo" [value]="selectedPeriodLabel" [caption]="periodLabel"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+      <app-filter-trigger label="Cuentas" [value]="accountLabel" caption="Seleccionar cuentas"
+        [disabled]="accounts.length === 0" (activated)="openAccountSelector()">
+      </app-filter-trigger>
     </section>
+
+    <app-section-card title="Ranking de categorías" appearance="plain">
+      <article *ngIf="categories.length; else emptyState" class="ranking-card">
+        <div class="category-ranking" role="list">
+          <div *ngFor="let category of categories; let index = index; trackBy: trackByCategory"
+            class="ranking-row" role="listitem">
+            <strong class="category-name">
+              <span>{{ index + 1 }}.</span>
+              {{ category.name }}
+            </strong>
+            <div class="bar" aria-hidden="true">
+              <span [style.width.%]="barWidth(category)" [style.--category-color]="category.color"></span>
+            </div>
+            <div class="category-amount">
+              <strong>{{ currency.symbol }} {{ category.amount | number:'1.2-2' }}</strong>
+              <small>{{ percentage(category) | number:'1.1-2' }}%</small>
+            </div>
+          </div>
+        </div>
+
+        <footer class="ranking-totals">
+          <div><span>Total de categorías destacadas</span><strong>{{ currency.symbol }} {{ totalAmount | number:'1.2-2' }}</strong></div>
+          <div><span>Participación acumulada</span><strong>{{ totalPercentage | number:'1.1-2' }}%</strong></div>
+        </footer>
+      </article>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <app-empty-state icon="bills" title="Sin gastos para clasificar"
+            description="No se encontraron categorías con gastos en el periodo seleccionado.">
+          </app-empty-state>
+        </div>
+      </ng-template>
+    </app-section-card>
   </main>
 </ion-content>
+
+<app-filter-modal [isOpen]="isPeriodSelectorOpen" title="Filtrar ranking"
+  description="Selecciona el periodo que deseas analizar." applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod" [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()" (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal [isOpen]="isAccountSelectorOpen" [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE" [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)" (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>

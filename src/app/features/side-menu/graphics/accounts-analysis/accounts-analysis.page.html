@@ -1,12 +1,64 @@
 <ion-header>
-  <app-page-layout title="Análisis por cuentas" (back)="back()"></app-page-layout>
+  <app-page-layout title="Análisis por cuentas" [loading]="(loadingService.loading$ | async) ?? false" (back)="back()">
+  </app-page-layout>
 </ion-header>
-<ion-content class="graphic-detail-page" [fullscreen]="false">
-  <main class="graphic-detail">
-    <section class="graphic-detail__card">
-      <app-empty-state icon="account" title="Análisis por cuentas"
-        description="Esta sección está preparada para consultar el rendimiento de tus cuentas.">
-      </app-empty-state>
+
+<ion-content class="accounts-analysis-page" [fullscreen]="false">
+  <main class="accounts-analysis">
+    <section class="detail-filters" aria-label="Filtros del análisis">
+      <app-filter-trigger label="Periodo" [value]="selectedPeriodLabel" [caption]="periodLabel"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+      <app-filter-trigger label="Cuentas" [value]="accountCaption" caption="Seleccionar cuentas"
+        [disabled]="accounts.length === 0" (activated)="openAccountSelector()">
+      </app-filter-trigger>
     </section>
+
+    <app-section-card title="Rendimiento por cuenta" appearance="plain">
+      <article *ngIf="rows.length; else emptyState" class="accounts-card">
+        <div class="analysis-table" role="table" aria-label="Rendimiento por cuenta">
+          <div class="table-row table-header" role="row">
+            <span>Cuenta</span><span>Ingresos</span><span>Gastos</span><span>Saldo</span>
+          </div>
+          <div *ngFor="let row of rows; trackBy: trackByAccount" class="table-row account-row" role="row">
+            <strong class="account-name"><i [style.background]="row.color"></i>{{ row.name }}</strong>
+            <span>{{ currency.symbol }} {{ row.income | number:'1.2-2' }}</span>
+            <span>{{ currency.symbol }} {{ row.expenses | number:'1.2-2' }}</span>
+            <strong class="balance" [class.negative]="row.balance < 0">
+              {{ currency.symbol }} {{ row.balance | number:'1.2-2' }}
+            </strong>
+          </div>
+        </div>
+
+        <footer class="totals" aria-label="Totales">
+          <strong>Total</strong>
+          <span>{{ currency.symbol }} {{ totalIncome | number:'1.2-2' }}</span>
+          <span>{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</span>
+          <strong class="balance" [class.negative]="totalBalance < 0">
+            {{ currency.symbol }} {{ totalBalance | number:'1.2-2' }}
+          </strong>
+        </footer>
+      </article>
+
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <app-empty-state icon="account" title="Sin cuentas para analizar"
+            description="Selecciona cuentas con movimientos para consultar su rendimiento.">
+          </app-empty-state>
+        </div>
+      </ng-template>
+    </app-section-card>
   </main>
 </ion-content>
+
+<app-filter-modal [isOpen]="isPeriodSelectorOpen" title="Filtrar análisis"
+  description="Selecciona el periodo que deseas analizar." applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod" [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate" [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()" (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal [isOpen]="isAccountSelectorOpen" [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE" [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)" (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>
