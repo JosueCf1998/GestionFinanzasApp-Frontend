@@ -1,7 +1,7 @@
 <app-base-modal
   [isOpen]="isOpen"
-  title="Personalizar presupuesto"
-  description="Elige el icono y color que identificarán este presupuesto."
+  [title]="title"
+  [description]="description"
   primaryText="Aplicar personalización"
   size="lg"
   (closed)="close()"
@@ -16,7 +16,7 @@
       </app-item-icon>
       <div>
         <strong>Vista previa</strong>
-        <span>Así se identificará tu presupuesto</span>
+        <span>{{ previewText }}</span>
       </div>
     </header>
 

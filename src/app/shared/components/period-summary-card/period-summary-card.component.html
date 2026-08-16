@@ -9,7 +9,7 @@
 
     <div class="summary-card__total">
       <span>{{ totalLabel }}</span>
-      <strong>{{ amountPrefix }} {{ currencySymbol }} {{ totalAmount | number:'1.2-2' }}</strong>
+      <strong>{{ amountPrefix }}{{ totalAmount < 0 ? '-' : '' }}{{ currencySymbol }} {{ (totalAmount < 0 ? -totalAmount : totalAmount) | number:'1.2-2' }}</strong>
       <small *ngIf="metaLabel">
         <b>{{ metaValue }}</b>
         {{ metaLabel }}

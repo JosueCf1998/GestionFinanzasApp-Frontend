@@ -13,6 +13,6 @@
   </div>
   <div class="detail-summary__value">
     <small>Importe</small>
-    <strong>{{ data.currencySymbol || 'S/' }} {{ data.amount | number:'1.2-2' }}</strong>
+    <strong>{{ data.amount < 0 ? '-' : '' }}{{ data.currencySymbol || 'S/' }} {{ (data.amount < 0 ? -data.amount : data.amount) | number:'1.2-2' }}</strong>
   </div>
 </article>

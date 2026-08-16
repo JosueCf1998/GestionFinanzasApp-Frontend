@@ -31,7 +31,7 @@
   </span>
 
   <strong class="amount-list-item__amount">
-    {{ amountPrefix }} {{ currencySymbol }} {{ amount | number:'1.2-2' }}
+    {{ amountPrefix }}{{ amount < 0 ? '-' : '' }}{{ currencySymbol }} {{ (amount < 0 ? -amount : amount) | number:'1.2-2' }}
   </strong>
 
   <img

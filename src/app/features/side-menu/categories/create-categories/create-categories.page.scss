@@ -1,383 +1,181 @@
 .create-category-page {
-  --background: var(--fv-background);
+  --background: linear-gradient(180deg, #fbfbff 0%, var(--fv-background) 46%);
 }
-
-/* ==========================================================
-   FORM
-   ========================================================== */
 
 .create-category-form {
-
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
-  padding: 16px;
-
+  gap: 18px;
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
 }
-
-/* ==========================================================
-   PREVIEW
-   ========================================================== */
 
 .category-preview {
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 8px 0 4px;
-
-}
-
-.preview-icon {
-
-  width: 72px;
-  height: 72px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 20px;
-
-  box-shadow: var(--fv-shadow-primary);
-
-}
-
-.preview-icon ion-icon {
-
-  width: 30px;
-  height: 30px;
-
-  filter: brightness(0) invert(1);
-
-}
-
-.preview-title {
-
-  margin: 0;
-
-  color: var(--fv-text-primary);
-
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.2;
-
-  text-align: center;
-
-}
-
-.preview-type {
-
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  padding: 5px 12px;
-
-  border-radius: 999px;
-
-  font-size: 11px;
-  font-weight: 700;
-
-  letter-spacing: .03em;
-
-  background: rgba(239, 68, 68, .10);
-
-  color: #ef4444;
-
-}
-
-.preview-type.income {
-
-  background: rgba(34, 197, 94, .10);
-
-  color: #22c55e;
-
-}
-
-/* ==========================================================
-   CARD
-   ========================================================== */
-
-.form-section {
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 16px;
-
-  padding: 16px;
-
-  background: var(--fv-surface);
-
-  border: 1px solid rgba(67, 97, 238, .05);
-
-  border-radius: 18px;
-
-  box-shadow: var(--fv-shadow-sm);
-
-}
-
-.form-section:focus-within {
-
-  border-color: rgba(67, 97, 238, .15);
-
-  box-shadow:
-    0 0 0 3px rgba(67, 97, 238, .06);
-
-}
-
-/* ==========================================================
-   SECTION HEADER
-   ========================================================== */
-
-.section-header {
-
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  gap: 12px;
-
+  min-height: 106px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--fv-primary) 12%, var(--fv-border));
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(67,97,238,.12), transparent 42%),
+    linear-gradient(135deg, #fff 0%, #f8f6ff 100%);
+  box-shadow: 0 12px 30px rgba(31,37,76,.07);
 }
 
-.section-header span {
-
-  color: var(--fv-text-secondary);
-
-  font-size: 12px;
-  font-weight: 600;
-
+.category-preview__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
 }
 
-.section-label {
+.category-preview__content {
+  min-width: 0;
+}
 
-  margin: 0;
-
+.category-preview__content > span {
+  display: block;
+  margin-bottom: 4px;
   color: var(--fv-text-secondary);
-
-  font-size: 11px;
-  font-weight: 700;
-
+  font-size: 10px;
+  font-weight: 750;
   letter-spacing: .08em;
-
   text-transform: uppercase;
-
 }
 
-/* ==========================================================
-   INPUT
-   ========================================================== */
-
-.fv-input {
-
-  --background: #f8faff;
-
-  --padding-start: 18px;
-  --padding-end: 18px;
-
-  --border-radius: 16px;
-
-  min-height: 52px;
-
-  border: 1px solid rgba(67, 97, 238, .08);
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
-
-}
-
-.fv-input.ion-focused {
-
-  border-color: var(--fv-primary);
-
-  box-shadow:
-    0 0 0 3px rgba(67, 97, 238, .08);
-
-}
-
-/* ==========================================================
-   ICONS
-   ========================================================== */
-
-.icons-grid {
-
-  display: grid;
-
-  grid-template-columns: repeat(6, 1fr);
-
-  gap: 12px;
-
-}
-
-.icon-button {
-
-  width: 100%;
-
-  aspect-ratio: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: transparent;
-
-  border: 1px solid rgba(67, 97, 238, .06);
-
-  border-radius: 16px;
-
-  transition:
-    background .18s ease,
-    border-color .18s ease,
-    transform .18s ease;
-
-}
-
-.icon-button:active {
-
-  transform: scale(.95);
-
-}
-
-.icon-button ion-icon {
-
-  width: 24px;
-  height: 24px;
-
+.category-preview h2 {
+  max-width: 190px;
+  margin: 0 0 8px;
+  overflow: hidden;
   color: var(--fv-text-primary);
-
-  transition: .18s ease;
-
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.icon-button.selected {
-
-  background: rgba(67, 97, 238, .08);
-
-  border-color: var(--fv-primary);
-
+.category-preview small {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(239,68,68,.09);
+  color: var(--fv-danger);
+  font-size: 10px;
+  font-weight: 750;
 }
 
-.icon-button.selected ion-icon {
-
-  width: 25px;
-  height: 25px;
-
-  color: var(--fv-primary);
-
+.category-preview small.income {
+  background: rgba(34,197,94,.1);
+  color: var(--fv-success);
 }
 
-/* ==========================================================
-   COLORS
-   ========================================================== */
-
-.colors-grid {
-
-  display: flex;
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-}
-
-.color-button {
-
-  width: 40px;
-  height: 40px;
-
+.type-description {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  margin: -2px 0 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(239,68,68,.045);
+  color: var(--fv-text-secondary);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
 
-  border: none;
-
+.type-description::before {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
   border-radius: 50%;
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease;
-
+  background: var(--fv-danger);
+  content: '';
 }
 
-.color-button:active {
-
-  transform: scale(.92);
-
+.type-description.income {
+  background: rgba(34,197,94,.055);
 }
 
-.color-button.selected {
-
-  transform: scale(1.1);
-
-  box-shadow:
-    0 0 0 3px var(--fv-surface),
-    0 0 0 5px rgba(67, 97, 238, .18);
-
+.type-description.income::before {
+  background: var(--fv-success);
 }
 
-.color-button ion-icon {
-
-  width: 15px;
-  height: 15px;
-
-  filter: brightness(0) invert(1);
-
+.category-type-selector {
+  --custom-segment-min-height: 44px;
+  --custom-segment-button-height: 36px;
+  --custom-segment-radius: 15px;
+  --custom-segment-button-radius: 12px;
+  --custom-segment-background: #f7f8fc;
+  --custom-segment-border: #eceef5;
+  --custom-segment-shadow: none;
 }
 
-/* ==========================================================
-   ACTION
-   ========================================================== */
+.personalization-row {
+  display: flex;
+  width: 100%;
+  min-height: 66px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--fv-border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--fv-primary) 2%, white);
+  color: inherit;
+  text-align: left;
+}
+
+.personalization-row > span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.personalization-row strong {
+  color: var(--fv-text-primary);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.personalization-row small {
+  overflow: hidden;
+  color: var(--fv-text-secondary);
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.personalization-row > ion-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  color: var(--fv-primary);
+}
+
+.personalization-row:active {
+  transform: scale(.98);
+}
 
 .action-container {
-
-  padding-top: 4px;
-
+  padding-top: 2px;
 }
 
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media (max-width: 420px) {
-
-  .preview-icon {
-
-    width: 64px;
-    height: 64px;
-
+@media (max-width: 360px) {
+  .create-category-form {
+    padding-inline: 14px;
   }
 
-  .preview-icon ion-icon {
-
-    width: 28px;
-    height: 28px;
-
+  .category-preview {
+    padding: 16px 14px;
   }
 
-  .preview-title {
-
-    font-size: 20px;
-
+  .category-preview h2 {
+    max-width: 150px;
+    font-size: 17px;
   }
-
-  .form-section {
-
-    padding: 14px;
-
-  }
-
-  .icons-grid {
-
-    grid-template-columns: repeat(5, 1fr);
-
-    gap: 10px;
-
-  }
-
 }

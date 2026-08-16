@@ -6,8 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ACCOUNT_ICONS, IconOption } from 'src/app/shared/constants/category-options';
-import { ColorOption, PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
+import { ACCOUNT_ICONS } from 'src/app/shared/constants/category-options';
+import { PERSONALIZATION_COLORS } from 'src/app/shared/constants/personalization-options';
 
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
@@ -17,6 +17,13 @@ import { AmountInputComponent } from 'src/app/shared/components/amount-input/amo
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { TextFieldComponent } from 'src/app/shared/components/text-field/text-field.component';
+import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
+import {
+  PersonalizationModalComponent,
+  PersonalizationValue
+} from 'src/app/shared/components/personalization-modal/personalization-modal.component';
 
 import { CreateAccountUseCase, CreateAccountRequest } from 'src/app/core/use-cases/accounts/create-account.usecase';
 import { UpdateAccountUseCase, UpdateAccountRequest } from 'src/app/core/use-cases/Accounts/update-account.usecase';
@@ -38,7 +45,11 @@ import { DeleteAccountRequest, DeleteAccountUseCase } from 'src/app/core/use-cas
     AmountInputComponent,
     ButtonComponent,
     PageLayoutComponent,
-    ItemIconComponent
+    ItemIconComponent,
+    TextFieldComponent,
+    SectionCardComponent,
+    InfoBannerComponent,
+    PersonalizationModalComponent
   ],
 })
 export class CreateAccountPage {
@@ -55,6 +66,7 @@ export class CreateAccountPage {
   showUnauthorizedAlert = false;
   showCustomAlert = false;
   showDeleteAlert = false;
+  isPersonalizationModalOpen = false;
 
   messageError = '';
 
@@ -72,8 +84,8 @@ export class CreateAccountPage {
   iconos = ACCOUNT_ICONS;
   colores = PERSONALIZATION_COLORS;
 
-  iconoSeleccionado = '';
-  colorSeleccionado = '';
+  iconoSeleccionado: string = ACCOUNT_ICONS[0]?.icon ?? '';
+  colorSeleccionado: string = PERSONALIZATION_COLORS[0]?.value ?? '';
 
   maxDate = new Date().toISOString();
 
@@ -219,8 +231,8 @@ export class CreateAccountPage {
       return Boolean(
         this.nombreCuenta ||
         this.montoInicial !== null ||
-        this.iconoSeleccionado ||
-        this.colorSeleccionado
+        this.iconoSeleccionado !== (ACCOUNT_ICONS[0]?.icon ?? '') ||
+        this.colorSeleccionado !== (PERSONALIZATION_COLORS[0]?.value ?? '')
       );
     }
 
@@ -236,14 +248,19 @@ export class CreateAccountPage {
   // UI ACTIONS
   // =========================
 
-  seleccionarIcono(option: IconOption) {
-    this.iconoSeleccionado = option.icon;
-    this.cambiosPendientes = true;
+  openPersonalizationModal(): void {
+    this.isPersonalizationModalOpen = true;
   }
 
-  seleccionarColor(option: ColorOption) {
-    this.colorSeleccionado = option.value;
+  closePersonalizationModal(): void {
+    this.isPersonalizationModalOpen = false;
+  }
+
+  applyPersonalization(value: PersonalizationValue): void {
+    this.iconoSeleccionado = value.icon;
+    this.colorSeleccionado = value.color;
     this.cambiosPendientes = true;
+    this.closePersonalizationModal();
   }
 
   // =========================
@@ -302,5 +319,14 @@ export class CreateAccountPage {
 
   private showError() {
     this.showGenericAlert = true;
+  }
+
+  get formattedBalance(): string {
+    return new Intl.NumberFormat('es-PE', {
+      style: 'currency',
+      currency: 'PEN',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(this.montoInicial ?? 0);
   }
 }

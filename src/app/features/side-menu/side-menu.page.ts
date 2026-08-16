@@ -3,10 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import {
   IonIcon,
-  IonButton,
   IonHeader,
-  IonToolbar,
-  IonButtons,
   IonMenuButton,
   IonContent,
   IonSplitPane,
@@ -35,11 +32,8 @@ import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-
   standalone: true,
   imports: [
     IonIcon,
-    IonButton,
     RouterModule,
     IonHeader,
-    IonToolbar,
-    IonButtons,
     IonMenuButton,
     IonContent,
     IonSplitPane,
@@ -121,11 +115,25 @@ export class SideMenuPage implements OnInit {
     }
   }
 
+  releaseMenuTriggerFocus(): void {
+    this.getDeepActiveElement()?.blur();
+  }
+
   // =========================
   // ACTIONS
   // =========================
 
   logOut() {
     this.navigationService.replace("/splash");
+  }
+
+  private getDeepActiveElement(): HTMLElement | null {
+    let activeElement = document.activeElement;
+
+    while (activeElement?.shadowRoot?.activeElement) {
+      activeElement = activeElement.shadowRoot.activeElement;
+    }
+
+    return activeElement instanceof HTMLElement ? activeElement : null;
   }
 }

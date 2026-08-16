@@ -13,7 +13,7 @@ import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-
 import { ListAccountsUseCase, Accounts } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
 import { CreateTransferUseCase, CreateTransferRequest } from 'src/app/core/use-cases/transfer/create-transfer.usecase';
 import { UpdateTransferUseCase } from 'src/app/core/use-cases/transfer/update-transfer.usecase';
-import { convertISODateToSQL } from 'src/app/core/utils/date.util';
+import { convertISODateToSQL, getLocalToday } from 'src/app/core/utils/date.util';
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { FilterModalComponent, FilterSelection } from 'src/app/shared/components/filter-modal/filter-modal.component';
@@ -108,7 +108,7 @@ export class NewTransferPage implements OnInit {
   fecha = this.today;
   comentario = '';
 
-  maxDate: string = new Date().toISOString();
+  maxDate = getLocalToday();
 
   /* =========================
      STATE
@@ -142,7 +142,7 @@ export class NewTransferPage implements OnInit {
       this.cuentaDestinoId = transfer.destinationAccountId.toString();
       this.cuentaDestino = transfer.destinationAccountName ?? '';
       this.monto = Number(transfer.amount);
-      this.fecha = transfer.date.slice(0, 10);
+      this.fecha = convertISODateToSQL(transfer.date);
       this.comentario = transfer.comment ?? '';
     }
   }
@@ -324,7 +324,7 @@ export class NewTransferPage implements OnInit {
 
   viewTransferHistory(): void {
     this.isSuccessReceiptOpen = false;
-    void this.navService.replace('/accounts/history-transfer', undefined, false);
+    void this.navService.back();
   }
 
   /* =========================
@@ -406,7 +406,7 @@ export class NewTransferPage implements OnInit {
   }
 
   private get today(): string {
-    return new Date().toISOString().slice(0, 10);
+    return getLocalToday();
   }
 
   private formatAmount(value: number): string {

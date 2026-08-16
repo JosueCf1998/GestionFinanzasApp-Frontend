@@ -1,0 +1,36 @@
+<div class="legend" aria-label="Leyenda del gráfico">
+  <span class="legend--income">{{ incomeLabel }}</span>
+  <span class="legend--expense">{{ expensesLabel }}</span>
+  <span class="legend--balance">{{ balanceLabel }}</span>
+</div>
+
+<div class="chart" role="img" [attr.aria-label]="ariaLabel">
+  <div class="chart__axis">
+    <span *ngFor="let label of axisLabels">{{ formatAxis(label) }}</span>
+  </div>
+
+  <div class="chart__plot">
+    <div class="chart__grid" aria-hidden="true">
+      <i *ngFor="let label of axisLabels"></i>
+    </div>
+
+    <div class="chart__columns" aria-hidden="true">
+      <div *ngFor="let item of items; trackBy: trackByIndex" class="chart__group">
+        <span class="bar bar--income" [style.height.%]="height(item.income)"></span>
+        <span class="bar bar--expense" [style.height.%]="height(item.expenses)"></span>
+      </div>
+    </div>
+
+    <svg class="balance-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <polyline [attr.points]="balancePoints"></polyline>
+      <circle *ngFor="let item of items; let index = index; trackBy: trackByIndex"
+        [attr.cx]="((index + .5) / items.length) * 100"
+        [attr.cy]="100 - height(item.balance)" r="1.35">
+      </circle>
+    </svg>
+  </div>
+
+  <div class="chart__labels" aria-hidden="true">
+    <span *ngFor="let item of items; trackBy: trackByIndex">{{ item.label }}</span>
+  </div>
+</div>

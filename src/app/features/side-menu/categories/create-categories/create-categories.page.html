@@ -1,229 +1,107 @@
-<ion-header
-  class="create-category-header">
-
-
-  <!-- ==========================================================
-       HEADER
-       ========================================================== -->
-
+<ion-header>
   <app-page-layout
     title="Crear categoría"
     (back)="backToCategories()">
   </app-page-layout>
-
-
 </ion-header>
 
-<ion-content
-  [fullscreen]="false"
-  class="create-category-page">
+<ion-content [fullscreen]="false" class="create-category-page">
+  <form class="create-category-form" (ngSubmit)="anadirCategoria()">
+    <section class="category-preview" aria-label="Vista previa de la categoría">
+      <div class="category-preview__identity">
+        <app-item-icon
+          [icon]="iconoCategoria"
+          [color]="colorCategoria"
+          size="lg"
+          variant="soft">
+        </app-item-icon>
 
-  <!-- ==========================================================
-       FORM
-       ========================================================== -->
-
-  <form
-    class="create-category-form"
-    (ngSubmit)="anadirCategoria()">
-
-    <!-- ==========================================================
-         HERO PREVIEW
-         ========================================================== -->
-
-    <section class="category-preview">
-
-      <app-item-icon
-        *ngIf="iconoCategoria"
-        [icon]="iconoCategoria"
-        [color]="colorCategoria"
-        size="xl"
-        variant="soft">
-      </app-item-icon>
-
-      <h2 class="preview-title">
-
-        {{
-          nombreCategoria ||
-          'Nueva categoría'
-        }}
-
-      </h2>
-
-      <span
-        class="preview-type"
-        [class.income]="tipoCategoria === 'ingreso'">
-
-        {{
-          tipoCategoria === 'ingreso'
-            ? 'Ingreso'
-            : 'Gasto'
-        }}
-
-      </span>
-
-    </section>
-
-    <!-- ==========================================================
-         NOMBRE
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <label class="section-label">
-
-        Nombre
-
-      </label>
-
-      <ion-input
-        class="fv-input"
-        type="text"
-        name="nombreCategoria"
-        maxlength="30"
-        autocomplete="off"
-        placeholder="Ej. Alimentación"
-        [(ngModel)]="nombreCategoria"
-        required>
-
-      </ion-input>
-
-    </section>
-
-    <!-- ==========================================================
-         TIPO
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <label class="section-label">
-
-          Tipo de categoría
-
-        </label>
-
+        <div class="category-preview__content">
+          <span>Vista previa</span>
+          <h2>{{ nombreCategoria.trim() || 'Nueva categoría' }}</h2>
+          <small [class.income]="tipoCategoria === 'ingreso'">
+            {{ tipoCategoria === 'ingreso' ? 'Ingreso' : 'Gasto' }}
+          </small>
+        </div>
       </div>
 
+    </section>
+
+    <app-section-card title="Nombre de la categoría">
+      <app-text-field
+        name="nombreCategoria"
+        placeholder="Ej. Alimentación"
+        ariaLabel="Nombre de la categoría"
+        [embedded]="true"
+        [maxLength]="30"
+        [required]="true"
+        [(ngModel)]="nombreCategoria">
+      </app-text-field>
+    </app-section-card>
+
+    <app-section-card class="category-type-card" title="Tipo de movimiento" appearance="plain">
       <app-custom-segment
+        class="category-type-selector"
         [options]="categoryTypes"
         [(model)]="tipoCategoria">
-
       </app-custom-segment>
 
-    </section>
+      <p class="type-description" [class.income]="tipoCategoria === 'ingreso'">
+        {{ tipoCategoria === 'ingreso'
+          ? 'Agrupa el dinero que entra a tus cuentas.'
+          : 'Organiza y controla en qué utilizas tu dinero.' }}
+      </p>
+    </app-section-card>
 
-    <!-- ==========================================================
-         ICONOS
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <label class="section-label">
-
-          Ícono
-
-        </label>
-
-        <span>
-
-          {{ iconos.length }} disponibles
-
-        </span>
-
-      </div>
-
-      <div class="icons-grid">
-
-        <button
-          *ngFor="let icon of iconos"
-          type="button"
-          class="icon-button"
-          [class.selected]="icon.icon === iconoSeleccionado"
-          [attr.aria-label]="icon.label"
-          (click)="seleccionarIcono(icon)">
-
-          <app-item-icon
-            [icon]="icon.icon"
-            [color]="colorCategoria"
-            size="sm"
-            variant="soft"
-            [selected]="icon.icon === iconoSeleccionado">
-          </app-item-icon>
-
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- ==========================================================
-         COLORES
-         ========================================================== -->
-
-    <section class="form-section">
-
-      <div class="section-header">
-
-        <label class="section-label">
-
-          Color
-
-        </label>
+    <app-section-card title="Apariencia" appearance="plain">
+      <button
+        type="button"
+        class="personalization-row"
+        (click)="openPersonalizationModal()">
+        <app-item-icon
+          [icon]="iconoCategoria"
+          [color]="colorCategoria"
+          size="md"
+          variant="soft">
+        </app-item-icon>
 
         <span>
-
-          {{ colores.length }} disponibles
-
+          <strong>Icono y color</strong>
+          <small>Personaliza cómo identificarás esta categoría</small>
         </span>
 
-      </div>
+        <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
+      </button>
+    </app-section-card>
 
-      <div class="colors-grid">
-
-        <button
-          *ngFor="let color of colores"
-          type="button"
-          class="color-button"
-          [style.background]="color.value"
-          [class.selected]="color.value === colorSeleccionado"
-          [attr.aria-label]="color.label"
-          (click)="seleccionarColor(color)">
-
-          <ion-icon
-            *ngIf="color.value === colorSeleccionado"
-            src="assets/icon/check.svg">
-          </ion-icon>
-
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- ==========================================================
-         ACTIONS
-         ========================================================== -->
+    <app-info-banner
+      title="Consejo FinVia"
+      message="Una buena organización por categorías te ayuda a entender mejor tus hábitos financieros."
+      symbol="✨">
+    </app-info-banner>
 
     <div class="action-container">
-
       <app-button
         text="Crear categoría"
         type="submit"
         [disabled]="!puedeGuardar">
       </app-button>
-
     </div>
-
   </form>
-
 </ion-content>
 
-<!-- ==========================================================
-     ALERTA CAMBIOS
-     ========================================================== -->
+<app-personalization-modal
+  [isOpen]="isPersonalizationModalOpen"
+  [selectedIcon]="iconoSeleccionado"
+  [selectedColor]="colorSeleccionado"
+  [icons]="iconos"
+  [colors]="colores"
+  title="Personalizar categoría"
+  description="Elige el icono y color que identificarán esta categoría."
+  previewText="Así se identificará tu categoría"
+  (modalClosed)="closePersonalizationModal()"
+  (applied)="applyPersonalization($event)">
+</app-personalization-modal>
 
 <app-custom-alert
   *ngIf="showCustomAlert"
@@ -234,10 +112,6 @@
   (onCancel)="showCustomAlert = false"
   (onConfirm)="salirSinGuardar()">
 </app-custom-alert>
-
-<!-- ==========================================================
-     ALERTA ERROR
-     ========================================================== -->
 
 <app-custom-alert
   *ngIf="showGenericAlert"

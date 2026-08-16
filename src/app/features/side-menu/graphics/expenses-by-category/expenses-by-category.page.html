@@ -1,0 +1,109 @@
+<ion-header>
+  <app-page-layout
+    title="Gastos por categoría"
+    [loading]="(loadingService.loading$ | async) ?? false"
+    (back)="back()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content class="category-expenses-page" [fullscreen]="false">
+  <main class="category-expenses">
+    <section class="detail-filters" aria-label="Filtros del gráfico">
+      <app-filter-trigger
+        label="Periodo"
+        [value]="selectedPeriodLabel"
+        [caption]="periodLabel"
+        (activated)="openPeriodSelector()">
+      </app-filter-trigger>
+
+      <app-filter-trigger
+        label="Cuentas"
+        [value]="accountCaption"
+        caption="Seleccionar cuentas"
+        [disabled]="accounts.length === 0"
+        (activated)="openAccountSelector()">
+      </app-filter-trigger>
+    </section>
+
+    <app-section-card title="Distribución de gastos" appearance="plain">
+      <article *ngIf="categories.length; else emptyState" class="distribution-card">
+        <div class="total-chip">
+          <small>Total de gastos</small>
+          <strong>{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</strong>
+        </div>
+
+        <div class="analysis-context">
+          <span><small>Agrupado por</small><strong>Categoría</strong></span>
+          <span><small>Periodo analizado</small><strong>{{ periodLabel }}</strong></span>
+        </div>
+
+        <div class="chart-stage">
+          <app-donut-chart
+            [segments]="chartSegments"
+            [ariaLabel]="'Distribución de gastos por categoría. Total ' + totalExpenses">
+          </app-donut-chart>
+          <div class="chart-total" aria-hidden="true">
+            <strong>{{ currency.symbol }} {{ totalExpenses | number:'1.2-2' }}</strong>
+            <span>Total</span>
+          </div>
+        </div>
+
+        <div class="category-list" role="list" aria-label="Detalle por categoría">
+          <div
+            *ngFor="let category of categories; trackBy: trackByCategory"
+            class="category-row"
+            role="listitem">
+            <span class="category-identity">
+              <app-item-icon
+                [icon]="category.icon"
+                [color]="category.color"
+                size="xs"
+                variant="soft"
+                aria-hidden="true">
+              </app-item-icon>
+              <strong>{{ category.name }}</strong>
+            </span>
+            <span class="category-percentage">{{ percentage(category) | number:'1.1-2' }}%</span>
+            <strong class="category-amount">
+              {{ currency.symbol }} {{ category.amount | number:'1.2-2' }}
+            </strong>
+          </div>
+        </div>
+
+      </article>
+
+      <ng-template #emptyState>
+        <div class="empty-state-action">
+          <app-empty-state
+            icon="category"
+            title="Sin gastos en este periodo"
+            description="Selecciona otro periodo para consultar la distribución de tus gastos.">
+          </app-empty-state>
+          <button type="button" (click)="openPeriodSelector()">Cambiar periodo</button>
+        </div>
+      </ng-template>
+    </app-section-card>
+  </main>
+</ion-content>
+
+<app-filter-modal
+  [isOpen]="isPeriodSelectorOpen"
+  title="Filtrar gastos"
+  description="Selecciona el periodo que deseas analizar."
+  applyText="Aplicar filtros"
+  [selectedPeriod]="selectedPeriod"
+  [selectedPeriodValue]="selectedPeriodValue"
+  [selectedStartDate]="selectedStartDate"
+  [selectedEndDate]="selectedEndDate"
+  (modalClosed)="closePeriodSelector()"
+  (filtersApplied)="applyFilters($event)">
+</app-filter-modal>
+
+<app-account-selector-modal
+  [isOpen]="isAccountSelectorOpen"
+  [accounts]="accounts"
+  [selectionMode]="AccountSelectionMode.MULTIPLE"
+  [selectedAccounts]="selectedAccounts"
+  (accountsSelected)="applyAccountFilter($event)"
+  (modalClosed)="closeAccountSelector()">
+</app-account-selector-modal>

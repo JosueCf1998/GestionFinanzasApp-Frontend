@@ -1,0 +1,30 @@
+:host { --border: #e8ebf3; --shadow: 0 10px 30px rgba(31,37,76,.07); }
+.accounts-analysis-page { --background: linear-gradient(180deg, #fafbff, #f5f6fb); }
+.accounts-analysis { display: grid; width: 100%; max-width: 560px; gap: 20px; margin: 0 auto; padding: 18px 16px calc(env(safe-area-inset-bottom) + 28px); }
+.detail-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.accounts-card { width: 100%; overflow: hidden; border: 1px solid rgba(224,228,238,.92); border-radius: 22px; background: var(--fv-surface); box-shadow: 0 14px 34px rgba(31,37,76,.075); }
+.analysis-table { display: grid; width: 100%; }
+.table-row, .totals { display: grid; width: 100%; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, .9fr)); align-items: center; column-gap: 7px; }
+.table-header { min-height: 50px; padding: 0 16px; border-bottom: 1px solid #e5e8f0; background: #f9fafe; color: #69758c; font-size: 8.75px; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
+.table-header span:not(:first-child) { text-align: right; }
+.account-row { min-height: 70px; padding: 0 16px; border-bottom: 1px solid rgba(230,233,241,.78); color: #414b5f; font-size: 10px; }
+.account-row:nth-child(odd) { background: rgba(248,249,252,.42); }
+.account-row:last-child { border-bottom: 0; }
+.account-row > span, .account-row > .balance { min-width: 0; overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.account-name { display: block; min-width: 0; overflow: hidden; color: #20263a; font-size: 11px; font-weight: 780; letter-spacing: -.01em; text-overflow: ellipsis; white-space: nowrap; }
+.balance { color: var(--fv-success); font-weight: 850; }
+.balance.negative { color: var(--fv-danger); }
+.totals { min-height: 70px; padding: 0 16px; border-top: 1px solid #dde2ed; background: linear-gradient(120deg, #f7f8fd, #f2f4fa); color: #293047; font-size: 10px; font-weight: 720; }
+.totals > span, .totals > .balance { min-width: 0; overflow: hidden; text-align: right; font-variant-numeric: tabular-nums; text-overflow: ellipsis; white-space: nowrap; }
+.totals > strong:first-child { color: #20263a; font-size: 11px; font-weight: 850; }
+.empty-state { border: 1px solid var(--border); border-radius: 20px; background: var(--fv-surface); box-shadow: var(--shadow); }
+@media (max-width: 420px) {
+  .accounts-analysis { padding-right: 10px; padding-left: 10px; }
+  .table-row, .totals { grid-template-columns: minmax(0, 1.25fr) repeat(3, minmax(0, .92fr)); column-gap: 4px; }
+  .table-header, .account-row, .totals { padding-right: 12px; padding-left: 12px; }
+  .table-header { min-height: 48px; font-size: 8px; letter-spacing: .015em; }
+  .account-row { min-height: 67px; font-size: 9px; }
+  .account-name { font-size: 10px; }
+  .totals { min-height: 67px; font-size: 9px; }
+  .totals > strong:first-child { font-size: 10px; }
+}

@@ -38,7 +38,7 @@
       </app-item-icon>
       <div class="fv-account-content" [class.selected]="isSelected(account)">
         <span class="fv-account-name">{{ account.name }}</span>
-        <span class="fv-account-balance">S/. {{ +account.amount | number:'1.2-2' }}</span>
+        <span class="fv-account-balance">{{ +account.amount < 0 ? '-' : '' }}S/. {{ (+account.amount < 0 ? -(+account.amount) : +account.amount) | number:'1.2-2' }}</span>
       </div>
       <div class="fv-account-status" [class.selected]="isSelected(account)">
         <ion-icon *ngIf="isSelected(account)" class="fv-check-icon" name="checkmark"></ion-icon>

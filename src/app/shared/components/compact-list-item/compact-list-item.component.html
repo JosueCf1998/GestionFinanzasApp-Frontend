@@ -21,8 +21,8 @@
   </span>
 
   <strong class="compact-list-item__amount">
-    {{ item.amountPrefix || '' }} {{ item.currencySymbol || 'S/' }}
-    {{ item.amount | number:'1.2-2' }}
+    {{ item.amountPrefix || '' }}{{ item.amount < 0 ? '-' : '' }}{{ item.currencySymbol || 'S/' }}
+    {{ (item.amount < 0 ? -item.amount : item.amount) | number:'1.2-2' }}
   </strong>
 
   <img

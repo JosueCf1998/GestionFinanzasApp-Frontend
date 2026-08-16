@@ -20,6 +20,13 @@ import 'src/app/core/utils/observable-extensions';
 import { CreateCategoryUseCase, RegisterCategoryRequest } from 'src/app/core/use-cases/categories/register-category.usecase';
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
+import { TextFieldComponent } from 'src/app/shared/components/text-field/text-field.component';
+import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
+import {
+  PersonalizationModalComponent,
+  PersonalizationValue
+} from 'src/app/shared/components/personalization-modal/personalization-modal.component';
 
 @Component({
   selector: 'app-create-categories',
@@ -35,7 +42,11 @@ import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon
     CustomSegmentComponent,
     PageLayoutComponent,
     ButtonComponent,
-    ItemIconComponent
+    ItemIconComponent,
+    TextFieldComponent,
+    SectionCardComponent,
+    InfoBannerComponent,
+    PersonalizationModalComponent
 ]
 })
 export class CreateCategoriesPage {
@@ -67,9 +78,9 @@ export class CreateCategoriesPage {
 
   nombreCategoria = '';
 
-  iconoSeleccionado = '';
+  iconoSeleccionado: string = CATEGORY_ICONS[0]?.icon ?? '';
 
-  colorSeleccionado = '';
+  colorSeleccionado: string = PERSONALIZATION_COLORS[0]?.value ?? '';
 
   /* ==========================
      UI STATE
@@ -80,6 +91,8 @@ export class CreateCategoriesPage {
   showCustomAlert = false;
 
   showGenericAlert = false;
+
+  isPersonalizationModalOpen = false;
 
   constructor(
     private registerCategoryUseCase: CreateCategoryUseCase,
@@ -140,8 +153,8 @@ export class CreateCategoriesPage {
 
     return Boolean(
       this.nombreCategoria.trim() ||
-      this.iconoSeleccionado ||
-      this.colorSeleccionado
+      this.iconoSeleccionado !== (CATEGORY_ICONS[0]?.icon ?? '') ||
+      this.colorSeleccionado !== (PERSONALIZATION_COLORS[0]?.value ?? '')
     );
   }
 
@@ -159,6 +172,20 @@ export class CreateCategoriesPage {
 
     this.colorSeleccionado =
       option.value;
+  }
+
+  openPersonalizationModal(): void {
+    this.isPersonalizationModalOpen = true;
+  }
+
+  closePersonalizationModal(): void {
+    this.isPersonalizationModalOpen = false;
+  }
+
+  applyPersonalization(value: PersonalizationValue): void {
+    this.iconoSeleccionado = value.icon;
+    this.colorSeleccionado = value.color;
+    this.closePersonalizationModal();
   }
 
   clearNombreCategoria(): void {

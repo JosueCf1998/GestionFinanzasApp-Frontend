@@ -13,6 +13,7 @@ node_modules/
 www/
 dist/
 build/
+out-tsc/
 coverage/
 out-tsc/
 

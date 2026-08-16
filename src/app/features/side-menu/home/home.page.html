@@ -35,7 +35,7 @@
         <div class="balance-left">
 
           <h2 class="text-display-large text-white balance-amount">
-            S/. {{ amount | number:'1.2-2' }}
+            {{ amount < 0 ? '-' : '' }}S/. {{ (amount < 0 ? -amount : amount) | number:'1.2-2' }}
           </h2>
 
         </div>
@@ -179,7 +179,7 @@
           <div class="category-action">
 
             <span class="category-amount text-body-bold">
-              S/. {{ category.totalAmount | number:'1.2-2' }}
+              {{ category.totalAmount < 0 ? '-' : '' }}S/. {{ (category.totalAmount < 0 ? -category.totalAmount : category.totalAmount) | number:'1.2-2' }}
             </span>
 
             <ion-icon
