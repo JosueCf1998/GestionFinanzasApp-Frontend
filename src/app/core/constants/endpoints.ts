@@ -62,6 +62,34 @@ export const ENDPOINTS = {
 
     TOP_EXPENSE_CATEGORIES: 'dashboard/top-expense-categories'
 
+  },
+
+  LEARNING: {
+
+    HOME: 'learning/home',
+
+    CATEGORIES: 'learning/categories',
+
+    COURSES_BY_CATEGORY: 'learning/courses/category',
+
+    COURSES_BY_LEVEL: 'learning/courses/level',
+
+    COURSE_DETAIL: 'learning/courses/detail',
+
+    LESSON_DETAIL: 'learning/lessons/detail',
+
+    START_LESSON: 'learning/lessons/start',
+
+    COMPLETE_LESSON: 'learning/lessons/complete',
+
+    QUIZ_DETAIL: 'learning/quiz/detail',
+
+    SUBMIT_QUIZ: 'learning/quiz/submit',
+
+    RECOMMENDATIONS: 'learning/recommendations',
+
+    STATS: 'learning/stats'
+
   }
 
 };
