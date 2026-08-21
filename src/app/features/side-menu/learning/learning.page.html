@@ -1,0 +1,155 @@
+<ion-content class="learning-page">
+  <section class="learning-hero" [class.has-featured]="featuredCourse">
+    <span class="hero-orb hero-orb-one"></span>
+    <span class="hero-orb hero-orb-two"></span>
+
+    <div class="hero-copy">
+      <p class="eyebrow">FINVIA ACADEMY</p>
+      <h1>Aprende con FinVia</h1>
+      <p>Conoce, practica y mejora tus finanzas con lecciones simples y efectivas.</p>
+    </div>
+
+    @if (featuredCourse) {
+    <article class="featured-card">
+      <div class="featured-copy">
+        <span class="featured-label">
+          <ion-icon name="star"></ion-icon>
+          Lección destacada
+        </span>
+        <h2>{{ featuredCourse.title }}</h2>
+        <p>{{ featuredCourse.description }}</p>
+        <button type="button">Ver lección</button>
+      </div>
+
+      <div class="featured-visual" aria-hidden="true">
+        @if (featuredCourse.imageUrl) {
+          <img [src]="featuredCourse.imageUrl" [alt]="featuredCourse.title">
+        } @else {
+          <app-item-icon icon="study" color="var(--fv-primary)" size="xl" variant="plain"></app-item-icon>
+        }
+      </div>
+    </article>
+    }
+  </section>
+
+  <main class="learning-content" [class.has-featured]="featuredCourse">
+    @if (loading) {
+      <div class="learning-status">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>Cargando tu aprendizaje...</span>
+      </div>
+    } @else if (errorMessage) {
+      <div class="learning-status error-status">
+        <ion-icon name="cloud-offline-outline"></ion-icon>
+        <span>{{ errorMessage }}</span>
+        <button type="button" (click)="retry()">Reintentar</button>
+      </div>
+    }
+
+    <article class="progress-card">
+      <div class="progress-block">
+        <div class="metric-icon level-icon">
+          <ion-icon name="stats-chart"></ion-icon>
+        </div>
+        <div class="metric-copy">
+          <span>Nivel financiero</span>
+          <strong>{{ financialLevel }}</strong>
+          <div class="level-progress"><i [style.width.%]="xpPercentage"></i></div>
+          <small>{{ currentXp | number }} / {{ nextLevelXp | number }} XP</small>
+        </div>
+      </div>
+
+      <div class="metric-divider"></div>
+
+      <div class="progress-block streak-block">
+        <div class="metric-icon streak-icon">🔥</div>
+        <div class="metric-copy">
+          <span>Racha actual</span>
+          <strong>{{ streakDays }} {{ streakDays === 1 ? 'día' : 'días' }}</strong>
+          <small>¡Sigue así!</small>
+        </div>
+      </div>
+    </article>
+
+    @if (categories.length) {
+    <div class="category-scroll" aria-label="Categorías de aprendizaje">
+      @for (category of categories; track category.value) {
+        <button
+          type="button"
+          class="category-chip"
+          [class.active]="selectedCategory === category.value"
+          (click)="selectCategory(category.value)">
+          <app-item-icon
+            [icon]="category.icon"
+            color="var(--fv-primary)"
+            size="xs"
+            variant="plain">
+          </app-item-icon>
+          <span>{{ category.label }}</span>
+        </button>
+      }
+    </div>
+    }
+
+    <section class="content-section">
+      <div class="section-title">
+        <h2>Rutas de aprendizaje</h2>
+        <button type="button">Ver todas <ion-icon name="chevron-forward"></ion-icon></button>
+      </div>
+
+      @if (paths.length) {
+      <div class="paths-grid">
+        @for (path of paths; track path.title) {
+          <article class="path-card">
+            <div class="path-heading">
+              <app-item-icon
+                [icon]="path.icon"
+                [color]="path.color"
+                size="sm"
+                variant="soft">
+              </app-item-icon>
+              <h3>{{ path.title }}</h3>
+            </div>
+            <p>{{ path.description }}</p>
+            <div class="path-meta">
+              <span>{{ path.lessons }} lecciones</span>
+              <strong [style.color]="path.color">{{ path.progress }}%</strong>
+            </div>
+            <div class="path-progress"><i [style.width.%]="path.progress" [style.background]="path.color"></i></div>
+          </article>
+        }
+      </div>
+      } @else if (!loading) {
+        <p class="empty-copy">Aún no hay rutas de aprendizaje disponibles.</p>
+      }
+    </section>
+
+    <section class="content-section recommended-section">
+      <div class="section-title">
+        <h2>Lecciones recomendadas</h2>
+        <button type="button">Ver todas <ion-icon name="chevron-forward"></ion-icon></button>
+      </div>
+
+      @if (lessons.length) {
+      <div class="lesson-list">
+        @for (lesson of lessons; track lesson.title) {
+          <button type="button" class="lesson-row">
+            <app-item-icon
+              [icon]="lesson.icon"
+              [color]="lesson.color"
+              size="sm"
+              variant="soft">
+            </app-item-icon>
+            <span class="lesson-title">{{ lesson.title }}</span>
+            <span class="lesson-time"><ion-icon name="time-outline"></ion-icon>{{ lesson.duration }} min</span>
+            <ion-icon class="lesson-arrow" name="chevron-forward"></ion-icon>
+          </button>
+        }
+      </div>
+      } @else if (!loading) {
+        <p class="empty-copy">Aún no tienes lecciones recomendadas.</p>
+      }
+    </section>
+
+  </main>
+</ion-content>

@@ -25,11 +25,6 @@ export interface SubmitQuizRequest extends LessonRequest {
   answers: QuizAnswerRequest[];
 }
 
-/**
- * El backend todavía no define un contrato cerrado para las respuestas de
- * aprendizaje. Estos tipos conservan los campos conocidos y permiten recibir
- * campos adicionales sin perder el tipado de las peticiones.
- */
 export interface LearningEntity {
   id?: number;
   [key: string]: unknown;
@@ -40,8 +35,52 @@ export interface LearningItemsResponse<T = LearningEntity> {
   [key: string]: unknown;
 }
 
+export interface LearningUserProgress {
+  level: string;
+  xp: number;
+  next_level_xp: number;
+  streak: number;
+}
+
+export interface LearningFeaturedCourse {
+  id: number;
+  title: string;
+  description: string;
+  image_url: string;
+  progress: number;
+}
+
+export interface LearningHomeCategory {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+export interface LearningHomePath {
+  id: number;
+  title: string;
+  description: string;
+  lessons: number;
+  progress: number;
+}
+
+export interface LearningRecommendedLesson {
+  id: number;
+  course_id: number;
+  course_title: string;
+  title: string;
+  number: number;
+  minutes: number;
+  level: LearningLevel;
+}
+
 export interface LearningHomeResponse {
-  [key: string]: unknown;
+  user_progress: LearningUserProgress;
+  featured_course: LearningFeaturedCourse | null;
+  categories: LearningHomeCategory[];
+  learning_paths: LearningHomePath[];
+  recommended_lessons: LearningRecommendedLesson[];
 }
 
 export interface LearningCategory extends LearningEntity {

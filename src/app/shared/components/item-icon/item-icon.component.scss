@@ -98,6 +98,35 @@
   background: var(--fv-item-icon-color);
 }
 
+/*
+ * En la variante sin contenedor el glyph aprovecha mejor el área disponible.
+ * Las variantes solid, soft, glass y nav-glass mantienen su escala original.
+ */
+.fv-item-icon--plain.fv-item-icon--xs .fv-item-icon__glyph {
+  width: 18px;
+  height: 18px;
+}
+
+.fv-item-icon--plain.fv-item-icon--sm .fv-item-icon__glyph {
+  width: 24px;
+  height: 24px;
+}
+
+.fv-item-icon--plain.fv-item-icon--md .fv-item-icon__glyph {
+  width: 30px;
+  height: 30px;
+}
+
+.fv-item-icon--plain.fv-item-icon--lg .fv-item-icon__glyph {
+  width: 36px;
+  height: 36px;
+}
+
+.fv-item-icon--plain.fv-item-icon--xl .fv-item-icon__glyph {
+  width: 48px;
+  height: 48px;
+}
+
 .fv-item-icon--nav-glass {
   --fv-nav-action-size: 40px;
   width: var(--fv-nav-action-size);
