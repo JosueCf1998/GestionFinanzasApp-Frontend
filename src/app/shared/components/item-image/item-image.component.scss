@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.fv-item-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-position: center;
+}
+
+.fv-item-image--contain { object-fit: contain; }
+.fv-item-image--cover { object-fit: cover; }
+.fv-item-image--fill { object-fit: fill; }
+.fv-item-image--left { object-position: left center; }
+.fv-item-image--right { object-position: right center; }
+.fv-item-image--top { object-position: center top; }
+.fv-item-image--bottom { object-position: center bottom; }
+.fv-item-image--radius-sm { border-radius: 6px; }
+.fv-item-image--radius-md { border-radius: 12px; }
+.fv-item-image--radius-lg { border-radius: 18px; }
+.fv-item-image--radius-full { border-radius: 999px; }

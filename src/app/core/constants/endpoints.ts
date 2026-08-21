@@ -88,7 +88,9 @@ export const ENDPOINTS = {
 
     RECOMMENDATIONS: 'learning/recommendations',
 
-    STATS: 'learning/stats'
+    STATS: 'learning/stats',
+
+    QUESTIONS: 'learning/questions'
 
   }
 

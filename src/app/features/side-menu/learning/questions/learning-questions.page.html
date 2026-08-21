@@ -1,0 +1,71 @@
+<ion-header>
+  <app-page-layout title="Resuelve tus dudas" (back)="back()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content class="questions-page" [fullscreen]="false">
+  <main class="questions-content">
+    <header class="questions-intro">
+      <h2>¿Qué quieres saber?</h2>
+      <p>Encuentra respuestas claras para tomar mejores decisiones con tu dinero.</p>
+    </header>
+
+    <label class="questions-search">
+      <app-item-icon icon="search-question" color="var(--fv-primary)" size="sm" variant="plain"></app-item-icon>
+      <input [(ngModel)]="search" type="search" placeholder="Busca una pregunta o palabra clave" aria-label="Buscar preguntas">
+      <app-item-icon icon="category" color="var(--fv-primary)" size="sm" variant="soft"></app-item-icon>
+    </label>
+
+    <div class="question-categories" aria-label="Categorías de preguntas">
+      @for (category of categories; track category.value) {
+        <button
+          type="button"
+          [class.active]="selectedCategory === category.value"
+          (click)="selectCategory(category.value)">
+          <app-item-icon [icon]="category.icon" color="var(--fv-primary)" size="xs" variant="plain"></app-item-icon>
+          {{ category.label }}
+        </button>
+      }
+    </div>
+
+    <section class="questions-list" aria-label="Preguntas frecuentes">
+      @if (loading) {
+        <div class="questions-state">Cargando preguntas...</div>
+      } @else if (errorMessage) {
+        <div class="questions-state">
+          <span>{{ errorMessage }}</span>
+          <app-button text="Reintentar" variant="primary" size="compact" expand="auto" (clicked)="retry()"></app-button>
+        </div>
+      } @else {
+      @for (item of filteredQuestions; track item.id) {
+        <article class="question-item" [style.--question-color]="questionColor(item)">
+          <button type="button" class="question-trigger" (click)="toggleQuestion(item.id)">
+            <app-item-icon [icon]="questionIcon(item)" [color]="questionColor(item)" size="md" variant="soft"></app-item-icon>
+            <strong>{{ item.question }}</strong>
+            <app-item-icon
+              class="question-chevron"
+              [class.expanded]="expandedQuestionId === item.id"
+              icon="right-inline"
+              color="var(--fv-text-muted)"
+              size="xs"
+              variant="plain">
+            </app-item-icon>
+          </button>
+          @if (expandedQuestionId === item.id) {
+            <div class="question-answer">
+              <p>{{ item.answer }}</p>
+            </div>
+          }
+        </article>
+      } @empty {
+        <div class="questions-empty">
+          <app-item-icon icon="search-question" color="var(--fv-primary)" size="lg" variant="soft"></app-item-icon>
+          <strong>No encontramos resultados</strong>
+          <span>Prueba con otra palabra o categoría.</span>
+        </div>
+      }
+      }
+    </section>
+
+  </main>
+</ion-content>

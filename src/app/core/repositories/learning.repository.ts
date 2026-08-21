@@ -10,6 +10,7 @@ import {
   LearningHomeResponse,
   LearningItemsResponse,
   LearningLesson,
+  LearningQuestion,
   LearningRecommendationsResponse,
   LearningStatsResponse,
   LessonProgressResponse,
@@ -75,5 +76,9 @@ export class LearningRepository {
 
   getStats(): Observable<Result<LearningStatsResponse>> {
     return this.apiService.get(ENDPOINTS.LEARNING.STATS);
+  }
+
+  getQuestions(): Observable<Result<LearningQuestion[]>> {
+    return this.apiService.get(ENDPOINTS.LEARNING.QUESTIONS);
   }
 }

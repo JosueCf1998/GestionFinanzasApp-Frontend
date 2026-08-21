@@ -35,6 +35,9 @@ export class ButtonComponent {
   @Input()
   icon?: string;
 
+  @Input()
+  iconPosition: 'start' | 'end' = 'start';
+
   /* ==========================================================
    * VARIANT
    * ========================================================== */
@@ -60,7 +63,7 @@ export class ButtonComponent {
    * ========================================================== */
 
   @Input()
-  size: 'default' | 'compact' = 'default';
+  size: 'default' | 'compact' | 'dense' = 'default';
 
   /* ==========================================================
    * EXPAND

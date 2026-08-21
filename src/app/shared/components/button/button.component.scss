@@ -42,6 +42,20 @@
   height: 17px;
 }
 
+.fv-button.dense {
+  height: 34px;
+  --padding-start: 13px;
+  --padding-end: 13px;
+  --border-radius: 10px;
+  font-size: 11px;
+  font-weight: var(--fv-fw-semibold);
+}
+
+.fv-button.dense .button-icon {
+  width: 15px;
+  height: 15px;
+}
+
 /* ==========================================================
    CONTENT
    ========================================================== */
@@ -271,6 +285,14 @@
 
     font-size: 15px;
 
+  }
+
+  .fv-button.compact {
+    height: 40px;
+  }
+
+  .fv-button.dense {
+    height: 34px;
   }
 
   .fv-button.danger {

@@ -6,12 +6,14 @@ import {
   LearningHomeCategory,
   LearningHomePath,
   LearningHomeResponse,
-  LearningRecommendedLesson,
   LearningUserProgress
 } from 'src/app/core/models/learning/learning.model';
 import { GetLearningHomeUseCase } from 'src/app/core/use-cases/learning/get-learning-home.usecase';
+import { NavigationService } from 'src/app/core/services/navigation.service';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
-import { environment } from 'src/environments/environment';
+import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
+import { ItemImageComponent } from 'src/app/shared/components/item-image/item-image.component';
 
 import 'src/app/core/utils/observable-extensions';
 
@@ -26,7 +28,7 @@ interface FeaturedCourseView {
   id: number;
   title: string;
   description: string;
-  imageUrl: string;
+  image: string;
   progress: number;
 }
 
@@ -40,21 +42,19 @@ interface LearningPath {
   color: string;
 }
 
-interface RecommendedLesson {
-  id: number;
-  title: string;
-  duration: number;
-  icon: string;
-  color: string;
-}
-
 const PATH_COLORS = ['#20b26b', '#6d43e5', '#4b8df8'];
-const LESSON_COLORS = ['#8057df', '#43c69a', '#ffa629'];
 
 @Component({
   selector: 'app-learning',
   standalone: true,
-  imports: [CommonModule, IonicModule, ItemIconComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ItemIconComponent,
+    ItemImageComponent,
+    ButtonComponent,
+    EmptyStateComponent
+  ],
   templateUrl: './learning.page.html',
   styleUrls: ['./learning.page.scss']
 })
@@ -72,9 +72,11 @@ export class LearningPage implements OnInit {
   streakDays = 0;
   categories: LearningCategoryView[] = [];
   paths: LearningPath[] = [];
-  lessons: RecommendedLesson[] = [];
 
-  constructor(private readonly getLearningHomeUseCase: GetLearningHomeUseCase) {}
+  constructor(
+    private readonly getLearningHomeUseCase: GetLearningHomeUseCase,
+    private readonly navigationService: NavigationService
+  ) {}
 
   // MARK: - ACCIONES Y CICLO DE VIDA
 
@@ -88,6 +90,10 @@ export class LearningPage implements OnInit {
 
   retry(): void {
     this.loadHome();
+  }
+
+  openQuestions(): void {
+    void this.navigationService.push('/learning/questions');
   }
 
   get xpPercentage(): number {
@@ -126,7 +132,6 @@ export class LearningPage implements OnInit {
     this.categories = this.mapCategories(data.categories);
     this.selectedCategory = this.categories[0]?.value ?? '';
     this.paths = this.mapLearningPaths(data.learning_paths);
-    this.lessons = this.mapRecommendedLessons(data.recommended_lessons);
   }
 
   private mapFeaturedCourse(course: LearningFeaturedCourse | null): FeaturedCourseView | null {
@@ -136,7 +141,7 @@ export class LearningPage implements OnInit {
       id: course.id,
       title: course.title,
       description: course.description,
-      imageUrl: this.resolveImageUrl(course.image_url),
+      image: course.image_url.split('/').pop()?.split('.')[0] ?? '',
       progress: this.clamp(course.progress)
     };
   }
@@ -169,16 +174,6 @@ export class LearningPage implements OnInit {
     }));
   }
 
-  private mapRecommendedLessons(lessons: LearningRecommendedLesson[]): RecommendedLesson[] {
-    return lessons.map((lesson, index) => ({
-      id: lesson.id,
-      title: lesson.title,
-      duration: lesson.minutes,
-      icon: this.resolveCourseIcon(lesson.course_title),
-      color: LESSON_COLORS[index % LESSON_COLORS.length]
-    }));
-  }
-
   private clamp(value: number): number {
     return Math.min(100, Math.max(0, value));
   }
@@ -196,9 +191,4 @@ export class LearningPage implements OnInit {
     return 'study';
   }
 
-  private resolveImageUrl(imageUrl: string): string {
-    if (!imageUrl || /^https?:\/\//.test(imageUrl)) return imageUrl;
-
-    return `${environment.apiUrl.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
-  }
 }

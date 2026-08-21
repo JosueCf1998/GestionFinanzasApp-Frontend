@@ -102,6 +102,11 @@
  * En la variante sin contenedor el glyph aprovecha mejor el área disponible.
  * Las variantes solid, soft, glass y nav-glass mantienen su escala original.
  */
+.fv-item-icon--plain.fv-item-icon--xxs .fv-item-icon__glyph {
+  width: 14px;
+  height: 14px;
+}
+
 .fv-item-icon--plain.fv-item-icon--xs .fv-item-icon__glyph {
   width: 18px;
   height: 18px;
@@ -181,6 +186,17 @@
 /* ==========================================================
    SIZE
    ========================================================== */
+
+.fv-item-icon--xxs {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+}
+
+.fv-item-icon--xxs .fv-item-icon__glyph {
+  width: 10px;
+  height: 10px;
+}
 
 .fv-item-icon--xs {
   width: 24px;

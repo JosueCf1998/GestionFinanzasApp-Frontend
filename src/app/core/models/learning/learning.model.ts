@@ -122,3 +122,12 @@ export interface LearningRecommendationsResponse {
 export interface LearningStatsResponse {
   [key: string]: unknown;
 }
+
+export interface LearningQuestion {
+  id: number;
+  category: string;
+  question: string;
+  answer: string;
+  icon?: string;
+  color?: string;
+}

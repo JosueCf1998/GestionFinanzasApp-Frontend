@@ -10,6 +10,7 @@
   [class.ghost]="variant === 'ghost'"
   [class.danger]="variant === 'danger'"
   [class.compact]="size === 'compact'"
+  [class.dense]="size === 'dense'"
   [class.auto]="expand === 'auto'"
   [expand]="expand === 'auto' ? undefined : expand"
   [type]="type"
@@ -32,7 +33,7 @@
   <ng-container *ngIf="!loading">
 
     <ion-icon
-      *ngIf="icon"
+      *ngIf="icon && iconPosition === 'start'"
       class="button-icon"
       [src]="'assets/icon/' + icon + '.svg'">
     </ion-icon>
@@ -42,6 +43,12 @@
       {{ text }}
 
     </span>
+
+    <ion-icon
+      *ngIf="icon && iconPosition === 'end'"
+      class="button-icon"
+      [src]="'assets/icon/' + icon + '.svg'">
+    </ion-icon>
 
   </ng-container>
 

@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
    TYPES
    ========================================================== */
 
-export type ItemIconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type ItemIconSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type ItemIconShape = 'rounded' | 'circle';
 export type ItemIconVariant = 'solid' | 'soft' | 'glass' | 'plain' | 'nav-glass';
 

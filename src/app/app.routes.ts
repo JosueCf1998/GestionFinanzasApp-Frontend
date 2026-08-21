@@ -75,6 +75,11 @@ export const routes: Routes = [
       }
     ],
   },
+  // LEARNING ROUTES
+  {
+    path: 'learning/questions',
+    loadComponent: () => import('./features/side-menu/learning/questions/learning-questions.page').then(m => m.LearningQuestionsPage)
+  },
   // GRAPHICS ROUTES
   {
     path: 'graphics/expenses-by-category',
