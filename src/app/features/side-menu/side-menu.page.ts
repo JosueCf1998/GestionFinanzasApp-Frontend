@@ -67,6 +67,7 @@ export class SideMenuPage implements OnInit {
     { title: "Presupuesto", url: "/main/budgets", icon: "wallet" },
     { title: "Mi Perfil", url: "/main/profile", icon: "user" },
     { title: "Transacciones", url: "/main/transactions", icon: "bills" },
+    { title: "Aprender", url: "/main/learning", icon: "school" },
   ];
 
   /*accountPages = [

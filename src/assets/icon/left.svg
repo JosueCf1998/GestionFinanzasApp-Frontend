@@ -1,7 +1,1 @@
-<svg class="customizable-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M3 12H21M10 19L3 12L10 5"
-        stroke="currentColor"
-        stroke-width="2.1"
-        stroke-linecap="round"
-        stroke-linejoin="round"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44" d="M244 400L100 256l144-144M120 256h292"/></svg>

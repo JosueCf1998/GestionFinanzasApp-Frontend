@@ -1,0 +1,18 @@
+@if (source) {
+  <img
+    class="fv-item-image"
+    [class.fv-item-image--contain]="fit === 'contain'"
+    [class.fv-item-image--cover]="fit === 'cover'"
+    [class.fv-item-image--fill]="fit === 'fill'"
+    [class.fv-item-image--left]="position === 'left'"
+    [class.fv-item-image--right]="position === 'right'"
+    [class.fv-item-image--top]="position === 'top'"
+    [class.fv-item-image--bottom]="position === 'bottom'"
+    [class.fv-item-image--radius-sm]="radius === 'sm'"
+    [class.fv-item-image--radius-md]="radius === 'md'"
+    [class.fv-item-image--radius-lg]="radius === 'lg'"
+    [class.fv-item-image--radius-full]="radius === 'full'"
+    [src]="source"
+    [alt]="alt"
+    [attr.loading]="loading">
+}

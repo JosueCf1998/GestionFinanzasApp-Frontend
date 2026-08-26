@@ -72,8 +72,17 @@ export const routes: Routes = [
       {
         path: 'transactions',
         loadComponent: () => import('./features/side-menu/transactions/transactions.page').then(m => m.TransactionsPage)
+      },
+      {
+        path: 'learning',
+        loadComponent: () => import('./features/side-menu/learning/learning.page').then(m => m.LearningPage)
       }
     ],
+  },
+  // LEARNING ROUTES
+  {
+    path: 'learning/questions',
+    loadComponent: () => import('./features/side-menu/learning/questions/learning-questions.page').then(m => m.LearningQuestionsPage)
   },
   // GRAPHICS ROUTES
   {

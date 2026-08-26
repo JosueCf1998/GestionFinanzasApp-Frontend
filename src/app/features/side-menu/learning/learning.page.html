@@ -1,0 +1,202 @@
+<ion-content class="learning-page">
+  <section class="learning-hero" [class.has-featured]="featuredCourse">
+    <span class="hero-orb hero-orb-one"></span>
+    <span class="hero-orb hero-orb-two"></span>
+
+    <div class="hero-copy">
+      <h1>Aprende con FinVia</h1>
+      <p>Conoce, practica y mejora tus finanzas con lecciones simples y efectivas.</p>
+    </div>
+
+    @if (featuredCourse) {
+    <article class="featured-card">
+      <div class="featured-copy">
+        <span class="featured-label">
+          <app-item-icon icon="star" color="#ffffff" size="xxs" variant="plain"></app-item-icon>
+          Lección destacada
+        </span>
+        <h2>{{ featuredCourse.title }}</h2>
+        <p>{{ featuredCourse.description }}</p>
+        <app-button
+          text="Ver lección"
+          variant="primary"
+          size="dense"
+          expand="auto">
+        </app-button>
+      </div>
+
+      <div class="featured-visual" aria-hidden="true">
+        <app-item-image
+          [image]="featuredCourse.image"
+          format="svg"
+          [alt]="featuredCourse.title"
+          fit="contain"
+          position="center"
+          loading="eager">
+        </app-item-image>
+      </div>
+    </article>
+    }
+  </section>
+
+  <main class="learning-content" [class.has-featured]="featuredCourse">
+    @if (loading) {
+      <div class="learning-status">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>Cargando tu aprendizaje...</span>
+      </div>
+    } @else if (errorMessage) {
+      <div class="learning-status error-status">
+        <app-item-icon icon="alert-triangle" color="var(--fv-danger)" size="xs" variant="plain"></app-item-icon>
+        <span>{{ errorMessage }}</span>
+        <app-button
+          text="Reintentar"
+          variant="primary"
+          size="compact"
+          expand="auto"
+          (clicked)="retry()">
+        </app-button>
+      </div>
+    }
+
+    <article class="progress-card">
+      <div class="progress-block">
+        <app-item-icon icon="chart" color="var(--fv-primary)" size="lg" shape="circle" variant="soft"></app-item-icon>
+        <div class="metric-copy">
+          <span>Nivel financiero</span>
+          <strong>{{ financialLevel }}</strong>
+          <div class="level-progress"><i [style.width.%]="xpPercentage"></i></div>
+          <small>{{ currentXp | number }} / {{ nextLevelXp | number }} XP</small>
+        </div>
+      </div>
+
+      <div class="metric-divider"></div>
+
+      <div class="progress-block streak-block">
+        <app-item-icon icon="streak-fire" color="var(--fv-warning)" size="lg" shape="circle" variant="soft"></app-item-icon>
+        <div class="metric-copy">
+          <span>Racha actual</span>
+          <strong>{{ streakDays }} {{ streakDays === 1 ? 'día' : 'días' }}</strong>
+          <small>¡Sigue así!</small>
+        </div>
+      </div>
+    </article>
+
+    @if (categories.length) {
+    <div class="category-scroll" aria-label="Categorías de aprendizaje">
+      @for (category of categories; track category.value) {
+        <button
+          type="button"
+          class="category-chip"
+          [class.active]="selectedCategory === category.value"
+          (click)="selectCategory(category.value)">
+          <app-item-icon
+            [icon]="category.icon"
+            color="var(--fv-primary)"
+            size="xs"
+            variant="plain">
+          </app-item-icon>
+          <span>{{ category.label }}</span>
+        </button>
+      }
+    </div>
+    }
+
+    <button
+      type="button"
+      class="questions-card"
+      aria-label="Abrir Resuelve tus dudas"
+      (click)="openQuestions()">
+      <app-item-icon
+        icon="search-question"
+        color="var(--fv-primary)"
+        size="md"
+        variant="soft">
+      </app-item-icon>
+
+      <span class="questions-copy">
+        <strong>Resuelve tus dudas</strong>
+        <small>Encuentra respuestas financieras por tema</small>
+      </span>
+
+      <app-item-icon
+        class="questions-arrow"
+        icon="right-inline"
+        color="var(--fv-text-muted)"
+        size="xs"
+        variant="plain">
+      </app-item-icon>
+    </button>
+
+    <section class="content-section">
+      <div class="section-title">
+        <h2>Rutas de aprendizaje</h2>
+      </div>
+
+      @if (paths.length) {
+      <div class="paths-grid">
+        @for (path of paths; track path.id) {
+          <button
+            type="button"
+            class="path-card"
+            [style.--path-color]="path.color"
+            [attr.aria-label]="path.title + ', ' + path.progress + '% completado'">
+            <app-item-icon
+              [icon]="path.icon"
+              [color]="path.color"
+              size="lg"
+              variant="soft">
+            </app-item-icon>
+
+            <div class="path-content">
+              <div class="path-heading">
+                <h3>{{ path.title }}</h3>
+              </div>
+              <p>{{ path.description }}</p>
+              <div class="path-meta">
+                <span>
+                  <app-item-icon
+                    icon="book"
+                    color="var(--fv-text-muted)"
+                    size="xxs"
+                    variant="plain">
+                  </app-item-icon>
+                  {{ path.lessons }} lecciones
+                </span>
+              </div>
+              <div class="path-progress-row">
+                <div
+                  class="path-progress"
+                  role="progressbar"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [attr.aria-valuenow]="path.progress">
+                  <i [style.width.%]="path.progress"></i>
+                </div>
+                <strong>{{ path.progress }}%</strong>
+              </div>
+            </div>
+
+            <div class="path-side">
+              <app-item-icon
+                class="path-arrow"
+                icon="right-inline"
+                color="var(--fv-text-muted)"
+                size="xs"
+                variant="plain">
+              </app-item-icon>
+            </div>
+          </button>
+        }
+      </div>
+      } @else if (!loading) {
+        <app-empty-state
+          icon="study"
+          title="Sin rutas disponibles"
+          description="Aún no hay rutas de aprendizaje disponibles.">
+        </app-empty-state>
+      }
+    </section>
+
+  </main>
+</ion-content>

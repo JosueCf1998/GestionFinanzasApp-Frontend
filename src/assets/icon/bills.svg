@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<style>.cls-1,.cls-2{fill:none;stroke:currentColor;stroke-miterlimit:10;stroke-width:1.91px;}.cls-2{stroke-linecap:square;}</style>
-</defs>
-<g id="money_stack" data-name="money stack">
-<line class="cls-1" x1="4.36" y1="15.82" x2="6.27" y2="15.82"/>
-<line class="cls-1" x1="17.73" y1="15.82" x2="19.64" y2="15.82"/>
-<rect class="cls-2" x="1.5" y="9.14" width="21" height="13.36"/>
-<line class="cls-2" x1="3.41" y1="5.32" x2="20.59" y2="5.32"/>
-<line class="cls-2" x1="5.32" y1="1.5" x2="18.68" y2="1.5"/>
-<circle class="cls-2" cx="12" cy="15.82" r="3.82"/>
-<line class="cls-1" x1="4.36" y1="15.82" x2="6.27" y2="15.82"/>
-<line class="cls-1" x1="17.73" y1="15.82" x2="19.64" y2="15.82"/>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="44" d="M160 336V48l32 16 32-16 31.94 16 32.37-16L320 64l31.79-16 31.93 16L416 48l32.01 16L480 48v224"/><path d="M480 272v112a80 80 0 01-80 80h0a80 80 0 01-80-80v-48H48a15.86 15.86 0 00-16 16c0 64 6.74 112 80 112h288" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="44"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="44" d="M224 144h192M288 224h128"/></svg>
