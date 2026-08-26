@@ -11,8 +11,6 @@ import "src/app/core/utils/observable-extensions";
 
 import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
 import { SectionCardComponent } from "src/app/shared/components/section-card/section-card.component";
-import { WarningMessageComponent } from "src/app/shared/components/warning-message/warning-message.component";
-import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 import { ProfileFieldEditModalComponent } from "./profile-field-edit-modal/profile-field-edit-modal.component";
@@ -39,8 +37,6 @@ export type ProfileFieldType = "name" | "email" | "phone";
     IonicModule,
     FeatureHeaderComponent,
     SectionCardComponent,
-    WarningMessageComponent,
-    ButtonComponent,
     CustomAlertComponent,
     ItemIconComponent,
     ProfileFieldEditModalComponent,

@@ -288,24 +288,45 @@
       </div>
     </app-section-card>
 
-    <app-section-card title="Eliminar cuenta" icon="trash-outline">
-      <p class="section-description">
-        Elimina tu cuenta de forma permanente. Esta acción no se puede deshacer
-        y todos tus datos serán borrados definitivamente.
-      </p>
-      <app-warning-message
-        title="Acción permanente"
-        icon="assets/icon/alert-triangle.svg"
-        message="Esta acción es irreversible. Se eliminarán todas tus cuentas, transacciones, presupuestos y datos asociados."
-      >
-      </app-warning-message>
-      <app-button
-        text="Eliminar cuenta"
-        icon="trash"
-        variant="danger"
-        (clicked)="deleteAccount()"
-      >
-      </app-button>
+    <app-section-card>
+      <div class="section-heading">
+        <app-item-icon
+          icon="alert-triangle"
+          color="#ef4444"
+          size="md"
+          variant="soft"
+        ></app-item-icon>
+        <div>
+          <p class="section-title-inline section-title-inline--danger">Eliminar cuenta</p>
+          <p class="section-subtitle">
+            Esta acción es permanente e irreversible.
+          </p>
+        </div>
+      </div>
+
+      <div class="personal-fields">
+        <button
+          class="personal-field-row personal-field-row--danger"
+          type="button"
+          (click)="deleteAccount()"
+        >
+          <div class="field-main">
+            <div class="field-icon-wrap field-icon-wrap--danger">
+              <ion-icon name="trash-outline" class="field-icon"></ion-icon>
+            </div>
+            <div class="field-copy">
+              <span class="field-label field-label--danger">Eliminar cuenta permanentemente</span>
+              <span class="field-value">Se borrarán todas tus cuentas, transacciones y presupuestos.</span>
+            </div>
+          </div>
+          <div class="field-side">
+            <ion-icon
+              name="chevron-forward-outline"
+              class="field-arrow field-arrow--danger"
+            ></ion-icon>
+          </div>
+        </button>
+      </div>
     </app-section-card>
   </div>
 </ion-content>
