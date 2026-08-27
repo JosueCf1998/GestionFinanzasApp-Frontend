@@ -53,12 +53,13 @@ export interface LearningFeaturedCourse {
 export interface LearningHomeCategory {
   id: number;
   name: string;
-  description: string;
+  description?: string;
   icon: string;
 }
 
 export interface LearningHomePath {
   id: number;
+  id_categories: number;
   title: string;
   description: string;
   lessons: number;

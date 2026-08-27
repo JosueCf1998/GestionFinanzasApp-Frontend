@@ -10,6 +10,7 @@ import {
 } from 'src/app/core/models/learning/learning.model';
 import { GetLearningHomeUseCase } from 'src/app/core/use-cases/learning/get-learning-home.usecase';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
@@ -34,6 +35,7 @@ interface FeaturedCourseView {
 
 interface LearningPath {
   id: number;
+  categoryId: number;
   title: string;
   description: string;
   lessons: number;
@@ -62,7 +64,6 @@ export class LearningPage implements OnInit {
 
   // MARK: - ESTADO DE LA VISTA
 
-  loading = false;
   errorMessage = '';
   selectedCategory = '';
   featuredCourse: FeaturedCourseView | null = null;
@@ -71,11 +72,13 @@ export class LearningPage implements OnInit {
   nextLevelXp = 1000;
   streakDays = 0;
   categories: LearningCategoryView[] = [];
+  allPaths: LearningPath[] = [];
   paths: LearningPath[] = [];
 
   constructor(
     private readonly getLearningHomeUseCase: GetLearningHomeUseCase,
-    private readonly navigationService: NavigationService
+    private readonly navigationService: NavigationService,
+    public readonly loadingService: SpinnerService
   ) {}
 
   // MARK: - ACCIONES Y CICLO DE VIDA
@@ -86,6 +89,7 @@ export class LearningPage implements OnInit {
 
   selectCategory(category: string): void {
     this.selectedCategory = category;
+    this.filterPaths();
   }
 
   retry(): void {
@@ -103,13 +107,12 @@ export class LearningPage implements OnInit {
   // MARK: - SERVICIOS
 
   private loadHome(): void {
-    this.loading = true;
+    this.loadingService.show();
     this.errorMessage = '';
-
     this.getLearningHomeUseCase.execute()
       .service({
         success: data => {
-          this.loading = false;
+          this.loadingService.hide();
           if (!data) {
             this.errorMessage = 'No pudimos cargar tu contenido de aprendizaje.';
             return;
@@ -117,7 +120,7 @@ export class LearningPage implements OnInit {
           this.mapHomeResponse(data);
         },
         failure: error => {
-          this.loading = false;
+          this.loadingService.hide();
           this.errorMessage = error?.message
             || 'No pudimos cargar tu contenido de aprendizaje.';
         }
@@ -131,7 +134,8 @@ export class LearningPage implements OnInit {
     this.featuredCourse = this.mapFeaturedCourse(data.featured_course);
     this.categories = this.mapCategories(data.categories);
     this.selectedCategory = this.categories[0]?.value ?? '';
-    this.paths = this.mapLearningPaths(data.learning_paths);
+    this.allPaths = this.mapLearningPaths(data.learning_paths);
+    this.filterPaths();
   }
 
   private mapFeaturedCourse(course: LearningFeaturedCourse | null): FeaturedCourseView | null {
@@ -154,17 +158,26 @@ export class LearningPage implements OnInit {
   }
 
   private mapCategories(categories: LearningHomeCategory[]): LearningCategoryView[] {
-    return categories.map(category => ({
-      id: category.id,
-      value: String(category.id),
-      label: category.name,
-      icon: category.icon
-    }));
+    return [
+      {
+        id: 0,
+        value: 'all',
+        label: 'Todo',
+        icon: 'category'
+      },
+      ...categories.map(category => ({
+        id: category.id,
+        value: String(category.id),
+        label: category.name,
+        icon: category.icon
+      }))
+    ];
   }
 
   private mapLearningPaths(paths: LearningHomePath[]): LearningPath[] {
     return paths.map((path, index) => ({
       id: path.id,
+      categoryId: path.id_categories,
       title: path.title,
       description: path.description,
       lessons: path.lessons,
@@ -172,6 +185,16 @@ export class LearningPage implements OnInit {
       icon: this.resolveCourseIcon(path.title),
       color: PATH_COLORS[index % PATH_COLORS.length]
     }));
+  }
+
+  private filterPaths(): void {
+    if (this.selectedCategory === 'all') {
+      this.paths = [...this.allPaths];
+      return;
+    }
+
+    const categoryId = Number(this.selectedCategory);
+    this.paths = this.allPaths.filter(path => path.categoryId === categoryId);
   }
 
   private clamp(value: number): number {

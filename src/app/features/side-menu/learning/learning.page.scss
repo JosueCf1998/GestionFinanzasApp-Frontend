@@ -142,7 +142,7 @@ button {
 .level-progress { width: min(170px, 100%); height: 6px; margin-top: 4px; overflow: hidden; border-radius: 99px; background: #ececf4; }
 .level-progress i { display: block; width: 62%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7948e4, #5a39d0); }
 
-.category-scroll { display: flex; gap: 9px; margin-top: 14px; padding: 2px 1px 5px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+.category-scroll { display: flex; gap: 9px; margin: 0 0 10px; padding: 2px 6px 5px 1px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
 .category-scroll::-webkit-scrollbar { display: none; }
 .category-chip { display: inline-flex; min-width: max-content; min-height: 38px; align-items: center; gap: 5px; padding: 5px 11px; border: 1px solid var(--fv-border); border-radius: 14px; color: var(--fv-text-secondary); background: var(--fv-surface); font-size: 11px; font-weight: 600; scroll-snap-align: start; box-shadow: var(--fv-shadow-sm); }
 .category-chip.active { border-color: color-mix(in srgb, var(--fv-primary) 25%, white); color: var(--fv-primary); background: color-mix(in srgb, var(--fv-primary) 6%, white); box-shadow: 0 5px 14px rgba(58,12,163,.10); }
@@ -157,12 +157,12 @@ button {
 .questions-arrow { opacity: .65; transition: transform .18s ease, opacity .18s ease; }
 .questions-card:hover .questions-arrow { transform: translateX(2px); opacity: 1; }
 
-.content-section { margin-top: 19px; }
-.section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
+.content-section { margin-top: 20px; }
+.section-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .section-title h2 { margin: 0; color: #151a42; font-size: 17px; font-weight: 800; }
 .section-title app-button { flex: 0 0 auto; }
 
-.paths-grid { display: flex; flex-direction: column; gap: 8px; }
+.paths-grid { display: flex; flex-direction: column; gap: 10px; }
 .path-card { --path-color: var(--fv-primary); display: grid; width: 100%; min-height: 118px; grid-template-columns: 52px minmax(0, 1fr) 20px; gap: 14px; align-items: center; padding: 13px 14px; border: 1px solid #e5e8f0; border-radius: 17px; color: inherit; text-align: left; background: #fff; box-shadow: 0 5px 16px rgba(31,42,80,.055); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
 .path-card:hover { transform: translateY(-1px); border-color: #d9ddea; box-shadow: 0 10px 24px rgba(31,42,80,.09); }
 .path-card:active { transform: scale(.992); }

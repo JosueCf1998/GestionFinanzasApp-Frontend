@@ -40,12 +40,7 @@
   </section>
 
   <main class="learning-content" [class.has-featured]="featuredCourse">
-    @if (loading) {
-      <div class="learning-status">
-        <ion-spinner name="crescent"></ion-spinner>
-        <span>Cargando tu aprendizaje...</span>
-      </div>
-    } @else if (errorMessage) {
+    @if (errorMessage) {
       <div class="learning-status error-status">
         <app-item-icon icon="alert-triangle" color="var(--fv-danger)" size="xs" variant="plain"></app-item-icon>
         <span>{{ errorMessage }}</span>
@@ -82,26 +77,6 @@
       </div>
     </article>
 
-    @if (categories.length) {
-    <div class="category-scroll" aria-label="Categorías de aprendizaje">
-      @for (category of categories; track category.value) {
-        <button
-          type="button"
-          class="category-chip"
-          [class.active]="selectedCategory === category.value"
-          (click)="selectCategory(category.value)">
-          <app-item-icon
-            [icon]="category.icon"
-            color="var(--fv-primary)"
-            size="xs"
-            variant="plain">
-          </app-item-icon>
-          <span>{{ category.label }}</span>
-        </button>
-      }
-    </div>
-    }
-
     <button
       type="button"
       class="questions-card"
@@ -132,6 +107,27 @@
       <div class="section-title">
         <h2>Rutas de aprendizaje</h2>
       </div>
+
+      @if (categories.length) {
+      <div class="category-scroll" aria-label="Filtrar rutas por categoría">
+        @for (category of categories; track category.value) {
+          <button
+            type="button"
+            class="category-chip"
+            [class.active]="selectedCategory === category.value"
+            [attr.aria-pressed]="selectedCategory === category.value"
+            (click)="selectCategory(category.value)">
+            <app-item-icon
+              [icon]="category.icon"
+              color="var(--fv-primary)"
+              size="xs"
+              variant="plain">
+            </app-item-icon>
+            <span>{{ category.label }}</span>
+          </button>
+        }
+      </div>
+      }
 
       @if (paths.length) {
       <div class="paths-grid">
@@ -189,7 +185,7 @@
           </button>
         }
       </div>
-      } @else if (!loading) {
+      } @else if ((loadingService.loading$ | async) === false) {
         <app-empty-state
           icon="study"
           title="Sin rutas disponibles"
