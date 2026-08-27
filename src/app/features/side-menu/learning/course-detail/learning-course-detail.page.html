@@ -1,0 +1,116 @@
+<ion-header>
+  <app-page-layout
+    title="Detalle del curso"
+    [loading]="(loadingService.loading$ | async) ?? false"
+    (back)="back()">
+  </app-page-layout>
+</ion-header>
+
+<ion-content class="course-page" [fullscreen]="false" [scrollY]="true">
+  <main class="course-content">
+    @if (errorMessage) {
+      <app-empty-state
+        icon="alert-triangle"
+        title="No pudimos cargar el curso"
+        [description]="errorMessage">
+      </app-empty-state>
+      <app-button text="Reintentar" variant="primary" expand="block" (clicked)="retry()"></app-button>
+    } @else if (course) {
+      <article class="course-card">
+        <div class="course-summary">
+          <div class="course-copy">
+            <span class="level-badge">
+              <app-item-icon icon="star" color="var(--fv-primary)" size="xxs" variant="plain"></app-item-icon>
+              {{ levelLabel }}
+            </span>
+            <h1>{{ course.title }}</h1>
+            <p>{{ course.description }}</p>
+            <div class="course-meta" aria-label="Información del curso">
+              <span><app-item-icon icon="book" color="var(--fv-text-secondary)" size="xxs" variant="plain"></app-item-icon>{{ course.progress.total }} lecciones</span>
+              <span><app-item-icon icon="history" color="var(--fv-text-secondary)" size="xxs" variant="plain"></app-item-icon>{{ course.estimated_minutes }} min</span>
+            </div>
+          </div>
+          <app-item-image
+            class="course-image"
+            [image]="courseImage"
+            format="svg"
+            [alt]="course.title"
+            fit="contain"
+            loading="eager">
+          </app-item-image>
+        </div>
+
+      </article>
+
+      <article class="course-progress">
+        <div><strong>Tu progreso</strong><span>{{ course.progress.percentage }}%</span></div>
+        <div class="progress-track"><i [style.width.%]="course.progress.percentage"></i></div>
+        <small>{{ course.progress.completed }} de {{ course.progress.total }} lecciones completadas</small>
+      </article>
+
+      <section class="lessons-section">
+        <header class="lessons-heading">
+          <div>
+            <h2>Lecciones del curso</h2>
+            <p>Contenido breve para aprender a tu ritmo</p>
+          </div>
+          <span>{{ course.progress.completed }} de {{ course.progress.total }}</span>
+        </header>
+        <div class="lessons-list">
+          @for (lesson of course.lessons; track lesson.id) {
+            <button
+              type="button"
+              class="lesson-card"
+              [class.active]="activeLesson?.id === lesson.id && lesson.status !== 'COMPLETED'"
+              [class.completed]="lesson.status === 'COMPLETED'"
+              [class.locked]="!canOpenLesson(lesson)"
+              [disabled]="!canOpenLesson(lesson)"
+              [attr.aria-pressed]="activeLesson?.id === lesson.id"
+              [attr.aria-disabled]="!canOpenLesson(lesson)"
+              [attr.aria-label]="lesson.number + '. ' + lesson.title + ', ' + lesson.minutes + ' minutos, ' + lessonStatusLabel(lesson.status)"
+              (click)="selectLesson(lesson)">
+              <span class="lesson-index" aria-hidden="true">
+                @if (lesson.status === 'COMPLETED') {
+                  <app-item-icon icon="check" color="#ffffff" size="xs" variant="plain"></app-item-icon>
+                } @else {
+                  {{ lesson.number < 10 ? '0' + lesson.number : lesson.number }}
+                }
+              </span>
+              <span class="lesson-copy">
+                @if (activeLesson?.id === lesson.id && lesson.status !== 'COMPLETED') {
+                  <span class="next-lesson">{{ lesson.status === 'IN_PROGRESS' ? 'En progreso' : 'Próxima lección' }}</span>
+                }
+                <strong>{{ lesson.title }}</strong>
+                <small>
+                  @if (lesson.status === 'COMPLETED') {
+                    Completada · Repasar
+                  } @else if (lesson.status === 'IN_PROGRESS') {
+                    {{ lesson.minutes }} min · Lección {{ lesson.number }} de {{ course.progress.total }}
+                  } @else {
+                    {{ lesson.minutes }} min · {{ lessonStatusLabel(lesson.status) }}
+                  }
+                </small>
+              </span>
+              @if (activeLesson?.id === lesson.id && lesson.status !== 'COMPLETED') {
+                <span class="lesson-action" aria-hidden="true">
+                  <small>{{ lesson.status === 'IN_PROGRESS' ? 'Continuar' : 'Comenzar' }}</small>
+                  <span><app-item-icon icon="right-inline" color="#ffffff" size="xxs" variant="plain"></app-item-icon></span>
+                </span>
+              } @else {
+                <span class="lesson-chevron" aria-hidden="true">
+                  <app-item-icon
+                    [icon]="canOpenLesson(lesson) ? 'right-inline' : 'lock'"
+                    [color]="canOpenLesson(lesson) ? '#8d9ab1' : '#b5bdcc'"
+                    size="xxs"
+                    variant="plain">
+                  </app-item-icon>
+                </span>
+              }
+            </button>
+          }
+        </div>
+      </section>
+
+    }
+  </main>
+</ion-content>

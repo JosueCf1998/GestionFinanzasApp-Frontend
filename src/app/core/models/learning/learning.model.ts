@@ -84,6 +84,33 @@ export interface LearningHomeResponse {
   recommended_lessons: LearningRecommendedLesson[];
 }
 
+export type LearningLessonStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
+
+export interface LearningCourseProgress {
+  completed: number;
+  total: number;
+  percentage: number;
+}
+
+export interface LearningCourseLesson {
+  id: number;
+  number: number;
+  title: string;
+  minutes: number;
+  status: LearningLessonStatus;
+}
+
+export interface LearningCourseDetail {
+  id: number;
+  title: string;
+  description: string;
+  image_url: string;
+  level: LearningLevel;
+  estimated_minutes: number;
+  progress: LearningCourseProgress;
+  lessons: LearningCourseLesson[];
+}
+
 export interface LearningCategory extends LearningEntity {
   nombre?: string;
   name?: string;

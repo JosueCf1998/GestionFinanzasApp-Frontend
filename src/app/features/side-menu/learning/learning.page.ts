@@ -100,6 +100,10 @@ export class LearningPage implements OnInit {
     void this.navigationService.push('/learning/questions');
   }
 
+  openCourse(courseId: number): void {
+    void this.navigationService.push(`/learning/courses/${courseId}`);
+  }
+
   get xpPercentage(): number {
     return this.clamp((this.currentXp / Math.max(this.nextLevelXp, 1)) * 100);
   }

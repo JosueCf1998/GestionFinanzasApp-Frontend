@@ -80,6 +80,10 @@ export const routes: Routes = [
     path: 'learning/questions',
     loadComponent: () => import('./features/side-menu/learning/questions/learning-questions.page').then(m => m.LearningQuestionsPage)
   },
+  {
+    path: 'learning/courses/:id',
+    loadComponent: () => import('./features/side-menu/learning/course-detail/learning-course-detail.page').then(m => m.LearningCourseDetailPage)
+  },
   // GRAPHICS ROUTES
   {
     path: 'graphics/expenses-by-category',

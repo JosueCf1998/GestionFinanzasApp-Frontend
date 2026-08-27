@@ -6,18 +6,18 @@
    IONIC CORE
    ========================== */
 
-@import "@ionic/angular/css/core.css";
+@use "@ionic/angular/css/core.css";
 
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@use "@ionic/angular/css/normalize.css";
+@use "@ionic/angular/css/structure.css";
+@use "@ionic/angular/css/typography.css" as ionic-typography;
+@use "@ionic/angular/css/display.css";
 
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@use "@ionic/angular/css/padding.css";
+@use "@ionic/angular/css/float-elements.css";
+@use "@ionic/angular/css/text-alignment.css";
+@use "@ionic/angular/css/text-transformation.css";
+@use "@ionic/angular/css/flex-utils.css";
 
 /* La interfaz de FinVia utiliza una única identidad visual clara. */
 
@@ -25,14 +25,14 @@
    DESIGN SYSTEM
    ========================== */
 
-@import "./design-system/colors";
-@import "./design-system/spacing";
-@import "./design-system/shadows";
-@import "./design-system/typography";
-@import "./design-system/cards";
-@import "./design-system/buttons";
-@import "./design-system/inputs";
-@import "./design-system/menu";
+@use "./design-system/colors";
+@use "./design-system/spacing";
+@use "./design-system/shadows";
+@use "./design-system/typography" as finvia-typography;
+@use "./design-system/cards";
+@use "./design-system/buttons";
+@use "./design-system/inputs";
+@use "./design-system/menu";
 
 /* ==========================
    GLOBAL RESET

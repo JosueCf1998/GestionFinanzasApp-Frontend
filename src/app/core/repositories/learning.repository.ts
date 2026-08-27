@@ -7,6 +7,7 @@ import {
   CoursesByLevelRequest,
   LearningCategory,
   LearningCourse,
+  LearningCourseDetail,
   LearningHomeResponse,
   LearningItemsResponse,
   LearningLesson,
@@ -46,7 +47,7 @@ export class LearningRepository {
     return this.apiService.post(ENDPOINTS.LEARNING.COURSES_BY_LEVEL, request);
   }
 
-  getCourseDetail(request: CourseDetailRequest): Observable<Result<LearningCourse>> {
+  getCourseDetail(request: CourseDetailRequest): Observable<Result<LearningCourseDetail>> {
     return this.apiService.post(ENDPOINTS.LEARNING.COURSE_DETAIL, request);
   }
 

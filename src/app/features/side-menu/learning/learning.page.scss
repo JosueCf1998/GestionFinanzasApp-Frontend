@@ -25,17 +25,6 @@ button {
   padding-bottom: 20px;
 }
 
-.learning-hero::after {
-  display: none;
-}
-
-.hero-orb {
-  display: none;
-}
-
-.hero-orb-one { width: 105px; height: 105px; right: 16%; top: -55px; }
-.hero-orb-two { width: 190px; height: 190px; right: -90px; bottom: -45px; }
-
 .hero-copy {
   position: relative;
   z-index: 2;

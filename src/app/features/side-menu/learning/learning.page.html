@@ -21,7 +21,8 @@
           text="Ver lección"
           variant="primary"
           size="dense"
-          expand="auto">
+          expand="auto"
+          (clicked)="openCourse(featuredCourse.id)">
         </app-button>
       </div>
 
@@ -136,7 +137,8 @@
             type="button"
             class="path-card"
             [style.--path-color]="path.color"
-            [attr.aria-label]="path.title + ', ' + path.progress + '% completado'">
+            [attr.aria-label]="path.title + ', ' + path.progress + '% completado'"
+            (click)="openCourse(path.id)">
             <app-item-icon
               [icon]="path.icon"
               [color]="path.color"
