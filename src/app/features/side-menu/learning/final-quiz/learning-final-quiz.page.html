@@ -1,0 +1,60 @@
+<ion-header>
+  <app-page-layout title="Reto final" [showBack]="false"></app-page-layout>
+</ion-header>
+
+<ion-content class="quiz-page" [scrollY]="true">
+  <main class="quiz-content">
+    <section class="quick-quiz">
+      <header class="quiz-heading">
+        <div class="quiz-mark"><app-item-icon icon="question" color="#fff" size="sm" variant="plain"></app-item-icon></div>
+        <div><span>Evaluación final</span><h1>Comprueba lo aprendido</h1><p>Un reto breve para completar el curso.</p></div>
+      </header>
+
+      <div class="quiz-body">
+      @if (loading) {
+        <div class="quiz-state">Preparando tu reto...</div>
+      } @else if (errorMessage) {
+        <div class="quiz-state error"><p>{{ errorMessage }}</p><app-button text="Reintentar" variant="primary" size="compact" (clicked)="retry()"></app-button></div>
+      } @else if (courseCompleted) {
+        <div class="quiz-result passed">
+          <div class="result-icon"><app-item-icon icon="success-check" color="#fff" size="md" variant="plain"></app-item-icon></div>
+          <span>Curso aprobado</span><h2>¡Excelente trabajo!</h2><p>Superaste el reto final con {{ result?.score ?? 100 }}%.</p>
+          <app-button text="Salir del curso" icon="right-inline" iconPosition="end" variant="primary" size="compact" (clicked)="returnToCourse()"></app-button>
+        </div>
+      } @else if (result && !result.passed) {
+        <div class="quiz-result failed">
+          <div class="result-icon"><app-item-icon icon="history" color="#ffffff" size="sm" variant="plain"></app-item-icon></div>
+          <span>Reto por completar</span><h2>Estuviste cerca</h2><p>Repasa los puntos clave e inténtalo nuevamente.</p>
+          <div class="result-score"><strong>{{ result.score ?? 0 }}%</strong><div><span>Tu resultado</span><div class="score-track"><i [style.width.%]="result.score ?? 0"></i></div><small>Meta de aprobación: {{ passingScore }}%</small></div></div>
+          <nav class="result-actions" aria-label="Acciones del resultado"><app-button text="Reintentar" icon="history" variant="primary" size="compact" expand="block" (clicked)="retryQuiz()"></app-button><app-button text="Salir del curso" variant="secondary" size="compact" expand="block" (clicked)="returnToCourse()"></app-button></nav>
+        </div>
+      } @else {
+        @if (currentQuestion; as question) {
+          <div class="quiz-status"><span>Pregunta {{ currentIndex + 1 }} de {{ questions.length }}</span><strong>{{ passingScore }}% para aprobar</strong></div>
+          <div class="quiz-progress"><i [style.width.%]="progress"></i></div>
+          <article class="quiz-question">
+            <span class="question-number">{{ currentIndex + 1 < 10 ? '0' + (currentIndex + 1) : currentIndex + 1 }}</span>
+            <h2>{{ question.question || question.title }}</h2>
+            <div class="quiz-options" role="radiogroup">
+              @for (option of question.options; track option.id; let i = $index) {
+                <button type="button" role="radio" [attr.aria-checked]="selectedOptionId === option.id" [class.selected]="selectedOptionId === option.id" (click)="selectOption(option.id)">
+                  <span>{{ ['A', 'B', 'C'][i] || i + 1 }}</span><strong>{{ optionText(option) }}</strong><i></i>
+                </button>
+              }
+            </div>
+          </article>
+        }
+      }
+      </div>
+    </section>
+  </main>
+</ion-content>
+
+@if (!loading && !errorMessage && currentQuestion && !result) {
+  <footer class="quiz-footer">
+    <nav class="quiz-actions" aria-label="Navegación del cuestionario">
+      <app-button text="Anterior" icon="left-inline" variant="ghost" size="compact" [disabled]="currentIndex === 0" (clicked)="previous()"></app-button>
+      <app-button [text]="currentIndex === questions.length - 1 ? 'Finalizar reto' : 'Continuar'" icon="right-inline" iconPosition="end" variant="primary" size="compact" [loading]="submitting" [disabled]="!selectedOptionId" (clicked)="continue()"></app-button>
+    </nav>
+  </footer>
+}

@@ -81,8 +81,7 @@ export class LearningCourseDetailPage implements OnInit, OnDestroy {
 
   selectLesson(lesson: LearningCourseLesson): void {
     if (!this.canOpenLesson(lesson)) return;
-    // Las completadas se pueden repasar sin alterar cuál es la siguiente lección desbloqueada.
-    if (lesson.status !== 'COMPLETED') this.activeLesson = lesson;
+    void this.navigationService.push(`/learning/lessons/${lesson.id}`);
   }
 
   canOpenLesson(lesson: LearningCourseLesson): boolean {

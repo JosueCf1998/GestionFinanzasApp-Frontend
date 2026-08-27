@@ -84,6 +84,14 @@ export const routes: Routes = [
     path: 'learning/courses/:id',
     loadComponent: () => import('./features/side-menu/learning/course-detail/learning-course-detail.page').then(m => m.LearningCourseDetailPage)
   },
+  {
+    path: 'learning/lessons/:id',
+    loadComponent: () => import('./features/side-menu/learning/lesson-detail/learning-lesson-detail.page').then(m => m.LearningLessonDetailPage)
+  },
+  {
+    path: 'learning/quiz/:id',
+    loadComponent: () => import('./features/side-menu/learning/final-quiz/learning-final-quiz.page').then(m => m.LearningFinalQuizPage)
+  },
   // GRAPHICS ROUTES
   {
     path: 'graphics/expenses-by-category',

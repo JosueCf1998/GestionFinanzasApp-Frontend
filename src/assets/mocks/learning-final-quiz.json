@@ -1,0 +1,36 @@
+{
+  "has_quiz": true,
+  "passing_score": 70,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Si recibes S/ 1,500, ¿cómo aplicas correctamente la regla 50/30/20?",
+      "correct_option_id": 102,
+      "options": [
+        { "id": 101, "text": "S/ 600, S/ 450 y S/ 450" },
+        { "id": 102, "text": "S/ 750, S/ 450 y S/ 300" },
+        { "id": 103, "text": "S/ 900, S/ 300 y S/ 300" }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "¿Cuál de estos gastos corresponde a una necesidad?",
+      "correct_option_id": 201,
+      "options": [
+        { "id": 201, "text": "El pago mensual de la vivienda" },
+        { "id": 202, "text": "Una suscripción de entretenimiento" },
+        { "id": 203, "text": "Una compra impulsiva de ropa" }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "¿Qué acción ayuda a cumplir el porcentaje de ahorro?",
+      "correct_option_id": 303,
+      "options": [
+        { "id": 301, "text": "Ahorrar solo si sobra dinero" },
+        { "id": 302, "text": "Usar el ahorro para ofertas" },
+        { "id": 303, "text": "Separarlo al recibir los ingresos" }
+      ]
+    }
+  ]
+}

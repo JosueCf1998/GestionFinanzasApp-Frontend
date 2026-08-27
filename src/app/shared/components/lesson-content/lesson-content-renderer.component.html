@@ -1,0 +1,25 @@
+@if (item; as content) {
+  @switch (section.type) {
+    @case ('TITLE') {
+      <article class="hero" [class.text-only]="!content.image_url"><div class="hero-copy"><span>Concepto clave</span><h2>{{ content.title }}</h2>@if(content.content){<p>{{ content.content }}</p>}</div>
+        @if(resolveImage(content.image_url);as image){<img [src]="image" [alt]="content.title || fallbackTitle">}
+      </article>
+    }
+    @case ('IMAGE') {@if(resolveImage(content.image_url);as image){<figure><img [src]="image" [alt]="content.title || fallbackTitle">@if(content.title){<figcaption>{{content.title}}</figcaption>}</figure>}}
+    @case ('TIP') {<article class="callout tip"><div class="callout-icon"><app-item-icon icon="star" color="#ffffff" size="xs" variant="plain"></app-item-icon></div><div class="callout-copy"><span class="callout-label">Consejo FinVia</span><h2>{{content.title||'Recomendación práctica'}}</h2>@if(content.content){<p>{{content.content}}</p>}</div></article>}
+    @case ('WARNING') {<article class="callout warning"><div class="callout-icon"><app-item-icon icon="alert-triangle" color="#c96a08" size="xs" variant="plain"></app-item-icon></div><div class="callout-copy"><h2>{{content.title||'Importante'}}</h2>@if(content.content){<p>{{content.content}}</p>}</div></article>}
+    @case ('EXAMPLE') {<article class="example"><div class="example-heading"><div class="example-icon"><app-item-icon icon="study" color="#ffffff" size="xs" variant="plain"></app-item-icon></div><div><span>Ejemplo práctico</span><h2>{{content.title||'Llévalo a la práctica'}}</h2></div></div>@if(exampleParts(content).length){<div class="values">@for(part of exampleParts(content);track part.label){<div><strong>{{part.value}}</strong><small>{{part.label}}</small></div>}</div>}@else if(content.content){<p>{{content.content}}</p>}</article>}
+    @default {<article class="text">@if(content.title){<h2>{{content.title}}</h2>}@if(content.content){<p>{{content.content}}</p>}</article>}
+  }
+} @else if (section.type === 'INFO_GROUP') {
+  <section class="info"><header><strong>Puntos clave</strong></header>
+    @for(content of items;track content.id;let index=$index){<article><b aria-hidden="true">{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</b><div><h3>{{infoTitle(content)}}</h3>@if(content.content){<p>{{content.content}}</p>}</div></article>}
+  </section>
+} @else if (section.type === 'WARNING_GROUP') {
+  <section class="warnings">
+    <header><div><app-item-icon icon="alert-triangle" color="#c96a08" size="xxs" variant="plain"></app-item-icon></div><strong>Errores que debes evitar</strong></header>
+    @for(content of items;track content.id;let index=$index){
+      <article><b aria-hidden="true">{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</b><div><h3>{{content.title || 'Importante'}}</h3>@if(content.content){<p>{{content.content}}</p>}</div></article>
+    }
+  </section>
+}

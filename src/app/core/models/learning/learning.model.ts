@@ -121,8 +121,49 @@ export interface LearningCourse extends LearningEntity {
   level?: LearningLevel;
 }
 
-export interface LearningLesson extends LearningEntity {
-  course_id?: number;
+export type LearningContentType = 'TITLE' | 'TEXT' | 'INFO' | 'TIP' | 'WARNING' | 'IMAGE' | 'EXAMPLE';
+
+export interface LearningLessonContent {
+  id: number;
+  type: LearningContentType;
+  title: string | null;
+  content: string | null;
+  image_url: string | null;
+  sort_order: number;
+}
+
+export type LearningLessonSectionType = LearningContentType | 'INFO_GROUP' | 'WARNING_GROUP';
+
+export interface LearningLessonContentSection {
+  id: number;
+  type: LearningLessonSectionType;
+  item?: LearningLessonContent;
+  items?: LearningLessonContent[];
+}
+
+export interface LearningLessonLink {
+  id: number;
+}
+
+export interface LearningLessonQuiz {
+  available: boolean;
+  passed: boolean;
+  passing_score: number;
+}
+
+export interface LearningLesson {
+  id: number;
+  course_id: number;
+  number: number;
+  total_lessons: number;
+  title: string;
+  minutes: number;
+  level: LearningLevel;
+  status: LearningLessonStatus;
+  contents: LearningLessonContent[];
+  quiz: LearningLessonQuiz;
+  previous_lesson: LearningLessonLink | null;
+  next_lesson: LearningLessonLink | null;
 }
 
 export interface LessonProgressResponse {
@@ -134,13 +175,36 @@ export interface LessonProgressResponse {
 
 export interface QuizDetailResponse {
   has_quiz: boolean;
-  [key: string]: unknown;
+  lesson_id?: number;
+  passing_score?: number;
+  questions?: LearningQuizQuestion[];
+  quizzes?: LearningQuizQuestion[];
+  items?: LearningQuizQuestion[];
+  quiz?: LearningQuizQuestion;
 }
 
 export interface SubmitQuizResponse {
   passed: boolean;
   score?: number;
+  correct_answers?: number;
+  total_questions?: number;
   [key: string]: unknown;
+}
+
+export interface LearningQuizOption {
+  id: number;
+  text?: string;
+  option?: string;
+  label?: string;
+  content?: string;
+}
+
+export interface LearningQuizQuestion {
+  id: number;
+  question?: string;
+  title?: string;
+  correct_option_id?: number;
+  options: LearningQuizOption[];
 }
 
 export interface LearningRecommendationsResponse {
