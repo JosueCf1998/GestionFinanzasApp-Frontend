@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent, IonHeader } from '@ionic/angular/standalone';
+import { Subscription } from 'rxjs';
 import {
   BUDGET_STATUS_LABELS,
   BudgetListItem,
@@ -15,7 +16,6 @@ import {
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { DetailBudgetUseCase } from 'src/app/core/use-cases/budgets/detail-budget.usecase';
-import { InfoBannerComponent } from 'src/app/shared/components/info-banner/info-banner.component';
 import {
   SelectionSummaryComponent,
   SelectionSummaryItem
@@ -30,6 +30,7 @@ import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-sum
 import { ProgressListItemComponent } from 'src/app/shared/components/progress-list-item/progress-list-item.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
+import { CURRENCIES, CurrencyCode } from 'src/app/shared/models/currency.model';
 import 'src/app/core/utils/observable-extensions';
 
 export interface CategoryBudget {
@@ -48,7 +49,7 @@ interface BudgetAccount extends SelectionSummaryItem, AccountDetailsItem {}
 
 interface DetailBudgetNavigationState {
   budget?: BudgetListItem;
-  currency?: string;
+  currency?: CurrencyCode;
   dateRangeLabel?: string;
 }
 
@@ -61,7 +62,6 @@ interface DetailBudgetNavigationState {
     CommonModule,
     IonContent,
     IonHeader,
-    InfoBannerComponent,
     SelectionSummaryComponent,
     AccountDetailsModalComponent,
     PageLayoutComponent,
@@ -72,7 +72,9 @@ interface DetailBudgetNavigationState {
     ItemIconComponent
   ]
 })
-export class DetailBudgetPage implements OnInit {
+export class DetailBudgetPage implements OnInit, OnDestroy {
+  private budgetDetailRequest?: Subscription;
+
   budget: BudgetListItem = {
     id: 0,
     name: 'Presupuesto',
@@ -84,7 +86,7 @@ export class DetailBudgetPage implements OnInit {
     status: 'ON_TRACK'
   };
 
-  currency = 'PEN';
+  currency: CurrencyCode = 'PEN';
   dateRangeLabel = 'Periodo seleccionado';
   startDate = '';
   endDate = '';
@@ -111,7 +113,15 @@ export class DetailBudgetPage implements OnInit {
     this.budget.id = Number(this.route.snapshot.paramMap.get('id')) || this.budget.id;
     if (state.currency) this.currency = state.currency;
     if (state.dateRangeLabel) this.dateRangeLabel = state.dateRangeLabel;
+  }
+
+  ionViewWillEnter(): void {
     this.loadBudgetDetail();
+  }
+
+  ngOnDestroy(): void {
+    this.budgetDetailRequest?.unsubscribe();
+    this.loadingService.hide();
   }
 
   // MARK: - SERVICIOS
@@ -122,9 +132,10 @@ export class DetailBudgetPage implements OnInit {
     }
 
     const request = { id: String(this.budget.id) };
+    this.budgetDetailRequest?.unsubscribe();
     this.loadingService.show();
 
-    this.detailBudgetUseCase.execute(request).service({
+    this.budgetDetailRequest = this.detailBudgetUseCase.execute(request).service({
       success: data => {
         this.loadingService.hide();
         if (data) this.applyBudgetDetail(data);
@@ -184,6 +195,10 @@ export class DetailBudgetPage implements OnInit {
 
   get statusLabel(): string {
     return BUDGET_STATUS_LABELS[this.budget.status];
+  }
+
+  get currencySymbol(): string {
+    return CURRENCIES[this.currency].symbol;
   }
 
   get linkedAccountsTitle(): string {

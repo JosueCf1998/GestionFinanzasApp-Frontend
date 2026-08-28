@@ -122,9 +122,8 @@
     </app-info-banner>
 
     <app-button
-      [text]="isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Guardar transferencia')"
+      [text]="isEditMode ? 'Guardar cambios' : 'Guardar transferencia'"
       type="submit"
-      [loading]="isSaving"
       [disabled]="!canSubmit">
     </app-button>
   </form>

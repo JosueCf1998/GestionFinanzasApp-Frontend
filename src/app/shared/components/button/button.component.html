@@ -14,23 +14,10 @@
   [class.auto]="expand === 'auto'"
   [expand]="expand === 'auto' ? undefined : expand"
   [type]="type"
-  [disabled]="disabled || loading"
+  [disabled]="disabled"
   (click)="onClick()">
 
-  <!-- ========================================================
-       LOADING
-       ======================================================== -->
-
-  <ion-spinner
-    *ngIf="loading"
-    name="crescent">
-  </ion-spinner>
-
-  <!-- ========================================================
-       CONTENT
-       ======================================================== -->
-
-  <ng-container *ngIf="!loading">
+  <ng-container>
 
     <ion-icon
       *ngIf="icon && iconPosition === 'start'"

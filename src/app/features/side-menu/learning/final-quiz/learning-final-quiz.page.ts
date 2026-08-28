@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { LearningQuizOption, LearningQuizQuestion, QuizDetailResponse, SubmitQuizResponse } from 'src/app/core/models/learning/learning.model';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { CompleteLessonUseCase } from 'src/app/core/use-cases/learning/complete-lesson.usecase';
 import { GetQuizDetailUseCase } from 'src/app/core/use-cases/learning/get-quiz-detail.usecase';
 import { SubmitQuizUseCase } from 'src/app/core/use-cases/learning/submit-quiz.usecase';
@@ -35,10 +36,12 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
   private quizRequest?: Subscription;
   private submitRequest?: Subscription;
   private completeRequest?: Subscription;
+  private spinnerVisible = false;
 
   constructor(private readonly route: ActivatedRoute, private readonly navigationService: NavigationService,
     private readonly getQuizDetailUseCase: GetQuizDetailUseCase, private readonly submitQuizUseCase: SubmitQuizUseCase,
-    private readonly completeLessonUseCase: CompleteLessonUseCase, private readonly alertService: AlertService) {}
+    private readonly completeLessonUseCase: CompleteLessonUseCase, private readonly alertService: AlertService,
+    private readonly loadingService: SpinnerService) {}
 
   ngOnInit(): void {
     this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
@@ -47,7 +50,7 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
     if (!Number.isInteger(this.lessonId) || this.lessonId <= 0) { this.loading = false; this.errorMessage = 'El reto seleccionado no es válido.'; return; }
     this.loadQuiz();
   }
-  ngOnDestroy(): void { this.quizRequest?.unsubscribe(); this.submitRequest?.unsubscribe(); this.completeRequest?.unsubscribe(); }
+  ngOnDestroy(): void { this.quizRequest?.unsubscribe(); this.submitRequest?.unsubscribe(); this.completeRequest?.unsubscribe(); this.hideSpinner(); }
   get currentQuestion(): LearningQuizQuestion | null { return this.questions[this.currentIndex] ?? null; }
   get selectedOptionId(): number | null { return this.currentQuestion ? this.selectedAnswers[this.currentQuestion.id] ?? null : null; }
   get progress(): number { return this.questions.length ? (this.currentIndex + 1) / this.questions.length * 100 : 0; }
@@ -63,8 +66,9 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
 
   private loadQuiz(): void {
     this.quizRequest?.unsubscribe(); this.loading = true; this.errorMessage = ''; this.temporary = false;
+    this.showSpinner();
     this.quizRequest = this.getQuizDetailUseCase.execute({ lesson_id: this.lessonId }).service({
-      success: response => { this.loading = false; this.questions = this.normalize(response); if (!this.questions.length) void this.loadTemporaryQuiz(); },
+      success: response => { this.loading = false; this.questions = this.normalize(response); if (this.questions.length) this.hideSpinner(); else void this.loadTemporaryQuiz(); },
       failure: () => { void this.loadTemporaryQuiz(); }
     });
   }
@@ -72,8 +76,8 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
     try {
       const request = await fetch('assets/mocks/learning-final-quiz.json'); if (!request.ok) throw new Error();
       const response = await request.json() as QuizDetailResponse; this.questions = this.normalize(response); this.temporary = true;
-      this.loading = false; this.errorMessage = this.questions.length ? '' : 'El cuestionario temporal no contiene preguntas.';
-    } catch { this.loading = false; this.errorMessage = 'No pudimos cargar el reto final.'; }
+      this.hideSpinner(); this.loading = false; this.errorMessage = this.questions.length ? '' : 'El cuestionario temporal no contiene preguntas.';
+    } catch { this.hideSpinner(); this.loading = false; this.errorMessage = 'No pudimos cargar el reto final.'; }
   }
   private normalize(response: QuizDetailResponse | null): LearningQuizQuestion[] {
     if (!response?.has_quiz) return [];
@@ -89,16 +93,20 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
       this.result = { passed, score, correct_answers: correct, total_questions: this.questions.length }; this.courseCompleted = passed; return;
     }
     this.submitting = true; this.submitRequest?.unsubscribe();
+    this.showSpinner();
     this.submitRequest = this.submitQuizUseCase.execute({ lesson_id: this.lessonId, answers: this.questions.map(question => ({ quiz_id: question.id, option_id: this.selectedAnswers[question.id] })) }).service({
-      success: result => { this.submitting = false; if (!result) return; this.result = result; if (result.passed) this.completeCourse(); },
-      failure: error => { this.submitting = false; void this.alertService.showAlert('No pudimos revisar tus respuestas', error?.message || 'Inténtalo nuevamente.', 'Entendido'); }
+      success: result => { this.submitting = false; if (!result) { this.hideSpinner(); return; } this.result = result; if (result.passed) this.completeCourse(); else this.hideSpinner(); },
+      failure: error => { this.hideSpinner(); this.submitting = false; void this.alertService.showAlert('No pudimos revisar tus respuestas', error?.message || 'Inténtalo nuevamente.', 'Entendido'); }
     });
   }
   private completeCourse(): void {
     this.submitting = true; this.completeRequest?.unsubscribe();
     this.completeRequest = this.completeLessonUseCase.execute({ lesson_id: this.lessonId }).service({
-      success: () => { this.submitting = false; this.courseCompleted = true; },
-      failure: error => { this.submitting = false; void this.alertService.showAlert('Quiz aprobado', error?.message || 'No pudimos actualizar el curso.', 'Entendido'); }
+      success: () => { this.hideSpinner(); this.submitting = false; this.courseCompleted = true; },
+      failure: error => { this.hideSpinner(); this.submitting = false; void this.alertService.showAlert('Quiz aprobado', error?.message || 'No pudimos actualizar el curso.', 'Entendido'); }
     });
   }
+
+  private showSpinner(): void { if (!this.spinnerVisible) { this.spinnerVisible = true; this.loadingService.show(); } }
+  private hideSpinner(): void { if (this.spinnerVisible) { this.spinnerVisible = false; this.loadingService.hide(); } }
 }

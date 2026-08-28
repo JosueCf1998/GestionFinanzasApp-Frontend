@@ -50,9 +50,11 @@
       <app-section-card
         title="Mis presupuestos"
         appearance="plain">
+        <app-list-skeleton *ngIf="isLoading"></app-list-skeleton>
+
         <div class="budget-list">
           <app-progress-list-item
-            *ngFor="let budget of budgets; trackBy: trackByBudget"
+            *ngFor="let budget of isLoading ? [] : budgets; trackBy: trackByBudget"
             [item]="budget"
             [currencySymbol]="currency.symbol"
             (selected)="openBudget($event)">
@@ -60,7 +62,7 @@
         </div>
 
         <div
-          *ngIf="(loadingService.loading$ | async) === false && budgets.length === 0"
+          *ngIf="!isLoading && budgets.length === 0"
           class="budget-empty-state">
           <app-item-icon
             icon="wallet"

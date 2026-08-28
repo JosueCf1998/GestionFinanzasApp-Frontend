@@ -93,6 +93,7 @@ export class TopExpenseCategoriesPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.loadCategoryCatalog();
     this.loadAccounts();
   }

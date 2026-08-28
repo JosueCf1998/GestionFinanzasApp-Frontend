@@ -89,7 +89,7 @@ export class AccountsAnalysisPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void { this.loadAccounts(); }
+  ngOnInit(): void { this.loadingService.show(); this.loadAccounts(); }
 
   ngOnDestroy(): void {
     this.accountRequest?.unsubscribe();

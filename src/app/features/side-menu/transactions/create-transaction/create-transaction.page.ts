@@ -340,14 +340,17 @@ export class CreateTransactionPage implements OnInit {
       : this.createTransactionsUseCase.execute(request);
 
     this.isSaving = true;
+    this.loadingService.show();
     operation.service({
       success: data => {
+        this.loadingService.hide();
         this.isSaving = false;
         this.hasPendingChanges = false;
         this.transactionId = data?.info?.id ?? this.transactionId;
         this.isSuccessReceiptOpen = true;
       },
       failure: () => {
+        this.loadingService.hide();
         this.isSaving = false;
         this.showSaveError = true;
       }

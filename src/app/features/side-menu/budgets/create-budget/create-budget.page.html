@@ -2,7 +2,6 @@
   <app-page-layout
     [title]="isEditMode ? 'Editar presupuesto' : 'Crear presupuesto'"
     [showBack]="true"
-    [loading]="isSaving || isDeleting"
     (back)="backToBudgets()">
   </app-page-layout>
 </ion-header>
@@ -92,11 +91,8 @@
 
     <div class="action-container">
       <app-button
-        [text]="isSaving
-          ? (isEditMode ? 'Guardando...' : 'Creando...')
-          : (isEditMode ? 'Guardar cambios' : 'Crear presupuesto')"
+        [text]="isEditMode ? 'Guardar cambios' : 'Crear presupuesto'"
         type="submit"
-        [loading]="isSaving"
         [disabled]="!canSave">
       </app-button>
 
@@ -105,7 +101,6 @@
         text="Eliminar presupuesto"
         icon="trash"
         variant="danger"
-        [loading]="isDeleting"
         [disabled]="isSaving || isDeleting"
         (clicked)="requestDeleteBudget()">
       </app-button>

@@ -12,7 +12,6 @@ import {
 } from 'src/app/core/models/budgets/list-budgets.model';
 import { FeatureFilterStateService } from 'src/app/core/services/feature-filter-state.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
-import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { ListBudgetsUseCase } from 'src/app/core/use-cases/budgets/list-budgets.usecase';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import {
@@ -25,6 +24,7 @@ import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { BudgetSummaryCardComponent } from 'src/app/shared/components/budget-summary-card/budget-summary-card.component';
 import { SectionCardComponent } from 'src/app/shared/components/section-card/section-card.component';
+import { ListSkeletonComponent } from 'src/app/shared/components/list-skeleton/list-skeleton.component';
 import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 
 @Component({
@@ -43,7 +43,8 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
     FilterModalComponent,
     FloatingActionButtonComponent,
     BudgetSummaryCardComponent,
-    SectionCardComponent
+    SectionCardComponent,
+    ListSkeletonComponent
   ]
 })
 export class BudgetsPage implements OnInit, OnDestroy {
@@ -60,6 +61,7 @@ export class BudgetsPage implements OnInit, OnDestroy {
   selectedStartDate = '';
   selectedEndDate = '';
   isPeriodSelectorOpen = false;
+  isLoading = false;
 
   readonly currency: Currency = CURRENCIES.PEN;
   budgets: BudgetListItem[] = [];
@@ -71,8 +73,7 @@ export class BudgetsPage implements OnInit, OnDestroy {
   constructor(
     private readonly navService: NavigationService,
     private readonly filterState: FeatureFilterStateService,
-    private readonly listBudgetsUseCase: ListBudgetsUseCase,
-    public readonly loadingService: SpinnerService
+    private readonly listBudgetsUseCase: ListBudgetsUseCase
   ) {
     this.setFilterSelection(this.getCurrentMonthSelection());
   }
@@ -97,7 +98,6 @@ export class BudgetsPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.budgetRequest?.unsubscribe();
     this.filterResetSubscription?.unsubscribe();
-    this.loadingService.hide();
   }
 
   // MARK: - SERVICIOS
@@ -111,13 +111,13 @@ export class BudgetsPage implements OnInit, OnDestroy {
     }
 
     this.budgetRequest?.unsubscribe();
-    this.loadingService.show();
+    this.isLoading = true;
 
     this.budgetRequest = this.listBudgetsUseCase
       .execute(request)
       .service({
         success: data => {
-          this.loadingService.hide();
+          this.isLoading = false;
 
           if (data) {
             this.setBudgetResponse(data);
@@ -127,7 +127,7 @@ export class BudgetsPage implements OnInit, OnDestroy {
           this.clearBudgetData();
         },
         failure: () => {
-          this.loadingService.hide();
+          this.isLoading = false;
           this.clearBudgetData();
         }
       });

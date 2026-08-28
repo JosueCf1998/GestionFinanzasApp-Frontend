@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular/standalone';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { Subscription } from 'rxjs';
@@ -67,7 +67,7 @@ interface TransactionCategorySummary {
     FilterModalComponent
   ]
 })
-export class TransactionsPage implements OnInit, OnDestroy {
+export class TransactionsPage implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(IonContent) private content?: IonContent;
 
   private transactionRequest?: Subscription;
@@ -123,8 +123,8 @@ export class TransactionsPage implements OnInit, OnDestroy {
     this.filterResetSubscription?.unsubscribe();
   }
 
-  ionViewWillEnter(): void {
-    void this.content?.scrollToTop(0);
+  ngAfterViewInit(): void {
+    this.scrollToTop();
   }
 
   get totalLabel(): string {
@@ -361,9 +361,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
     );
     this.categorySummaries = this.buildCategorySummaries(this.transactions);
 
-    requestAnimationFrame(() => {
-      void this.content?.scrollToTop(0);
-    });
+    this.scrollToTop();
   }
 
   private buildCategorySummaries(
@@ -384,6 +382,10 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
     return Array.from(summaries.values())
       .sort((first, second) => second.amount - first.amount);
+  }
+
+  private scrollToTop(): void {
+    requestAnimationFrame(() => void this.content?.scrollToTop(0));
   }
 
   private formatShortDate(value: string): string {

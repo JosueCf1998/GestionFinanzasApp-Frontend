@@ -2,7 +2,6 @@
   <app-page-layout
     [title]="isEditMode ? 'Editar transacción' : 'Nueva transacción'"
     [showBack]="true"
-    [loading]="isSaving || isDeleting"
     (back)="backToTransactions()">
   </app-page-layout>
 </ion-header>
@@ -138,9 +137,8 @@
 
     <div class="action-container">
       <app-button
-        [text]="isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Registrar transacción')"
+        [text]="isEditMode ? 'Guardar cambios' : 'Registrar transacción'"
         type="submit"
-        [loading]="isSaving"
         [disabled]="!canSave">
       </app-button>
       <app-button

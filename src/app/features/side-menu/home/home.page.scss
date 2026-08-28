@@ -264,7 +264,7 @@
 
 .categories-container {
   padding-top: var(--fv-space-sm);
-  padding-bottom: 100px;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
 
   display: flex;
   flex-direction: column;

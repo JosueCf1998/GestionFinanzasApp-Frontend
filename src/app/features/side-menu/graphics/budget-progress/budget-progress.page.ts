@@ -109,6 +109,7 @@ export class BudgetProgressPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.loadAccounts();
   }
 

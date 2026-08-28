@@ -91,9 +91,11 @@
          ACCOUNTS (AQUÍ SÍ SE USA COMPONENTE)
          ========================================================== -->
 
+    <app-list-skeleton *ngIf="isLoading"></app-list-skeleton>
+
     <section
       class="accounts-section"
-      *ngIf="accountList.length">
+      *ngIf="!isLoading && accountList.length">
 
       <div class="section-header">
 
@@ -157,7 +159,7 @@
          EMPTY STATE (SIN COMPONENTE ICONO)
          ========================================================== -->
 
-    <section class="empty-state" *ngIf="!accountList.length">
+    <section class="empty-state" *ngIf="!isLoading && !accountList.length">
 
       <div class="empty-icon">
 

@@ -59,10 +59,11 @@ export class LearningLessonDetailPage implements OnInit, OnDestroy {
       return;
     }
     this.startingNext = true;
+    this.loadingService.show();
     this.nextLessonRequest?.unsubscribe();
     this.nextLessonRequest = this.startLessonUseCase.execute({ lesson_id: nextId }).service({
-      success: () => { this.startingNext = false; void this.navigationService.push(`/learning/lessons/${nextId}`); },
-      failure: error => { this.startingNext = false; void this.alertService.showAlert('No pudimos iniciar la siguiente lección', error?.message || 'Inténtalo nuevamente.', 'Entendido'); }
+      success: () => { this.loadingService.hide(); this.startingNext = false; void this.navigationService.push(`/learning/lessons/${nextId}`); },
+      failure: error => { this.loadingService.hide(); this.startingNext = false; void this.alertService.showAlert('No pudimos iniciar la siguiente lección', error?.message || 'Inténtalo nuevamente.', 'Entendido'); }
     });
   }
 

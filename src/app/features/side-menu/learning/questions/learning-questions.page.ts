@@ -8,6 +8,7 @@ import { ListLearningQuestionsUseCase } from 'src/app/core/use-cases/learning/li
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { PageLayoutComponent } from 'src/app/shared/components/page-layout/page-layout.component';
+import { ListSkeletonComponent } from 'src/app/shared/components/list-skeleton/list-skeleton.component';
 import 'src/app/core/utils/observable-extensions';
 
 interface QuestionCategory {
@@ -55,7 +56,7 @@ const TEMPORARY_QUESTIONS: LearningQuestion[] = [
 @Component({
   selector: 'app-learning-questions',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonContent, IonHeader, ButtonComponent, ItemIconComponent, PageLayoutComponent],
+  imports: [CommonModule, FormsModule, IonContent, IonHeader, ButtonComponent, ItemIconComponent, ListSkeletonComponent, PageLayoutComponent],
   templateUrl: './learning-questions.page.html',
   styleUrls: ['./learning-questions.page.scss']
 })

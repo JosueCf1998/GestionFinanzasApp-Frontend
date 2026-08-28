@@ -30,7 +30,7 @@
 
     <section class="questions-list" aria-label="Preguntas frecuentes">
       @if (loading) {
-        <div class="questions-state">Cargando preguntas...</div>
+        <app-list-skeleton [rows]="5"></app-list-skeleton>
       } @else if (errorMessage) {
         <div class="questions-state">
           <span>{{ errorMessage }}</span>

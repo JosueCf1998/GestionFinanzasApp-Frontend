@@ -18,7 +18,7 @@
   </app-page-layout>
 </ion-header>
 
-<ion-content [fullscreen]="false" class="detail-budget-page">
+<ion-content [fullscreen]="false" [scrollY]="true" class="detail-budget-page">
   <main class="detail-budget">
     <app-budget-summary-card
       mode="budget"
@@ -33,7 +33,7 @@
       [used]="budget.used"
       [balance]="isExceeded ? exceededAmount : availableAmount"
       [balanceLabel]="isExceeded ? 'Excedido' : 'Disponible'"
-      [currencySymbol]="currency === 'PEN' ? 'S/' : currency">
+      [currencySymbol]="currencySymbol">
     </app-budget-summary-card>
 
     <app-warning-message
@@ -53,7 +53,7 @@
         [showArrow]="false"
         [actionText]="budgetAccounts.length > 1 ? 'Ver detalles' : ''"
         [actionOnly]="true"
-        [trailingText]="budgetAccounts.length === 1 ? currency + (budgetAccounts[0].amount | number:'1.2-2') : ''"
+        [trailingText]="budgetAccounts.length === 1 ? currencySymbol + ' ' + (budgetAccounts[0].amount | number:'1.2-2') : ''"
         (activated)="openAccountDetails()">
       </app-selection-summary>
     </app-section-card>
@@ -65,7 +65,7 @@
         <app-progress-list-item
           *ngFor="let category of categoryBudgets; trackBy: trackByCategory"
           [item]="category"
-          [currencySymbol]="currency === 'PEN' ? 'S/' : currency"
+          [currencySymbol]="currencySymbol"
           (selected)="openCategoryDetail(category)">
         </app-progress-list-item>
       </div>

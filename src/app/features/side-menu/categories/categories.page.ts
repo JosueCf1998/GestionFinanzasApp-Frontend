@@ -6,8 +6,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Categoria } from 'src/app/shared/models/categoria.model';
 import { CustomSegmentComponent } from "src/app/shared/components/custom-segment/custom-segment.component";
-import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { ListCategoriesUseCase } from "src/app/core/use-cases/categories/list-categories.usecase";
+import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from "src/app/shared/components/custom-alert/custom-alert.component";
 import { AlertService } from "src/app/core/services/alert.service";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
@@ -53,10 +53,6 @@ export class CategoriesPage {
         if (data) {
           this.ingresos = data.items.filter(cat => cat.tipo === "ingreso");
           this.gastos = data.items.filter(cat => cat.tipo === "gasto");
-          console.log(data);
-          console.log(this.ingresos);
-          console.log(this.gastos);
-
         } else {
           this.showGenericAlert = true;
         }

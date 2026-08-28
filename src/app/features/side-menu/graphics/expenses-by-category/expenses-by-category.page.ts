@@ -100,6 +100,7 @@ export class ExpensesByCategoryPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.loadAccounts();
     this.loadCategoryCatalog();
   }

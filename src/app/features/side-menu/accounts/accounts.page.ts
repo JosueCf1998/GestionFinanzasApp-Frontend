@@ -3,18 +3,18 @@ import { IonicModule } from "@ionic/angular";
 import { CommonModule } from "@angular/common";
 import { NavigationService } from "src/app/core/services/navigation.service";
 import { Accounts, ListAccountsUseCase } from "src/app/core/use-cases/accounts/list-accounts.usecase";
-import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import 'src/app/core/utils/observable-extensions';
 import { ButtonComponent } from "src/app/shared/components/button/button.component";
 import { ItemIconComponent } from "src/app/shared/components/item-icon/item-icon.component";
 import { FeatureHeaderComponent } from "src/app/shared/components/feature-header/feature-header.component";
+import { ListSkeletonComponent } from "src/app/shared/components/list-skeleton/list-skeleton.component";
 
 @Component({
   selector: "app-accounts",
   templateUrl: "./accounts.page.html",
   styleUrls: ["./accounts.page.scss"],
   standalone: true,
-  imports: [IonicModule, CommonModule, ButtonComponent, ItemIconComponent, FeatureHeaderComponent],
+  imports: [IonicModule, CommonModule, ButtonComponent, ItemIconComponent, FeatureHeaderComponent, ListSkeletonComponent],
 })
 export class AccountsPage {
 
@@ -23,11 +23,11 @@ export class AccountsPage {
   messageError: string = '';
 
   accountList: Accounts[] = [];
+  isLoading = false;
 
   constructor(
       private listAccountsUseCase: ListAccountsUseCase,
       private navService: NavigationService,
-      private loadingService: SpinnerService,
   ) {
     this.executeAccountList();
   }
@@ -35,10 +35,10 @@ export class AccountsPage {
   // MARK: - SERVICIOS
 
   private executeAccountList() {
-    this.loadingService.show();
+    this.isLoading = true;
     this.listAccountsUseCase.listAccounts().service({
       success: (data) => {
-        this.loadingService.hide();
+        this.isLoading = false;
         if (data) {
           this.accountList = data.items;
         } else {
@@ -46,7 +46,7 @@ export class AccountsPage {
         }
       },
       failure: (error) => {
-        this.loadingService.hide();
+        this.isLoading = false;
         this.showGenericAlert = true;
       }
     });

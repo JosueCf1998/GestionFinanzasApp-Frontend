@@ -96,6 +96,7 @@ export class IncomeVsExpensesPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadingService.show();
     this.loadAccounts();
   }
 

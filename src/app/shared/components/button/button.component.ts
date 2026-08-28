@@ -79,9 +79,6 @@ export class ButtonComponent {
   @Input()
   disabled = false;
 
-  @Input()
-  loading = false;
-
   /* ==========================================================
    * EVENT
    * ========================================================== */
@@ -95,7 +92,7 @@ export class ButtonComponent {
 
   onClick(): void {
 
-    if (this.disabled || this.loading) {
+    if (this.disabled) {
 
       return;
 

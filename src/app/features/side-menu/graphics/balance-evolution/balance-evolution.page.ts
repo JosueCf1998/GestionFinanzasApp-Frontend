@@ -70,7 +70,7 @@ export class BalanceEvolutionPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void { this.loadAccounts(); }
+  ngOnInit(): void { this.loadingService.show(); this.loadAccounts(); }
   ngOnDestroy(): void { this.dataRequest?.unsubscribe(); this.accountRequest?.unsubscribe(); this.loadingService.hide(); }
 
   get initialBalance(): number { return this.periods.length ? this.periods[0].balance - this.periods[0].netMovement : 0; }

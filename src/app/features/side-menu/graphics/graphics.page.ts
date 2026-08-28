@@ -145,6 +145,7 @@ export class GraphicsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.loadingService.show();
     const savedState = this.filterState.get<GraphicsFilterState>('graphics');
     if (savedState) this.setPeriodSelection(savedState);
 

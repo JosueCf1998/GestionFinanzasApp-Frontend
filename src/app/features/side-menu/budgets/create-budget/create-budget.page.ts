@@ -596,12 +596,10 @@ export class CreateBudgetPage implements OnInit {
     this.selectedIcon = data.icon;
     this.selectedColor = data.color;
     this.canDeleteBudget = data.availableActions?.canDelete ?? false;
-    this.periodSelection = {
-      period: 'custom',
-      periodValue: '',
-      startDate: convertISODateToSQL(data.generalDetail.startDate),
-      endDate: convertISODateToSQL(data.generalDetail.endDate)
-    };
+    this.periodSelection = this.inferPeriodSelection(
+      convertISODateToSQL(data.generalDetail.startDate),
+      convertISODateToSQL(data.generalDetail.endDate)
+    );
     this.selectedAccounts = data.linkedAccounts.map(account => ({
       id: account.id,
       name: account.name,
@@ -623,6 +621,33 @@ export class CreateBudgetPage implements OnInit {
     this.reconcileSelectedAccounts();
     this.reconcileSelectedCategories();
     this.initialFormSnapshot = this.buildSnapshot();
+  }
+
+  private inferPeriodSelection(startDate: string, endDate: string): FilterSelection {
+    const monthMatch = /^(\d{4})-(\d{2})-01$/.exec(startDate);
+
+    if (monthMatch) {
+      const year = Number(monthMatch[1]);
+      const month = Number(monthMatch[2]);
+      const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+      const expectedEndDate = `${monthMatch[1]}-${monthMatch[2]}-${String(lastDay).padStart(2, '0')}`;
+
+      if (endDate === expectedEndDate) {
+        return {
+          period: 'monthly',
+          periodValue: `${monthMatch[1]}-${monthMatch[2]}`,
+          startDate,
+          endDate
+        };
+      }
+    }
+
+    const year = startDate.slice(0, 4);
+    if (startDate === `${year}-01-01` && endDate === `${year}-12-31`) {
+      return { period: 'annual', periodValue: year, startDate, endDate };
+    }
+
+    return { period: 'custom', periodValue: '', startDate, endDate };
   }
 
   private reconcileSelectedAccounts(): void {

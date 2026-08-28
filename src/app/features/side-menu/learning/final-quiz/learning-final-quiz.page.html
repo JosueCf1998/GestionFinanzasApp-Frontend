@@ -12,7 +12,7 @@
 
       <div class="quiz-body">
       @if (loading) {
-        <div class="quiz-state">Preparando tu reto...</div>
+        <div class="quiz-state" aria-hidden="true"></div>
       } @else if (errorMessage) {
         <div class="quiz-state error"><p>{{ errorMessage }}</p><app-button text="Reintentar" variant="primary" size="compact" (clicked)="retry()"></app-button></div>
       } @else if (courseCompleted) {
@@ -54,7 +54,7 @@
   <footer class="quiz-footer">
     <nav class="quiz-actions" aria-label="Navegación del cuestionario">
       <app-button text="Anterior" icon="left-inline" variant="ghost" size="compact" [disabled]="currentIndex === 0" (clicked)="previous()"></app-button>
-      <app-button [text]="currentIndex === questions.length - 1 ? 'Finalizar reto' : 'Continuar'" icon="right-inline" iconPosition="end" variant="primary" size="compact" [loading]="submitting" [disabled]="!selectedOptionId" (clicked)="continue()"></app-button>
+      <app-button [text]="currentIndex === questions.length - 1 ? 'Finalizar reto' : 'Continuar'" icon="right-inline" iconPosition="end" variant="primary" size="compact" [disabled]="!selectedOptionId || submitting" (clicked)="continue()"></app-button>
     </nav>
   </footer>
 }
