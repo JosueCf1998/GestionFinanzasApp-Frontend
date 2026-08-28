@@ -1,7 +1,7 @@
 export type LearningLevel = 'BASICO' | 'INTERMEDIO' | 'AVANZADO';
 
 export interface CoursesByCategoryRequest {
-  category_id: number;
+  categoryId: number;
 }
 
 export interface CoursesByLevelRequest {
@@ -9,19 +9,22 @@ export interface CoursesByLevelRequest {
 }
 
 export interface CourseDetailRequest {
-  course_id: number;
+  courseId: number;
 }
 
 export interface LessonRequest {
-  lesson_id: number;
+  lessonId: number;
 }
+
+export type QuizDetailRequest = CourseDetailRequest;
+export type CompleteCourseRequest = CourseDetailRequest;
 
 export interface QuizAnswerRequest {
-  quiz_id: number;
-  option_id: number;
+  quizId: number;
+  optionId: number;
 }
 
-export interface SubmitQuizRequest extends LessonRequest {
+export interface SubmitQuizRequest extends CourseDetailRequest {
   answers: QuizAnswerRequest[];
 }
 
@@ -174,13 +177,13 @@ export interface LessonProgressResponse {
 }
 
 export interface QuizDetailResponse {
-  has_quiz: boolean;
-  lesson_id?: number;
-  passing_score?: number;
-  questions?: LearningQuizQuestion[];
-  quizzes?: LearningQuizQuestion[];
-  items?: LearningQuizQuestion[];
-  quiz?: LearningQuizQuestion;
+  courseId: number;
+  passingScore: number;
+  requiredCorrectAnswers: number;
+  totalQuestions: number;
+  passed: boolean;
+  hasQuiz: boolean;
+  questions: LearningQuizQuestion[];
 }
 
 export interface SubmitQuizResponse {
@@ -193,18 +196,30 @@ export interface SubmitQuizResponse {
 
 export interface LearningQuizOption {
   id: number;
-  text?: string;
-  option?: string;
-  label?: string;
-  content?: string;
+  text: string;
 }
 
 export interface LearningQuizQuestion {
   id: number;
-  question?: string;
-  title?: string;
-  correct_option_id?: number;
+  question: string;
   options: LearningQuizOption[];
+}
+
+export interface QuizDetailApiResponse {
+  course_id: number;
+  passing_score: number;
+  required_correct_answers: number;
+  total_questions: number;
+  passed: boolean;
+  has_quiz: boolean;
+  questions: Array<{
+    quiz_id: number;
+    question: string;
+    options: Array<{
+      option_id: number;
+      text: string;
+    }>;
+  }>;
 }
 
 export interface LearningRecommendationsResponse {

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ENDPOINTS } from 'src/app/core/constants/endpoints';
 import {
   CourseDetailRequest,
+  CompleteCourseRequest,
   CoursesByCategoryRequest,
   CoursesByLevelRequest,
   LearningCategory,
@@ -16,6 +17,8 @@ import {
   LearningStatsResponse,
   LessonProgressResponse,
   LessonRequest,
+  QuizDetailRequest,
+  QuizDetailApiResponse,
   QuizDetailResponse,
   SubmitQuizRequest,
   SubmitQuizResponse
@@ -38,7 +41,9 @@ export class LearningRepository {
   getCoursesByCategory(
     request: CoursesByCategoryRequest
   ): Observable<Result<LearningItemsResponse<LearningCourse>>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.COURSES_BY_CATEGORY, request);
+    return this.apiService.post(ENDPOINTS.LEARNING.COURSES_BY_CATEGORY, {
+      category_id: request.categoryId
+    });
   }
 
   getCoursesByLevel(
@@ -48,27 +53,42 @@ export class LearningRepository {
   }
 
   getCourseDetail(request: CourseDetailRequest): Observable<Result<LearningCourseDetail>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.COURSE_DETAIL, request);
+    return this.apiService.post(ENDPOINTS.LEARNING.COURSE_DETAIL, {
+      course_id: request.courseId
+    });
   }
 
   getLessonDetail(request: LessonRequest): Observable<Result<LearningLesson>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.LESSON_DETAIL, request);
+    return this.apiService.post(ENDPOINTS.LEARNING.LESSON_DETAIL, {
+      lesson_id: request.lessonId
+    });
   }
 
-  startLesson(request: LessonRequest): Observable<Result<LessonProgressResponse>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.START_LESSON, request);
+  completeCourse(request: CompleteCourseRequest): Observable<Result<LessonProgressResponse>> {
+    return this.apiService.post(ENDPOINTS.LEARNING.COMPLETE_COURSE, {
+      course_id: request.courseId
+    });
   }
 
-  completeLesson(request: LessonRequest): Observable<Result<LessonProgressResponse>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.COMPLETE_LESSON, request);
-  }
-
-  getQuizDetail(request: LessonRequest): Observable<Result<QuizDetailResponse>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.QUIZ_DETAIL, request);
+  getQuizDetail(request: QuizDetailRequest): Observable<Result<QuizDetailResponse>> {
+    return this.apiService
+      .post<QuizDetailApiResponse>(ENDPOINTS.LEARNING.QUIZ_DETAIL, {
+        course_id: request.courseId
+      })
+      .pipe(map(result => ({
+        ...result,
+        data: result.data ? this.mapQuizDetail(result.data) : null
+      })));
   }
 
   submitQuiz(request: SubmitQuizRequest): Observable<Result<SubmitQuizResponse>> {
-    return this.apiService.post(ENDPOINTS.LEARNING.SUBMIT_QUIZ, request);
+    return this.apiService.post(ENDPOINTS.LEARNING.SUBMIT_QUIZ, {
+      course_id: request.courseId,
+      answers: request.answers.map(answer => ({
+        quiz_id: answer.quizId,
+        option_id: answer.optionId
+      }))
+    });
   }
 
   getRecommendations(): Observable<Result<LearningRecommendationsResponse>> {
@@ -81,5 +101,26 @@ export class LearningRepository {
 
   getQuestions(): Observable<Result<LearningQuestion[]>> {
     return this.apiService.get(ENDPOINTS.LEARNING.QUESTIONS);
+  }
+
+  private mapQuizDetail(response: QuizDetailApiResponse): QuizDetailResponse {
+    const questions = (response.questions ?? []).map(question => ({
+      id: Number(question.quiz_id),
+      question: question.question,
+      options: (question.options ?? []).map(option => ({
+        id: Number(option.option_id),
+        text: option.text
+      }))
+    }));
+
+    return {
+      courseId: Number(response.course_id),
+      passingScore: Number(response.passing_score),
+      requiredCorrectAnswers: Number(response.required_correct_answers),
+      totalQuestions: Number(response.total_questions),
+      passed: Boolean(response.passed),
+      hasQuiz: Boolean(response.has_quiz),
+      questions
+    };
   }
 }

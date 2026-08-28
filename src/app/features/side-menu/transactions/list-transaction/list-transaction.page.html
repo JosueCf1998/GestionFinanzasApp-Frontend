@@ -41,22 +41,24 @@
           description="Prueba cambiando el período o seleccionando otras cuentas para encontrar movimientos.">
         </app-empty-state>
 
-        <section
-          *ngFor="let group of transactionGroups; trackBy: trackByGroup"
-          class="movement-group">
-          <header class="movement-group__header">
-            <h3>{{ group.label }}</h3>
-          </header>
+        <ng-container *ngIf="!isLoading">
+          <section
+            *ngFor="let group of transactionGroups; trackBy: trackByGroup"
+            class="movement-group">
+            <header class="movement-group__header">
+              <h3>{{ group.label }}</h3>
+            </header>
 
-          <div class="movement-group__items">
-            <app-compact-list-item
-              *ngFor="let item of group.items; trackBy: trackByTransaction"
-              [item]="item.view"
-              [interactive]="true"
-              (activated)="openTransactionDetail(item.transaction)">
-            </app-compact-list-item>
-          </div>
-        </section>
+            <div class="movement-group__items">
+              <app-compact-list-item
+                *ngFor="let item of group.items; trackBy: trackByTransaction"
+                [item]="item.view"
+                [interactive]="true"
+                (activated)="openTransactionDetail(item.transaction)">
+              </app-compact-list-item>
+            </div>
+          </section>
+        </ng-container>
         </div>
       </app-section-card>
     </ng-container>

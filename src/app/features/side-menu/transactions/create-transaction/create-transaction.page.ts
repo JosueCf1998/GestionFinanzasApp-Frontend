@@ -57,6 +57,7 @@ interface TransactionFormState {
     color: string;
   };
   transactionType?: TransactionType;
+  date?: string;
 }
 
 @Component({
@@ -156,6 +157,7 @@ export class CreateTransactionPage implements OnInit {
       };
     } else if (state.category) {
       this.selectedType = state.transactionType ?? 'gasto';
+      this.date = convertISODateToSQL(state.date ?? '') || this.today;
       this.selectedCategory = {
         id: state.category.id,
         nombre: state.category.name,
@@ -373,7 +375,9 @@ export class CreateTransactionPage implements OnInit {
 
   viewTransactions(): void {
     this.isSuccessReceiptOpen = false;
-    void this.navService.back();
+    void (this.isEditMode
+      ? this.navService.backMultiple(2)
+      : this.navService.back());
   }
 
   requestDeleteTransaction(): void {

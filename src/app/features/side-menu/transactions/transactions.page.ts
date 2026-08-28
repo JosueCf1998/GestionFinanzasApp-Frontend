@@ -73,6 +73,7 @@ export class TransactionsPage implements AfterViewInit, OnInit, OnDestroy {
   private transactionRequest?: Subscription;
   private accountRequest?: Subscription;
   private filterResetSubscription?: Subscription;
+  private hasEnteredView = false;
   readonly AccountSelectionMode = AccountSelectionMode;
   readonly transactionTypes = [
     { value: 'gasto', label: 'Gastos' },
@@ -125,6 +126,21 @@ export class TransactionsPage implements AfterViewInit, OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.scrollToTop();
+  }
+
+  ionViewWillEnter(): void {
+    if (!this.hasEnteredView) {
+      this.hasEnteredView = true;
+      return;
+    }
+
+    if (this.accounts.length) {
+      this.loadTransactions();
+      return;
+    }
+
+    this.isLoading = true;
+    this.loadAccounts();
   }
 
   get totalLabel(): string {

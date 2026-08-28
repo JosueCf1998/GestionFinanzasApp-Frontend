@@ -7,7 +7,7 @@ import { LearningQuizOption, LearningQuizQuestion, QuizDetailResponse, SubmitQui
 import { AlertService } from 'src/app/core/services/alert.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
-import { CompleteLessonUseCase } from 'src/app/core/use-cases/learning/complete-lesson.usecase';
+import { CompleteCourseUseCase } from 'src/app/core/use-cases/learning/complete-course.usecase';
 import { GetQuizDetailUseCase } from 'src/app/core/use-cases/learning/get-quiz-detail.usecase';
 import { SubmitQuizUseCase } from 'src/app/core/use-cases/learning/submit-quiz.usecase';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
@@ -32,7 +32,6 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
   passingScore = 70;
   private lessonId = 0;
   private courseId = 0;
-  private temporary = false;
   private quizRequest?: Subscription;
   private submitRequest?: Subscription;
   private completeRequest?: Subscription;
@@ -40,14 +39,18 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
 
   constructor(private readonly route: ActivatedRoute, private readonly navigationService: NavigationService,
     private readonly getQuizDetailUseCase: GetQuizDetailUseCase, private readonly submitQuizUseCase: SubmitQuizUseCase,
-    private readonly completeLessonUseCase: CompleteLessonUseCase, private readonly alertService: AlertService,
+    private readonly completeCourseUseCase: CompleteCourseUseCase, private readonly alertService: AlertService,
     private readonly loadingService: SpinnerService) {}
 
   ngOnInit(): void {
     this.lessonId = Number(this.route.snapshot.paramMap.get('id'));
     this.courseId = Number(this.route.snapshot.queryParamMap.get('courseId')) || 0;
     this.passingScore = Number(this.route.snapshot.queryParamMap.get('passingScore')) || 70;
-    if (!Number.isInteger(this.lessonId) || this.lessonId <= 0) { this.loading = false; this.errorMessage = 'El reto seleccionado no es válido.'; return; }
+    if (!Number.isInteger(this.lessonId) || this.lessonId <= 0 || !Number.isInteger(this.courseId) || this.courseId <= 0) {
+      this.loading = false;
+      this.errorMessage = 'El reto o el curso seleccionado no es válido.';
+      return;
+    }
     this.loadQuiz();
   }
   ngOnDestroy(): void { this.quizRequest?.unsubscribe(); this.submitRequest?.unsubscribe(); this.completeRequest?.unsubscribe(); this.hideSpinner(); }
@@ -62,46 +65,47 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
   continue(): void { if (!this.selectedOptionId) return; if (this.currentIndex < this.questions.length - 1) this.currentIndex += 1; else this.submit(); }
   retryQuiz(): void { this.currentIndex = 0; this.selectedAnswers = {}; this.result = null; }
   returnToCourse(): void { if (this.courseId) void this.navigationService.replace(`/learning/courses/${this.courseId}`); else this.back(); }
-  optionText(option: LearningQuizOption): string { return option.text || option.option || option.label || option.content || `Opción ${option.id}`; }
+  optionText(option: LearningQuizOption): string { return option.text || `Opción ${option.id}`; }
 
   private loadQuiz(): void {
-    this.quizRequest?.unsubscribe(); this.loading = true; this.errorMessage = ''; this.temporary = false;
+    this.quizRequest?.unsubscribe(); this.loading = true; this.errorMessage = '';
     this.showSpinner();
-    this.quizRequest = this.getQuizDetailUseCase.execute({ lesson_id: this.lessonId }).service({
-      success: response => { this.loading = false; this.questions = this.normalize(response); if (this.questions.length) this.hideSpinner(); else void this.loadTemporaryQuiz(); },
-      failure: () => { void this.loadTemporaryQuiz(); }
+    this.quizRequest = this.getQuizDetailUseCase.execute({ courseId: this.courseId }).service({
+      success: response => {
+        this.hideSpinner();
+        this.loading = false;
+        this.questions = this.normalize(response);
+        if (!this.questions.length) {
+          this.errorMessage = response?.hasQuiz
+            ? 'El reto final no contiene preguntas disponibles.'
+            : 'Este curso no tiene un reto final activo.';
+        }
+      },
+      failure: error => {
+        this.hideSpinner();
+        this.loading = false;
+        this.questions = [];
+        this.errorMessage = error?.message || 'No pudimos cargar el reto final.';
+      }
     });
   }
-  private async loadTemporaryQuiz(): Promise<void> {
-    try {
-      const request = await fetch('assets/mocks/learning-final-quiz.json'); if (!request.ok) throw new Error();
-      const response = await request.json() as QuizDetailResponse; this.questions = this.normalize(response); this.temporary = true;
-      this.hideSpinner(); this.loading = false; this.errorMessage = this.questions.length ? '' : 'El cuestionario temporal no contiene preguntas.';
-    } catch { this.hideSpinner(); this.loading = false; this.errorMessage = 'No pudimos cargar el reto final.'; }
-  }
   private normalize(response: QuizDetailResponse | null): LearningQuizQuestion[] {
-    if (!response?.has_quiz) return [];
-    this.passingScore = response.passing_score || this.passingScore;
-    const source = response.questions ?? response.quizzes ?? response.items ?? (response.quiz ? [response.quiz] : []);
-    return source.map(question => ({ ...question, id: Number(question.id), options: (question.options ?? []).map(option => ({ ...option, id: Number(option.id) })) })).filter(question => question.id > 0 && question.options.length > 0);
+    if (!response?.hasQuiz) return [];
+    this.passingScore = response.passingScore || this.passingScore;
+    return response.questions.filter(question => question.id > 0 && question.options.length > 0);
   }
   private submit(): void {
     if (this.submitting || !this.questions.length) return;
-    if (this.temporary) {
-      const correct = this.questions.filter(question => this.selectedAnswers[question.id] === question.correct_option_id).length;
-      const score = Math.round(correct / this.questions.length * 100); const passed = score >= this.passingScore;
-      this.result = { passed, score, correct_answers: correct, total_questions: this.questions.length }; this.courseCompleted = passed; return;
-    }
     this.submitting = true; this.submitRequest?.unsubscribe();
     this.showSpinner();
-    this.submitRequest = this.submitQuizUseCase.execute({ lesson_id: this.lessonId, answers: this.questions.map(question => ({ quiz_id: question.id, option_id: this.selectedAnswers[question.id] })) }).service({
+    this.submitRequest = this.submitQuizUseCase.execute({ courseId: this.courseId, answers: this.questions.map(question => ({ quizId: question.id, optionId: this.selectedAnswers[question.id] })) }).service({
       success: result => { this.submitting = false; if (!result) { this.hideSpinner(); return; } this.result = result; if (result.passed) this.completeCourse(); else this.hideSpinner(); },
       failure: error => { this.hideSpinner(); this.submitting = false; void this.alertService.showAlert('No pudimos revisar tus respuestas', error?.message || 'Inténtalo nuevamente.', 'Entendido'); }
     });
   }
   private completeCourse(): void {
     this.submitting = true; this.completeRequest?.unsubscribe();
-    this.completeRequest = this.completeLessonUseCase.execute({ lesson_id: this.lessonId }).service({
+    this.completeRequest = this.completeCourseUseCase.execute({ courseId: this.courseId }).service({
       success: () => { this.hideSpinner(); this.submitting = false; this.courseCompleted = true; },
       failure: error => { this.hideSpinner(); this.submitting = false; void this.alertService.showAlert('Quiz aprobado', error?.message || 'No pudimos actualizar el curso.', 'Entendido'); }
     });

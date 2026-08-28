@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IonContent, IonHeader } from '@ionic/angular/standalone';
 import { Subscription } from 'rxjs';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
@@ -7,6 +7,7 @@ import { FilteredTransaction } from 'src/app/core/models/transactions/list-trans
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { Accounts, ListAccountsUseCase } from 'src/app/core/use-cases/accounts/list-accounts.usecase';
 import { FilterTransactionsUseCase } from 'src/app/core/use-cases/transactions/filter-transactions.usecase';
+import { getLocalToday } from 'src/app/core/utils/date.util';
 import { normalizeFilteredTransaction } from 'src/app/core/utils/transaction.util';
 import { AccountSelectionMode, AccountSelectorModalComponent } from 'src/app/shared/components/account-selector-modal/account-selector-modal.component';
 import {
@@ -74,7 +75,7 @@ interface TransactionListEntry {
     SectionCardComponent
   ]
 })
-export class ListTransactionPage implements OnInit, OnDestroy {
+export class ListTransactionPage implements OnDestroy {
   private transactionRequest?: Subscription;
   private accountRequest?: Subscription;
   private allTransactions: FilteredTransaction[] = [];
@@ -113,7 +114,7 @@ export class ListTransactionPage implements OnInit, OnDestroy {
     this.initialAccountIds = new Set(state.selectedAccountIds ?? []);
   }
 
-  ngOnInit(): void {
+  ionViewWillEnter(): void {
     if (!this.category) return;
     this.isLoading = true;
     this.loadAccounts();
@@ -150,9 +151,15 @@ export class ListTransactionPage implements OnInit, OnDestroy {
 
   createTransaction(): void {
     if (!this.category) return;
+    const today = getLocalToday();
+    const date = today >= this.selectedStartDate && today <= this.selectedEndDate
+      ? today
+      : this.selectedStartDate;
+
     void this.navService.forward('/transactions/create', {
       category: this.category,
-      transactionType: this.transactionType
+      transactionType: this.transactionType,
+      date
     });
   }
 

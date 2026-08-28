@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LessonRequest, QuizDetailResponse } from 'src/app/core/models/learning/learning.model';
+import { QuizDetailRequest, QuizDetailResponse } from 'src/app/core/models/learning/learning.model';
 import { Result } from 'src/app/core/models/result.model';
 import { LearningRepository } from 'src/app/core/repositories/learning.repository';
 
@@ -8,7 +8,7 @@ import { LearningRepository } from 'src/app/core/repositories/learning.repositor
 export class GetQuizDetailUseCase {
   constructor(private readonly repository: LearningRepository) {}
 
-  execute(request: LessonRequest): Observable<Result<QuizDetailResponse>> {
+  execute(request: QuizDetailRequest): Observable<Result<QuizDetailResponse>> {
     return this.repository.getQuizDetail(request);
   }
 }

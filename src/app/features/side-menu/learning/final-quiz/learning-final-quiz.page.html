@@ -38,7 +38,7 @@
             <div class="quiz-options" role="radiogroup">
               @for (option of question.options; track option.id; let i = $index) {
                 <button type="button" role="radio" [attr.aria-checked]="selectedOptionId === option.id" [class.selected]="selectedOptionId === option.id" (click)="selectOption(option.id)">
-                  <span>{{ ['A', 'B', 'C'][i] || i + 1 }}</span><strong>{{ optionText(option) }}</strong><i></i>
+                  <span>{{ ['A', 'B', 'C', 'D'][i] || i + 1 }}</span><strong>{{ optionText(option) }}</strong><i></i>
                 </button>
               }
             </div>

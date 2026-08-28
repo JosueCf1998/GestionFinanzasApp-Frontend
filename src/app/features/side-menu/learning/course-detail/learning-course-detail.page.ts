@@ -102,7 +102,7 @@ export class LearningCourseDetailPage implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.course = null;
     this.activeLesson = null;
-    this.courseRequest = this.getCourseDetailUseCase.execute({ course_id: courseId }).service({
+    this.courseRequest = this.getCourseDetailUseCase.execute({ courseId }).service({
       success: course => {
         this.loadingService.hide();
         if (!course) {
