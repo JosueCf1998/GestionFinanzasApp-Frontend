@@ -5,6 +5,7 @@ import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { Subscription } from 'rxjs';
 import { FilteredTransaction } from 'src/app/core/models/transactions/list-transactions.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { FeatureFilterStateService } from 'src/app/core/services/feature-filter-state.service';
 import {
   Accounts,
   ListAccountsUseCase
@@ -32,6 +33,10 @@ import 'src/app/core/utils/observable-extensions';
 import { normalizeFilteredTransaction } from 'src/app/core/utils/transaction.util';
 
 type TransactionType = 'gasto' | 'ingreso';
+type TransactionsFilterState = FilterSelection & {
+  selectedType: TransactionType;
+  selectedAccountIds: number[];
+};
 
 interface TransactionCategorySummary {
   id: number;
@@ -67,6 +72,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   private transactionRequest?: Subscription;
   private accountRequest?: Subscription;
+  private filterResetSubscription?: Subscription;
   readonly AccountSelectionMode = AccountSelectionMode;
   readonly transactionTypes = [
     { value: 'gasto', label: 'Gastos' },
@@ -94,17 +100,27 @@ export class TransactionsPage implements OnInit, OnDestroy {
   constructor(
     private readonly filterTransactionsUseCase: FilterTransactionsUseCase,
     private readonly listAccountsUseCase: ListAccountsUseCase,
-    private readonly navService: NavigationService
+    private readonly navService: NavigationService,
+    private readonly filterState: FeatureFilterStateService
   ) {}
 
   ngOnInit(): void {
+    const savedState = this.filterState.get<TransactionsFilterState>('transactions');
+    if (savedState) this.setFilterState(savedState);
+
+    this.filterResetSubscription = this.filterState.resetsFor('transactions').subscribe(() => {
+      this.resetFilters();
+      this.loadTransactions();
+    });
+
     this.isLoading = true;
-    this.loadAccounts();
+    this.loadAccounts(savedState?.selectedAccountIds);
   }
 
   ngOnDestroy(): void {
     this.transactionRequest?.unsubscribe();
     this.accountRequest?.unsubscribe();
+    this.filterResetSubscription?.unsubscribe();
   }
 
   ionViewWillEnter(): void {
@@ -176,6 +192,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
     if (value !== 'gasto' && value !== 'ingreso') return;
 
     this.selectedType = value;
+    this.persistFilters();
     this.applyLocalFilters();
   }
 
@@ -188,10 +205,8 @@ export class TransactionsPage implements OnInit, OnDestroy {
   }
 
   applyFilters(selection: FilterSelection): void {
-    this.selectedPeriod = selection.period;
-    this.selectedPeriodValue = selection.periodValue;
-    this.selectedStartDate = selection.startDate;
-    this.selectedEndDate = selection.endDate;
+    this.setPeriodSelection(selection);
+    this.persistFilters();
     this.closePeriodSelector();
     this.loadTransactions();
   }
@@ -206,6 +221,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   applyAccountFilter(accounts: Accounts[]): void {
     this.selectedAccounts = [...accounts];
+    this.persistFilters();
     this.closeAccountSelector();
     this.loadTransactions();
   }
@@ -262,12 +278,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
     return category.id;
   }
 
-  private loadAccounts(): void {
+  private loadAccounts(selectedAccountIds?: number[]): void {
     this.accountRequest?.unsubscribe();
     this.accountRequest = this.listAccountsUseCase.listAccounts().service({
       success: data => {
         this.accounts = data?.items ?? [];
-        this.selectedAccounts = [...this.accounts];
+        this.selectedAccounts = selectedAccountIds
+          ? this.accounts.filter(account => selectedAccountIds.includes(account.id))
+          : [...this.accounts];
         this.loadTransactions();
       },
       failure: () => {
@@ -276,6 +294,40 @@ export class TransactionsPage implements OnInit, OnDestroy {
         this.loadTransactions();
       }
     });
+  }
+
+  private setPeriodSelection(selection: FilterSelection): void {
+    this.selectedPeriod = selection.period;
+    this.selectedPeriodValue = selection.periodValue;
+    this.selectedStartDate = selection.startDate;
+    this.selectedEndDate = selection.endDate;
+  }
+
+  private setFilterState(state: TransactionsFilterState): void {
+    this.setPeriodSelection(state);
+    this.selectedType = state.selectedType;
+  }
+
+  private persistFilters(): void {
+    this.filterState.set<TransactionsFilterState>('transactions', {
+      period: this.selectedPeriod,
+      periodValue: this.selectedPeriodValue,
+      startDate: this.selectedStartDate,
+      endDate: this.selectedEndDate,
+      selectedType: this.selectedType,
+      selectedAccountIds: this.selectedAccounts.map(account => account.id)
+    });
+  }
+
+  private resetFilters(): void {
+    this.selectedType = 'gasto';
+    this.selectedPeriod = 'monthly';
+    this.selectedPeriodValue = this.getCurrentMonth();
+    this.selectedStartDate = this.getFirstDayOfCurrentMonth();
+    this.selectedEndDate = this.getLastDayOfCurrentMonth();
+    this.selectedAccounts = [...this.accounts];
+    this.closePeriodSelector();
+    this.closeAccountSelector();
   }
 
   private applyLocalFilters(): void {

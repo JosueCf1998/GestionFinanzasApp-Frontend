@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import 'src/app/core/utils/observable-extensions';
 import { PeriodPreset } from 'src/app/core/models/budgets/list-budgets.model';
 import { NavigationService } from 'src/app/core/services/navigation.service';
+import { FeatureFilterStateService } from 'src/app/core/services/feature-filter-state.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import {
   DashboardRequest,
@@ -45,6 +46,10 @@ interface PeriodGraphicCard {
   label: string;
 }
 
+type GraphicsFilterState = FilterSelection & {
+  selectedAccountIds: number[];
+};
+
 @Component({
   selector: 'app-graphics',
   templateUrl: './graphics.page.html',
@@ -65,6 +70,7 @@ interface PeriodGraphicCard {
 export class GraphicsPage implements OnInit, OnDestroy {
   private accountRequest?: Subscription;
   private dashboardRequest?: Subscription;
+  private filterResetSubscription?: Subscription;
 
   readonly AccountSelectionMode = AccountSelectionMode;
   readonly currency: Currency = CURRENCIES.PEN;
@@ -134,16 +140,26 @@ export class GraphicsPage implements OnInit, OnDestroy {
     private readonly listAccountsUseCase: ListAccountsUseCase,
     private readonly dashboardSummaryUseCase: DashboardSummaryUseCase,
     private readonly navigationService: NavigationService,
+    private readonly filterState: FeatureFilterStateService,
     public readonly loadingService: SpinnerService
   ) {}
 
   ngOnInit(): void {
-    this.loadAccounts();
+    const savedState = this.filterState.get<GraphicsFilterState>('graphics');
+    if (savedState) this.setPeriodSelection(savedState);
+
+    this.filterResetSubscription = this.filterState.resetsFor('graphics').subscribe(() => {
+      this.resetFilters();
+      this.loadDashboard();
+    });
+
+    this.loadAccounts(savedState?.selectedAccountIds);
   }
 
   ngOnDestroy(): void {
     this.accountRequest?.unsubscribe();
     this.dashboardRequest?.unsubscribe();
+    this.filterResetSubscription?.unsubscribe();
     this.loadingService.hide();
   }
 
@@ -176,10 +192,8 @@ export class GraphicsPage implements OnInit, OnDestroy {
   }
 
   applyFilters(selection: FilterSelection): void {
-    this.selectedPeriod = selection.period;
-    this.selectedPeriodValue = selection.periodValue;
-    this.selectedStartDate = selection.startDate;
-    this.selectedEndDate = selection.endDate;
+    this.setPeriodSelection(selection);
+    this.persistFilters();
     this.closePeriodSelector();
     this.loadDashboard();
   }
@@ -194,6 +208,7 @@ export class GraphicsPage implements OnInit, OnDestroy {
 
   applyAccountFilter(accounts: Accounts[]): void {
     this.selectedAccounts = [...accounts];
+    this.persistFilters();
     this.closeAccountSelector();
     this.loadDashboard();
   }
@@ -208,12 +223,14 @@ export class GraphicsPage implements OnInit, OnDestroy {
     });
   }
 
-  private loadAccounts(): void {
+  private loadAccounts(selectedAccountIds?: number[]): void {
     this.accountRequest?.unsubscribe();
     this.accountRequest = this.listAccountsUseCase.listAccounts().service({
       success: data => {
         this.accounts = data?.items ?? [];
-        this.selectedAccounts = [...this.accounts];
+        this.selectedAccounts = selectedAccountIds
+          ? this.accounts.filter(account => selectedAccountIds.includes(account.id))
+          : [...this.accounts];
         this.loadDashboard();
       },
       failure: () => {
@@ -222,6 +239,33 @@ export class GraphicsPage implements OnInit, OnDestroy {
         this.loadDashboard();
       }
     });
+  }
+
+  private setPeriodSelection(selection: FilterSelection): void {
+    this.selectedPeriod = selection.period;
+    this.selectedPeriodValue = selection.periodValue;
+    this.selectedStartDate = selection.startDate;
+    this.selectedEndDate = selection.endDate;
+  }
+
+  private persistFilters(): void {
+    this.filterState.set<GraphicsFilterState>('graphics', {
+      period: this.selectedPeriod,
+      periodValue: this.selectedPeriodValue,
+      startDate: this.selectedStartDate,
+      endDate: this.selectedEndDate,
+      selectedAccountIds: this.selectedAccounts.map(account => account.id)
+    });
+  }
+
+  private resetFilters(): void {
+    this.selectedPeriod = 'monthly';
+    this.selectedPeriodValue = this.getCurrentMonth();
+    this.selectedStartDate = this.getFirstDayOfCurrentMonth();
+    this.selectedEndDate = this.getLastDayOfCurrentMonth();
+    this.selectedAccounts = [...this.accounts];
+    this.closePeriodSelector();
+    this.closeAccountSelector();
   }
 
   private loadDashboard(): void {

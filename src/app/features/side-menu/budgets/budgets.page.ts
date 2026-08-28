@@ -10,6 +10,7 @@ import {
   ListBudgetsRequest,
   ListBudgetsResponse
 } from 'src/app/core/models/budgets/list-budgets.model';
+import { FeatureFilterStateService } from 'src/app/core/services/feature-filter-state.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { ListBudgetsUseCase } from 'src/app/core/use-cases/budgets/list-budgets.usecase';
@@ -47,11 +48,17 @@ import { CURRENCIES, Currency } from 'src/app/shared/models/currency.model';
 })
 export class BudgetsPage implements OnInit, OnDestroy {
   private budgetRequest?: Subscription;
+  private filterResetSubscription?: Subscription;
+  private readonly monthYearFormatter = new Intl.DateTimeFormat('es-PE', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC'
+  });
 
   selectedPeriod: PeriodPreset = 'monthly';
-  selectedPeriodValue = this.getCurrentMonth();
-  selectedStartDate = this.getFirstDayOfCurrentMonth();
-  selectedEndDate = this.getLastDayOfCurrentMonth();
+  selectedPeriodValue = '';
+  selectedStartDate = '';
+  selectedEndDate = '';
   isPeriodSelectorOpen = false;
 
   readonly currency: Currency = CURRENCIES.PEN;
@@ -61,22 +68,35 @@ export class BudgetsPage implements OnInit, OnDestroy {
     used: 0,
     percentage: 0
   };
-  selectedDate = '';
-
   constructor(
     private readonly navService: NavigationService,
+    private readonly filterState: FeatureFilterStateService,
     private readonly listBudgetsUseCase: ListBudgetsUseCase,
     public readonly loadingService: SpinnerService
-  ) {}
+  ) {
+    this.setFilterSelection(this.getCurrentMonthSelection());
+  }
 
   // MARK: - CICLO DE VIDA
 
   ngOnInit(): void {
+    const savedSelection = this.filterState.get<FilterSelection>('budgets');
+
+    if (savedSelection && this.isValidSelection(savedSelection)) {
+      this.setFilterSelection(savedSelection);
+    }
+
+    this.filterResetSubscription = this.filterState.resetsFor('budgets').subscribe(() => {
+      this.resetFiltersToCurrentMonth();
+      this.loadBudgets();
+    });
+
     this.loadBudgets();
   }
 
   ngOnDestroy(): void {
     this.budgetRequest?.unsubscribe();
+    this.filterResetSubscription?.unsubscribe();
     this.loadingService.hide();
   }
 
@@ -142,6 +162,21 @@ export class BudgetsPage implements OnInit, OnDestroy {
     return `${this.formatNumericDate(this.selectedStartDate)} - ${this.formatNumericDate(this.selectedEndDate)}`;
   }
 
+  get selectedDateLabel(): string {
+    if (this.selectedPeriod === 'monthly' && /^\d{4}-\d{2}$/.test(this.selectedPeriodValue)) {
+      const [year, month] = this.selectedPeriodValue.split('-').map(Number);
+      const label = this.monthYearFormatter.format(new Date(Date.UTC(year, month - 1, 1)));
+
+      return label.charAt(0).toUpperCase() + label.slice(1);
+    }
+
+    if (this.selectedPeriod === 'annual' && /^\d{4}$/.test(this.selectedPeriodValue)) {
+      return this.selectedPeriodValue;
+    }
+
+    return this.selectedDateRange;
+  }
+
   openPeriodSelector(): void {
     this.isPeriodSelectorOpen = true;
   }
@@ -155,10 +190,8 @@ export class BudgetsPage implements OnInit, OnDestroy {
       return;
     }
 
-    this.selectedPeriod = selection.period;
-    this.selectedPeriodValue = selection.periodValue;
-    this.selectedStartDate = selection.startDate;
-    this.selectedEndDate = selection.endDate;
+    this.setFilterSelection(selection);
+    this.filterState.set('budgets', selection);
     this.closePeriodSelector();
     this.loadBudgets();
   }
@@ -167,7 +200,7 @@ export class BudgetsPage implements OnInit, OnDestroy {
     this.navService.forward(`/budgets/detail/${budget.id}`, {
       budget,
       currency: this.currency.code,
-      dateRangeLabel: this.selectedDate
+      dateRangeLabel: this.selectedDateLabel
     });
   }
 
@@ -188,6 +221,18 @@ export class BudgetsPage implements OnInit, OnDestroy {
     return this.isValidSelection(request) ? request : null;
   }
 
+  private setFilterSelection(selection: FilterSelection): void {
+    this.selectedPeriod = selection.period;
+    this.selectedPeriodValue = selection.periodValue;
+    this.selectedStartDate = selection.startDate;
+    this.selectedEndDate = selection.endDate;
+  }
+
+  private resetFiltersToCurrentMonth(): void {
+    this.setFilterSelection(this.getCurrentMonthSelection());
+    this.closePeriodSelector();
+  }
+
   private isValidSelection(
     selection: Pick<FilterSelection, 'startDate' | 'endDate'>
   ): boolean {
@@ -204,7 +249,6 @@ export class BudgetsPage implements OnInit, OnDestroy {
   private setBudgetResponse(response: ListBudgetsResponse): void {
     this.budgets = [...response.items];
     this.summary = { ...response.summary };
-    this.selectedDate = response.dateRangeLabel;
   }
 
   private clearBudgetData(): void {
@@ -216,18 +260,17 @@ export class BudgetsPage implements OnInit, OnDestroy {
     };
   }
 
-  private getCurrentMonth(): string {
-    return this.formatDateInput(new Date()).slice(0, 7);
-  }
-
-  private getFirstDayOfCurrentMonth(): string {
+  private getCurrentMonthSelection(): FilterSelection {
     const today = new Date();
-    return this.formatDateInput(new Date(today.getFullYear(), today.getMonth(), 1));
-  }
+    const year = today.getFullYear();
+    const month = today.getMonth();
 
-  private getLastDayOfCurrentMonth(): string {
-    const today = new Date();
-    return this.formatDateInput(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+    return {
+      period: 'monthly',
+      periodValue: this.formatDateInput(today).slice(0, 7),
+      startDate: this.formatDateInput(new Date(year, month, 1)),
+      endDate: this.formatDateInput(new Date(year, month + 1, 0))
+    };
   }
 
   private formatDateInput(date: Date): string {

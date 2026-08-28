@@ -17,8 +17,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { NavigationService } from '../../core/services/navigation.service';
+import {
+  FeatureFilterStateService,
+  FilterStateKey
+} from '../../core/services/feature-filter-state.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
+import { NavigationService } from '../../core/services/navigation.service';
 
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
@@ -68,6 +72,12 @@ export class SideMenuPage implements OnInit {
     { title: "Aprender", url: "/main/learning", icon: "school" },
   ];
 
+  private readonly menuFilterStateKeys: Readonly<Record<string, FilterStateKey>> = {
+    '/main/budgets': 'budgets',
+    '/main/graphics': 'graphics',
+    '/main/transactions': 'transactions'
+  };
+
   // =========================
   // USER DATA
   // =========================
@@ -76,8 +86,9 @@ export class SideMenuPage implements OnInit {
   name = '';
 
   constructor(
-    private navigationService: NavigationService,
-    private localManagementService: LocalManagementService
+    private readonly navigationService: NavigationService,
+    private readonly localManagementService: LocalManagementService,
+    private readonly filterState: FeatureFilterStateService
   ) {}
 
   // =========================
@@ -107,6 +118,11 @@ export class SideMenuPage implements OnInit {
 
   logOut() {
     this.navigationService.replace('/splash');
+  }
+
+  onMenuItemSelected(url: string): void {
+    const stateKey = this.menuFilterStateKeys[url];
+    if (stateKey) this.filterState.reset(stateKey);
   }
 
   private getDeepActiveElement(): HTMLElement | null {
