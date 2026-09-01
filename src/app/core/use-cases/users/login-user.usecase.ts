@@ -15,7 +15,8 @@ export interface LoginUserRequest {
 export interface LoginUserResponse {
   token: string;
   isFirstTime: boolean;
-  nombre: string;
+  nombre?: string;
+  name?: string;
 }
 
 @Injectable({
@@ -41,10 +42,14 @@ export class LoginUserUseCase {
   }
 
   private saveUserData(userData: LoginUserResponse, email: string): void {
-    console.log('Saving user data:', `Bearer ${userData.token}`);
+    const name = (userData.nombre ?? userData.name ?? '').trim();
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
-    this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, userData.nombre);
+    if (name) {
+      this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, name);
+    } else {
+      this.localManagementService.removeVariable(KEY_MANAGEMENT.NAME);
+    }
     this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, userData.isFirstTime);
   }
 

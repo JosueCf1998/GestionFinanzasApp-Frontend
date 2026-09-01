@@ -55,8 +55,8 @@ export class LoginRecurrentPage implements OnInit {
   showUnauthorizedAlert: boolean = false
   messageError: string = '';
 
-  email: string = this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) || "";
-  name: string = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
+  email: string = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.EMAIL) || "";
+  name: string = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.NAME) || "";
 
   constructor(
     private navService: NavigationService,
@@ -66,7 +66,11 @@ export class LoginRecurrentPage implements OnInit {
     private localManagementService: LocalManagementService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (!this.email || !this.name) {
+      void this.navService.replace('/login', undefined, false);
+    }
+  }
 
   // MARK: - SERVICIOS
 

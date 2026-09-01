@@ -35,6 +35,13 @@ export class LocalManagementService {
     }
   }
 
+  /** Obtiene un texto persistido y descarta valores vacíos o inválidos. */
+  getNonEmptyVariable(key: string): string | null {
+    const value = this.getVariable(key)?.trim();
+    if (!value || value === 'undefined' || value === 'null') return null;
+    return value;
+  }
+
   /**
    * Elimina una variable de localStorage.
    */

@@ -15,7 +15,7 @@ import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants'
 })
 export class SplashPage implements OnInit {
 
-  isLoginRecurrent: boolean = this.localManagementService.getVariable(KEY_MANAGEMENT.EMAIL) != null;
+  isLoginRecurrent = false;
 
   constructor(
     private navService: NavigationService,
@@ -23,6 +23,10 @@ export class SplashPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    const email = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.EMAIL);
+    const name = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.NAME);
+    this.isLoginRecurrent = Boolean(email && name);
+
     let time = this.isLoginRecurrent ? 2500 : 1500;
     setTimeout(() => {
       if (this.isLoginRecurrent) {
