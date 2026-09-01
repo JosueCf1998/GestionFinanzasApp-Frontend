@@ -88,7 +88,7 @@ export const ENDPOINTS = {
 
     STATS: 'learning/stats',
 
-    QUESTIONS: 'learning/questions'
+    FAQ: 'learning/faq'
 
   }
 

@@ -3,14 +3,10 @@
 .questions-content { width: min(100%, 760px); margin: 0 auto; padding: 22px 24px calc(48px + env(safe-area-inset-bottom)); }
 .questions-intro h2 { margin: 0; color: var(--fv-primary-dark, #32148f); font-size: clamp(25px, 5vw, 32px); font-weight: 800; letter-spacing: -.03em; }
 .questions-intro p { max-width: 520px; margin: 6px 0 0; color: var(--fv-text-secondary); font-size: 14px; line-height: 1.45; }
-.questions-search { display: grid; grid-template-columns: 28px minmax(0, 1fr) 36px; gap: 9px; align-items: center; min-height: 56px; margin-top: 16px; padding: 7px 9px 7px 14px; border: 1px solid #ddd5f5; border-radius: 17px; background: #fff; box-shadow: 0 6px 18px rgba(58,12,163,.06); }
+.questions-search { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 9px; align-items: center; min-height: 56px; margin-top: 16px; padding: 7px 14px; border: 1px solid #ddd5f5; border-radius: 17px; background: #fff; box-shadow: 0 6px 18px rgba(58,12,163,.06); }
 .questions-search input { width: 100%; border: 0; outline: 0; color: var(--fv-text-primary); background: transparent; font: inherit; font-size: 13px; }
 .questions-search input::placeholder { color: var(--fv-text-muted); }
-.question-categories { display: flex; gap: 8px; margin-top: 12px; padding: 2px 0 4px; overflow-x: auto; scrollbar-width: none; }
-.question-categories::-webkit-scrollbar { display: none; }
-.question-categories button { display: inline-flex; min-width: max-content; min-height: 38px; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--fv-border); border-radius: 13px; color: var(--fv-text-secondary); background: #fff; font-size: 11px; font-weight: 650; box-shadow: var(--fv-shadow-sm); }
-.question-categories button.active { border-color: #cdbff8; color: var(--fv-primary); background: #f7f4ff; }
-.questions-list { display: flex; flex-direction: column; gap: 7px; margin-top: 17px; }
+.questions-list { display: flex; flex-direction: column; gap: 7px; margin-top: 14px; }
 .questions-state { display: flex; min-height: 150px; align-items: center; justify-content: center; flex-direction: column; gap: 12px; color: var(--fv-text-secondary); font-size: 12px; }
 .question-item { overflow: hidden; border: 1px solid #e3e6ee; border-radius: 17px; background: #fff; box-shadow: 0 5px 16px rgba(31,42,80,.055); }
 .question-trigger { display: grid; width: 100%; min-height: 62px; grid-template-columns: 40px minmax(0, 1fr) 18px; gap: 11px; align-items: center; padding: 9px 12px; border: 0; color: inherit; text-align: left; background: transparent; }

@@ -34,7 +34,7 @@
           <div class="quiz-progress"><i [style.width.%]="progress"></i></div>
           <article class="quiz-question">
             <span class="question-number">{{ currentIndex + 1 < 10 ? '0' + (currentIndex + 1) : currentIndex + 1 }}</span>
-            <h2>{{ question.question || question.title }}</h2>
+            <h2>{{ question.question }}</h2>
             <div class="quiz-options" role="radiogroup">
               @for (option of question.options; track option.id; let i = $index) {
                 <button type="button" role="radio" [attr.aria-checked]="selectedOptionId === option.id" [class.selected]="selectedOptionId === option.id" (click)="selectOption(option.id)">

@@ -100,7 +100,7 @@ export class LearningRepository {
   }
 
   getQuestions(): Observable<Result<LearningQuestion[]>> {
-    return this.apiService.get(ENDPOINTS.LEARNING.QUESTIONS);
+    return this.apiService.get(ENDPOINTS.LEARNING.FAQ);
   }
 
   private mapQuizDetail(response: QuizDetailApiResponse): QuizDetailResponse {

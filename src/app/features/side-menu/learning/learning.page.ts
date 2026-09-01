@@ -40,11 +40,12 @@ interface LearningPath {
   description: string;
   lessons: number;
   progress: number;
+  level: string;
   icon: string;
   color: string;
 }
 
-const PATH_COLORS = ['#20b26b', '#6d43e5', '#4b8df8'];
+const PATH_ICON_COLOR = '#6d43e5';
 
 @Component({
   selector: 'app-learning',
@@ -101,6 +102,7 @@ export class LearningPage implements OnInit {
   }
 
   openCourse(courseId: number): void {
+    if (!Number.isInteger(courseId) || courseId <= 0) return;
     void this.navigationService.push(`/learning/courses/${courseId}`);
   }
 
@@ -146,7 +148,7 @@ export class LearningPage implements OnInit {
     if (!course) return null;
 
     return {
-      id: course.id,
+      id: Number(course.id),
       title: course.title,
       description: course.description,
       image: course.image_url.split('/').pop()?.split('.')[0] ?? '',
@@ -179,15 +181,16 @@ export class LearningPage implements OnInit {
   }
 
   private mapLearningPaths(paths: LearningHomePath[]): LearningPath[] {
-    return paths.map((path, index) => ({
+    return paths.map(path => ({
       id: path.id,
       categoryId: path.id_categories,
       title: path.title,
       description: path.description,
       lessons: path.lessons,
       progress: this.clamp(path.progress),
+      level: this.formatLevel(path.level),
       icon: this.resolveCourseIcon(path.title),
-      color: PATH_COLORS[index % PATH_COLORS.length]
+      color: PATH_ICON_COLOR
     }));
   }
 
@@ -203,6 +206,12 @@ export class LearningPage implements OnInit {
 
   private clamp(value: number): number {
     return Math.min(100, Math.max(0, value));
+  }
+
+  private formatLevel(level?: string): string {
+    if (!level) return '';
+    const normalized = level.trim().toLocaleLowerCase('es');
+    return normalized.charAt(0).toLocaleUpperCase('es') + normalized.slice(1);
   }
 
   private resolveCourseIcon(title: string): string {

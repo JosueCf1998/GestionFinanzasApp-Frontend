@@ -67,6 +67,7 @@ export interface LearningHomePath {
   description: string;
   lessons: number;
   progress: number;
+  level?: LearningLevel;
 }
 
 export interface LearningRecommendedLesson {
@@ -171,7 +172,7 @@ export interface LearningLesson {
 
 export interface LessonProgressResponse {
   lesson_id?: number;
-  completion_blocked?: 'QUIZ_NOT_PASSED';
+  completion_blocked?: 'ALL_LESSONS_NOT_COMPLETED' | 'QUIZ_NOT_PASSED';
   passing_score?: number;
   [key: string]: unknown;
 }

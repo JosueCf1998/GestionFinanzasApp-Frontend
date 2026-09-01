@@ -72,7 +72,7 @@ export class LearningCourseDetailPage implements OnInit, OnDestroy {
   }
 
   back(): void {
-    void this.navigationService.back();
+    void this.navigationService.replace('/main/learning');
   }
 
   retry(): void {

@@ -17,13 +17,13 @@
         </span>
         <h2>{{ featuredCourse.title }}</h2>
         <p>{{ featuredCourse.description }}</p>
-        <app-button
-          text="Ver lección"
-          variant="primary"
-          size="dense"
-          expand="auto"
-          (clicked)="openCourse(featuredCourse.id)">
-        </app-button>
+        <button
+          type="button"
+          class="featured-action"
+          (click)="openCourse(featuredCourse.id)"
+          [attr.aria-label]="'Ver detalle del curso ' + featuredCourse.title">
+          Ver lección
+        </button>
       </div>
 
       <div class="featured-visual" aria-hidden="true">
@@ -81,7 +81,7 @@
     <button
       type="button"
       class="questions-card"
-      aria-label="Abrir Resuelve tus dudas"
+      aria-label="Abrir preguntas frecuentes"
       (click)="openQuestions()">
       <app-item-icon
         icon="search-question"
@@ -91,8 +91,8 @@
       </app-item-icon>
 
       <span class="questions-copy">
-        <strong>Resuelve tus dudas</strong>
-        <small>Encuentra respuestas financieras por tema</small>
+        <strong>Preguntas frecuentes</strong>
+        <small>Encuentra respuestas claras sobre tus finanzas</small>
       </span>
 
       <app-item-icon
@@ -137,12 +137,15 @@
             type="button"
             class="path-card"
             [style.--path-color]="path.color"
-            [attr.aria-label]="path.title + ', ' + path.progress + '% completado'"
+            [class.has-progress]="path.progress > 0"
+            [class.is-complete]="path.progress === 100"
+            [attr.aria-label]="path.title + (path.level ? ', nivel ' + path.level : '') + ', ' + path.progress + '% completado'"
             (click)="openCourse(path.id)">
             <app-item-icon
+              class="path-icon"
               [icon]="path.icon"
               [color]="path.color"
-              size="lg"
+              size="md"
               variant="soft">
             </app-item-icon>
 
@@ -161,6 +164,9 @@
                   </app-item-icon>
                   {{ path.lessons }} lecciones
                 </span>
+                @if (path.level) {
+                  <span class="path-level">{{ path.level }}</span>
+                }
               </div>
               <div class="path-progress-row">
                 <div

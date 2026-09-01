@@ -1,5 +1,5 @@
 <ion-header>
-  <app-page-layout title="Resuelve tus dudas" (back)="back()">
+  <app-page-layout title="Preguntas frecuentes" (back)="back()">
   </app-page-layout>
 </ion-header>
 
@@ -13,20 +13,7 @@
     <label class="questions-search">
       <app-item-icon icon="search-question" color="var(--fv-primary)" size="sm" variant="plain"></app-item-icon>
       <input [(ngModel)]="search" type="search" placeholder="Busca una pregunta o palabra clave" aria-label="Buscar preguntas">
-      <app-item-icon icon="category" color="var(--fv-primary)" size="sm" variant="soft"></app-item-icon>
     </label>
-
-    <div class="question-categories" aria-label="Categorías de preguntas">
-      @for (category of categories; track category.value) {
-        <button
-          type="button"
-          [class.active]="selectedCategory === category.value"
-          (click)="selectCategory(category.value)">
-          <app-item-icon [icon]="category.icon" color="var(--fv-primary)" size="xs" variant="plain"></app-item-icon>
-          {{ category.label }}
-        </button>
-      }
-    </div>
 
     <section class="questions-list" aria-label="Preguntas frecuentes">
       @if (loading) {
@@ -61,7 +48,7 @@
         <div class="questions-empty">
           <app-item-icon icon="search-question" color="var(--fv-primary)" size="lg" variant="soft"></app-item-icon>
           <strong>No encontramos resultados</strong>
-          <span>Prueba con otra palabra o categoría.</span>
+          <span>Prueba con otra palabra.</span>
         </div>
       }
       }
