@@ -12,11 +12,19 @@ export interface LoginUserRequest {
   email: string;
   password: string;
 }
+
+/**
+ * Respuesta del endpoint POST /users/login
+ * - token: JWT de sesión
+ * - isFirstTime: true si el usuario no tiene cuentas creadas aún
+ * - name: nombre del usuario (campo devuelto por el backend)
+ * - otpEnabled: true si el usuario tiene 2FA (OTP) activado
+ */
 export interface LoginUserResponse {
   token: string;
   isFirstTime: boolean;
-  nombre?: string;
   name?: string;
+  otpEnabled: boolean;
 }
 
 @Injectable({
@@ -42,15 +50,18 @@ export class LoginUserUseCase {
   }
 
   private saveUserData(userData: LoginUserResponse, email: string): void {
-    const name = (userData.nombre ?? userData.name ?? '').trim();
+    const name = (userData.name ?? '').trim();
+
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
+    this.localManagementService.setVariable(KEY_MANAGEMENT.OTP_ENABLED, Boolean(userData.otpEnabled));
+    this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, Boolean(userData.isFirstTime));
+
     if (name) {
       this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, name);
     } else {
       this.localManagementService.removeVariable(KEY_MANAGEMENT.NAME);
     }
-    this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, userData.isFirstTime);
   }
 
 }

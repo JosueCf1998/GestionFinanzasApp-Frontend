@@ -20,6 +20,7 @@ import {
 } from "src/app/core/use-cases/users/register-user.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
+import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
 import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
 
@@ -36,7 +37,8 @@ import 'src/app/core/utils/observable-extensions';
     IonButton,
     IonItem,
     IonInput,
-    CustomAlertComponent
+    CustomAlertComponent,
+    BaseModalComponent
   ],
 })
 export class RegisterPage {
@@ -55,23 +57,29 @@ export class RegisterPage {
   showSuccessAlert: boolean = false;
   showGenericAlert: boolean = false;
   showUnauthorizedAlert: boolean = false;
+  showVerificationModal = false;
   messageError: string = '';
+  verificationCode = '';
+  pendingEmail = '';
 
   constructor(
     private navService: NavigationService,
     private registerUserUseCase: RegisterUserUseCase,
     private loadingService: SpinnerService
   ) {}
-  
+
   // MARK: - SERVICES
 
   private executeRegister(body: RegisterUserRequest) {
     this.loadingService.show();
-    this.registerUserUseCase.createUser(body).service({
+    this.registerUserUseCase.requestRegistration(body).service({
       success: (data) => {
         this.loadingService.hide();
-        if (data) {
-          this.showSuccessAlert = true;
+
+        if (data !== null) {
+          this.pendingEmail = body.email;
+          this.verificationCode = '';
+          this.showVerificationModal = true;
         } else {
           this.showGenericAlert = true;
         }
@@ -84,6 +92,45 @@ export class RegisterPage {
         } else {
           this.showGenericAlert = true;
         }
+      }
+    });
+  }
+
+  onVerificationCodeInput(event: any): void {
+    const rawValue = event?.detail?.value ?? '';
+    const digits = rawValue.replace(/\D/g, '').slice(0, 6);
+    this.verificationCode = digits;
+  }
+
+  closeVerificationModal(): void {
+    this.showVerificationModal = false;
+    this.verificationCode = '';
+    this.pendingEmail = '';
+  }
+
+  confirmVerificationCode(): void {
+    const code = this.verificationCode.trim();
+
+    if (!code || code.length !== 6) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = 'Ingresa un código de verificación de 6 dígitos.';
+      return;
+    }
+
+    this.loadingService.show();
+    this.registerUserUseCase.verifyRegistration({
+      email: this.pendingEmail,
+      code
+    }).service({
+      success: () => {
+        this.loadingService.hide();
+        this.showVerificationModal = false;
+        this.showSuccessAlert = true;
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        this.showUnauthorizedAlert = true;
+        this.messageError = error?.message ?? 'El código ingresado es inválido.';
       }
     });
   }
@@ -108,7 +155,7 @@ export class RegisterPage {
       this.messageError = "Ingresa tus credenciales correctamente.";
       return;
     }
-    
+
     const password = this.registerForm.value.password || "";
     const repeatPassword = this.registerForm.value.repeatPassword || "";
 

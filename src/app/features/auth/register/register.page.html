@@ -195,12 +195,38 @@
 
   </div>
 
+  <app-base-modal
+    [isOpen]="showVerificationModal"
+    title="Verifica tu cuenta"
+    description="Ingresa el código de 6 dígitos que enviamos a tu correo electrónico."
+    primaryText="Confirmar"
+    secondaryText="Cancelar"
+    [backdropDismiss]="false"
+    size="sm"
+    (closed)="closeVerificationModal()"
+    (primary)="confirmVerificationCode()"
+    (secondary)="closeVerificationModal()">
+    <div class="verification-modal__content">
+      <ion-item lines="none" class="form-item verification-input-wrapper">
+        <ion-input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          placeholder="123456"
+          [value]="verificationCode"
+          (ionInput)="onVerificationCodeInput($event)">
+        </ion-input>
+      </ion-item>
+    </div>
+  </app-base-modal>
+
   <!-- SUCCESS ALERT -->
 
   <app-custom-alert
     *ngIf="showSuccessAlert"
     header="Éxito"
-    [message]="'Usuario registrado con éxito.'"
+    [message]="'Usuario registrado con éxito. Ya puedes iniciar sesión.'"
     [imageUrl]="'assets/icon/check.svg'"
     [confirmText]="'Ir a Login'"
     [alertSize]="'medium'"

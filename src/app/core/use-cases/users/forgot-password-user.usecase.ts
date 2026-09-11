@@ -3,34 +3,66 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { Result } from '../../models/result.model';
 import { EncryptionService } from '../../services/encryption.service';
-import { tap } from 'rxjs/operators';
-import { LocalManagementService } from '../../services/localManagementService.service';
-import { KEY_MANAGEMENT } from '../../constants/key-management.constants';
 import { encryptBody } from '../../utils/encryption.util';
 
-export interface ForgotPassworUserdRequest {
+export interface PasswordResetRequest {
   email: string;
+}
+
+export interface PasswordResetRequestResponse {
+  message?: string;
+}
+
+export interface PasswordResetConfirmRequest {
+  email: string;
+  reset_token: string;
+  otp_code: string;
   new_password: string;
 }
 
-export interface ForgotPasswordUserResponse {
+export interface PasswordResetConfirmResponse {
+  message?: string;
+}
+
+/** @deprecated Usa PasswordResetRequest o PasswordResetConfirmRequest */
+export interface ForgotPassworUserdRequest {
+  email: string;
+  new_password?: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ForgotPasswordUserUseCase {
-
   constructor(
     private apiService: ApiService,
-    private encryptionService: EncryptionService,
-    private localManagementService: LocalManagementService
+    private encryptionService: EncryptionService
   ) {}
 
-  forgotPassword(body: ForgotPassworUserdRequest): Observable<Result<ForgotPasswordUserResponse>> {
-    const endpoint = 'users/forgot-password';
+  /**
+   * Paso 1 — Solicita un token de reseteo de contraseña.
+   * El backend lo envía por email si el usuario tiene OTP habilitado.
+   * Endpoint: POST /users/password-reset-request
+   */
+  passwordResetRequest(body: PasswordResetRequest): Observable<Result<PasswordResetRequestResponse>> {
+    const endpoint = 'users/password-reset/request';
     const encryptedBody = encryptBody(body, this.encryptionService);
-    return this.apiService.post<ForgotPasswordUserResponse>(endpoint, encryptedBody)
+    return this.apiService.post<PasswordResetRequestResponse>(endpoint, encryptedBody);
   }
 
+  /**
+   * Paso 2 — Confirma el reseteo con token + OTP + nueva contraseña.
+   * Endpoint: POST /users/password-reset-confirm
+   */
+  passwordResetConfirm(body: PasswordResetConfirmRequest): Observable<Result<PasswordResetConfirmResponse>> {
+    const endpoint = 'users/password-reset/confirm';
+    const encryptedBody = encryptBody(body, this.encryptionService);
+    return this.apiService.post<PasswordResetConfirmResponse>(endpoint, encryptedBody);
+  }
+
+  /** @deprecated Usa passwordResetRequest() en su lugar */
+  forgotPassword(body: ForgotPassworUserdRequest): Observable<Result<PasswordResetRequestResponse>> {
+    return this.passwordResetRequest({ email: body.email });
+  }
 }
+

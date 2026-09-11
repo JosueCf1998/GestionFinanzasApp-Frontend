@@ -5,4 +5,5 @@ export const KEY_MANAGEMENT = {
   ID: 'user_id',
   FIRST_LOGIN: 'first_login',
   IS_FIRST_TIME: 'is_first_time',
+  OTP_ENABLED: 'otp_enabled',
 };
