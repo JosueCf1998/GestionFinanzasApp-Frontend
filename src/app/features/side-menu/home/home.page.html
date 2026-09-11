@@ -1,229 +1,109 @@
 <ion-content class="home-page">
-
-  <div class="page-container">
-
-    <div class="hero-section">
-      <div class="hero-text">
-        <h1 class="text-title hero-title">
-          Hola, {{ name.charAt(0).toUpperCase() + name.slice(1) }} 👋
-        </h1>
-
-        <p class="text-caption hero-subtitle">
-          {{ isFirstTime ? 'Bienvenido a FinVia' : 'Bienvenido de nuevo a FinVia' }}
-        </p>
-      </div>
-
-      <div class="hero-decoration">
-        <img src="assets/image/img-wallet.jpg" alt="Billetera">
-      </div>
-    </div>
-
-    <!-- BALANCE -->
-
-    <div class="balance-card">
-
-      <div class="balance-header">
-
-        <span class="text-caption text-white">
-          Balance Total
-        </span>
-
-      </div>
-
-      <div class="balance-body">
-
-        <div class="balance-left">
-
-          <h2 class="text-display-large text-white balance-amount">
-            {{ amount < 0 ? '-' : '' }}S/. {{ (amount < 0 ? -amount : amount) | number:'1.2-2' }}
-          </h2>
-
-        </div>
-
-        <button
-          type="button"
-          class="balance-eye"
-          (click)="validationSecretValues()">
-
-          <ion-icon
-            [src]="hideSecretValues
-              ? 'assets/icon/eye-off-outline.svg'
-              : 'assets/icon/eye-outline.svg'">
-          </ion-icon>
-
-        </button>
-
-      </div>
-
-      <div
-        class="balance-footer"
-        (click)="openModal()">
-
-        <div class="account-chip">
-
-          <ion-icon
-            src="assets/icon/wallet.svg">
-          </ion-icon>
-
-        </div>
-
-        <span class="text-body text-white account-text">
-          Cuenta Principal
-        </span>
-
-      </div>
-
-    </div>
-
-    <!-- SEGMENT -->
-
-    <div class="segment-container">
-
-      <app-custom-segment
-        [options]="dataTabs"
-        [(model)]="segment"
-        segmentClass="main-tabs"
-        (modelChange)="onSegmentChanged($event)">
-      </app-custom-segment>
-
-    </div>
-
-    <!-- SECTION HEADER -->
-
-    <div class="section-header">
-
-      <h2 class="text-subtitle">
-        Resumen por categoría
-      </h2>
-
-      <button
-        type="button"
-        class="view-all-button">
-
-        Ver todas
-
-        <ion-icon
-          name="chevron-forward-outline">
-        </ion-icon>
-
+  <main class="home-shell">
+    <header class="home-header">
+      <button class="icon-button" type="button" aria-label="Abrir menú" (click)="openMenu()">
+        <ion-icon name="menu-outline"></ion-icon>
       </button>
 
-    </div>
+      <div class="header-brand">finvia<span>.</span></div>
 
-    <!-- CATEGORY LIST -->
+      <button class="profile-button" type="button" aria-label="Notificaciones">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span class="notification-dot"></span>
+      </button>
+    </header>
 
-    <ng-container
-      *ngIf="categoriesWithAmounts.length > 0; else noCategories">
+    <section class="welcome-section" aria-labelledby="welcome-title">
+      <span class="eyebrow">MI RESUMEN</span>
+      <h1 id="welcome-title">Hola, {{ name || 'Josue' }}</h1>
+      <p>Esto es lo que está pasando con tu dinero.</p>
+    </section>
 
-      <div class="categories-container">
-
-        <div
-          class="category-card"
-          *ngFor="let category of categoriesWithAmounts">
-
-          <!-- BLOQUE 1 : ICON -->
-
-          <app-item-icon
-            [icon]="category.icono"
-            [color]="category.color"
-            size="sm"
-            variant="soft">
-          </app-item-icon>
-
-          <!-- BLOQUE 2 : INFO -->
-
-          <div class="category-info">
-
-            <div class="category-name text-body-bold">
-              {{ category.nombre }}
-            </div>
-
-            <div class="category-progress-row">
-
-              <span
-                class="category-percent"
-                [style.color]="category.color">
-
-                {{
-                  amount > 0
-                    ? ((category.totalAmount / amount) * 100).toFixed(0)
-                    : 0
-                }}%
-
-              </span>
-
-              <div class="category-progress">
-
-                <div class="progress-track">
-
-                  <div
-                    class="progress-fill"
-                    [style.background]="category.color"
-                    [style.width.%]="
-                      amount > 0
-                        ? (category.totalAmount / amount) * 100
-                        : 0
-                    ">
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- BLOQUE 3 : ACTION -->
-
-          <div class="category-action">
-
-            <span class="category-amount text-body-bold">
-              {{ category.totalAmount < 0 ? '-' : '' }}S/. {{ (category.totalAmount < 0 ? -category.totalAmount : category.totalAmount) | number:'1.2-2' }}
-            </span>
-
-            <ion-icon
-              class="category-arrow"
-              src="assets/icon/right-inline.svg">
-            </ion-icon>
-
-          </div>
-
-        </div>
-
+    <section class="balance-card" aria-labelledby="balance-title">
+      <div class="balance-card__topline">
+        <span id="balance-title">Balance total</span>
+        <button class="balance-visibility" type="button" aria-label="Mostrar u ocultar balance" (click)="validationSecretValues()">
+          <ion-icon [name]="hideSecretValues ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </button>
       </div>
 
-    </ng-container>
+      <strong class="balance-amount">
+        {{ hideSecretValues ? 'S/. ••••••' : 'S/. ' + ((amount < 0 ? -amount : amount) | number:'1.2-2') }}
+      </strong>
 
-    <!-- EMPTY STATE -->
-
-    <ng-template #noCategories>
-
-      <div class="empty-state">
-
-        <div class="empty-icon-container">
-
-          <ion-icon
-            src="assets/icon/category.svg">
-          </ion-icon>
-
-        </div>
-
-        <h3 class="text-subtitle">
-          Sin movimientos
-        </h3>
-
-        <p class="text-caption">
-          Aún no tienes transacciones registradas.
-        </p>
-
+      <div class="balance-meta">
+        <span>Disponible este mes</span>
+        <strong>{{ hideSecretValues ? '••••••' : 'S/. 2,300.00' }}</strong>
       </div>
 
-    </ng-template>
+      <button class="account-row" type="button" aria-label="Editar balance de la cuenta principal" (click)="openModal()">
+        <span class="account-row__icon"><ion-icon src="assets/icon/wallet.svg"></ion-icon></span>
+        <span class="account-row__copy"><small>Cuenta activa</small><strong>Cuenta Principal</strong></span>
+        <ion-icon class="account-row__arrow" name="chevron-forward-outline"></ion-icon>
+      </button>
+    </section>
 
-  </div>
+    <section class="quick-actions" aria-label="Acciones rápidas">
+      <button class="quick-action quick-action--primary" type="button" (click)="navigateToCreateTransac()">
+        <span><ion-icon name="add-outline"></ion-icon></span>
+        <strong>Nuevo movimiento</strong>
+      </button>
+      <button class="quick-action" type="button" (click)="navigateToGraphics()">
+        <span><ion-icon src="assets/icon/chart-pie.svg"></ion-icon></span>
+        <strong>Ver análisis</strong>
+      </button>
+    </section>
 
-  <!-- MODAL -->
+    <section class="overview-section" aria-labelledby="overview-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">ESTE MES</span>
+          <h2 id="overview-title">Resumen financiero</h2>
+        </div>
+        <span class="period-label">Septiembre</span>
+      </div>
+
+      <div class="summary-list">
+        <article *ngFor="let card of summaryCards" class="summary-row" [ngClass]="card.tone">
+          <span class="summary-row__icon"><ion-icon [src]="'assets/icon/' + card.icon + '.svg'"></ion-icon></span>
+          <span class="summary-row__copy"><small>{{ card.label }}</small><strong>{{ card.amount }}</strong></span>
+          <ion-icon class="summary-row__arrow" name="chevron-forward-outline"></ion-icon>
+        </article>
+      </div>
+    </section>
+
+    <section class="activity-section" aria-labelledby="activity-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">ACTIVIDAD</span>
+          <h2 id="activity-title">Últimos movimientos</h2>
+        </div>
+        <button class="text-action" type="button" (click)="navigateToCreateTransac()">Ver todos</button>
+      </div>
+
+      <div class="activity-card">
+        <div *ngFor="let item of recentMovements; let last = last" class="activity-row" [class.activity-row--last]="last">
+          <span class="activity-row__icon" [style.background]="item.color + '18'" [style.color]="item.color">
+            <ion-icon [src]="'assets/icon/' + item.icon + '.svg'"></ion-icon>
+          </span>
+          <span class="activity-row__copy"><strong>{{ item.label }}</strong><small>Movimiento reciente</small></span>
+          <strong class="activity-row__amount">- {{ item.amount }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="learning-card" aria-labelledby="learning-title">
+      <span class="learning-card__icon"><ion-icon src="assets/icon/study.svg"></ion-icon></span>
+      <div class="learning-card__copy">
+        <span class="eyebrow">PARA TI</span>
+        <h2 id="learning-title">Mejora tus finanzas</h2>
+        <p>Aprende a distribuir tus ingresos paso a paso.</p>
+      </div>
+      <button class="round-action" type="button" aria-label="Ir a aprendizaje" (click)="navigateToLearning()">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
+    </section>
+  </main>
 
   <app-base-modal
     [isOpen]="isModalOpen"
@@ -233,27 +113,14 @@
     size="sm"
     (closed)="closeModal()"
     (primary)="updateAmount()">
-      <div class="modal-content">
-
-          <ion-item class="fv-input">
-
-            <ion-label position="floating">
-              Nuevo monto
-            </ion-label>
-
-            <ion-input
-              type="number"
-              [(ngModel)]="newAmount">
-            </ion-input>
-
-          </ion-item>
-
-      </div>
+    <div class="modal-content">
+      <ion-item class="fv-input">
+        <ion-label position="floating">Nuevo monto</ion-label>
+        <ion-input type="number" [(ngModel)]="newAmount"></ion-input>
+      </ion-item>
+    </div>
   </app-base-modal>
 
-  <app-floating-action-button
-    ariaLabel="Crear transacción"
-    (clicked)="navigateToCreateTransac()">
+  <app-floating-action-button ariaLabel="Crear transacción" (clicked)="navigateToCreateTransac()">
   </app-floating-action-button>
-
 </ion-content>

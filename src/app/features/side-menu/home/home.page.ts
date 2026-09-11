@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, MenuController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
-import { CustomSegmentComponent } from 'src/app/shared/components/custom-segment/custom-segment.component';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
 import { Categoria } from 'src/app/shared/models/categoria.model';
@@ -14,7 +13,6 @@ import { Categoria } from 'src/app/shared/models/categoria.model';
 import 'src/app/core/utils/observable-extensions';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
-import { ItemIconComponent } from 'src/app/shared/components/item-icon/item-icon.component';
 import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
 import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
 
@@ -28,8 +26,6 @@ import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-mo
     CommonModule,
     FormsModule,
     HttpClientModule,
-    CustomSegmentComponent,
-    ItemIconComponent,
     FloatingActionButtonComponent,
     BaseModalComponent
   ],
@@ -54,6 +50,51 @@ export class HomePage {
   notificationCount = 3;
 
   userName = 'Josue';
+
+  summaryCards = [
+    {
+      label: 'Ingresos',
+      amount: 'S/. 1,200.00',
+      tone: 'income',
+      icon: 'salary',
+      iconColor: '#2aa876'
+    },
+    {
+      label: 'Gastos',
+      amount: 'S/. 3,675.00',
+      tone: 'expense',
+      icon: 'down-trend',
+      iconColor: '#e35d5d'
+    },
+    {
+      label: 'Presupuesto',
+      amount: 'S/. 1,500.00',
+      tone: 'budget',
+      icon: 'budget-wallet',
+      iconColor: '#5b49d6'
+    },
+    {
+      label: 'Meta de Ahorro',
+      amount: 'S/. 800 / 1,000',
+      tone: 'goal',
+      icon: 'up-trend',
+      iconColor: '#5977d8'
+    }
+  ];
+
+  recentMovements = [
+    { label: 'Supermercado', amount: 'S/. 180.00', icon: 'bills', color: '#f3b44d' },
+    { label: 'Almuerzo', amount: 'S/. 25.00', icon: 'restaurant', color: '#6a7ef5' },
+    { label: 'Pago de Internet', amount: 'S/. 100.00', icon: 'card-credit', color: '#40b3a2' }
+  ];
+
+  donutSegments = [
+    { value: 30, color: '#f45d74' },
+    { value: 24, color: '#4ec5a5' },
+    { value: 17, color: '#f4c15b' },
+    { value: 13, color: '#6f7ef7' },
+    { value: 16, color: '#7dd3fc' }
+  ];
 
   categoriesWithAmounts: Array<Categoria & {
     totalAmount: number;
@@ -440,10 +481,37 @@ export class HomePage {
 
   }
 
+  donutBackground(): string {
+    const segments = this.donutSegments
+      .map((segment, index, arr) => {
+        const previous = arr.slice(0, index).reduce((sum, item) => sum + item.value, 0);
+        return `${segment.color} ${previous}% ${previous + segment.value}%`;
+      })
+      .join(', ');
+
+    return `conic-gradient(${segments})`;
+  }
+
   navigateToCreateTransac(): void {
 
     this.navService.push(
       '/transactions/create'
+    );
+
+  }
+
+  navigateToLearning(): void {
+
+    this.navService.push(
+      '/main/learning'
+    );
+
+  }
+
+  navigateToGraphics(): void {
+
+    this.navService.push(
+      '/main/graphics'
     );
 
   }
