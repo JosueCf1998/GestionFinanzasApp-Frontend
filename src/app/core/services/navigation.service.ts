@@ -7,6 +7,8 @@ import { NavController } from '@ionic/angular';
 })
 export class NavigationService {
   private isNavigating = false;
+  private navigationLockTimeout?: ReturnType<typeof setTimeout>;
+  private readonly navigationLockMs = 150;
 
   constructor(private readonly navCtrl: NavController) {}
 
@@ -15,9 +17,10 @@ export class NavigationService {
    */
   async push(path: string, state?: any): Promise<void> {
     if (this.isNavigating) return;
-    
+
     this.isNavigating = true;
-    
+    this.clearNavigationLock();
+
     try {
       await this.navCtrl.navigateForward(path, {
         animated: true,
@@ -25,9 +28,9 @@ export class NavigationService {
         state
       });
     } finally {
-      setTimeout(() => {
+      this.navigationLockTimeout = setTimeout(() => {
         this.isNavigating = false;
-      }, 300);
+      }, this.navigationLockMs);
     }
   }
 
@@ -43,18 +46,19 @@ export class NavigationService {
    */
   async back(): Promise<void> {
     if (this.isNavigating) return;
-    
+
     this.isNavigating = true;
-    
+    this.clearNavigationLock();
+
     try {
       await this.navCtrl.back({
         animated: true,
         animationDirection: 'back'
       });
     } finally {
-      setTimeout(() => {
+      this.navigationLockTimeout = setTimeout(() => {
         this.isNavigating = false;
-      }, 300);
+      }, this.navigationLockMs);
     }
   }
 
@@ -63,24 +67,25 @@ export class NavigationService {
    */
   async backMultiple(steps: number): Promise<void> {
     if (this.isNavigating) return;
-    
+
     this.isNavigating = true;
-    
+    this.clearNavigationLock();
+
     try {
       for (let i = 0; i < steps; i++) {
         await this.navCtrl.back({
-          animated: i === steps - 1, // Solo animar la última navegación
+          animated: i === steps - 1,
           animationDirection: 'back'
         });
-        // Pequeño delay entre navegaciones para asegurar que se procesen
+
         if (i < steps - 1) {
           await new Promise(resolve => setTimeout(resolve, 50));
         }
       }
     } finally {
-      setTimeout(() => {
+      this.navigationLockTimeout = setTimeout(() => {
         this.isNavigating = false;
-      }, 300);
+      }, this.navigationLockMs);
     }
   }
 
@@ -89,9 +94,10 @@ export class NavigationService {
    */
   async replace(path: string, state?: any, animated: boolean = true): Promise<void> {
     if (this.isNavigating) return;
-    
+
     this.isNavigating = true;
-    
+    this.clearNavigationLock();
+
     try {
       await this.navCtrl.navigateRoot(path, {
         animated: animated,
@@ -99,9 +105,16 @@ export class NavigationService {
         state
       });
     } finally {
-      setTimeout(() => {
+      this.navigationLockTimeout = setTimeout(() => {
         this.isNavigating = false;
-      }, animated ? 300 : 100);
+      }, animated ? this.navigationLockMs : 80);
+    }
+  }
+
+  private clearNavigationLock(): void {
+    if (this.navigationLockTimeout) {
+      clearTimeout(this.navigationLockTimeout);
+      this.navigationLockTimeout = undefined;
     }
   }
 

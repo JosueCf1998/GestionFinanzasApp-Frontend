@@ -43,10 +43,22 @@
       </article>
 
       <article class="course-progress">
-        <div><strong>Tu progreso</strong><span>{{ course.progress.percentage }}%</span></div>
-        <div class="progress-track"><i [style.width.%]="course.progress.percentage"></i></div>
-        <small>{{ course.progress.completed }} de {{ course.progress.total }} lecciones completadas</small>
+        <div><strong>Tu progreso</strong><span>{{ displayProgress }}%</span></div>
+        <div class="progress-track"><i [style.width.%]="displayProgress"></i></div>
+        <small>
+          @if (hasPendingFinalQuiz) {
+            Te falta el examen final
+          } @else {
+            {{ course.progress.completed }} de {{ course.progress.total }} lecciones completadas
+          }
+        </small>
       </article>
+
+      @if (hasPendingFinalQuiz) {
+        <div class="course-final-cta">
+          <app-button text="Ir al examen final" icon="right-inline" iconPosition="end" variant="primary" expand="block" (clicked)="goToFinalQuiz()"></app-button>
+        </div>
+      }
 
       <section class="lessons-section">
         <header class="lessons-heading">

@@ -58,7 +58,7 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
   get selectedOptionId(): number | null { return this.currentQuestion ? this.selectedAnswers[this.currentQuestion.id] ?? null : null; }
   get progress(): number { return this.questions.length ? (this.currentIndex + 1) / this.questions.length * 100 : 0; }
 
-  back(): void { void this.navigationService.replace(`/learning/lessons/${this.lessonId}`); }
+  back(): void { void this.confirmExitCourse(); }
   retry(): void { this.loadQuiz(); }
   selectOption(id: number): void { if (this.currentQuestion && !this.submitting) this.selectedAnswers = { ...this.selectedAnswers, [this.currentQuestion.id]: id }; }
   previous(): void { if (this.currentIndex > 0 && !this.submitting) this.currentIndex -= 1; }
@@ -66,6 +66,19 @@ export class LearningFinalQuizPage implements OnInit, OnDestroy {
   retryQuiz(): void { this.currentIndex = 0; this.selectedAnswers = {}; this.result = null; }
   returnToCourse(): void { if (this.courseId) void this.navigationService.replace(`/learning/courses/${this.courseId}`); else this.back(); }
   optionText(option: LearningQuizOption): string { return option.text || `Opción ${option.id}`; }
+
+  async confirmExitCourse(): Promise<void> {
+    const confirmed = await this.alertService.showAlert(
+      'Salir del reto',
+      'Si sales ahora, podrías perder el progreso de este intento. ¿Deseas continuar?',
+      'Salir',
+      'Cancelar'
+    );
+
+    if (confirmed) {
+      this.returnToCourse();
+    }
+  }
 
   private loadQuiz(): void {
     this.quizRequest?.unsubscribe(); this.loading = true; this.errorMessage = '';

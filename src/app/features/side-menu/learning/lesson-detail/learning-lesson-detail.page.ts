@@ -7,7 +7,7 @@ import { LearningLesson, LearningLessonContent, LearningLessonContentSection } f
 import { AlertService } from 'src/app/core/services/alert.service';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { SpinnerService } from 'src/app/core/services/spinnerService.service';
-import { CompleteCourseUseCase } from 'src/app/core/use-cases/learning/complete-course.usecase';
+import { CompleteLessonUseCase } from 'src/app/core/use-cases/learning/complete-lesson.usecase';
 import { GetLessonDetailUseCase } from 'src/app/core/use-cases/learning/get-lesson-detail.usecase';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { EmptyStateComponent } from 'src/app/shared/components/empty-state/empty-state.component';
@@ -32,7 +32,7 @@ export class LearningLessonDetailPage implements OnInit, OnDestroy {
 
   constructor(private readonly route: ActivatedRoute, private readonly navigationService: NavigationService,
     private readonly getLessonDetailUseCase: GetLessonDetailUseCase,
-    private readonly completeCourseUseCase: CompleteCourseUseCase,
+    private readonly completeLessonUseCase: CompleteLessonUseCase,
     private readonly alertService: AlertService,
     public readonly loadingService: SpinnerService) {}
 
@@ -56,13 +56,13 @@ export class LearningLessonDetailPage implements OnInit, OnDestroy {
     this.completingLesson = true;
     this.loadingService.show();
     this.completeRequest?.unsubscribe();
-    this.completeRequest = this.completeCourseUseCase.execute({ courseId: currentLesson.course_id }).service({
+    this.completeRequest = this.completeLessonUseCase.execute({ lessonId: currentLesson.id }).service({
       success: () => {
         this.completingLesson = false;
         this.loadingService.hide();
         this.openFollowingContent(currentLesson);
       },
-      failure: error => {
+      failure: (error: { message?: string } | null | undefined) => {
         this.completingLesson = false;
         this.loadingService.hide();
         void this.alertService.showAlert(

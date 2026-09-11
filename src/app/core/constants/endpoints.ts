@@ -76,9 +76,11 @@ export const ENDPOINTS = {
 
     COURSE_DETAIL: 'learning/courses/detail',
 
+    COMPLETE_COURSE: 'learning/courses/complete',
+
     LESSON_DETAIL: 'learning/lessons/detail',
 
-    COMPLETE_COURSE: 'learning/lessons/complete',
+    COMPLETE_LESSON: 'learning/lessons/complete',
 
     QUIZ_DETAIL: 'learning/quiz/detail',
 

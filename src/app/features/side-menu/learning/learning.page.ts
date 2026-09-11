@@ -88,6 +88,10 @@ export class LearningPage implements OnInit {
     this.loadHome();
   }
 
+  ionViewWillEnter(): void {
+    this.loadHome();
+  }
+
   selectCategory(category: string): void {
     this.selectedCategory = category;
     this.filterPaths();

@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  FormsModule,
 } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
@@ -20,6 +21,7 @@ import {
 } from "src/app/core/use-cases/users/forgot-password-user.usecase";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
+import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
 import { validate, validateMatch } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
 
@@ -31,12 +33,14 @@ import 'src/app/core/utils/observable-extensions';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     IonContent,
     IonIcon,
     IonButton,
     IonItem,
     IonInput,
-    CustomAlertComponent
+    CustomAlertComponent,
+    BaseModalComponent
   ],
 })
 export class ForgotPasswordPage {
@@ -49,6 +53,11 @@ export class ForgotPasswordPage {
 
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
+  showOtpModal = false;
+
+  pendingEmail = '';
+  resetToken = '';
+  otpCode = '';
 
   showGenericAlert: boolean = false;
   showUnauthorizedAlert: boolean = false;
@@ -62,13 +71,16 @@ export class ForgotPasswordPage {
 
   // MARK: - SERVICIOS
 
-  private executeForgotPassword(body: ForgotPassworUserdRequest) {
+  private requestPasswordReset(email: string) {
     this.loadingService.show();
-    this.forgotPasswordUseCase.forgotPassword(body).service({
-      success: async (data) => {
+    this.forgotPasswordUseCase.passwordResetRequest({ email }).service({
+      success: (data) => {
         this.loadingService.hide();
-        if (data) {
-          await this.navService.replace('/login');
+        if (data !== null) {
+          this.pendingEmail = email;
+          this.resetToken = '';
+          this.otpCode = '';
+          this.showOtpModal = true;
         } else {
           this.showGenericAlert = true;
         }
@@ -81,6 +93,47 @@ export class ForgotPasswordPage {
         } else {
           this.showGenericAlert = true;
         }
+      }
+    });
+  }
+
+  private confirmPasswordReset(password: string) {
+    const token = this.resetToken.trim();
+    const otp = this.otpCode.trim();
+
+    if (!token) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = 'Ingresa el token de recuperación recibido por correo.';
+      return;
+    }
+
+    if (!otp || otp.length !== 6) {
+      this.showUnauthorizedAlert = true;
+      this.messageError = 'Ingresa el código OTP de 6 dígitos.';
+      return;
+    }
+
+    this.loadingService.show();
+    this.forgotPasswordUseCase.passwordResetConfirm({
+      email: this.pendingEmail,
+      reset_token: token,
+      otp_code: otp,
+      new_password: password,
+    }).service({
+      success: async () => {
+        this.loadingService.hide();
+        this.showOtpModal = false;
+        this.showGenericAlert = true;
+        this.messageError = 'Contraseña actualizada correctamente.';
+        setTimeout(async () => {
+          this.showGenericAlert = false;
+          await this.navService.replace('/login');
+        }, 1200);
+      },
+      failure: (error) => {
+        this.loadingService.hide();
+        this.showUnauthorizedAlert = true;
+        this.messageError = error?.message ?? 'No se pudo restablecer la contraseña.';
       }
     });
   }
@@ -105,7 +158,7 @@ export class ForgotPasswordPage {
       this.messageError = "Ingresa tus credenciales correctamente.";
       return;
     }
-    
+
     const password = this.forgotForm.value.password || "";
     const repeatPassword = this.forgotForm.value.repeatPassword || "";
 
@@ -123,11 +176,20 @@ export class ForgotPasswordPage {
       return;
     }
 
-    const body: ForgotPassworUserdRequest = {
-      email: this.forgotForm.value.email!,
-      new_password: password,
-    };
-    this.executeForgotPassword(body);
+    const email = (this.forgotForm.value.email || '').trim().toLowerCase();
+    this.requestPasswordReset(email);
+  }
+
+  confirmOtpReset(): void {
+    const password = this.forgotForm.value.password || '';
+    this.confirmPasswordReset(password);
+  }
+
+  closeOtpModal(): void {
+    this.showOtpModal = false;
+    this.resetToken = '';
+    this.otpCode = '';
+    this.pendingEmail = '';
   }
 
   closeAlerts() {

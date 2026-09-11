@@ -58,12 +58,28 @@ export class LearningCourseDetailPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.courseId = Number(this.route.snapshot.paramMap.get('id'));
-    if (!Number.isInteger(this.courseId) || this.courseId <= 0) {
-      this.errorMessage = 'El curso seleccionado no es válido.';
-      return;
+    this.initializeCourse();
+  }
+
+  ionViewWillEnter(): void {
+    this.initializeCourse();
+  }
+
+  get hasPendingFinalQuiz(): boolean {
+    if (!this.course || !this.course.lessons.length) return false;
+
+    const allLessonsCompleted = this.course.lessons.every(lesson => lesson.status === 'COMPLETED');
+    const courseCompleted = this.course.progress.completed >= this.course.progress.total;
+
+    return allLessonsCompleted && courseCompleted;
+  }
+
+  get displayProgress(): number {
+    if (!this.course) return 0;
+    if (this.hasPendingFinalQuiz) {
+      return Math.min(99, this.course.progress.percentage);
     }
-    this.loadCourse(this.courseId);
+    return this.course.progress.percentage;
   }
 
   ngOnDestroy(): void {
@@ -94,6 +110,25 @@ export class LearningCourseDetailPage implements OnInit, OnDestroy {
 
   lessonActionLabel(lesson: LearningCourseLesson): string {
     return lesson.status === 'IN_PROGRESS' ? 'Continuar' : 'Empezar';
+  }
+
+  goToFinalQuiz(): void {
+    if (!this.courseId || !this.course) return;
+
+    const lastLesson = this.course.lessons[this.course.lessons.length - 1];
+    if (!lastLesson) return;
+
+    const query = `courseId=${this.courseId}&totalLessons=${this.course.progress.total}&passingScore=${this.course.progress.percentage || 70}`;
+    void this.navigationService.replace(`/learning/quiz/${lastLesson.id}?${query}`);
+  }
+
+  private initializeCourse(): void {
+    this.courseId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!Number.isInteger(this.courseId) || this.courseId <= 0) {
+      this.errorMessage = 'El curso seleccionado no es válido.';
+      return;
+    }
+    this.loadCourse(this.courseId);
   }
 
   private loadCourse(courseId: number): void {

@@ -13,14 +13,14 @@ import {
   IonButton,
   IonItem,
   IonText,
-  IonInput, IonLabel } from "@ionic/angular/standalone";
+  IonInput,
+} from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
 import { SpinnerService } from "src/app/core/services/spinnerService.service";
 import { CustomAlertComponent } from 'src/app/shared/components/custom-alert/custom-alert.component';
 import { LocalManagementService } from "src/app/core/services/localManagementService.service";
 import { KEY_MANAGEMENT } from "src/app/core/constants/key-management.constants";
 import { LoginUserRequest, LoginUserResponse, LoginUserUseCase } from "src/app/core/use-cases/users/login-user.usecase";
-import { validate } from "src/app/core/utils/password-validation.util";
 import 'src/app/core/utils/observable-extensions';
 import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usecase";
 
@@ -29,7 +29,7 @@ import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usec
   templateUrl: "./login-recurrent.page.html",
   styleUrls: ["./login-recurrent.page.scss"],
   standalone: true,
-  imports: [IonLabel,
+  imports: [
     IonInput,
     IonText,
     IonItem,
@@ -40,7 +40,7 @@ import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usec
     CommonModule,
     ReactiveFormsModule,
     CustomAlertComponent
-],
+  ],
 })
 export class LoginRecurrentPage implements OnInit {
 
@@ -69,7 +69,10 @@ export class LoginRecurrentPage implements OnInit {
   ngOnInit() {
     if (!this.email || !this.name) {
       void this.navService.replace('/login', undefined, false);
+      return;
     }
+
+    this.loginForm.patchValue({ email: this.email }, { emitEvent: false });
   }
 
   // MARK: - SERVICIOS
@@ -124,39 +127,19 @@ export class LoginRecurrentPage implements OnInit {
   }
 
   validationLogin(email: string, password: string): boolean {
-    // Validar que el formulario tenga valores
-    if (this.loginForm.invalid) {
-      return this.showValidationError("Ingresa tus credenciales correctamente.");
-    }
-
-    // Validar que los campos no estén vacíos después del trim
     if (!email || !password) {
       return this.showValidationError("Por favor completa todos los campos.");
     }
 
-    // Validar formato de email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       return this.showValidationError("Por favor ingresa un correo electrónico válido.");
     }
 
-    // Validar que el email no contenga espacios
     if (email.includes(' ')) {
       return this.showValidationError("El correo electrónico no debe contener espacios.");
     }
 
-    // Requerir al menos un carácter especial en la contraseña
-    const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?`~]/;
-    if (!specialCharRegex.test(password)) {
-      return this.showValidationError("La contraseña debe contener al menos un carácter especial (por ejemplo: !@#$%).");
-    }
-
-    const passwordError = validate(password);
-    if (passwordError) {
-      return this.showValidationError(passwordError);
-    }
-
-    // Validar longitud máxima razonable
     if (email.length > 254) {
       return this.showValidationError("El correo electrónico excede la longitud permitida.");
     }

@@ -4,6 +4,7 @@ import { ENDPOINTS } from 'src/app/core/constants/endpoints';
 import {
   CourseDetailRequest,
   CompleteCourseRequest,
+  CompleteLessonRequest,
   CoursesByCategoryRequest,
   CoursesByLevelRequest,
   LearningCategory,
@@ -70,6 +71,12 @@ export class LearningRepository {
     });
   }
 
+  completeLesson(request: CompleteLessonRequest): Observable<Result<LessonProgressResponse>> {
+    return this.apiService.post(ENDPOINTS.LEARNING.COMPLETE_LESSON, {
+      lesson_id: request.lessonId
+    });
+  }
+
   getQuizDetail(request: QuizDetailRequest): Observable<Result<QuizDetailResponse>> {
     return this.apiService
       .post<QuizDetailApiResponse>(ENDPOINTS.LEARNING.QUIZ_DETAIL, {
@@ -101,6 +108,10 @@ export class LearningRepository {
 
   getQuestions(): Observable<Result<LearningQuestion[]>> {
     return this.apiService.get(ENDPOINTS.LEARNING.FAQ);
+  }
+
+  getFaq(): Observable<Result<LearningQuestion[]>> {
+    return this.getQuestions();
   }
 
   private mapQuizDetail(response: QuizDetailApiResponse): QuizDetailResponse {

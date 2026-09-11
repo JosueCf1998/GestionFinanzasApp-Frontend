@@ -18,6 +18,7 @@ export interface LessonRequest {
 
 export type QuizDetailRequest = CourseDetailRequest;
 export type CompleteCourseRequest = CourseDetailRequest;
+export type CompleteLessonRequest = LessonRequest;
 
 export interface QuizAnswerRequest {
   quizId: number;

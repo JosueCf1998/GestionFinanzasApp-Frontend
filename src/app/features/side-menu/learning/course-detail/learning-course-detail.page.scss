@@ -36,6 +36,24 @@
 .progress-track i { display: block; height: 100%; border-radius: inherit; background: var(--fv-gradient-primary); transition: width .3s ease; }
 .course-progress small { display: block; margin-top: 12px; color: var(--fv-text-muted); font-size: 9px; font-weight: var(--fv-fw-regular); }
 
+.course-final-cta {
+  margin: 16px 0 18px;
+  padding: 0;
+}
+
+.course-final-cta .fv-button {
+  height: 58px;
+  --border-radius: 18px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  box-shadow: 0 12px 24px rgba(92, 67, 204, 0.28);
+}
+
+.course-final-cta .fv-button .button-label {
+  letter-spacing: -.01em;
+}
+
 .lessons-section { margin-top: 28px; }
 .lessons-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
 .lessons-heading h2 { margin: 0; color: var(--fv-text-primary); font-size: 19px; font-weight: var(--fv-fw-bold); letter-spacing: -.025em; }
