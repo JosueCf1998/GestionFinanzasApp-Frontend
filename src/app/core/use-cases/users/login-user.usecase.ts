@@ -18,13 +18,13 @@ export interface LoginUserRequest {
  * - token: JWT de sesión
  * - isFirstTime: true si el usuario no tiene cuentas creadas aún
  * - name: nombre del usuario (campo devuelto por el backend)
- * - otpEnabled: true si el usuario tiene 2FA (OTP) activado
+ * - otpEnabled: opcional; algunos contratos antiguos lo incluían
  */
 export interface LoginUserResponse {
   token: string;
   isFirstTime: boolean;
   name?: string;
-  otpEnabled: boolean;
+  otpEnabled?: boolean;
 }
 
 @Injectable({

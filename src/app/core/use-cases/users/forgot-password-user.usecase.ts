@@ -15,7 +15,6 @@ export interface PasswordResetRequestResponse {
 
 export interface PasswordResetConfirmRequest {
   email: string;
-  reset_token: string;
   otp_code: string;
   new_password: string;
 }
@@ -42,7 +41,7 @@ export class ForgotPasswordUserUseCase {
   /**
    * Paso 1 — Solicita un token de reseteo de contraseña.
    * El backend lo envía por email si el usuario tiene OTP habilitado.
-   * Endpoint: POST /users/password-reset-request
+  * Endpoint: POST /users/password-reset/request
    */
   passwordResetRequest(body: PasswordResetRequest): Observable<Result<PasswordResetRequestResponse>> {
     const endpoint = 'users/password-reset/request';
@@ -52,7 +51,7 @@ export class ForgotPasswordUserUseCase {
 
   /**
    * Paso 2 — Confirma el reseteo con token + OTP + nueva contraseña.
-   * Endpoint: POST /users/password-reset-confirm
+  * Endpoint: POST /users/password-reset/confirm
    */
   passwordResetConfirm(body: PasswordResetConfirmRequest): Observable<Result<PasswordResetConfirmResponse>> {
     const endpoint = 'users/password-reset/confirm';

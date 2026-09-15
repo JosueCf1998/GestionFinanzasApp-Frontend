@@ -139,13 +139,11 @@ export class LoginPage implements OnInit {
       return this.showValidationError("El correo electrónico no debe contener espacios.");
     }
 
-    // Requerir al menos un carácter especial en la contraseña
-    const specialCharRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?`~]/;
-    if (!specialCharRegex.test(password)) {
-      return this.showValidationError("La contraseña debe contener al menos un carácter especial (por ejemplo: !@#$%).");
-    }
-
-    const passwordError = validate(password);
+    const passwordError = validate(password, {
+      minLength: 8,
+      requireSpecialChar: false,
+      requireUppercase: false
+    });
     if (passwordError) {
       return this.showValidationError(passwordError);
     }

@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  FormsModule,
 } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
@@ -32,6 +33,7 @@ import 'src/app/core/utils/observable-extensions';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     IonContent,
     IonIcon,
     IonButton,
@@ -96,12 +98,6 @@ export class RegisterPage {
     });
   }
 
-  onVerificationCodeInput(event: any): void {
-    const rawValue = event?.detail?.value ?? '';
-    const digits = rawValue.replace(/\D/g, '').slice(0, 6);
-    this.verificationCode = digits;
-  }
-
   closeVerificationModal(): void {
     this.showVerificationModal = false;
     this.verificationCode = '';
@@ -159,7 +155,11 @@ export class RegisterPage {
     const password = this.registerForm.value.password || "";
     const repeatPassword = this.registerForm.value.repeatPassword || "";
 
-    const passwordError = validate(password);
+    const passwordError = validate(password, {
+      minLength: 8,
+      requireSpecialChar: false,
+      requireUppercase: false
+    });
     if (passwordError) {
       this.showUnauthorizedAlert = true;
       this.messageError = passwordError;

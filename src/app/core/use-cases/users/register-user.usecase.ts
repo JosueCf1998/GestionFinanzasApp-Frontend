@@ -45,10 +45,10 @@ export class RegisterUserUseCase {
   /**
    * Paso 1 — Envía los datos de registro al backend.
    * El backend crea un registro pendiente y envía un código de 6 dígitos al email.
-   * Endpoint: POST /users/register
+  * Endpoint: POST /users/register/request
    */
   requestRegistration(body: RegisterUserRequest): Observable<Result<RegisterUserResponse>> {
-    const endpoint = 'users/register';
+    const endpoint = 'users/register/request';
     const mappedBody = mapObjectKeys(body, REGISTER_KEY_MAP);
     const encryptedBody = encryptBody(mappedBody, this.encryptionService);
     return this.apiService.post<RegisterUserResponse>(endpoint, encryptedBody);
@@ -57,7 +57,7 @@ export class RegisterUserUseCase {
   /**
    * Paso 2 — Verifica el código de 6 dígitos enviado al email.
    * Si el código es válido, el backend crea el usuario definitivamente.
-   * Endpoint: POST /users/register-verify
+  * Endpoint: POST /users/register/verify
    */
   verifyRegistration(body: RegisterVerifyRequest): Observable<Result<RegisterVerifyResponse>> {
     const endpoint = 'users/register/verify';

@@ -1,73 +1,69 @@
 <ion-content class="home-page">
   <main class="home-shell">
-    <header class="home-header">
-      <button class="icon-button" type="button" aria-label="Abrir menú" (click)="openMenu()">
-        <ion-icon name="menu-outline"></ion-icon>
+    <section class="intro-row" aria-labelledby="welcome-title">
+      <div>
+        <span class="overline">RESUMEN FINANCIERO</span>
+        <h1 id="welcome-title">Hola, {{ name || 'Josue' }}</h1>
+        <p>Ten el control de tu dinero.</p>
+      </div>
+      <button class="profile-chip" type="button" aria-label="Abrir menú" (click)="openMenu()">
+        <span>{{ (name || 'U').charAt(0).toUpperCase() }}</span>
       </button>
-
-      <div class="header-brand">finvia<span>.</span></div>
-
-      <button class="profile-button" type="button" aria-label="Notificaciones">
-        <ion-icon name="notifications-outline"></ion-icon>
-        <span class="notification-dot"></span>
-      </button>
-    </header>
-
-    <section class="welcome-section" aria-labelledby="welcome-title">
-      <span class="eyebrow">MI RESUMEN</span>
-      <h1 id="welcome-title">Hola, {{ name || 'Josue' }}</h1>
-      <p>Esto es lo que está pasando con tu dinero.</p>
     </section>
 
-    <section class="balance-card" aria-labelledby="balance-title">
-      <div class="balance-card__topline">
-        <span id="balance-title">Balance total</span>
-        <button class="balance-visibility" type="button" aria-label="Mostrar u ocultar balance" (click)="validationSecretValues()">
+    <section class="balance-hero" aria-labelledby="balance-title">
+      <div class="balance-hero__glow" aria-hidden="true"></div>
+      <div class="balance-hero__topline">
+        <span class="balance-hero__label" id="balance-title">Balance total</span>
+        <button class="icon-action" type="button" aria-label="Mostrar u ocultar balance" (click)="validationSecretValues()">
           <ion-icon [name]="hideSecretValues ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
         </button>
       </div>
-
-      <strong class="balance-amount">
+      <strong class="balance-hero__amount">
         {{ hideSecretValues ? 'S/. ••••••' : 'S/. ' + ((amount < 0 ? -amount : amount) | number:'1.2-2') }}
       </strong>
-
-      <div class="balance-meta">
-        <span>Disponible este mes</span>
-        <strong>{{ hideSecretValues ? '••••••' : 'S/. 2,300.00' }}</strong>
+      <div class="balance-hero__status">
+        <span class="status-dot"></span>
+        <span>Balance disponible</span>
+        <span class="status-divider"></span>
+        <strong>Cuenta Principal</strong>
       </div>
+      <div class="balance-hero__footer">
+        <span>Actualizado hoy</span>
+        <button type="button" (click)="openModal()">Gestionar cuenta <ion-icon name="arrow-forward-outline"></ion-icon></button>
+      </div>
+    </section>
 
-      <button class="account-row" type="button" aria-label="Editar balance de la cuenta principal" (click)="openModal()">
-        <span class="account-row__icon"><ion-icon src="assets/icon/wallet.svg"></ion-icon></span>
-        <span class="account-row__copy"><small>Cuenta activa</small><strong>Cuenta Principal</strong></span>
-        <ion-icon class="account-row__arrow" name="chevron-forward-outline"></ion-icon>
+    <section class="action-bar" aria-label="Acciones rápidas">
+      <button class="action-item action-item--primary" type="button" (click)="navigateToCreateTransac()">
+        <span class="action-item__icon"><ion-icon name="add-outline"></ion-icon></span>
+        <span>Nuevo gasto</span>
+      </button>
+      <button class="action-item" type="button" (click)="navigateToGraphics()">
+        <span class="action-item__icon"><ion-icon src="assets/icon/chart-pie.svg"></ion-icon></span>
+        <span>Análisis</span>
+      </button>
+      <button class="action-item" type="button" (click)="navigateToLearning()">
+        <span class="action-item__icon"><ion-icon src="assets/icon/study.svg"></ion-icon></span>
+        <span>Aprender</span>
       </button>
     </section>
 
-    <section class="quick-actions" aria-label="Acciones rápidas">
-      <button class="quick-action quick-action--primary" type="button" (click)="navigateToCreateTransac()">
-        <span><ion-icon name="add-outline"></ion-icon></span>
-        <strong>Nuevo movimiento</strong>
-      </button>
-      <button class="quick-action" type="button" (click)="navigateToGraphics()">
-        <span><ion-icon src="assets/icon/chart-pie.svg"></ion-icon></span>
-        <strong>Ver análisis</strong>
-      </button>
-    </section>
-
-    <section class="overview-section" aria-labelledby="overview-title">
+    <section class="monthly-section" aria-labelledby="monthly-title">
       <div class="section-heading">
         <div>
-          <span class="eyebrow">ESTE MES</span>
-          <h2 id="overview-title">Resumen financiero</h2>
+          <span class="overline">SEPTIEMBRE 2026</span>
+          <h2 id="monthly-title">Resumen del mes</h2>
         </div>
-        <span class="period-label">Septiembre</span>
+        <button class="link-button" type="button" (click)="navigateToGraphics()">Ver análisis <ion-icon name="arrow-forward-outline"></ion-icon></button>
       </div>
 
-      <div class="summary-list">
-        <article *ngFor="let card of summaryCards" class="summary-row" [ngClass]="card.tone">
-          <span class="summary-row__icon"><ion-icon [src]="'assets/icon/' + card.icon + '.svg'"></ion-icon></span>
-          <span class="summary-row__copy"><small>{{ card.label }}</small><strong>{{ card.amount }}</strong></span>
-          <ion-icon class="summary-row__arrow" name="chevron-forward-outline"></ion-icon>
+      <div class="monthly-panel">
+        <article *ngFor="let card of summaryCards" class="metric-row" [ngClass]="card.tone">
+          <span class="metric-row__icon"><ion-icon [src]="'assets/icon/' + card.icon + '.svg'"></ion-icon></span>
+          <span class="metric-row__label">{{ card.label }}</span>
+          <strong>{{ card.amount }}</strong>
+          <ion-icon class="metric-row__arrow" name="chevron-forward-outline"></ion-icon>
         </article>
       </div>
     </section>
@@ -75,34 +71,28 @@
     <section class="activity-section" aria-labelledby="activity-title">
       <div class="section-heading">
         <div>
-          <span class="eyebrow">ACTIVIDAD</span>
-          <h2 id="activity-title">Últimos movimientos</h2>
+          <span class="overline">MOVIMIENTOS</span>
+          <h2 id="activity-title">Actividad reciente</h2>
         </div>
-        <button class="text-action" type="button" (click)="navigateToCreateTransac()">Ver todos</button>
+        <button class="link-button" type="button" (click)="navigateToCreateTransac()">Ver todos <ion-icon name="arrow-forward-outline"></ion-icon></button>
       </div>
 
-      <div class="activity-card">
+      <div class="activity-panel">
         <div *ngFor="let item of recentMovements; let last = last" class="activity-row" [class.activity-row--last]="last">
           <span class="activity-row__icon" [style.background]="item.color + '18'" [style.color]="item.color">
             <ion-icon [src]="'assets/icon/' + item.icon + '.svg'"></ion-icon>
           </span>
-          <span class="activity-row__copy"><strong>{{ item.label }}</strong><small>Movimiento reciente</small></span>
-          <strong class="activity-row__amount">- {{ item.amount }}</strong>
+          <span class="activity-row__copy"><strong>{{ item.label }}</strong><small>Hoy · Cuenta Principal</small></span>
+          <span class="activity-row__amount">-{{ item.amount }}</span>
         </div>
       </div>
     </section>
 
-    <section class="learning-card" aria-labelledby="learning-title">
-      <span class="learning-card__icon"><ion-icon src="assets/icon/study.svg"></ion-icon></span>
-      <div class="learning-card__copy">
-        <span class="eyebrow">PARA TI</span>
-        <h2 id="learning-title">Mejora tus finanzas</h2>
-        <p>Aprende a distribuir tus ingresos paso a paso.</p>
-      </div>
-      <button class="round-action" type="button" aria-label="Ir a aprendizaje" (click)="navigateToLearning()">
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </button>
-    </section>
+    <button class="learning-strip" type="button" aria-label="Ir a aprendizaje" (click)="navigateToLearning()">
+      <span class="learning-strip__icon"><ion-icon src="assets/icon/study.svg"></ion-icon></span>
+      <span class="learning-strip__copy"><small>RECOMENDADO PARA TI</small><strong>Aprende la regla 50/30/20</strong></span>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </button>
   </main>
 
   <app-base-modal

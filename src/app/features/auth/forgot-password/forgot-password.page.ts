@@ -54,9 +54,9 @@ export class ForgotPasswordPage {
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
   showOtpModal = false;
+  showSuccessAlert = false;
 
   pendingEmail = '';
-  resetToken = '';
   otpCode = '';
 
   showGenericAlert: boolean = false;
@@ -78,7 +78,6 @@ export class ForgotPasswordPage {
         this.loadingService.hide();
         if (data !== null) {
           this.pendingEmail = email;
-          this.resetToken = '';
           this.otpCode = '';
           this.showOtpModal = true;
         } else {
@@ -98,14 +97,7 @@ export class ForgotPasswordPage {
   }
 
   private confirmPasswordReset(password: string) {
-    const token = this.resetToken.trim();
     const otp = this.otpCode.trim();
-
-    if (!token) {
-      this.showUnauthorizedAlert = true;
-      this.messageError = 'Ingresa el token de recuperación recibido por correo.';
-      return;
-    }
 
     if (!otp || otp.length !== 6) {
       this.showUnauthorizedAlert = true;
@@ -116,24 +108,24 @@ export class ForgotPasswordPage {
     this.loadingService.show();
     this.forgotPasswordUseCase.passwordResetConfirm({
       email: this.pendingEmail,
-      reset_token: token,
       otp_code: otp,
       new_password: password,
     }).service({
       success: async () => {
         this.loadingService.hide();
         this.showOtpModal = false;
-        this.showGenericAlert = true;
-        this.messageError = 'Contraseña actualizada correctamente.';
-        setTimeout(async () => {
-          this.showGenericAlert = false;
-          await this.navService.replace('/login');
-        }, 1200);
+        this.showSuccessAlert = true;
       },
       failure: (error) => {
         this.loadingService.hide();
+
+        const errorMessage = error?.message ?? '';
+        if (this.isRepeatedPasswordError(errorMessage)) {
+          this.closeOtpModal();
+        }
+
         this.showUnauthorizedAlert = true;
-        this.messageError = error?.message ?? 'No se pudo restablecer la contraseña.';
+        this.messageError = errorMessage || 'No se pudo restablecer la contraseña.';
       }
     });
   }
@@ -162,7 +154,11 @@ export class ForgotPasswordPage {
     const password = this.forgotForm.value.password || "";
     const repeatPassword = this.forgotForm.value.repeatPassword || "";
 
-    const passwordError = validate(password);
+    const passwordError = validate(password, {
+      minLength: 8,
+      requireSpecialChar: false,
+      requireUppercase: false
+    });
     if (passwordError) {
       this.showUnauthorizedAlert = true;
       this.messageError = passwordError;
@@ -187,13 +183,28 @@ export class ForgotPasswordPage {
 
   closeOtpModal(): void {
     this.showOtpModal = false;
-    this.resetToken = '';
     this.otpCode = '';
     this.pendingEmail = '';
+  }
+
+  private isRepeatedPasswordError(message: string): boolean {
+    const normalizedMessage = message
+      .toLocaleLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    return normalizedMessage.includes('igual a la anterior')
+      || normalizedMessage.includes('misma contrasena')
+      || normalizedMessage.includes('igual que la anterior');
   }
 
   closeAlerts() {
     this.showGenericAlert = false;
     this.showUnauthorizedAlert = false;
+  }
+
+  async handleSuccessConfirm() {
+    this.showSuccessAlert = false;
+    await this.navService.replace('/login');
   }
 }

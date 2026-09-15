@@ -148,3 +148,30 @@ ion-menu {
 
   color: var(--fv-text-primary);
 }
+
+/* Shared verification input used by registration and password recovery. */
+.verification-modal__content {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 8px;
+}
+
+.verification-modal__content .verification-input-wrapper {
+  width: 100%;
+  --background: #f7f8fc;
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  border: 1px solid #e2e6f0;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.verification-modal__content ion-input {
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  color: var(--fv-text-primary);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-align: center;
+}

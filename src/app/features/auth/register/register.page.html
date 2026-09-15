@@ -214,8 +214,8 @@
           pattern="[0-9]*"
           maxlength="6"
           placeholder="123456"
-          [value]="verificationCode"
-          (ionInput)="onVerificationCodeInput($event)">
+          [(ngModel)]="verificationCode"
+          name="verificationCode">
         </ion-input>
       </ion-item>
     </div>
