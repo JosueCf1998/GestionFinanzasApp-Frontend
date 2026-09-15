@@ -23,6 +23,7 @@ import {
 } from '../../core/services/feature-filter-state.service';
 import { LocalManagementService } from '../../core/services/localManagementService.service';
 import { NavigationService } from '../../core/services/navigation.service';
+import { LogoutUserUseCase } from '../../core/use-cases/users/logout-user.usecase';
 
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
 import { PageLayoutComponent } from "src/app/shared/components/page-layout/page-layout.component";
@@ -88,7 +89,8 @@ export class SideMenuPage implements OnInit {
   constructor(
     private readonly navigationService: NavigationService,
     private readonly localManagementService: LocalManagementService,
-    private readonly filterState: FeatureFilterStateService
+    private readonly filterState: FeatureFilterStateService,
+    private readonly logoutUserUseCase: LogoutUserUseCase
   ) {}
 
   // =========================
@@ -117,6 +119,7 @@ export class SideMenuPage implements OnInit {
   // =========================
 
   logOut() {
+    this.logoutUserUseCase.logout();
     this.navigationService.replace('/splash');
   }
 

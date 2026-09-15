@@ -1,9 +1,6 @@
 import { ListAccountsUseCase } from '../../../core/use-cases/accounts/list-accounts.usecase';
-import { ListTransferUseCase } from '../../../core/use-cases/transfer/list-transfer.usecase';
-import { ListTransactionsUseCase } from '../../../core/use-cases/transactions/list-transactions.usecase';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule, MenuController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { NavigationService } from 'src/app/core/services/navigation.service';
@@ -13,8 +10,9 @@ import { Categoria } from 'src/app/shared/models/categoria.model';
 import 'src/app/core/utils/observable-extensions';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
-import { FloatingActionButtonComponent } from 'src/app/shared/components/floating-action-button/floating-action-button.component';
-import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-modal.component';
+import { DashboardRequest, DashboardSummary } from 'src/app/core/models/dashboard/dashboard.model';
+import { DashboardSummaryUseCase } from 'src/app/core/use-cases/dashboard/dashboard-summary.usecase';
+import { FilterTransactionsUseCase } from 'src/app/core/use-cases/transactions/filter-transactions.usecase';
 
 @Component({
   selector: 'app-home',
@@ -24,10 +22,7 @@ import { BaseModalComponent } from 'src/app/shared/components/base-modal/base-mo
   imports: [
     IonicModule,
     CommonModule,
-    FormsModule,
-    HttpClientModule,
-    FloatingActionButtonComponent,
-    BaseModalComponent
+    HttpClientModule
   ],
 })
 export class HomePage {
@@ -36,13 +31,11 @@ export class HomePage {
   showUnauthorizedAlert = false;
   messageError = '';
 
-  isModalOpen = false;
-
   hideSecretValues = false;
 
-  amount = 4580;
-  newAmount = this.amount;
-
+  amount = 0;
+  accountName = 'Cuenta Principal';
+  pendingDashboardRequests = 0;
   errorMessage: string | null = null;
 
   segment: 'gastos' | 'ingresos' = 'gastos';
@@ -54,39 +47,42 @@ export class HomePage {
   summaryCards = [
     {
       label: 'Ingresos',
-      amount: 'S/. 1,200.00',
+      amount: 'S/. 0.00',
       tone: 'income',
       icon: 'salary',
       iconColor: '#2aa876'
     },
     {
       label: 'Gastos',
-      amount: 'S/. 3,675.00',
+      amount: 'S/. 0.00',
       tone: 'expense',
       icon: 'down-trend',
       iconColor: '#e35d5d'
     },
     {
       label: 'Presupuesto',
-      amount: 'S/. 1,500.00',
+      amount: 'S/. 0.00',
       tone: 'budget',
       icon: 'budget-wallet',
       iconColor: '#5b49d6'
     },
     {
-      label: 'Meta de Ahorro',
-      amount: 'S/. 800 / 1,000',
+      label: 'Saldo del periodo',
+      amount: 'S/. 0.00',
       tone: 'goal',
       icon: 'up-trend',
       iconColor: '#5977d8'
     }
   ];
 
-  recentMovements = [
-    { label: 'Supermercado', amount: 'S/. 180.00', icon: 'bills', color: '#f3b44d' },
-    { label: 'Almuerzo', amount: 'S/. 25.00', icon: 'restaurant', color: '#6a7ef5' },
-    { label: 'Pago de Internet', amount: 'S/. 100.00', icon: 'card-credit', color: '#40b3a2' }
-  ];
+  recentMovements: Array<{
+    label: string;
+    amount: string;
+    icon: string;
+    color: string;
+    type: 'income' | 'expense';
+    dateLabel: string;
+  }> = [];
 
   donutSegments = [
     { value: 30, color: '#f45d74' },
@@ -201,18 +197,15 @@ export class HomePage {
 
   constructor(
     private listAccountsUseCase: ListAccountsUseCase,
-    private listTransferUseCase: ListTransferUseCase,
-    private listTransactionsUseCase: ListTransactionsUseCase,
+    private dashboardSummaryUseCase: DashboardSummaryUseCase,
+    private filterTransactionsUseCase: FilterTransactionsUseCase,
     private localManagementService: LocalManagementService,
     private navService: NavigationService,
     private loadingService: SpinnerService,
     private menuCtrl: MenuController
   ) {
 
-    this.loadMockData();
-    // this.executeAccountList();
-    // this.executeTransferList();
-    // this.executeTransactionsList();
+    this.loadDashboardData();
 
   }
 
@@ -220,113 +213,124 @@ export class HomePage {
      SERVICIOS
      ========================== */
 
-  private executeAccountList(): void {
-
+  private loadDashboardData(): void {
+    this.pendingDashboardRequests = 2;
     this.loadingService.show();
 
-    this.listAccountsUseCase
-      .listAccounts()
-      .service({
+    this.listAccountsUseCase.listAccounts().service({
+      success: data => {
+        const accounts = data?.items ?? [];
+        const accountIds = accounts.map(account => account.id);
+        const accountName = accounts[0]?.name || 'Sin cuentas';
 
-        success: (data) => {
+        this.loadDashboardSummary(accountIds);
+        this.loadRecentTransactions(accountIds);
 
-          this.loadingService.hide();
-
-          if (data) {
-
-          } else {
-
-            this.showGenericAlert = true;
-
-          }
-
-        },
-
-        failure: () => {
-
-          this.loadingService.hide();
-
-          this.showGenericAlert = true;
-
-        }
-
-      });
-
+        this.accountName = accountName;
+      },
+      failure: () => {
+        this.accountName = 'Sin cuentas';
+        this.loadDashboardSummary([]);
+        this.loadRecentTransactions([]);
+      }
+    });
   }
 
-  private executeTransferList(): void {
+  private loadDashboardSummary(accountIds: number[]): void {
+    const request = this.buildDashboardRequest(accountIds);
 
-    this.loadingService.show();
-
-    this.listTransferUseCase
-      .listTransfer()
-      .service({
-
-        success: (data) => {
-
-          this.loadingService.hide();
-
-          if (data) {
-
-            console.log(
-              'Transfers List:',
-              data.items
-            );
-
-          }
-
-        },
-
-        failure: (error) => {
-
-          this.loadingService.hide();
-
-          console.error(
-            'Error executing transfer list:',
-            error
-          );
-
+    this.dashboardSummaryUseCase.execute(request).service({
+      success: data => {
+        if (data?.summary) {
+          this.applyDashboardSummary(data.summary);
         }
-
-      });
-
+        this.finishDashboardRequest();
+      },
+      failure: () => {
+        this.showGenericAlert = true;
+        this.finishDashboardRequest();
+      }
+    });
   }
 
-  private executeTransactionsList(): void {
+  private loadRecentTransactions(accountIds: number[]): void {
+    const request = this.buildDashboardRequest(accountIds);
 
-    this.loadingService.show();
+    this.filterTransactionsUseCase.execute({
+      account_ids: accountIds,
+      start_date: request.fecha_inicio,
+      end_date: request.fecha_fin
+    }).service({
+      success: data => {
+        const expenses = (data?.transactionList?.expensesList ?? []).map(item => ({
+          label: item.category.name,
+          amount: this.formatCurrency(Number(item.amount)),
+          icon: item.category.icon || 'category',
+          color: item.category.color || '#8b5cf6',
+          type: 'expense' as const,
+          dateLabel: this.formatMovementDate(item.date || item.createdAt)
+        }));
+        const incomes = (data?.transactionList?.incomeList ?? []).map(item => ({
+          label: item.category.name,
+          amount: this.formatCurrency(Number(item.amount)),
+          icon: item.category.icon || 'category',
+          color: item.category.color || '#22c55e',
+          type: 'income' as const,
+          dateLabel: this.formatMovementDate(item.date || item.createdAt)
+        }));
 
-    this.listTransactionsUseCase
-      .execute()
-      .service({
+        this.recentMovements = [...expenses, ...incomes].slice(0, 3);
+        this.finishDashboardRequest();
+      },
+      failure: () => {
+        this.recentMovements = [];
+        this.finishDashboardRequest();
+      }
+    });
+  }
 
-        success: (data) => {
+  private buildDashboardRequest(accountIds: number[]): DashboardRequest {
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-          this.loadingService.hide();
+    return {
+      fecha_inicio: this.formatDate(startOfMonth),
+      fecha_fin: this.formatDate(today),
+      cuentas: accountIds,
+      limit: 3
+    };
+  }
 
-          if (data) {
+  private applyDashboardSummary(summary: DashboardSummary): void {
+    this.amount = summary.currentBalance;
+    this.summaryCards = [
+      { label: 'Ingresos', amount: this.formatCurrency(summary.totalIncome), tone: 'income', icon: 'salary', iconColor: '#2aa876' },
+      { label: 'Gastos', amount: this.formatCurrency(summary.totalExpenses), tone: 'expense', icon: 'down-trend', iconColor: '#e35d5d' },
+      { label: 'Presupuesto', amount: this.formatCurrency(summary.totalBudget), tone: 'budget', icon: 'budget-wallet', iconColor: '#5b49d6' },
+      { label: 'Saldo del periodo', amount: this.formatCurrency(summary.periodBalance), tone: 'goal', icon: 'up-trend', iconColor: '#5977d8' }
+    ];
+  }
 
-            this.groupTransactionsByCategory(
-              data.items
-            );
+  private finishDashboardRequest(): void {
+    this.pendingDashboardRequests -= 1;
+    if (this.pendingDashboardRequests <= 0) {
+      this.loadingService.hide();
+    }
+  }
 
-          }
+  private formatDate(date: Date): string {
+    return date.toISOString().slice(0, 10);
+  }
 
-        },
+  private formatCurrency(value: number): string {
+    return `S/. ${Math.abs(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  }
 
-        failure: (error) => {
-
-          this.loadingService.hide();
-
-          console.error(
-            'Error executing transactions list:',
-            error
-          );
-
-        }
-
-      });
-
+  private formatMovementDate(value?: string): string {
+    if (!value) return 'Este mes';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Este mes';
+    return date.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' });
   }
 
   /* ==========================
@@ -439,30 +443,6 @@ export class HomePage {
 
   }
 
-  openModal(): void {
-
-    this.isModalOpen = true;
-
-  }
-
-  closeModal(): void {
-
-    this.isModalOpen = false;
-
-  }
-
-  updateAmount(): void {
-
-    if (this.newAmount) {
-
-      this.amount = this.newAmount;
-
-    }
-
-    this.closeModal();
-
-  }
-
   validationSecretValues(): void {
 
     this.hideSecretValues =
@@ -498,6 +478,14 @@ export class HomePage {
       '/transactions/create'
     );
 
+  }
+
+  navigateToTransactions(): void {
+    this.navService.push('/main/transactions');
+  }
+
+  navigateToAccounts(): void {
+    this.navService.push('/main/accounts');
   }
 
   navigateToLearning(): void {

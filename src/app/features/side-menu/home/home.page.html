@@ -16,7 +16,11 @@
       <div class="balance-hero__topline">
         <span class="balance-hero__label" id="balance-title">Balance total</span>
         <button class="icon-action" type="button" aria-label="Mostrar u ocultar balance" (click)="validationSecretValues()">
-          <ion-icon [name]="hideSecretValues ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          <ion-icon
+            [src]="hideSecretValues
+              ? 'assets/icon/eye-off-outline.svg'
+              : 'assets/icon/eye-outline.svg'">
+          </ion-icon>
         </button>
       </div>
       <strong class="balance-hero__amount">
@@ -26,17 +30,17 @@
         <span class="status-dot"></span>
         <span>Balance disponible</span>
         <span class="status-divider"></span>
-        <strong>Cuenta Principal</strong>
+        <strong>{{ accountName }}</strong>
       </div>
       <div class="balance-hero__footer">
         <span>Actualizado hoy</span>
-        <button type="button" (click)="openModal()">Gestionar cuenta <ion-icon name="arrow-forward-outline"></ion-icon></button>
+        <button type="button" (click)="navigateToAccounts()">Gestionar cuenta <ion-icon src="assets/icon/right-inline.svg"></ion-icon></button>
       </div>
     </section>
 
     <section class="action-bar" aria-label="Acciones rápidas">
       <button class="action-item action-item--primary" type="button" (click)="navigateToCreateTransac()">
-        <span class="action-item__icon"><ion-icon name="add-outline"></ion-icon></span>
+        <span class="action-item__icon"><ion-icon src="assets/icon/add.svg"></ion-icon></span>
         <span>Nuevo gasto</span>
       </button>
       <button class="action-item" type="button" (click)="navigateToGraphics()">
@@ -55,15 +59,14 @@
           <span class="overline">SEPTIEMBRE 2026</span>
           <h2 id="monthly-title">Resumen del mes</h2>
         </div>
-        <button class="link-button" type="button" (click)="navigateToGraphics()">Ver análisis <ion-icon name="arrow-forward-outline"></ion-icon></button>
+        <button class="link-button" type="button" (click)="navigateToGraphics()">Ver análisis <ion-icon src="assets/icon/right-inline.svg"></ion-icon></button>
       </div>
 
       <div class="monthly-panel">
         <article *ngFor="let card of summaryCards" class="metric-row" [ngClass]="card.tone">
           <span class="metric-row__icon"><ion-icon [src]="'assets/icon/' + card.icon + '.svg'"></ion-icon></span>
           <span class="metric-row__label">{{ card.label }}</span>
-          <strong>{{ card.amount }}</strong>
-          <ion-icon class="metric-row__arrow" name="chevron-forward-outline"></ion-icon>
+          <strong>{{ hideSecretValues ? 'S/. ••••••' : card.amount }}</strong>
         </article>
       </div>
     </section>
@@ -74,43 +77,35 @@
           <span class="overline">MOVIMIENTOS</span>
           <h2 id="activity-title">Actividad reciente</h2>
         </div>
-        <button class="link-button" type="button" (click)="navigateToCreateTransac()">Ver todos <ion-icon name="arrow-forward-outline"></ion-icon></button>
+        <button class="link-button" type="button" (click)="navigateToTransactions()">Ver todos <ion-icon src="assets/icon/right-inline.svg"></ion-icon></button>
       </div>
 
-      <div class="activity-panel">
+      <div class="activity-panel" *ngIf="recentMovements.length > 0; else emptyActivity">
         <div *ngFor="let item of recentMovements; let last = last" class="activity-row" [class.activity-row--last]="last">
           <span class="activity-row__icon" [style.background]="item.color + '18'" [style.color]="item.color">
             <ion-icon [src]="'assets/icon/' + item.icon + '.svg'"></ion-icon>
           </span>
-          <span class="activity-row__copy"><strong>{{ item.label }}</strong><small>Hoy · Cuenta Principal</small></span>
-          <span class="activity-row__amount">-{{ item.amount }}</span>
+          <span class="activity-row__copy"><strong>{{ item.label }}</strong><small>{{ item.dateLabel }} · {{ accountName }}</small></span>
+          <span class="activity-row__amount">{{ hideSecretValues ? (item.type === 'income' ? '+ S/. ••••••' : '- S/. ••••••') : (item.type === 'income' ? '+' : '-') + item.amount }}</span>
         </div>
       </div>
+
+      <ng-template #emptyActivity>
+        <div class="activity-empty">
+          <span class="activity-empty__icon">
+            <ion-icon src="assets/icon/bills.svg"></ion-icon>
+          </span>
+          <strong>Sin movimientos recientes</strong>
+          <span>Cuando registres una operación aparecerá aquí.</span>
+        </div>
+      </ng-template>
     </section>
 
     <button class="learning-strip" type="button" aria-label="Ir a aprendizaje" (click)="navigateToLearning()">
       <span class="learning-strip__icon"><ion-icon src="assets/icon/study.svg"></ion-icon></span>
       <span class="learning-strip__copy"><small>RECOMENDADO PARA TI</small><strong>Aprende la regla 50/30/20</strong></span>
-      <ion-icon name="arrow-forward-outline"></ion-icon>
+      <ion-icon src="assets/icon/right-inline.svg"></ion-icon>
     </button>
   </main>
 
-  <app-base-modal
-    [isOpen]="isModalOpen"
-    title="Modificar monto"
-    description="Actualiza el monto mostrado en tu resumen."
-    primaryText="Guardar"
-    size="sm"
-    (closed)="closeModal()"
-    (primary)="updateAmount()">
-    <div class="modal-content">
-      <ion-item class="fv-input">
-        <ion-label position="floating">Nuevo monto</ion-label>
-        <ion-input type="number" [(ngModel)]="newAmount"></ion-input>
-      </ion-item>
-    </div>
-  </app-base-modal>
-
-  <app-floating-action-button ariaLabel="Crear transacción" (clicked)="navigateToCreateTransac()">
-  </app-floating-action-button>
 </ion-content>
