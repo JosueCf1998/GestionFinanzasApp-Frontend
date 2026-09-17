@@ -50,17 +50,18 @@ export class LoginUserUseCase {
   }
 
   private saveUserData(userData: LoginUserResponse, email: string): void {
-    const name = (userData.name ?? '').trim();
+    const rawName = (userData.name ?? (userData as any).nombre ?? '').trim();
+    const existingName = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.NAME);
+    const fallbackName = email ? email.split('@')[0] : '';
+    const resolvedName = rawName || existingName || fallbackName;
 
     this.localManagementService.setVariable(KEY_MANAGEMENT.TOKEN, `Bearer ${userData.token}`);
     this.localManagementService.setVariable(KEY_MANAGEMENT.EMAIL, email);
     this.localManagementService.setVariable(KEY_MANAGEMENT.OTP_ENABLED, Boolean(userData.otpEnabled));
     this.localManagementService.setVariable(KEY_MANAGEMENT.IS_FIRST_TIME, Boolean(userData.isFirstTime));
 
-    if (name) {
-      this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, name);
-    } else {
-      this.localManagementService.removeVariable(KEY_MANAGEMENT.NAME);
+    if (resolvedName) {
+      this.localManagementService.setVariable(KEY_MANAGEMENT.NAME, resolvedName);
     }
   }
 
