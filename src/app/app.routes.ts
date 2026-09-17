@@ -72,6 +72,10 @@ export const routes: Routes = [
       {
         path: 'learning',
         loadComponent: () => import('./features/side-menu/learning/learning.page').then(m => m.LearningPage)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/side-menu/profile/profile.page').then(m => m.ProfilePage)
       }
     ],
   },

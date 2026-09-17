@@ -1,0 +1,258 @@
+<ion-content [fullscreen]="false" class="profile-page">
+
+  <div class="profile-container">
+
+    <!-- ================= 1. USER HERO CARD ================= -->
+    <header class="profile-hero-card">
+      <div class="avatar-ring">
+        <div class="avatar-circle">
+          {{ initials }}
+        </div>
+        <button type="button" class="avatar-edit-badge" (click)="openEditNameModal()" aria-label="Editar nombre">
+          <ion-icon src="assets/icon/pencil.svg"></ion-icon>
+        </button>
+      </div>
+
+      <div class="hero-info">
+        <div class="hero-name-row" (click)="openEditNameModal()" role="button" aria-label="Editar nombre">
+          <h1 class="hero-name">{{ fullName }}</h1>
+        </div>
+
+        <button type="button" class="hero-email-chip" (click)="toggleEmailMask($event)" aria-label="Mostrar u ocultar correo">
+          <ion-icon src="assets/icon/mail.svg" class="chip-mail-icon"></ion-icon>
+          <span class="chip-email-text">{{ displayedEmail }}</span>
+          <ion-icon
+            [src]="showFullEmail ? 'assets/icon/eye-off-outline.svg' : 'assets/icon/eye-outline.svg'"
+            class="chip-eye-icon">
+          </ion-icon>
+        </button>
+      </div>
+
+      <!-- Micro Dashboard / Status Strip -->
+      <div class="hero-stats-strip">
+        <div class="stat-cell">
+          <span class="stat-label">Estado</span>
+          <div class="stat-val-row">
+            <span class="status-pulse-dot"></span>
+            <span class="stat-value">Activo</span>
+          </div>
+        </div>
+
+        <div class="stat-separator"></div>
+
+        <div class="stat-cell">
+          <span class="stat-label">Seguridad</span>
+          <div class="stat-val-row">
+            <ion-icon src="assets/icon/shield-security.svg" class="stat-icon"></ion-icon>
+            <span class="stat-value">2FA OTP</span>
+          </div>
+        </div>
+
+        <div class="stat-separator"></div>
+
+        <div class="stat-cell">
+          <span class="stat-label">Moneda</span>
+          <div class="stat-val-row">
+            <span class="stat-value">PEN (S/)</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= 2. SECCIÓN: SEGURIDAD Y ACCESO ================= -->
+    <section class="settings-group">
+      <span class="group-caption">SEGURIDAD Y ACCESO</span>
+
+      <div class="settings-card">
+
+        <!-- Cambiar contraseña -->
+        <button type="button" class="settings-row" (click)="openChangePasswordModal()">
+          <div class="row-leading">
+            <app-item-icon icon="password" color="#4361ee" size="md" variant="soft" shape="rounded"></app-item-icon>
+            <div class="row-labels">
+              <span class="row-title">Contraseña</span>
+              <span class="row-subtitle">Actualizar clave protegida con código OTP</span>
+            </div>
+          </div>
+          <div class="row-trailing">
+            <span class="trailing-dots">••••••••</span>
+            <ion-icon src="assets/icon/right-inline.svg" class="chevron"></ion-icon>
+          </div>
+        </button>
+
+        <div class="row-divider"></div>
+
+        <!-- Eliminar cuenta -->
+        <button type="button" class="settings-row" (click)="openDeleteAccountConfirm()">
+          <div class="row-leading">
+            <app-item-icon icon="trash" color="#4361ee" size="md" variant="soft" shape="rounded"></app-item-icon>
+            <div class="row-labels">
+              <span class="row-title">Eliminar cuenta</span>
+              <span class="row-subtitle">Borrar permanentemente tus datos y registros</span>
+            </div>
+          </div>
+          <div class="row-trailing">
+            <ion-icon src="assets/icon/right-inline.svg" class="chevron"></ion-icon>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ================= 3. SECCIÓN: INFORMACIÓN Y LEGAL ================= -->
+    <section class="settings-group">
+      <span class="group-caption">INFORMACIÓN Y LEGAL</span>
+
+      <div class="settings-card">
+
+        <!-- Política de Privacidad -->
+        <button type="button" class="settings-row" (click)="openLegalViewer('privacy')">
+          <div class="row-leading">
+            <app-item-icon icon="shield-security" color="#4361ee" size="md" variant="soft" shape="rounded"></app-item-icon>
+            <div class="row-labels">
+              <span class="row-title">Política de Privacidad</span>
+              <span class="row-subtitle">Tratamiento y protección de datos personales</span>
+            </div>
+          </div>
+          <div class="row-trailing">
+            <ion-icon src="assets/icon/right-inline.svg" class="chevron"></ion-icon>
+          </div>
+        </button>
+
+        <div class="row-divider"></div>
+
+        <!-- Términos de Uso -->
+        <button type="button" class="settings-row" (click)="openLegalViewer('terms')">
+          <div class="row-leading">
+            <app-item-icon icon="book" color="#4361ee" size="md" variant="soft" shape="rounded"></app-item-icon>
+            <div class="row-labels">
+              <span class="row-title">Términos de Servicio</span>
+              <span class="row-subtitle">Condiciones de uso y regulaciones legales</span>
+            </div>
+          </div>
+          <div class="row-trailing">
+            <ion-icon src="assets/icon/right-inline.svg" class="chevron"></ion-icon>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ================= 4. PIE DE PÁGINA ================= -->
+    <footer class="profile-footer">
+      <div class="footer-badge">
+        <span class="footer-logo-dot"></span>
+        <span class="footer-app-name">Finvia</span>
+        <span class="footer-version">v1.0.0</span>
+      </div>
+      <div class="footer-security-note">
+        <ion-icon src="assets/icon/shield-security.svg"></ion-icon>
+        <span>Cifrado de extremo a extremo AES-256</span>
+      </div>
+      <p class="footer-copyright">© 2026 Finvia. Todos los derechos reservados.</p>
+    </footer>
+
+  </div>
+
+  <!-- ================= MODALES ================= -->
+
+  <!-- Modal editar nombre -->
+  <app-profile-field-edit-modal
+    [isOpen]="isEditNameModalOpen"
+    title="Editar nombre"
+    label="Nombre completo"
+    placeholder="Tu nombre completo"
+    [initialValue]="fullName"
+    icon="user"
+    [loading]="modalLoading"
+    (closed)="closeEditNameModal()"
+    (saved)="onSaveName($event)">
+  </app-profile-field-edit-modal>
+
+  <!-- Modal cambiar contraseña -->
+  <app-change-password-modal
+    [isOpen]="isChangePasswordModalOpen"
+    [loading]="modalLoading"
+    (closed)="closeChangePasswordModal()"
+    (saved)="onSavePassword($event)">
+  </app-change-password-modal>
+
+  <!-- Modal verificación OTP para cambio de contraseña -->
+  <app-base-modal
+    [isOpen]="isOtpModalOpen"
+    title="Código de seguridad"
+    [description]="'Ingresa el código de 6 dígitos que enviamos a tu correo ' + displayedEmail"
+    primaryText="Confirmar cambio"
+    secondaryText="Cancelar"
+    [primaryDisabled]="otpCode.trim().length !== 6 || otpLoading"
+    [secondaryDisabled]="otpLoading"
+    [backdropDismiss]="false"
+    size="sm"
+    (closed)="closeOtpModal()"
+    (primary)="confirmOtpPasswordReset()"
+    (secondary)="closeOtpModal()">
+    <div class="otp-modal-content">
+      <div class="otp-input-box">
+        <ion-input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="6"
+          placeholder="000000"
+          [(ngModel)]="otpCode"
+          class="otp-digit-input">
+        </ion-input>
+      </div>
+      <button type="button" class="otp-resend-btn" (click)="resendOtpCode()" [disabled]="otpLoading">
+        ¿No recibiste el código? <span>Reenviar</span>
+      </button>
+    </div>
+  </app-base-modal>
+
+  <!-- Visor de documentos legales -->
+  <app-legal-document-viewer
+    [isOpen]="isLegalViewerOpen"
+    [type]="legalDocType"
+    (closed)="closeLegalViewer()">
+  </app-legal-document-viewer>
+
+  <!-- Alerta confirmar eliminación de cuenta -->
+  <app-custom-alert
+    *ngIf="showDeleteConfirmAlert"
+    header="¿Eliminar cuenta?"
+    message="Esta acción es permanente e irreversible. Se borrarán todas tus cuentas, transacciones, presupuestos y datos asociados."
+    imageUrl="assets/icon/alert-triangle.svg"
+    confirmText="Sí, eliminar definitivamente"
+    cancelText="Cancelar"
+    alertSize="medium"
+    [reverseButtons]="true"
+    [showCancel]="true"
+    (onCancel)="closeDeleteAccountConfirm()"
+    (onConfirm)="executeDeleteAccount()">
+  </app-custom-alert>
+
+  <!-- Alerta de éxito -->
+  <app-custom-alert
+    *ngIf="showSuccessAlert"
+    header="Operación exitosa"
+    [message]="alertMessage"
+    imageUrl="assets/icon/check.svg"
+    confirmText="Entendido"
+    alertSize="small"
+    [showCancel]="false"
+    (onConfirm)="closeAlerts()">
+  </app-custom-alert>
+
+  <!-- Alerta de error -->
+  <app-custom-alert
+    *ngIf="showErrorAlert"
+    header="Atención"
+    [message]="alertMessage"
+    imageUrl="assets/icon/alert-triangle.svg"
+    confirmText="Entendido"
+    alertSize="small"
+    [showCancel]="false"
+    (onConfirm)="closeAlerts()">
+  </app-custom-alert>
+
+</ion-content>

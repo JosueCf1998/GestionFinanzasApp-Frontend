@@ -1,0 +1,52 @@
+<app-base-modal
+  [isOpen]="isOpen"
+  [title]="title"
+  [description]="description"
+  primaryText="Cerrar"
+  size="md"
+  (closed)="onClose()"
+  (primary)="onClose()">
+
+  <div class="legal-content">
+    <ng-container *ngIf="type === 'privacy'">
+      <h3>1. Información que recopilamos</h3>
+      <p>
+        En Finvia nos comprometemos a proteger tu privacidad. Recopilamos información estrictamente necesaria
+        para gestionar tus cuentas, transacciones y presupuestos personales de forma segura y confidencial.
+      </p>
+
+      <h3>2. Uso y protección de datos</h3>
+      <p>
+        Tus datos personales y financieros están protegidos mediante cifrado estándar AES-256 en reposo y en tránsito.
+        Finvia no vende ni comparte tus datos con terceros bajo ninguna circunstancia.
+      </p>
+
+      <h3>3. Tus derechos</h3>
+      <p>
+        Tienes derecho a acceder, modificar y solicitar la eliminación permanente de tu cuenta y toda tu información
+        financiera en cualquier momento a través de la sección "Eliminar cuenta" en este perfil.
+      </p>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'terms'">
+      <h3>1. Aceptación de los términos</h3>
+      <p>
+        Al utilizar la aplicación Finvia, aceptas cumplir estos términos y condiciones de servicio. La plataforma
+        está diseñada para la gestión y planificación financiera personal.
+      </p>
+
+      <h3>2. Seguridad de la cuenta</h3>
+      <p>
+        Eres responsable de mantener la confidencialidad de tus credenciales y de cualquier actividad que ocurra
+        en tu sesión. Te recomendamos habilitar la autenticación de dos factores (OTP).
+      </p>
+
+      <h3>3. Modificaciones</h3>
+      <p>
+        Finvia se reserva el derecho de actualizar estos términos en función de mejoras del servicio o regulaciones vigentes.
+        Te notificaremos cualquier cambio relevante a través de la aplicación.
+      </p>
+    </ng-container>
+  </div>
+
+</app-base-modal>

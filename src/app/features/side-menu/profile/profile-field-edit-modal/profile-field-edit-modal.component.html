@@ -1,0 +1,30 @@
+<app-base-modal
+  [isOpen]="isOpen"
+  [title]="title"
+  description="Actualiza tus datos para mantener tu cuenta al día."
+  primaryText="Guardar cambios"
+  secondaryText="Cancelar"
+  [primaryDisabled]="form.invalid || loading"
+  [secondaryDisabled]="loading"
+  size="sm"
+  (closed)="onClose()"
+  (primary)="onSave()"
+  (secondary)="onClose()">
+
+  <form [formGroup]="form" class="edit-field-form" (ngSubmit)="onSave()">
+    <label class="input-label">{{ label }}</label>
+    <ion-item lines="none" class="modal-form-item">
+      <ion-icon slot="start" [src]="'assets/icon/' + icon + '.svg'" class="field-icon"></ion-icon>
+      <ion-input
+        type="text"
+        [placeholder]="placeholder"
+        formControlName="value"
+        required>
+      </ion-input>
+    </ion-item>
+    <p class="field-hint" *ngIf="form.get('value')?.invalid && form.get('value')?.touched">
+      Este campo es obligatorio (mínimo 2 caracteres).
+    </p>
+  </form>
+
+</app-base-modal>
