@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonImg, AlertController } from '@ionic/angular/standalone';
+import { App } from '@capacitor/app';
 import { NavigationService } from 'src/app/core/services/navigation.service';
 import { LocalManagementService } from 'src/app/core/services/localManagementService.service';
 import { KEY_MANAGEMENT } from 'src/app/core/constants/key-management.constants';
@@ -52,7 +53,7 @@ export class SplashPage implements OnInit {
     const isIos = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Mac/i.test(navigator.userAgent);
     const mode: 'ios' | 'md' = isIos ? 'ios' : 'md';
 
-    // 1. Alerta nativa de Notificaciones
+    // 1. Alerta nativa de Notificaciones (opcional)
     await new Promise<void>((resolve) => {
       const header = isIos
         ? '“Finvia” desea enviarle notificaciones'
@@ -90,40 +91,48 @@ export class SplashPage implements OnInit {
       }).then((alert) => alert.present());
     });
 
-    // 2. Alerta nativa de Permiso para usar la app
-    await new Promise<void>((resolve) => {
-      const header = isIos
-        ? '¿Desea permitir que “Finvia” use esta aplicación?'
-        : '¿Permitir que Finvia acceda al almacenamiento de la app?';
+    // 2. Alerta de Uso y Almacenamiento: Salir o Permitir directamente
+    const header = isIos
+      ? '¿Desea permitir que “Finvia” use esta aplicación?'
+      : '¿Permitir que Finvia use esta aplicación?';
 
-      const message = isIos
-        ? 'Finvia requiere acceso al almacenamiento del dispositivo para registrar sus transacciones, presupuestos y gestionar sus finanzas de forma segura.'
-        : 'Finvia necesita este permiso para guardar y procesar tus cuentas, transacciones y presupuestos en este dispositivo.';
+    const message = 'Finvia requiere acceso al almacenamiento del dispositivo para registrar sus transacciones, presupuestos y gestionar sus finanzas de forma segura.';
 
-      const confirmBtnText = isIos ? 'OK' : 'Permitir';
-
-      this.alertController.create({
-        header,
-        message,
-        mode,
-        cssClass: 'native-permission-alert',
-        backdropDismiss: false,
-        buttons: [
-          {
-            text: 'No permitir',
-            role: 'cancel',
-            handler: () => resolve()
-          },
-          {
-            text: confirmBtnText,
-            role: 'confirm',
-            handler: () => resolve()
+    const alert = await this.alertController.create({
+      header,
+      message,
+      mode,
+      cssClass: 'native-permission-alert',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Salir',
+          role: 'cancel',
+          handler: async () => {
+            await this.closeApp();
           }
-        ]
-      }).then((alert) => alert.present());
+        },
+        {
+          text: 'Permitir',
+          role: 'confirm',
+          handler: () => {
+            this.localManagementService.setVariable(KEY_MANAGEMENT.PERMISSIONS_SEEN, 'true');
+            this.navService.replace('/login');
+          }
+        }
+      ]
     });
 
-    this.localManagementService.setVariable(KEY_MANAGEMENT.PERMISSIONS_SEEN, 'true');
-    this.navService.replace('/login');
+    await alert.present();
+  }
+
+  private async closeApp(): Promise<void> {
+    try {
+      await App.exitApp();
+    } catch {
+      if (typeof window !== 'undefined') {
+        window.close();
+      }
+    }
   }
 }

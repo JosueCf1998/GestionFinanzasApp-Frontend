@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">GestionApp</string>
-    <string name="title_activity_main">GestionApp</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">Finvia</string>
+    <string name="title_activity_main">Finvia</string>
+    <string name="package_name">com.finvia.app</string>
+    <string name="custom_url_scheme">com.finvia.app</string>
 </resources>
