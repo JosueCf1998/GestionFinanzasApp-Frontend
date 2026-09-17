@@ -6,4 +6,5 @@ export const KEY_MANAGEMENT = {
   FIRST_LOGIN: 'first_login',
   IS_FIRST_TIME: 'is_first_time',
   OTP_ENABLED: 'otp_enabled',
+  PERMISSIONS_SEEN: 'has_seen_permissions',
 };

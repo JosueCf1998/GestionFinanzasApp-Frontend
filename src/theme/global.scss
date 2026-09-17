@@ -175,3 +175,49 @@ ion-menu {
   letter-spacing: .2em;
   text-align: center;
 }
+
+/* ==========================================================
+   NATIVE ALERTS (REMOVE BROWSER FOCUS BLUE OUTLINE)
+   ========================================================== */
+
+ion-alert,
+.alert-wrapper,
+.native-permission-alert {
+  outline: none !important;
+  outline-style: none !important;
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .alert-wrapper {
+    outline: none !important;
+    outline-style: none !important;
+    border: none !important;
+
+    &:focus,
+    &:focus-visible {
+      outline: none !important;
+      outline-style: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .alert-button,
+  button {
+    outline: none !important;
+    outline-style: none !important;
+
+    &:focus,
+    &:focus-visible {
+      outline: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
