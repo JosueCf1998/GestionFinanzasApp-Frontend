@@ -98,7 +98,7 @@ export class LoginRecurrentPage implements OnInit {
             this.messageError = responseError;
             return;
           }
-          this.navService.push('/main')
+          this.navService.replace('/main');
         } else {
           this.showGenericAlert = true;
         }

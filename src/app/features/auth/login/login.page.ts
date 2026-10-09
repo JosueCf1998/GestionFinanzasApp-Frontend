@@ -77,9 +77,9 @@ export class LoginPage implements OnInit {
             return;
           }
           if (data.isFirstTime) {
-            this.navService.push("/welcome-step-one");
+            this.navService.replace("/welcome-step-one");
           } else {
-            this.navService.push('/main')
+            this.navService.replace('/main');
           }
         } else {
           this.showGenericAlert = true;
