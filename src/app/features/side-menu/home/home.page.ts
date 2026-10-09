@@ -107,6 +107,11 @@ export class HomePage {
   name: string = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
   isFirstTime: boolean = this.localManagementService.getVariable(KEY_MANAGEMENT.IS_FIRST_TIME) === 'true';
 
+  get firstName(): string {
+    const raw = this.localManagementService.getNonEmptyVariable(KEY_MANAGEMENT.NAME) || this.name || 'Usuario';
+    return raw.trim().split(/\s+/)[0] || 'Usuario';
+  }
+
   dataTabs = [
     {
       value: 'gastos',
@@ -204,9 +209,11 @@ export class HomePage {
     private loadingService: SpinnerService,
     private menuCtrl: MenuController
   ) {
-
     this.loadDashboardData();
+  }
 
+  ionViewWillEnter(): void {
+    this.name = this.localManagementService.getVariable(KEY_MANAGEMENT.NAME) || "";
   }
 
   /* ==========================
