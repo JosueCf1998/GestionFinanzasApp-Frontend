@@ -146,7 +146,6 @@ export class EditCategoriesPage {
       icon: this.iconoSeleccionado,
       color: this.colorSeleccionado
     };
-    console.log('Cuerpo de la solicitud de actualización:', body);
     this.executeUpdateCategory(body);
   }
 

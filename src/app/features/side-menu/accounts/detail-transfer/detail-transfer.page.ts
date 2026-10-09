@@ -59,10 +59,8 @@ export class DetailTransferPage implements OnInit {
       this.loadTransferData(state.transferData);
       localStorage.removeItem('transferDetail');
     } else {
-      console.log('⚠️ No se recibió transferData en el state, intentando localStorage...');
       const storedData = localStorage.getItem('transferDetail');
       if (storedData) {
-        console.log('✅ Datos recuperados desde localStorage');
         const transfer = JSON.parse(storedData);
         this.loadTransferData(transfer);
         localStorage.removeItem('transferDetail');
@@ -73,9 +71,6 @@ export class DetailTransferPage implements OnInit {
   }
 
   private loadTransferData(transfer: any) {
-    console.log('=== CARGANDO DATOS DE TRANSFERENCIA ===');
-    console.log('Transfer recibido:', transfer);
-
     this.transferId = transfer.id;
     this.cuentaOrigenId = transfer.originAccountId || null;
     this.cuentaDestinoId = transfer.destinationAccountId || null;
@@ -171,7 +166,6 @@ export class DetailTransferPage implements OnInit {
     this.deleteTransferUseCase.deleteTransfer({ id: this.transferId }).service({
       success: () => {
         this.loadingService.hide();
-        console.log('✅ Transferencia eliminada exitosamente');
         this.navService.back();
       },
       failure: (error) => {

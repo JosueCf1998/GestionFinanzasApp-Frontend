@@ -12,7 +12,6 @@ import {
   IonIcon,
   IonButton,
   IonItem,
-  IonText,
   IonInput,
 } from "@ionic/angular/standalone";
 import { NavigationService } from "../../../core/services/navigation.service";
@@ -31,7 +30,6 @@ import { LogoutUserUseCase } from "src/app/core/use-cases/users/logout-user.usec
   standalone: true,
   imports: [
     IonInput,
-    IonText,
     IonItem,
     IonButton,
     IonIcon,
