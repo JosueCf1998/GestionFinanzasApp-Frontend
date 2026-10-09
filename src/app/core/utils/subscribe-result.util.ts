@@ -1,19 +1,28 @@
 import { Observable, Subscription } from 'rxjs';
-import { Result, ErrorDetail } from '../models/result.model';
+import { Result } from '../models/result.model';
+import { AppErrorDetail } from '../models/app-error.model';
+import { AppErrorMapper } from './error-mapper.util';
 
 /**
  * Handlers para el flujo de `Result<T>`.
- * - `success` recibe únicamente la `data` (T|null).
- * - `failure` recibe el modelo `ErrorDetail` o `null` si no hay info.
+ * - `success` recibe únicamente la `data` (T | null).
+ * - `failure` recibe el modelo estandarizado `AppErrorDetail` garantizando uno de los 3 errores:
+ *    - Timeout
+ *    - ConectionError
+ *    - GenericError
  */
 export type ServiceHandlers<T> = {
   success: (data: T | null) => void;
-  failure: (error: ErrorDetail | null) => void;
+  failure: (error: AppErrorDetail) => void;
 };
 
 /**
- * service: helper para suscribirse a `Observable<Result<T>>`.
+ * helper para suscribirse a `Observable<Result<T>>`.
  * Devuelve la `Subscription` para que el consumidor pueda cancelar si lo desea.
+ *
+ * Filtro de seguridad:
+ * Si la respuesta no es exitosa o llega cualquier error no mapeado,
+ * pasa obligatoriamente por los filtros estandarizados (Timeout, ConectionError, GenericError).
  *
  * Uso:
  * const sub = service(obs, { success, failure });
@@ -25,25 +34,18 @@ export function service<T>(
 ): Subscription {
   return obs.subscribe({
     next: (res) => {
-      if (res.success) {
+      if (res?.success) {
         handlers.success(res.data);
         return;
       }
-      // Construir ErrorDetail preferente a partir de `res.error`
-      let error: ErrorDetail = {
-        code: String(res.statusCode) ?? "500",
-        message: res.error?.description ?? "Error desconocido",
-        description: res.error?.message ?? "No se proporcionó información adicional",
-      };
-      handlers.failure(error);
+      // Pasa obligatoriamente por el filtro de mapeo estandarizado
+      const appError: AppErrorDetail = AppErrorMapper.map(res?.error ?? res);
+      handlers.failure(appError);
     },
     error: (err) => {
-      const errDetail: ErrorDetail = {
-        code: err.code ?? "500",
-        message: err?.message ?? String(err),
-        description: typeof err === 'string' ? err : (err?.stack ?? String(err)),
-      };
-      handlers.failure(errDetail);
+      // Cualquier excepción arrojada en el flujo pasa por el filtro
+      const appError: AppErrorDetail = AppErrorMapper.map(err);
+      handlers.failure(appError);
     },
   });
 }

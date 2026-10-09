@@ -1,5 +1,6 @@
 import { Injectable, ApplicationRef, ComponentRef, createComponent, EnvironmentInjector, inject } from '@angular/core';
 import { CustomAlertComponent } from '../../shared/components/custom-alert/custom-alert.component';
+import { AppErrorMapper } from '../utils/error-mapper.util';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,15 @@ export class AlertService {
   private appRef = inject(ApplicationRef);
   private injector = inject(EnvironmentInjector);
   private alertComponentRef: ComponentRef<CustomAlertComponent> | null = null;
+
+  /**
+   * Muestra una alerta estandarizada para cualquiera de los 3 errores del sistema:
+   * Timeout, ConectionError o GenericError.
+   */
+  showError(error: any): Promise<boolean> {
+    const appError = AppErrorMapper.map(error);
+    return this.showAlert(appError.title, appError.description || appError.message);
+  }
 
   showAlert(
     title: string,
