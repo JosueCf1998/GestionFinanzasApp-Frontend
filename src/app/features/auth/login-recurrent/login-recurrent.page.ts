@@ -56,6 +56,11 @@ export class LoginRecurrentPage implements OnInit {
   email: string = '';
   name: string = '';
 
+  get firstName(): string {
+    const raw = (this.name || '').trim();
+    return raw ? raw.split(/\s+/)[0] : 'Usuario';
+  }
+
   constructor(
     private navService: NavigationService,
     private loginUserUseCase: LoginUserUseCase,
